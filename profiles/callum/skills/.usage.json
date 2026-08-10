@@ -1,0 +1,32 @@
+{
+  "navo-design-system": {
+    "archived_at": null,
+    "created_at": "2026-08-10T16:47:56.752186+00:00",
+    "created_by": "agent",
+    "last_patched_at": "2026-08-10T16:55:07.272946+00:00",
+    "last_reused_patch_generation": 0,
+    "last_used_at": "2026-08-10T16:55:02.560605+00:00",
+    "last_viewed_at": "2026-08-10T16:55:02.558488+00:00",
+    "patch_count": 2,
+    "patch_generation": 2,
+    "pinned": false,
+    "state": "active",
+    "use_count": 1,
+    "view_count": 1
+  },
+  "popular-web-designs": {
+    "archived_at": null,
+    "created_at": "2026-08-10T16:47:38.395852+00:00",
+    "created_by": null,
+    "last_patched_at": null,
+    "last_reused_patch_generation": 0,
+    "last_used_at": "2026-08-10T16:47:38.397381+00:00",
+    "last_viewed_at": "2026-08-10T16:47:38.395867+00:00",
+    "patch_count": 0,
+    "patch_generation": 0,
+    "pinned": false,
+    "state": "active",
+    "use_count": 1,
+    "view_count": 1
+  }
+}
