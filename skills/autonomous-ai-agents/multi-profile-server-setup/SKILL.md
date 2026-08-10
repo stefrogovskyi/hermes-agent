@@ -136,3 +136,25 @@ Use when configuring or troubleshooting multi-profile Hermes Agent instances run
    - **Agent-Specific Themes:** Assign distinct color themes per agent board (Hermes: Cyber Blue/Emerald, Richard: Gold/Emerald, Callum: Electric Cyan/Indigo, Alistair: Executive Violet/Purple, Liz: Coral/Rose, Ben: Growth Orange/Amber).
    - **Daily 08:00 AM Review Cron:** Schedule a daily cron at 08:00 AM (`0 8 * * *`) that polls `kanban_api.php`, aggregates tasks across all agent boards, and delivers a concise Telegram brief.
 
+9. **Airtable PAT Token Synchronization & Base Audit:**
+   - Always verify Personal Access Tokens (`PAT`) against `https://api.airtable.com/v0/meta/bases` to confirm active base permissions before running CRM or outreach workflows.
+   - Sync `AIRTABLE_API_KEY` and `AIRTABLE_PAT` in both `/opt/hermes/profiles/richard/.env` and master `.env`.
+
+10. **Branded HTML Email Signature Templates:**
+    - To prevent bare plain-text emails, bind official HTML email templates (e.g. `/root/navo24_email_template.html` or `/opt/hermes/richard_official_signature.html`) directly into outreach senders so signatures, logo images, and blue highlighted links (`color: #0000FF`) are rendered automatically on every outbound message.
+    - **Official Richard Marlowe HTML Signature Snippet:**
+      ```html
+      <div style="font-family: Tahoma, Arial, sans-serif; font-size: 10pt; color: #000000; line-height: 1.35; margin-top: 20px; border-top: 1px solid #E2E8F0; padding-top: 16px;">
+        <b>Richard Marlowe</b><br>
+        <b>Connections Manager</b><br>
+        <div style="margin: 8px 0 10px 0;">
+          <img src="https://bit.ly/4hLg86T" alt="navo" style="height: 35px; width: auto; display: block;" border="0">
+        </div>
+        API-MCP for Logistics &amp; Trade<br>
+        +44 203 440 9800<br>
+        <a href="mailto:rich@navo24.com" style="color: #0000FF; text-decoration: underline;">rich@navo24.com</a><br>
+        30 St Mary Axe, London, EC3A 8BF<br>
+        <a href="https://www.navo24.com" style="color: #0000FF; text-decoration: underline;">www.navo24.com</a>
+      </div>
+      ```
+
