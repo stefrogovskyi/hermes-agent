@@ -26,6 +26,25 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
 2. **Direct Execution on Feedback**: When the user approves draft direction (e.g., "Billy text is good - translate to Chinese and send") or tells you to stop ("Стоп"), execute the translation, draft, or answer directly without embarking on unnecessary exploratory tool searches or file queries.
 3. **Inbound Replies vs. Mass Cold Outreach**:
    - **Inbound Replies (1-on-1)**: Handled via `check_inbound.py` poller (3m interval). User approves/modifies drafts before sending.
+   - **4-Touch Sequence Strategy (Exact Text)**:
+     1. **Емейл 1 (Зацепка)**:
+        `Здравствуйте, [Имя/Компания]!`
+        `Это Ричард из Navo. Ваши контакты мы получили от наших коллег в логистике как сильного агента в Китае для контейнерных и других видов перевозки. Это правильно?`
+     2. **Емейл 2 (Завязка диалога - Судоходные линии и объёмы)**:
+        `Понятно, спасибо!`
+        `Уточните пожалуйста, с какими судоходными линиями вы работаете? Есть ли среди ваших клиентов известные китайские или мировые бренды? Расскажите о ваших сильных сторонах, где самые лучшие ставки у вас? Какой примерный объем перевозок в контейнерах или тоннах вашей компании за год?`
+     3. **Емейл 3 (Завязка диалога - ЛПР)**:
+        `Принято, спасибо!`
+        `По поводу сотрудничества и интеграции Вашей компании в нашу экосистему, подскажите общаться с Вами или с Вашим боссом?`
+     4. **Емейл 4 (Полноценный оффер Early Bird)**:
+        `Отлично`
+        `Мы работаем с экспедиторскими компаниями через принципиально новую экосистему для цифровой логистики... [3 месяца бесплатного тестового периода, бесплатное обновление сайта, калькулятор фрахта, автотрекинг, объединённая сеть тарифов].`
+   - **Signature Rule**:
+     - **NO EXTRA PARAGRAPHS OR BLANK LINES** at the very top of the email body text.
+     - **EXACTLY 1 EXTRA BLANK LINE** before the signature block.
+     - **NO HORIZONTAL LINE (`border-top`) BEFORE THE SIGNATURE**.
+     - Use ONLY the official HTML signature block (`Richard Marlowe / Connections Manager`, logo `https://bit.ly/4hLg86T`, +44 203 440 9800, 30 St Mary Axe London, `rich@navo24.com`, `www.navo24.com`).
+     *(See `references/4-touch-sequence-pattern.md` for full sequence details and HTML signature templates.)*
    - **Mass Cold Outreach (Batches of 500)**: B2B campaigns across Airtable bases (`CN FF 1`: `appdWYgvtQR2Fgaeq` / `CNFF-1`, `CN FF 2`: `appa1AH0vV4fl1BVQ` / `CNFF-2`, `CN FF 3`: `appVItBOee1awOPHh` / `CNFF-3`) with 1m sending interval, CCing `lxxmng@navo24.com` & `stefan@navo24.com`. Update `Stage` and `status` to `"Contacted"` via Airtable PATCH API strictly record-by-record AFTER each email is sent.
    - **Plain Text Body + HTML Signature Only**: Cold outreach emails MUST use a natural human plain-text body (or simple HTML text). DO NOT send full HTML email newsletter templates, which look like automated marketing blasts. ATTACH ONLY the official HTML signature at the bottom (Richard Marlowe, Senior Sales Manager, domain links).
    - **Verification before Confirming Launch**: Never report a mass outreach batch as "launched/running" based on text alone. Verify that the necessary credentials (full Airtable PAT format `pat<id>.<secret>`, SMTP credentials, or local script) are present and actually executed.

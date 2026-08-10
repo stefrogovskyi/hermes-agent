@@ -10,7 +10,7 @@ USER: Стефан (COO Navo). MS To-Do = supremo@i.ua via Make webhook. Аге�
 §
 WORK STYLE: Stefan wants 24/7 autonomous proactive work on long-term tasks. Priority rule: if Stefan interjects with a question, pause background work, answer, then resume. No waiting for prompts.
 §
-Windows: pythonw CREATE_NO_WINDOW. Servarica 500GB: NEVER copy/backup 5TB+ files from user PCs, hold ONLY FTS5 index, fetch on-demand. Fallback chain: free models FIRST, paid models LAST.
+Servarica = 24/7 Master Node. NEVER copy 5TB+ files to 500GB Servarica — store ONLY FTS5 index & fetch on-demand via Tailscale. Fallback chain: free models FIRST, paid models LAST. Richard emails MUST use official logo signature (https://bit.ly/4hLg86T) & blue #0000FF links. Kanban boards: dual persistence (localStorage+API). Daily 08:00 AM Kanban brief.
 §
 YouTube WL: Playwright 23:00 daily; 'move'=deletion. DP World vacancies cron = Hermes Stevenson DM ONLY. DBs: WAL+busy_timeout 10s.
 §
