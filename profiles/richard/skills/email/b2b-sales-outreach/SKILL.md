@@ -23,11 +23,31 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
 ## Key Principles
 
 1. **Client Language Matching**: Always match the language of the prospect. If a Chinese client replies in Chinese (e.g. 陈先生 from Qiaoye Logistics), translate questions and draft responses into clear, professional B2B Chinese.
-2. **Direct Execution on Feedback**: When the user approves draft direction (e.g., "Billy text is good - translate to Chinese and send"), execute the translation and delivery/confirmation directly without embarking on unnecessary exploratory tool searches or file queries.
-3. **Qualifying Questions Pattern**:
+2. **Direct Execution on Feedback**: When the user approves draft direction (e.g., "Billy text is good - translate to Chinese and send") or tells you to stop ("Стоп"), execute the translation, draft, or answer directly without embarking on unnecessary exploratory tool searches or file queries.
+3. **Inbound Replies vs. Mass Cold Outreach**:
+   - **Inbound Replies (1-on-1)**: Handled via `check_inbound.py` poller (3m interval). User approves/modifies drafts before sending.
+   - **Mass Cold Outreach (Batches of 500)**: B2B campaigns across Airtable bases (`CN FF 1`: `appdWYgvtQR2Fgaeq` / `CNFF-1`, `CN FF 2`: `appa1AH0vV4fl1BVQ` / `CNFF-2`, `CN FF 3`: `appVItBOee1awOPHh` / `CNFF-3`) with 1m sending interval, CCing `lxxmng@navo24.com` & `stefan@navo24.com`. Update `Stage` and `status` to `"Contacted"` via Airtable PATCH API (up to 10 records per batch).
+   - **Verification before Confirming Launch**: Never report a mass outreach batch as "launched/running" based on text alone. Verify that the necessary credentials (full Airtable PAT format `pat<id>.<secret>`, Make Webhook, or local script) are present and actually executed.
+4. **Airtable PAT Authentication & Base Mapping**:
+   - Airtable Personal Access Tokens use the full format `pat<id>.<secret>` (e.g. `patzjFlOTnLygbDs0.64e5...`). Single `pat<id>` prefixes will return 401 Unauthorized.
+   - Base mapping for Chinese Freight Forwarder outreach:
+     * `CN FF 1` = Base ID `appdWYgvtQR2Fgaeq` (Table `CNFF-1`)
+     * `CN FF 2` = Base ID `appa1AH0vV4fl1BVQ` (Table `CNFF-2`)
+     * `CN FF 3` = Base ID `appVItBOee1awOPHh` (Table `CNFF-3`)
+
+## Pitfalls & Common Mistakes
+
+- **CRITICAL: Premature CRM Status Updates**: Never bulk-update Airtable records from `Lead` to `Contacted` in advance or without actually dispatching the emails. Sending a batch of 500 emails with a 1-minute interval physically takes **~8.3 hours** — updating Airtable in seconds without real SMTP/API dispatch corrupts lead tracking and creates false completion reports. Always update Airtable status record-by-record AFTER each email is actually sent.
+- **Faking/Simulating Batch Triggers**: Confirming a mass email launch without executing a real tool or background process results in missed emails and user frustration. Always run real background processes (`terminal(background=True, notify_on_complete=True)`) with proper 60s delays and log files (e.g. `/root/cn_ff_1_outreach.log`).
+- **Real SMTP Dispatch Settings**:
+  * Host: `smtp.office365.com:587` (STARTTLS)
+  * From: `rich@navo24.com`
+  * CC List: `lxxmng@navo24.com`, `stefan@navo24.com`
+- **Excessive Exploratory Tool Searching**: When the user gives a direct command ("Stop", "Translate to Chinese and send"), execute immediately rather than searching files or running multiple diagnostic queries.
+4. **Qualifying Questions Pattern**:
    - Carrier & Route Focus: Ask which primary shipping lines and trade lanes they operate on.
    - Service/Feature Priorities: Ask which platform capabilities (tracking, schedules, loading, API/MCP) matter most to their workflow.
    - Decision-Maker Clarification: Clarify whether to continue direct discussion with the respondent or involve their leadership/management.
-4. **Signature & CC Rules**:
+5. **Signature & CC Rules**:
    - CC team emails (`lxxmng@navo24.com`, `stefan@navo24.com`) as required.
    - Use standard polite closing (`顺祝商祺， / Best regards,` + `Richard Marlowe`). Let Outlook signature auto-attach without adding redundant custom signatures.
