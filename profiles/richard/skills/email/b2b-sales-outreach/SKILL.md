@@ -2,11 +2,23 @@
 name: b2b-sales-outreach
 description: "Draft, translate, and handle B2B sales email outreach."
 version: 0.1.0
+author: Richard Marlowe, Hermes Agent
+license: MIT
+metadata:
+  hermes:
+    tags: [Email, Sales, Outreach, Translation, B2B]
+    related_skills: [email-inbox-triage, himalaya]
 ---
 
 # B2B Sales Outreach & Reply Workflows
 
 Guidelines for drafting, translating, and confirming B2B sales email replies for international freight logistics and prospective clients.
+
+## When to Use
+
+- Drafting or translating B2B sales emails for prospective clients.
+- Handling client draft feedback from Stefan or team members.
+- Qualifying inbound sales leads via email.
 
 ## Key Principles
 

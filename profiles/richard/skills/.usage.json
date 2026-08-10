@@ -3,16 +3,16 @@
     "archived_at": null,
     "created_at": "2026-08-10T14:04:42.492086+00:00",
     "created_by": "agent",
-    "last_patched_at": null,
+    "last_patched_at": "2026-08-10T14:04:52.325921+00:00",
     "last_reused_patch_generation": 0,
-    "last_used_at": null,
-    "last_viewed_at": null,
-    "patch_count": 0,
-    "patch_generation": 0,
+    "last_used_at": "2026-08-10T14:04:48.205836+00:00",
+    "last_viewed_at": "2026-08-10T14:04:48.204488+00:00",
+    "patch_count": 1,
+    "patch_generation": 1,
     "pinned": false,
     "state": "active",
-    "use_count": 0,
-    "view_count": 0
+    "use_count": 1,
+    "view_count": 1
   },
   "email-inbox-triage": {
     "archived_at": null,
