@@ -66,6 +66,11 @@ Use when configuring or troubleshooting multi-profile Hermes Agent instances run
    - **Constraint:** Do NOT attempt full file sync or replication from large remote workstations (5+ TB across PCs) onto a server with limited storage (e.g. 500 GB VPS).
    - **Pattern:** Use a **lightweight metadata & FTS5 index** (paths, filenames, extracted text) and fetch/transfer individual files **on-demand** over Tailscale / SMB / SSH when explicitly requested.
 
+6. **Google Drive Trashed File Recovery & Hierarchy Audit:**
+   - Files in Google Drive can be moved to trash directly (`trashed: true`) or implicitly via parent folders.
+   - To query trashed items via Drive API: `drive search "trashed=true" --raw-query` or `drive search "name contains 'X' and trashed=true" --raw-query`.
+   - To restore a trashed file programmatically: send `PATCH https://www.googleapis.com/drive/v3/files/<file_id>?supportsAllDrives=true` with JSON body `{"trashed": false}` using the OAuth access token.
+
 6. **Windows Remote Access & SMB Inspection over Tailscale:**
    - **Windows SMB Guest Access:** Windows 10/11 blocks anonymous SMB by default (`STATUS_ACCESS_DENIED`). To enable guest SMB access:
      ```powershell
