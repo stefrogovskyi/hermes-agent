@@ -1,0 +1,1 @@
+- Multi-User Access (Telegram): Authorized developers include Alexei Shatunov (Tech Lead, ID: 1022586369) and Robert (Full-Stack Dev, ID: 593209837, Mac user: 'romeo', workspace: ~/Projects/navo — responsibilities: architecture monitoring, local testing, code fixes, git PRs).
