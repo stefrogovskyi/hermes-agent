@@ -82,17 +82,13 @@ Use when configuring or troubleshooting multi-profile Hermes Agent instances run
 
 7. **Master Fallback Chain & Key Synchronization:**
    - **Primary Model:** Standardize all profiles on a reliable primary model (e.g., `google/gemini-3.6-flash`). Ensure both `GEMINI_API_KEY` and `GOOGLE_API_KEY` exist in `.env` for compatibility with both `google` and `gemini` provider specs.
-   - **Master 16-Step Fallback Chain:** Configure a full fallback chain across all profiles in `config.yaml` to ensure graceful failover during rate limits or 402/503 errors:
+   - **Master Fallback Priority Rule (Free First, Paid Last):** All 12 FREE models (`:free` suffix) MUST be placed at the top of the fallback list. Commercial/paid models (`minimax`, `kimi`, `gpt-4o`, `gpt-4o-mini`) MUST be placed at the very end of the priority chain so they are consumed only as an emergency last resort.
+   - **Master 16-Step Fallback Chain:**
      ```yaml
      fallback_providers:
-       - model: gpt-4o-mini
-         provider: openai
-       - model: gpt-4o
-         provider: openai
-       - model: minimax-m2.7
-         provider: gonka24
-       - model: kimi-k2.6
-         provider: gonka24
+       # --- 1. FREE MODELS FIRST (Steps 1 to 12) ---
+       - model: poolside/laguna-s-2.1:free
+         provider: nous
        - model: nvidia/nemotron-3-ultra-550b-a55b:free
          provider: openrouter
        - model: nvidia/nemotron-3-super-120b-a12b:free
@@ -101,8 +97,6 @@ Use when configuring or troubleshooting multi-profile Hermes Agent instances run
          provider: openrouter
        - model: google/gemma-4-26b-a4b-it:free
          provider: openrouter
-       - model: poolside/laguna-s-2.1:free
-         provider: nous
        - model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
          provider: openrouter
        - model: cohere/north-mini-code:free
@@ -117,5 +111,15 @@ Use when configuring or troubleshooting multi-profile Hermes Agent instances run
          provider: openrouter
        - model: nvidia/nemotron-nano-9b-v2:free
          provider: openrouter
+
+       # --- 2. PAID / COMMERCIAL MODELS AT THE VERY END (Steps 13 to 16) ---
+       - model: minimax-m2.7
+         provider: gonka24
+       - model: kimi-k2.6
+         provider: gonka24
+       - model: gpt-4o-mini
+         provider: openai
+       - model: gpt-4o
+         provider: openai
      ```
    - **Verification:** Regularly audit all profile `config.yaml` and `.env` files to guarantee no profile lacks fallback entries or active primary API keys.
