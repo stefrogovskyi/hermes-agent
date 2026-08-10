@@ -1,0 +1,6 @@
+model:
+  default: google/gemini-3.6-flash
+  provider: google
+onboarding:
+  seen:
+    profile_build_offered: true
