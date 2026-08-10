@@ -1,3 +1,36 @@
+fallback_providers:
+- model: poolside/laguna-s-2.1:free
+  provider: nous
+- model: nvidia/nemotron-3-ultra-550b-a55b:free
+  provider: openrouter
+- model: nvidia/nemotron-3-super-120b-a12b:free
+  provider: openrouter
+- model: google/gemma-4-31b-it:free
+  provider: openrouter
+- model: google/gemma-4-26b-a4b-it:free
+  provider: openrouter
+- model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
+  provider: openrouter
+- model: cohere/north-mini-code:free
+  provider: openrouter
+- model: openai/gpt-oss-20b:free
+  provider: openrouter
+- model: inclusionai/ling-3.0-flash:free
+  provider: openrouter
+- model: nvidia/nemotron-nano-12b-v2-vl:free
+  provider: openrouter
+- model: nvidia/nemotron-3-nano-30b-a3b:free
+  provider: openrouter
+- model: nvidia/nemotron-nano-9b-v2:free
+  provider: openrouter
+- model: minimax-m2.7
+  provider: gonka24
+- model: kimi-k2.6
+  provider: gonka24
+- model: gpt-4o-mini
+  provider: openai
+- model: gpt-4o
+  provider: openai
 model:
   default: google/gemini-3.6-flash
   provider: google

@@ -79,3 +79,43 @@ Use when configuring or troubleshooting multi-profile Hermes Agent instances run
      New-NetFirewallRule -Name 'OpenSSH-Server-Inbound' -DisplayName 'OpenSSH Server' -Enabled True -Direction Inbound -Protocol TCP -LocalPort 22 -Action Allow
      ```
    - **Python Direct SMB Access:** Use `impacket.smbconnection.SMBConnection` with `conn.login("Guest", "")` to list SMB shares and paths over Tailscale without needing local mount points on Linux.
+
+7. **Master Fallback Chain & Key Synchronization:**
+   - **Primary Model:** Standardize all profiles on a reliable primary model (e.g., `google/gemini-3.6-flash`). Ensure both `GEMINI_API_KEY` and `GOOGLE_API_KEY` exist in `.env` for compatibility with both `google` and `gemini` provider specs.
+   - **Master 16-Step Fallback Chain:** Configure a full fallback chain across all profiles in `config.yaml` to ensure graceful failover during rate limits or 402/503 errors:
+     ```yaml
+     fallback_providers:
+       - model: gpt-4o-mini
+         provider: openai
+       - model: gpt-4o
+         provider: openai
+       - model: minimax-m2.7
+         provider: gonka24
+       - model: kimi-k2.6
+         provider: gonka24
+       - model: nvidia/nemotron-3-ultra-550b-a55b:free
+         provider: openrouter
+       - model: nvidia/nemotron-3-super-120b-a12b:free
+         provider: openrouter
+       - model: google/gemma-4-31b-it:free
+         provider: openrouter
+       - model: google/gemma-4-26b-a4b-it:free
+         provider: openrouter
+       - model: poolside/laguna-s-2.1:free
+         provider: nous
+       - model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
+         provider: openrouter
+       - model: cohere/north-mini-code:free
+         provider: openrouter
+       - model: openai/gpt-oss-20b:free
+         provider: openrouter
+       - model: inclusionai/ling-3.0-flash:free
+         provider: openrouter
+       - model: nvidia/nemotron-nano-12b-v2-vl:free
+         provider: openrouter
+       - model: nvidia/nemotron-3-nano-30b-a3b:free
+         provider: openrouter
+       - model: nvidia/nemotron-nano-9b-v2:free
+         provider: openrouter
+     ```
+   - **Verification:** Regularly audit all profile `config.yaml` and `.env` files to guarantee no profile lacks fallback entries or active primary API keys.

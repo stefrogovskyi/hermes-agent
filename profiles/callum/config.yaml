@@ -6,14 +6,8 @@ display:
   streaming: true
   tool_progress: all
 fallback_providers:
-- model: gpt-4o-mini
-  provider: openai
-- model: gpt-4o
-  provider: openai
-- model: minimax-m2.7
-  provider: gonka24
-- model: kimi-k2.6
-  provider: gonka24
+- model: poolside/laguna-s-2.1:free
+  provider: nous
 - model: nvidia/nemotron-3-ultra-550b-a55b:free
   provider: openrouter
 - model: nvidia/nemotron-3-super-120b-a12b:free
@@ -22,8 +16,6 @@ fallback_providers:
   provider: openrouter
 - model: google/gemma-4-26b-a4b-it:free
   provider: openrouter
-- model: poolside/laguna-s-2.1:free
-  provider: nous
 - model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
   provider: openrouter
 - model: cohere/north-mini-code:free
@@ -38,6 +30,14 @@ fallback_providers:
   provider: openrouter
 - model: nvidia/nemotron-nano-9b-v2:free
   provider: openrouter
+- model: minimax-m2.7
+  provider: gonka24
+- model: kimi-k2.6
+  provider: gonka24
+- model: gpt-4o-mini
+  provider: openai
+- model: gpt-4o
+  provider: openai
 group_sessions_per_user: true
 model:
   default: google/gemini-3.6-flash
