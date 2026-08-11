@@ -16,6 +16,9 @@ metadata:
 ## When to Use
 Use when configuring or troubleshooting multi-profile Hermes Agent instances running as systemd background services on Linux servers, or setting up Git workspace synchronization.
 
+- `references/vercel-surge-kanban-sync.md` — Detailed guide for Vercel/Surge CLI deployments, `localStorage` + API dual persistence for Kanban boards, and `notranslate` headers to prevent Japanese auto-translation glitches.
+- `references/troubleshooting.md` — Diagnostic steps for gateway logs and systemd services.
+
 ## Key Concepts & Architecture
 
 1. **Systemd Services per Profile:**
@@ -129,10 +132,14 @@ Use when configuring or troubleshooting multi-profile Hermes Agent instances run
      ```
    - **Verification:** Regularly audit all profile `config.yaml` and `.env` files to guarantee no profile lacks fallback entries or active primary API keys.
 
-8. **Interactive Multi-Agent Kanban Boards & Rollback Prevention:**
+9. **Interactive Multi-Agent Kanban Boards & Rollback Prevention:**
    - **Preventing Drag-and-Drop Rollbacks:** Unpersisted drag-and-drop or static HTML resets card positions on page refresh. To fix:
      - Implement HTML5 Drag and Drop (`draggable="true"`, `ondragstart`, `ondragover`, `ondrop`).
      - **Dual Persistence:** Save card positions immediately to `localStorage` (`localStorage.setItem('kanban_state_' + agent, ...)`), then send `POST /kanban_api.php` with `{ agent, action: "move_card", card_id, new_column_id }` to update `kanban_store_<agent>.json` on the server.
+   - **Preventing Browser Auto-Translation Glitches (Japanese/Foreign Translation Fix):**
+     - When hosting Cyrillic HTML pages on Vercel/Surge, browsers (Chrome/Safari) may misidentify the language and auto-translate the page to Japanese or another language.
+     - **Fix:** Include `<meta name="google" content="notranslate">` and `<meta http-equiv="Content-Language" content="ru">` in `<head>`, and configure `vercel.json` headers with `"Content-Type": "text/html; charset=utf-8"`.
+   - **Kanban Hosting Policy (Hard Rule):** All agent Kanban boards MUST be deployed EXCLUSIVELY to Vercel (`https://<agent>-kanban.vercel.app`). **NEVER** deploy or host Kanban boards on the primary production domain `aavalanche.com/kanban/`.
    - **Agent-Specific Themes:** Assign distinct color themes per agent board (Hermes: Cyber Blue/Emerald, Richard: Gold/Emerald, Callum: Electric Cyan/Indigo, Alistair: Executive Violet/Purple, Liz: Coral/Rose, Ben: Growth Orange/Amber).
    - **Daily 08:00 AM Review Cron:** Schedule a daily cron at 08:00 AM (`0 8 * * *`) that polls `kanban_api.php`, aggregates tasks across all agent boards, and delivers a concise Telegram brief.
 

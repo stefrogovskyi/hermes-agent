@@ -10,7 +10,7 @@ USER: Стефан (COO Navo). MS To-Do = supremo@i.ua via Make webhook. Аге�
 §
 WORK STYLE: Stefan wants 24/7 autonomous proactive work on long-term tasks. Priority rule: if Stefan interjects with a question, pause background work, answer, then resume. No waiting for prompts.
 §
-Servarica 24/7 Master Node. NEVER copy multi-TB files to 500GB Servarica — store FTS5 index & fetch on-demand via Tailscale. Fallbacks: free models FIRST, paid LAST. Richard emails: official logo signature (https://bit.ly/4hLg86T) & blue #0000FF links. Answer user's current request first; never block on clarify().
+КАНБАНЫ АГЕНТОВ: Все 6 Канбанов агентов хостятся ИСКЛЮЧИТЕЛЬНО НА VERCEL (https://<agent>-kanban.vercel.app). НИКОГДА НЕ ДЕПЛОИТЬ КАНБАНЫ НА ДОМЕНЕ AAVALANCHE.COM. Бэкенд API: https://dev.aavalanche.com/kanban_api.php.
 §
 YouTube WL: Playwright 23:00 daily; 'move'=deletion. DP World vacancies cron = Hermes Stevenson DM ONLY. DBs: WAL+busy_timeout 10s.
 §

@@ -81,3 +81,11 @@ Guidelines, tokens, typography standards, and copy rules for all Navo24 platform
   - Provide a sticky bottom mobile control bar (`← Назад | Слайд N из 8 | Вперед →`).
 - **Deployments:** Package with static `index.html` + `vercel.json` (`cleanUrls: true`) for 1-click Vercel deployment.
 
+## 7. AI-Augmented Developer KPI & Velocity Benchmarking
+
+- **Name Conventions:** Robert is "Роберт" (Full-Stack Developer), NOT "Роберт Vance".
+- **Baseline Observation Phase (Month 1):**
+  - Do NOT set arbitrary hardcoded SLA numbers (e.g. "48 hours Cycle Time") without project-specific baseline data.
+  - Phase 1 focuses on 0 Prod Regressions (Sev-1) + 100% AI Review & Test pass, while logging real velocity with Claude Code on Dev-servers.
+  - Log AI tool usage via GitHub PR templates (`[x] Claude Code Assisted`) and CI/CD time-to-dev-server metrics to set accurate company SLAs on Month 2.
+

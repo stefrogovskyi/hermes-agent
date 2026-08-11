@@ -14,11 +14,142 @@ agents_config = {
         "accent": "#3B82F6",
         "accent_secondary": "#10B981",
         "cards": [
-            {"id": "c_h1", "column_id": "todo", "title": "🛍️ Silpo Weekly Groceries Order", "desc": "Еженедельная автосборка корзины Сільпо через Playwright Chromium (>1,700 UAH).", "assignee": "🤖 Hermes", "tag": "PENDING", "tag_class": "tag-todo"},
-            {"id": "c_h2", "column_id": "in_progress", "title": "🖥️ Servarica Master Node 24/7 Autonomy", "desc": "Полный перенос 6 профилей Гермеса и вочдогов на Серварику.", "assignee": "🤖 Hermes Cluster", "tag": "ACTIVE", "tag_class": "tag-progress"},
-            {"id": "c_h3", "column_id": "recurring", "title": "📺 YouTube Watch Later Sorter", "desc": "Ежедневный разбор в 23:00 со 49 реальными плейлистами YouTube.", "assignee": "🤖 Hermes DM", "tag": "DAILY 23:00", "tag_class": "tag-cron"},
-            {"id": "c_h4", "column_id": "completed", "title": "🤖 100% Multi-Agent Profiles Cluster", "desc": "Все 6 агентов (Hermes, Callum, Richard, Alistair, Liz, Ben) запущены и изолированы.", "assignee": "🤖 6 Cores Live", "tag": "VERIFIED", "tag_class": "tag-done"}
-        ]
+        {
+                "id": "card_1",
+                "column_id": "todo",
+                "title": "💳 Monobank Merchant Acquiring Token Integration",
+                "desc": "Подключение X-Token ФОП Монобанка для реальных списаний в грн на сайте.",
+                "assignee": "👤 Stefan / Callum",
+                "tag": "BACKLOG",
+                "tag_class": "tag-todo"
+        },
+        {
+                "id": "card_2",
+                "column_id": "todo",
+                "title": "🛍️ Silpo Weekly Groceries Order Assembly",
+                "desc": "Еженедельная автосборка корзины Сільпо через Playwright Chromium (>1,700 UAH).",
+                "assignee": "🤖 Hermes",
+                "tag": "PENDING",
+                "tag_class": "tag-todo"
+        },
+        {
+                "id": "card_3",
+                "column_id": "todo",
+                "title": "🇩🇪 Hetzner Cloud VPS Migration",
+                "desc": "Перенос 6 профилей Гермеса и крон-задач на серваки Hetzner для 24/7 автономии.",
+                "assignee": "🤖 Hermes Cluster",
+                "tag": "PLANNED",
+                "tag_class": "tag-todo"
+        },
+        {
+                "id": "card_4",
+                "column_id": "in_progress",
+                "title": "🌐 Avalanche Agency 3-Tier Pipeline",
+                "desc": "Синхронизация dev.aavalanche.com, staging и prod под управлением GitHub.",
+                "assignee": "💻 Callum Vance",
+                "tag": "ACTIVE",
+                "tag_class": "tag-progress"
+        },
+        {
+                "id": "card_5",
+                "column_id": "in_progress",
+                "title": "🚀 AI Project Evaluation & 10-Point Price Graduation",
+                "desc": "ИИ-оценка сложности проекта по 10 уровням, конвертация валюты по IP и модалка оплаты.",
+                "assignee": "💻 Callum Vance",
+                "tag": "ACTIVE",
+                "tag_class": "tag-progress"
+        },
+        {
+                "id": "card_6",
+                "column_id": "in_progress",
+                "title": "🔑 User Auth, Personal Cabinet & Admin Panel",
+                "desc": "Регистрация, вход, Google/Facebook OAuth, Личный Кабинет и таблица пользователей.",
+                "assignee": "💻 Callum Vance",
+                "tag": "ACTIVE",
+                "tag_class": "tag-progress"
+        },
+        {
+                "id": "card_7",
+                "column_id": "recurring",
+                "title": "📺 YouTube Watch Later Daily Sorter",
+                "desc": "Ежедневный разбор в 23:00 с сопоставлением со 49 реальными плейлистами YouTube.",
+                "assignee": "🤖 Hermes DM",
+                "tag": "DAILY 23:00",
+                "tag_class": "tag-cron"
+        },
+        {
+                "id": "card_8",
+                "column_id": "recurring",
+                "title": "🌾 Memory Harvest Cron",
+                "desc": "Ежедневная автосборка фактов и кейсов памяти memory_v2 в 02:00 MSK.",
+                "assignee": "🤖 Hermes",
+                "tag": "DAILY 02:00",
+                "tag_class": "tag-cron"
+        },
+        {
+                "id": "card_9",
+                "column_id": "recurring",
+                "title": "🌲 Pinecone Vector Memory Sync",
+                "desc": "Ежедневный векторный синтез эмбеддингов в Pinecone в 03:00 MSK.",
+                "assignee": "🤖 Hermes",
+                "tag": "DAILY 03:00",
+                "tag_class": "tag-cron"
+        },
+        {
+                "id": "card_10",
+                "column_id": "recurring",
+                "title": "🏢 DP World Careers Vacancies Poller",
+                "desc": "Ежедневный мониторинг новых вакансий DP World в 09:00 MSK.",
+                "assignee": "🤖 Hermes DM ONLY",
+                "tag": "DAILY 09:00",
+                "tag_class": "tag-cron"
+        },
+        {
+                "id": "card_11",
+                "column_id": "completed",
+                "title": "🤖 100% Multi-Agent Hermes Profiles Cluster",
+                "desc": "Все 6 агентов (Orchestrator, Callum, Richard, Alistair, Liz, Ben) работают на ядре Гермеса!",
+                "assignee": "🤖 6 Cores Live",
+                "tag": "VERIFIED",
+                "tag_class": "tag-done"
+        },
+        {
+                "id": "card_12",
+                "column_id": "completed",
+                "title": "🌍 8 Multilingual Language Clones",
+                "desc": "100% отзеркаливание верстки на 8 языков (es, de, fr, it, uk, ru, zh, ar) без сброса сессий.",
+                "assignee": "💻 Callum Vance",
+                "tag": "VERIFIED",
+                "tag_class": "tag-done"
+        },
+        {
+                "id": "card_13",
+                "column_id": "completed",
+                "title": "📧 Dual Branded Email Mailer",
+                "desc": "Двойная отправка писем админу на dr.reenforce@gmail.com с info@aavalanche.com.",
+                "assignee": "💻 Callum Vance",
+                "tag": "VERIFIED",
+                "tag_class": "tag-done"
+        },
+        {
+                "id": "card_14",
+                "column_id": "completed",
+                "title": "🗺️ Drive & Desktop File Organization",
+                "desc": "Наведен полный порядок на Диске и Рабочем столе с памяткой README_FILE_STRUCTURE.md.",
+                "assignee": "📈 Alistair Sterling",
+                "tag": "VERIFIED",
+                "tag_class": "tag-done"
+        },
+        {
+                "id": "card_15",
+                "column_id": "completed",
+                "title": "🔎 Google Search Console SEO Setup",
+                "desc": "Загружен sitemap.xml для 9 языков и robots.txt, закрыты noindex dev/staging.",
+                "assignee": "🤖 Hermes",
+                "tag": "VERIFIED",
+                "tag_class": "tag-done"
+        }
+]
     },
     "richard": {
         "title": "Richard Marlowe — B2B Sales & Pipeline Kanban",
@@ -179,7 +310,18 @@ def generate_html(agent, cfg):
   </header>
 
   <div class="grid" id="kanban-grid">
-    <!-- Columns loaded dynamically -->
+    <div class="column" data-col="todo" ondragover="event.preventDefault();this.classList.add('drag-over');" ondragleave="this.classList.remove('drag-over');" ondrop="handleDrop(event,'todo',this)">
+      <div class="column-header"><span>📋 TODO / BACKLOG</span></div>
+    </div>
+    <div class="column" data-col="in_progress" ondragover="event.preventDefault();this.classList.add('drag-over');" ondragleave="this.classList.remove('drag-over');" ondrop="handleDrop(event,'in_progress',this)">
+      <div class="column-header"><span>⚡ IN PROGRESS</span></div>
+    </div>
+    <div class="column" data-col="recurring" ondragover="event.preventDefault();this.classList.add('drag-over');" ondragleave="this.classList.remove('drag-over');" ondrop="handleDrop(event,'recurring',this)">
+      <div class="column-header"><span>🔄 RECURRING / CRON</span></div>
+    </div>
+    <div class="column" data-col="completed" ondragover="event.preventDefault();this.classList.add('drag-over');" ondragleave="this.classList.remove('drag-over');" ondrop="handleDrop(event,'completed',this)">
+      <div class="column-header"><span>✅ COMPLETED / DONE</span></div>
+    </div>
   </div>
 
   <!-- NEW TASK MODAL -->
