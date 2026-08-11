@@ -6,6 +6,10 @@ command_allowlist:
 - script execution via -e/-c flag
 - execute_code
 - command parser limit or malformed executable payload
+compression:
+  enabled: true
+  target_ratio: 0.15
+  threshold: 0.25
 display:
   interim_assistant_messages: true
   streaming: true

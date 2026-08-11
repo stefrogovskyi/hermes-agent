@@ -5,6 +5,10 @@ browser:
   engine: chrome
 command_allowlist:
 - script execution via -e/-c flag
+compression:
+  enabled: true
+  target_ratio: 0.15
+  threshold: 0.25
 display:
   interim_assistant_messages: true
   streaming: true
