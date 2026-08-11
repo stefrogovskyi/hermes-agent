@@ -6,61 +6,119 @@ model:
       api_key_env: GONKA24_API_KEY
       base_url: https://api.gonka24.com/v1
       models:
-      - minimax-m2.7
-      - kimi-k2.6
+        - minimax-m2.7
+        - kimi-k2.6
   request_timeout_seconds: 60
   max_retries: 3
   retry_delay_seconds: 2
 fallback_providers:
-- model: gpt-4o-mini
-  provider: openai
-- model: gpt-4o
-  provider: openai
-- model: minimax-m2.7
-  provider: gonka24
-- model: kimi-k2.6
-  provider: gonka24
-- model: google/gemma-4-31b-it:free
-  provider: openrouter
-- model: google/gemma-4-26b-a4b-it:free
-  provider: openrouter
-- model: poolside/laguna-s-2.1:free
-  provider: nous
-- model: cohere/north-mini-code:free
-  provider: openrouter
-- model: openai/gpt-oss-20b:free
-  provider: openrouter
-- model: inclusionai/ling-3.0-flash:free
-  provider: openrouter
-- model: nvidia/nemotron-3-ultra-550b-a55b:free
-  provider: openrouter
-- model: nvidia/nemotron-3-super-120b-a12b:free
-  provider: openrouter
-- model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
-  provider: openrouter
-- model: nvidia/nemotron-nano-12b-v2-vl:free
-  provider: openrouter
-- model: nvidia/nemotron-3-nano-30b-a3b:free
-  provider: openrouter
-- model: nvidia/nemotron-nano-9b-v2:free
-  provider: openrouter
-command_allowlist:
-- script execution via -e/-c flag
-_config_version: 33
-onboarding:
-  seen:
-    busy_input_prompt: true
-group_sessions_per_user: true
-telegram:
-  enabled: true
-  allowed_users: &id001
-  - 330656040
-  - 1022586369
-  - 593209837
-  allow_from: *id001
-streaming:
-  enabled: true
+  - model: gpt-4o-mini
+    provider: openai
+  - model: gpt-4o
+    provider: openai
+  - model: minimax-m2.7
+    provider: gonka24
+  - model: kimi-k2.6
+    provider: gonka24
+  - model: google/gemma-4-31b-it:free
+    provider: openrouter
+  - model: google/gemma-4-26b-a4b-it:free
+    provider: openrouter
+  - model: poolside/laguna-s-2.1:free
+    provider: nous
+  - model: cohere/north-mini-code:free
+    provider: openrouter
+  - model: openai/gpt-oss-20b:free
+    provider: openrouter
+  - model: inclusionai/ling-3.0-flash:free
+    provider: openrouter
+  - model: nvidia/nemotron-3-ultra-550b-a55b:free
+    provider: openrouter
+  - model: nvidia/nemotron-3-super-120b-a12b:free
+    provider: openrouter
+  - model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
+    provider: openrouter
+  - model: nvidia/nemotron-nano-12b-v2-vl:free
+    provider: openrouter
+  - model: nvidia/nemotron-3-nano-30b-a3b:free
+    provider: openrouter
+  - model: nvidia/nemotron-nano-9b-v2:free
+    provider: openrouter
 display:
   streaming: true
   interim_assistant_messages: true
   tool_progress: all
+telegram:
+  enabled: true
+  allowed_users:
+    - 330656040
+    - 1022586369
+    - 593209837
+  allow_from:
+    - 330656040
+    - 1022586369
+    - 593209837
+  group_response_mode: always
+  group_trigger_keywords:
+    - Каллум
+    - Каллума
+    - Каллуму
+    - Каллумом
+    - Каллуме
+    - Callum
+    - Callum Vance
+    - Callum's
+  respond_to_dms: true
+  group_allow_from: '*'
+  require_mention: false
+command_allowlist:
+  - start gateway outside systemd (use 'systemctl --user restart hermes-gateway')
+  - script execution via -e/-c flag
+streaming:
+  enabled: true
+onboarding:
+  seen:
+    busy_input_prompt: true
+_config_version: 33
+group_sessions_per_user: true
+system_prompt_append: 'In Telegram group chats: respond ONLY if (1) @mentioned (@callumvancebot),
+  (2) replied/quoted to, or (3) your name (Каллум / Callum) is explicitly mentioned
+  in any declension/case.'
+
+# ── Security ──────────────────────────────────────────────────────────
+# Secret redaction is ON by default — strings that look like API keys,
+# tokens, and passwords are masked in tool output, logs, and chat
+# responses before the model or user ever sees them. Set redact_secrets
+# to false to disable (e.g. when developing the redactor itself).
+# tirith pre-exec scanning is enabled by default when the tirith binary
+# is available. Configure via security.tirith_* keys or env vars
+# (TIRITH_ENABLED, TIRITH_BIN, TIRITH_TIMEOUT, TIRITH_FAIL_OPEN).
+#
+# security:
+#   redact_secrets: true
+#   tirith_enabled: true
+#   tirith_path: "tirith"
+#   tirith_timeout: 5
+#   tirith_fail_open: true
+
+# ── Fallback Model ────────────────────────────────────────────────────
+# Automatic provider failover when primary is unavailable.
+# Uncomment and configure to enable. Triggers on rate limits (429),
+# overload (529), service errors (503), or connection failures.
+#
+# Supported providers:
+#   openrouter   (OPENROUTER_API_KEY)  — routes to any model
+#   openai-codex (OAuth — hermes auth) — OpenAI Codex
+#   nous         (OAuth — hermes auth) — Nous Portal
+#   zai          (ZAI_API_KEY)         — Z.AI / GLM
+#   kimi-coding  (KIMI_API_KEY)        — Kimi / Moonshot
+#   kimi-coding-cn (KIMI_CN_API_KEY)   — Kimi / Moonshot (China)
+#   minimax      (MINIMAX_API_KEY)     — MiniMax
+#   minimax-cn   (MINIMAX_CN_API_KEY)  — MiniMax (China)
+#   bedrock      (AWS IAM / boto3)     — AWS Bedrock (Converse API)
+#
+# For custom OpenAI-compatible endpoints, add base_url and key_env.
+#
+# fallback_model:
+#   provider: openrouter
+#   model: anthropic/claude-sonnet-4

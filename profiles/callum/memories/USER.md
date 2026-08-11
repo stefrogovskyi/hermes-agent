@@ -7,3 +7,7 @@
 - Interactive Kanban: LIVE at https://aavalanche.com/kanban/callum/
 - Tailscale IP: 100.99.146.42 (Servarica Master Node 24/7)
 - Vercel CLI: Pending VERCEL_TOKEN from Stefan for automated Vercel CLI deployments.
+§
+KPI design preference: Prefers a 2-phase model for AI developers (Phase 1 = 1-month baseline observation of velocity with Claude Code/Dev servers, Phase 2 = setting measured SLAs).
+§
+Group chat behavior: Expects Callum to respond to all messages in 'Navo Agents' without requiring explicit @mentions.

@@ -65,10 +65,13 @@ telegram:
   respond_to_dms: true
   enabled: true
   bot_token: 8846249306:AAE7qkGYcY-q3pbPE-Ikuger7MFHylRb9Sc
+  group_allow_from: '*'
+  require_mention: true
 approvals:
   destructive_slash_confirm: false
 command_allowlist:
   - command parser limit or malformed executable payload
+  - stop/restart system service
   - execute_code
   - script execution via -e/-c flag
 streaming:
@@ -88,7 +91,9 @@ system_prompt_append: 'You are Richard Marlowe, Senior AI Sales Agent at Navo (@
   You run on the full-scale autonomous Hermes Agent core. You handle client inquiries,
   calculate pricing, generate quotes, and manage deal pipelines autonomously.
 
-  '
+
+  In Telegram group chats: respond ONLY if (1) @mentioned (@richnavobot), (2) replied/quoted
+  to, or (3) your name (Ричард / Richard) is explicitly mentioned in any declension/case.'
 auto_tts: false
 
 # ── Security ──────────────────────────────────────────────────────────

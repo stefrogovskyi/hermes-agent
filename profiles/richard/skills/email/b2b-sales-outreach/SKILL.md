@@ -49,7 +49,12 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
      - **NO HORIZONTAL LINE (`border-top`) BEFORE THE SIGNATURE**.
      - Use ONLY the official HTML signature block (`Richard Marlowe / Connections Manager`, logo `https://bit.ly/4hLg86T`, +44 203 440 9800, 30 St Mary Axe London, `rich@navo24.com`, `www.navo24.com`).
      *(See `references/4-touch-sequence-pattern.md` for full sequence details and HTML signature templates.)*
-   - **Mass Cold Outreach (Batches of 500)**: B2B campaigns across Airtable bases (`CN FF 1`: `appdWYgvtQR2Fgaeq` / `CNFF-1`, `CN FF 2`: `appa1AH0vV4fl1BVQ` / `CNFF-2`, `CN FF 3`: `appVItBOee1awOPHh` / `CNFF-3`) with 1m sending interval, CCing `sales@navo24.com`, `lxxmng@navo24.com` & `stefan@navo24.com`. Update `Stage` and `status` to `"Contacted"` via Airtable PATCH API strictly record-by-record AFTER each email is sent.
+   - **Mass Cold Outreach & Anti-Spam (100% Dynamic AI Personalization)**:
+     - **NO STATIC REPETITIVE TEMPLATES**: Cold outreach MUST use 100% dynamic AI personalization (unique subject line & body text per lead generated from CRM company name, contact person, city, and specialties). Static templates cause Microsoft Exchange Online Protection (EOP) to flag outbound spam and block sending (`550 5.1.8 Access denied, bad outbound sender AS(42004)`).
+     - **Safe Sending Cadence**: Use human-like delays of **3–5 minutes (180–300s)** between sends to avoid rate-limiting and anti-spam heuristics on Microsoft 365.
+     - **CC Rules**: CC `lxxmng@navo24.com` & `stefan@navo24.com`. **DO NOT CC `sales@navo24.com`** on cold outreach emails.
+     - **Exchange Online Distribution List Recovery**: Distribution Lists (Groups) in Exchange Online do NOT store or queue blocked messages. Once rejected, messages cannot be retroactively pulled or claimed. Use **Exchange Admin Center (`admin.exchange.microsoft.com`) -> Message Trace** filtered by `Rejected/Failed` to audit external senders and subjects that were blocked.
+     - **Airtable Status Updates**: Update `Stage` and `status` to `"Contacted"` via Airtable PATCH API strictly record-by-record AFTER each email is actually dispatched.
    - **Plain Text Body + HTML Signature Only**: Cold outreach emails MUST use a natural human plain-text body (or simple HTML text). DO NOT send full HTML email newsletter templates, which look like automated marketing blasts. ATTACH ONLY the official HTML signature at the bottom (Richard Marlowe, Senior Sales Manager, domain links).
    - **Verification before Confirming Launch**: Never report a mass outreach batch as "launched/running" based on text alone. Verify that the necessary credentials (full Airtable PAT format `pat<id>.<secret>`, SMTP credentials, or local script) are present and actually executed.
 4. **Airtable PAT Authentication & Base Mapping**:
@@ -61,6 +66,11 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
 
 ## Pitfalls & Common Mistakes
 
+- **CRITICAL: Distinguish M365 Outbound Block NDRs from True Client Bounces**:
+  * Internal Exchange Online Protection (EOP) blocks return `550 5.1.8 Access denied, bad outbound sender AS(42004)`, `was not recognized as a valid sender`, or `suspected of sending spam`.
+  * **This is an issue on OUR side (`rich@navo24.com`), NOT an invalid recipient mailbox.**
+  * Inbound pollers / bounce handlers MUST NEVER delete or purge CRM records upon receiving `550 5.1.8` NDRs! Doing so deletes valid client leads from the CRM. If records were mistakenly deleted due to M365 blocks, inspect the Inbox NDR headers, extract the affected recipient email addresses, and restore them back into the CRM as `Lead`.
+  * Only true recipient-side NDRs (`550 5.1.1 User unknown`, `Host not found`, `Mailbox disabled`) indicate a dead lead that should be deleted/marked bounced.
 - **CRITICAL: Premature CRM Status Updates**: Never bulk-update Airtable records from `Lead` to `Contacted` in advance or without actually dispatching the emails. Sending a batch of 500 emails with a 1-minute interval physically takes **~8.3 hours** — updating Airtable in seconds without real SMTP/API dispatch corrupts lead tracking and creates false completion reports. Always update Airtable status record-by-record AFTER each email is actually sent.
 - **Inbound Poller Duplication (MS Graph)**: Always mark processed MS Graph messages as `isRead = True` and persist their IDs in `/opt/hermes/profiles/richard/processed_msg_ids.json`. Without marking read and persisting seen IDs, the 3-minute poller cron job will repeatedly trigger duplicate alerts for the same messages over 100 times.
 - **Faking/Simulating Batch Triggers**: Confirming a mass email launch without executing a real tool or background process results in missed emails and user frustration. Always run real background processes (`terminal(background=True, notify_on_complete=True)`) with proper 60s delays and log files (e.g. `/root/cn_ff_1_outreach.log`).
