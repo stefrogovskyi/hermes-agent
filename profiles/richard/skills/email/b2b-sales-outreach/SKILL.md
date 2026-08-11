@@ -25,7 +25,8 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
 1. **Client Language Matching**: Always match the language of the prospect. If a Chinese client replies in Chinese (e.g. 陈先生 from Qiaoye Logistics), translate questions and draft responses into clear, professional B2B Chinese.
 2. **Direct Execution on Feedback**: When the user approves draft direction (e.g., "Billy text is good - translate to Chinese and send") or tells you to stop ("Стоп"), execute the translation, draft, or answer directly without embarking on unnecessary exploratory tool searches or file queries.
 3. **Inbound Replies vs. Mass Cold Outreach**:
-   - **Inbound Replies (1-on-1 Threading Mandate)**:
+   - **Inbound Replies (1-on-1 Threading & Russian Translation Mandate)**:
+     - **Russian Translation Mandate**: ALWAYS provide Stefan with a clear Russian translation of BOTH the client's message and Richard's proposed draft reply (e.g. 💬 **Сообщение клиента (Оригинал)**, 🇷🇺 **Перевод сообщения клиента**, ✍️ **Предлагаемый черновик ответа (Китайский)**, 🇷🇺 **Русский перевод черновика**).
      - **Thread Headers**: ALWAYS set `In-Reply-To` and `References` headers to the client's original message ID (`msg_id` / `internet_message_id`).
      - **Exact Subject Preservation**: Keep the exact original subject prefixed with `Re: ` (e.g., `Re: 来自 Navo 的初步建立联系`).
      - **Quoted History Below Signature**: Below Richard's official HTML signature, ALWAYS attach the quoted original message history (`----- Original Message -----` + client's previous text/HTML). This ensures Outlook and all mail clients group the reply into the EXACT SAME email thread/conversation rather than opening a new standalone message.

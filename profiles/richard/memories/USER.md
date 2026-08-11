@@ -7,3 +7,5 @@ User: Stefan Rogovskiy (COO Navo, stefan@navo24.com). Outreach: CC lxxmng@navo24
 4) Email 4: Full Early Bird offer (3m free, site redesign, rate widget, tracking).
 Formatting: Plain text body, NO top empty lines, 1 extra blank line before signature, NO horizontal line before signature. Signature: Richard Marlowe Connections Manager HTML block (no border-top).
 Threading: All 1-on-1 replies MUST set In-Reply-To & References headers, keep Re: <subject>, and quote original history below signature.
+§
+Mandate: Always provide a full Russian translation for BOTH the client's inbound message and Richard's proposed draft reply in all Telegram approval notifications for Stefan.
