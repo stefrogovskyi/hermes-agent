@@ -22,8 +22,9 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
 
 ## Key Principles
 
-1. **No Snake Emojis**: NEVER use snake emojis (🐍) in any messages, status reports, email drafts, or Telegram outputs.
-2. **Client Language Matching**: Always match the language of the prospect. If a Chinese client replies in Chinese (e.g. 陈先生 from Qiaoye Logistics), translate questions and draft responses into clear, professional B2B Chinese.
+1. **No Snake Emojis & Tool Usage**: NEVER use snake emojis (🐍) in any messages, status reports, email drafts, or Telegram outputs. Prefer using `terminal` over `execute_code` for background tasks and shell scripts to prevent python snake icons from rendering in the platform UI.
+2. **Persistent Background Workers**: When running long-lived background workers (like cold outreach daemons), use `terminal(command="PYTHONUNBUFFERED=1 python3 -u script.py >> log 2>&1", background=True)` rather than a transient subshell `nohup &`, which gets terminated when the execution turn closes.
+3. **Client Language Matching**: Always match the language of the prospect. If a Chinese client replies in Chinese (e.g. 陈先生 from Qiaoye Logistics), translate questions and draft responses into clear, professional B2B Chinese.
 2. **Direct Execution on Feedback**: When the user approves draft direction (e.g., "Billy text is good - translate to Chinese and send") or tells you to stop ("Стоп"), execute the translation, draft, or answer directly without embarking on unnecessary exploratory tool searches or file queries.
 3. **Inbound Replies vs. Mass Cold Outreach**:
    - **Inbound Replies (1-on-1 Threading & Russian Translation Mandate)**:
