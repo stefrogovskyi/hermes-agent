@@ -78,4 +78,15 @@ platforms:
     - 330656040
     - 1022586369
     - 593209837
+    group_response_mode: mention
+    aliases:
+    - hermes
+    - гермес
+    - гермеса
+    - гермесу
+    - гермесом
+    - гермесе
+    - гермес стивенсон
+    - hermes stevenson
+    - '@hermesstevensonbot'
 group_sessions_per_user: true

@@ -87,3 +87,16 @@ display:
 providers:
   google:
     request_timeout_seconds: 30
+platforms:
+  telegram:
+    group_response_mode: mention
+    aliases:
+    - ben
+    - бен
+    - бена
+    - бену
+    - беном
+    - бене
+    - бен джетт
+    - ben jett
+    - '@benjettbot'

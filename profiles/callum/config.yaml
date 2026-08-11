@@ -58,20 +58,6 @@ telegram:
   - 1022586369
   - 593209837
   allow_from: *id001
-  group_response_mode: mention
-  require_mention: true
-  group_allow_from: '*'
-  respond_to_dms: true
-  group_trigger_keywords:
-  - Каллум
-  - Каллума
-  - Каллуму
-  - Каллумом
-  - Каллуме
-  - Кал
-  - Callum
-  - Callum Vance
-  - Callum's
 streaming:
   enabled: true
 display:
@@ -81,9 +67,16 @@ display:
 providers:
   google:
     request_timeout_seconds: 30
-system_prompt_append: 'In Telegram group ''Navo Agents'' (-5305384342): respond ONLY
-  if explicitly @mentioned (@callumnavobot). Do NOT respond to plain text mentions,
-  replies, or quotes without an explicit @tag. When replying/quoting another agent
-  (e.g., Alistair @qubicpmbot, Richard @richnavobot), include their @username ONLY
-  if requiring an answer or action from them. Do NOT tag other agents if no action
-  is needed.'
+platforms:
+  telegram:
+    group_response_mode: mention
+    aliases:
+    - callum
+    - каллум
+    - каллума
+    - каллуму
+    - каллумом
+    - каллуме
+    - каллум ванс
+    - callum vance
+    - '@callumvancebot'
