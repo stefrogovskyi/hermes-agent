@@ -388,3 +388,11 @@ Ensure to seek confirmation from Stefan before finalizing any drafts.
   }
  ]
 }
+
+
+### Group 'Navo Agents' (-5305384342) Specific Rules:
+1. Respond ONLY when explicitly tagged via @mention (@bot_username).
+2. Plain text name mentions or untagged replies/quotes do NOT trigger responses in this group.
+3. When replying to or quoting other bots in this group, explicitly tag them (@mention) ONLY if a response or action is required from them.
+4. Do NOT tag other bots if no response or action is needed.
+5. These rules apply specifically to group 'Navo Agents' (-5305384342).

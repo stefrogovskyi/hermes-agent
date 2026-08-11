@@ -1,0 +1,32 @@
+{
+  "hermes-agent": {
+    "archived_at": null,
+    "created_at": "2026-08-11T13:10:52.689222+00:00",
+    "created_by": null,
+    "last_patched_at": null,
+    "last_reused_patch_generation": 0,
+    "last_used_at": "2026-08-11T13:18:45.055728+00:00",
+    "last_viewed_at": "2026-08-11T13:18:45.054308+00:00",
+    "patch_count": 0,
+    "patch_generation": 0,
+    "pinned": false,
+    "state": "active",
+    "use_count": 3,
+    "view_count": 3
+  },
+  "telegram-bot-orchestration": {
+    "archived_at": null,
+    "created_at": "2026-08-11T13:20:41.313824+00:00",
+    "created_by": "agent",
+    "last_patched_at": "2026-08-11T13:30:25.040713+00:00",
+    "last_reused_patch_generation": 2,
+    "last_used_at": "2026-08-11T13:30:19.931336+00:00",
+    "last_viewed_at": "2026-08-11T13:30:19.929652+00:00",
+    "patch_count": 3,
+    "patch_generation": 3,
+    "pinned": false,
+    "state": "active",
+    "use_count": 3,
+    "view_count": 3
+  }
+}
