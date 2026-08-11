@@ -98,11 +98,12 @@ When reaching out to cold B2B prospects (e.g. Chinese logistics operators, freig
    - Always CC team addresses: `lxxmng@navo24.com`, `stefan@navo24.com`.
    - Update Airtable record status to `Contacted` strictly record-by-record AFTER each email is actually sent out via SMTP.
 
-## Inbound Email Poller & MS Graph Deduplication Rule
+## Inbound Email Poller, Russian Translation & Threading Mandate
 
-To prevent duplicate Telegram cron notifications (e.g. sending 100+ repeated alerts for the same unread messages):
-- **Mark as Read**: When fetching unread messages via MS Graph API (`$filter=isRead eq false`), immediately issue a `PATCH https://graph.microsoft.com/v1.0/me/messages/{msg_id}` with `{"isRead": true}`.
-- **Persistent Seen Registry**: Save all processed message IDs to `/opt/hermes/profiles/richard/processed_msg_ids.json`.
-- **Deduplication Check**: Skip any `msg_id` already present in `processed_msg_ids.json`.
-- **Silent Exit**: If no new unseen messages exist after filtering, output `NO_NEW_EMAILS` to keep the 3-minute cron job 100% silent.
-
+To ensure proper conversation threading in Outlook/Gmail and full transparency for Stefan:
+- **Thread Headers**: Always set `In-Reply-To` and `References` headers to the client's original `msg_id` / `internet_message_id`.
+- **Exact Subject Preservation**: Keep the exact original subject prefixed with `Re: `.
+- **Quoted History Below Signature**: Below Richard's signature, attach the quoted original message history (`----- Original Message -----`).
+- **Russian Translation Mandate**: In all Telegram approval/notification drafts, ALWAYS provide Stefan with a clear Russian translation of BOTH the client's message and Richard's proposed draft reply.
+- **Automatic Bounce Cleaning**: Parse Outlook `Undeliverable` or `退信` notices to extract recipient email addresses, auto-delete matching records from Airtable, and stay silent without alerting Stefan.
+- **Mark as Read & Deduplication**: Mark fetched MS Graph messages as `isRead = True` and save IDs to `/opt/hermes/profiles/richard/processed_msg_ids.json` to prevent duplicate alerts.

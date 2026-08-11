@@ -6,7 +6,7 @@
    - **Frontend (JavaScript):**
      - Attach `draggable="true"` and HTML5 Drag & Drop handlers (`ondragstart`, `ondragover`, `ondrop`).
      - On `ondrop`, update local UI immediately and save state to `localStorage.setItem('kanban_state_' + agent, JSON.stringify(currentState))`.
-     - In the background, send `POST https://aavalanche.com/kanban_api.php` with `{ agent, action: "move_card", card_id, new_column_id }`.
+     - In the background, send `POST https://dev.aavalanche.com/kanban_api.php` with `{ agent, action: "move_card", card_id, new_column_id }`.
    - **Backend (`kanban_api.php` on Hostinger):**
      - Supports `action: "move_card"`, `action: "add_card"`, `action: "add_comment"`.
      - Writes updated JSON to `/home/u473746908/domains/aavalanche.com/public_html/kanban_store_<agent>.json`.
