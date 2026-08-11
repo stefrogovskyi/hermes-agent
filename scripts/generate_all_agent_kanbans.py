@@ -103,6 +103,9 @@ def generate_html(agent, cfg):
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Language" content="ru">
+  <meta name="google" content="notranslate">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{cfg['title']}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -397,7 +400,7 @@ for agent, cfg in agents_config.items():
     v_dir = f"/tmp/_vercel_kanban_{agent}"
     os.makedirs(v_dir, exist_ok=True)
     open(os.path.join(v_dir, "index.html"), "w", encoding="utf-8").write(html)
-    v_json = {"version": 2, "name": f"{agent}-kanban", "builds": [{"src": "index.html", "use": "@vercel/static"}], "routes": [{"src": "/(.*)", "dest": "/index.html"}]}
+    v_json = {"version": 2, "name": f"{agent}-kanban", "builds": [{"src": "index.html", "use": "@vercel/static"}], "routes": [{"src": "/(.*)", "dest": "/index.html"}], "headers": [{"source": "/(.*)", "headers": [{"key": "Content-Type", "value": "text/html; charset=utf-8"}, {"key": "Content-Language", "value": "ru"}]}]}
     open(os.path.join(v_dir, "vercel.json"), "w", encoding="utf-8").write(json.dumps(v_json, indent=2))
     
     print(f"✅ Generated & uploaded Kanban for {agent.upper()}")

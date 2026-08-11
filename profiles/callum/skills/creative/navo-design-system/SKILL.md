@@ -37,17 +37,19 @@ Guidelines, tokens, typography standards, and copy rules for all Navo24 platform
 
 ## 2. Typography Hierarchy
 
-- **Display / Hero Titles:** Ranade (Light 300 / Ultralight 210, tracking `-0.03em`).
-- **Body Text:** Switzer (Extralight 200 to Regular 400, line-height 1.5).
+- **Display / Hero Titles:** Ranade (Fontshare: `https://api.fontshare.com/v2/css?f[]=ranade@200,300,500,700&display=swap`). Light 300 / Ultralight 210, tracking `-0.03em`.
+- **Body Text:** Switzer (Fontshare: `https://api.fontshare.com/v2/css?f[]=switzer@200,300,400,500,600,700&display=swap`). Extralight 200 to Regular 400, line-height 1.5.
 - **Figures, Badges, & Eyebrows:** JetBrains Mono (uppercase, tracked `+0.10em` to `+0.14em`).
 - **Font Stack Fallbacks:**
-  - Display / Body: `Switzer, Ranade, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`
+  - Display Titles: `'Ranade', 'Switzer', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`
+  - Body Text: `'Switzer', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`
   - Monospace: `'JetBrains Mono', SFMono-Regular, Consolas, monospace`
 
 ## 3. Copy & Prose Rules (§08 The Voice)
 
 - **Spaced Em-Dash Rule:** The spaced em-dash (` — `) is **banned from prose** as an AI-writing tell. Use colons, semicolons, commas, or periods instead. (Allowed only in titles/labels like `"TrackingMCP — Dashboard"`).
 - **Endorsement Rule (§06):** Legal footers and product endorsements must use `© 2026 [Product] · a Navo24 product` in lowercase JetBrains Mono (10–11px, `ink-500`).
+- **Team Names:** Robert's title is Full-Stack Developer (first name "Роберт" only, do NOT add "Vance" surname). Callum Vance is Tech Lead.
 
 ## 4. Brand Vector Assets
 
@@ -61,17 +63,21 @@ Guidelines, tokens, typography standards, and copy rules for all Navo24 platform
   - Never put `background-color` on a `width: 100%` wrapper `<td>` around a CTA button link. That stretches the button background edge-to-edge across the card padding.
   - Wrap the CTA button in `<table align="center">` and place `background-color: #1f4fe6`, `display: inline-block`, `padding: 14px 28px`, `border-radius: 6px`, and `box-sizing: border-box; max-width: 100%;` directly on the `<a>` element.
 - **Vertical Step Lists:**
-  - On step-by-step onboarding boxes ("Step 1 → Step 2"), stack steps vertically with individual step badges (`Step 1`, `Step 2`) and vertical connectors (e.g. `border-left: 2px dashed #12c2c2`). Avoid crowding steps into horizontal single-line badges.
+  - On step-by-step onboarding boxes ("Step 1 → Step 2"), stack steps vertically (one under the other) with individual step badges (`Step 1`, `Step 2`) and vertical connectors (e.g. `border-left: 2px dashed #12c2c2`). Avoid crowding steps into horizontal single-line badges.
 - **Header Badging:**
   - Header right corner should feature a clean `navo24.com` badge in JetBrains Mono (`11px`, `color: #12c2c2`, `background-color: rgba(18, 194, 194, 0.12)`).
 - **Secondary Contact Line Positioning:**
-  - Secondary contact options (e.g. `sales@navo24.com` / demo requests) should be placed as a clean plain text sentence with an underlined link directly above the sign-off (`Best regards, / The Navo24 Team`), rather than a secondary button.
+  - Secondary contact options (e.g. `sales@navo24.com` / demo requests) should be placed as a clean plain text sentence with an underlined mailto link directly above the sign-off (`Best regards, / The Navo24 Team`), rather than a secondary button.
 
 ## 6. Slide Decks & Presentation Artifacts
 
-- **Theme:** Dark canvas (`#0A0E16`), dark card surfaces (`#121826` / `#1A2234`), border `#26334D`.
-- **Typography:** Plus Jakarta Sans for headings/body, JetBrains Mono for eyebrows/badges/SLA tags.
-- **Header Bar:** Brand mark gradient (`linear-gradient(135deg, #1f4fe6, #12c2c2)`), product badge, slide counter (`1 / N`), and keyboard controls (`← / →`).
-- **Footer:** Gradient progress bar (`#1F4FE6` to `#12C2C2`).
+- **Theme & Both Themes Rule (§03):** Support both Dark (`#0A0E16` canvas, `#121826` paper, `#1A2234` cards) and Light (`#FCFCFB` canvas, `#FFFFFF` paper, `#F8FAFC` cards) via a Theme Toggle button in the header (`☀️ Light` / `🌙 Dark`) with state saved in `localStorage`.
+- **Typography:** Ranade for display slide titles (`h1`, `h2`), Switzer for body/cards, JetBrains Mono for eyebrows/badges/SLA tags. Include Fontshare URLs in `<link>` tags.
+- **Header Bar:** Navo white wordmark SVG, product badge (`navo24.com` or project badge), slide counter (`1 / N`), Theme Toggle button, and keyboard controls (`← / →`).
+- **Mobile Responsiveness:**
+  - On screens `<= 768px`, collapse 2-column/4-column card grids to 1 column (`1fr`).
+  - Do NOT lock viewport height (`height: 100vh; overflow: hidden`) on mobile — allow smooth scrolling.
+  - Implement mobile touch swipe support (`touchstart` / `touchend`).
+  - Provide a sticky bottom mobile control bar (`← Назад | Слайд N из 8 | Вперед →`).
 - **Deployments:** Package with static `index.html` + `vercel.json` (`cleanUrls: true`) for 1-click Vercel deployment.
 

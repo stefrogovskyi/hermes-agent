@@ -140,7 +140,12 @@ Use when configuring or troubleshooting multi-profile Hermes Agent instances run
    - Always verify Personal Access Tokens (`PAT`) against `https://api.airtable.com/v0/meta/bases` to confirm active base permissions before running CRM or outreach workflows.
    - Sync `AIRTABLE_API_KEY` and `AIRTABLE_PAT` in both `/opt/hermes/profiles/richard/.env` and master `.env`.
 
-10. **Branded HTML Email Signature Templates:**
+11. **Sub-Agent Interactive Tool Latency & `clarify()` Suspension Pitfall:**
+    - **Pitfall:** Invoking interactive tools like `clarify()` in sub-agent profiles (e.g. Richard) suspends the agent execution loop and blocks the thread waiting for UI inline button clicks (up to 45 minutes / 2560 seconds). If the user sends a new message (e.g. asking for a translation or edit) while `clarify()` is waiting, the agent appears "asleep" or unresponsive.
+    - **Rule:**
+      1. **Never call `clarify()` in sub-agent profiles or automated workflows.** Reply directly in clean, direct plain text in Telegram.
+      2. **Always address the user's LATEST message FIRST.** If the user asks for a translation, explanation, or edit, execute that request immediately before proposing unrelated draft or email workflows.
+
     - To prevent bare plain-text emails, bind official HTML email templates (e.g. `/root/navo24_email_template.html` or `/opt/hermes/richard_official_signature.html`) directly into outreach senders so signatures, logo images, and blue highlighted links (`color: #0000FF`) are rendered automatically on every outbound message.
     - **Official Richard Marlowe HTML Signature Snippet:**
       ```html
@@ -157,4 +162,10 @@ Use when configuring or troubleshooting multi-profile Hermes Agent instances run
         <a href="https://www.navo24.com" style="color: #0000FF; text-decoration: underline;">www.navo24.com</a>
       </div>
       ```
+
+12. **Master Connector & Token Synchronization across Profiles:**
+    - **Surge CLI Token:** `SURGE_TOKEN` (`82bd19e64bbf196940cf4c78cf9f835a`) allows instant CLI publishing to `stefan-kanban.surge.sh` without interactive login.
+    - **Vercel CLI Configuration:** Set `VERCEL_TEAM_ID` (e.g. `GtuxagVBDyZ4qeqAoxNDvVUg`), `VERCEL_PROJECT_ID`, and `VERCEL_TOKEN` in master `.env` and mirror to all sub-profiles.
+    - **Master Env Sync Rule:** Periodically run a sync script to propagate all master environment variables (`SURGE_TOKEN`, `VERCEL_TEAM_ID`, `AIRTABLE_PAT`, `GITHUB_TOKEN`, `GEMINI_API_KEY`, `OPENAI_API_KEY`, `GONKA24_API_KEY`, `NOUS_API_KEY`, `OPENROUTER_API_KEY`, `SEARATES_API_KEY`, `NAVO_API_KEY`, `HOSTINGER_API_TOKEN`) into `/opt/hermes/profiles/*/.env` so no sub-agent is blocked by missing credentials.
+
 
