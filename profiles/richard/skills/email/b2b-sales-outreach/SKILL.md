@@ -25,7 +25,10 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
 1. **Client Language Matching**: Always match the language of the prospect. If a Chinese client replies in Chinese (e.g. 陈先生 from Qiaoye Logistics), translate questions and draft responses into clear, professional B2B Chinese.
 2. **Direct Execution on Feedback**: When the user approves draft direction (e.g., "Billy text is good - translate to Chinese and send") or tells you to stop ("Стоп"), execute the translation, draft, or answer directly without embarking on unnecessary exploratory tool searches or file queries.
 3. **Inbound Replies vs. Mass Cold Outreach**:
-   - **Inbound Replies (1-on-1)**: Handled via `check_inbound.py` poller (3m interval). User approves/modifies drafts before sending.
+   - **Inbound Replies (1-on-1 Threading Mandate)**:
+     - **Thread Headers**: ALWAYS set `In-Reply-To` and `References` headers to the client's original message ID (`msg_id` / `internet_message_id`).
+     - **Exact Subject Preservation**: Keep the exact original subject prefixed with `Re: ` (e.g., `Re: 来自 Navo 的初步建立联系`).
+     - **Quoted History Below Signature**: Below Richard's official HTML signature, ALWAYS attach the quoted original message history (`----- Original Message -----` + client's previous text/HTML). This ensures Outlook and all mail clients group the reply into the EXACT SAME email thread/conversation rather than opening a new standalone message.
    - **4-Touch Sequence Strategy (Exact Text)**:
      1. **Емейл 1 (Зацепка)**:
         `Здравствуйте, [Имя/Компания]!`
@@ -58,6 +61,7 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
 ## Pitfalls & Common Mistakes
 
 - **CRITICAL: Premature CRM Status Updates**: Never bulk-update Airtable records from `Lead` to `Contacted` in advance or without actually dispatching the emails. Sending a batch of 500 emails with a 1-minute interval physically takes **~8.3 hours** — updating Airtable in seconds without real SMTP/API dispatch corrupts lead tracking and creates false completion reports. Always update Airtable status record-by-record AFTER each email is actually sent.
+- **Inbound Poller Duplication (MS Graph)**: Always mark processed MS Graph messages as `isRead = True` and persist their IDs in `/opt/hermes/profiles/richard/processed_msg_ids.json`. Without marking read and persisting seen IDs, the 3-minute poller cron job will repeatedly trigger duplicate alerts for the same messages over 100 times.
 - **Faking/Simulating Batch Triggers**: Confirming a mass email launch without executing a real tool or background process results in missed emails and user frustration. Always run real background processes (`terminal(background=True, notify_on_complete=True)`) with proper 60s delays and log files (e.g. `/root/cn_ff_1_outreach.log`).
 - **Real SMTP Dispatch Settings**:
   * Host: `smtp.office365.com:587` (STARTTLS)

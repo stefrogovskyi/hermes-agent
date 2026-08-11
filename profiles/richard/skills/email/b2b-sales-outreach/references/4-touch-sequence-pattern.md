@@ -97,3 +97,12 @@ When reaching out to cold B2B prospects (e.g. Chinese logistics operators, freig
    - 1-minute interval between consecutive emails in mass outreach.
    - Always CC team addresses: `lxxmng@navo24.com`, `stefan@navo24.com`.
    - Update Airtable record status to `Contacted` strictly record-by-record AFTER each email is actually sent out via SMTP.
+
+## Inbound Email Poller & MS Graph Deduplication Rule
+
+To prevent duplicate Telegram cron notifications (e.g. sending 100+ repeated alerts for the same unread messages):
+- **Mark as Read**: When fetching unread messages via MS Graph API (`$filter=isRead eq false`), immediately issue a `PATCH https://graph.microsoft.com/v1.0/me/messages/{msg_id}` with `{"isRead": true}`.
+- **Persistent Seen Registry**: Save all processed message IDs to `/opt/hermes/profiles/richard/processed_msg_ids.json`.
+- **Deduplication Check**: Skip any `msg_id` already present in `processed_msg_ids.json`.
+- **Silent Exit**: If no new unseen messages exist after filtering, output `NO_NEW_EMAILS` to keep the 3-minute cron job 100% silent.
+
