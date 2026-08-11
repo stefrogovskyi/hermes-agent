@@ -84,6 +84,7 @@ display:
   streaming: true
   interim_assistant_messages: true
   tool_progress: all
+  streaming_throttle_ms: 1000
 providers:
   google:
     request_timeout_seconds: 30

@@ -56,6 +56,7 @@ display:
   streaming: true
   interim_assistant_messages: true
   tool_progress: all
+  streaming_throttle_ms: 1000
 command_allowlist:
 - delete in root path
 - stop/restart system service
