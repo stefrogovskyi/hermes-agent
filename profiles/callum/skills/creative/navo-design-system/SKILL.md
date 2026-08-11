@@ -64,4 +64,14 @@ Guidelines, tokens, typography standards, and copy rules for all Navo24 platform
   - On step-by-step onboarding boxes ("Step 1 → Step 2"), stack steps vertically with individual step badges (`Step 1`, `Step 2`) and vertical connectors (e.g. `border-left: 2px dashed #12c2c2`). Avoid crowding steps into horizontal single-line badges.
 - **Header Badging:**
   - Header right corner should feature a clean `navo24.com` badge in JetBrains Mono (`11px`, `color: #12c2c2`, `background-color: rgba(18, 194, 194, 0.12)`).
+- **Secondary Contact Line Positioning:**
+  - Secondary contact options (e.g. `sales@navo24.com` / demo requests) should be placed as a clean plain text sentence with an underlined link directly above the sign-off (`Best regards, / The Navo24 Team`), rather than a secondary button.
+
+## 6. Slide Decks & Presentation Artifacts
+
+- **Theme:** Dark canvas (`#0A0E16`), dark card surfaces (`#121826` / `#1A2234`), border `#26334D`.
+- **Typography:** Plus Jakarta Sans for headings/body, JetBrains Mono for eyebrows/badges/SLA tags.
+- **Header Bar:** Brand mark gradient (`linear-gradient(135deg, #1f4fe6, #12c2c2)`), product badge, slide counter (`1 / N`), and keyboard controls (`← / →`).
+- **Footer:** Gradient progress bar (`#1F4FE6` to `#12C2C2`).
+- **Deployments:** Package with static `index.html` + `vercel.json` (`cleanUrls: true`) for 1-click Vercel deployment.
 
