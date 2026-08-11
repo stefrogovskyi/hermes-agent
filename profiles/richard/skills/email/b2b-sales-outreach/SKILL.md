@@ -53,9 +53,9 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
      - **NO HORIZONTAL LINE (`border-top`) BEFORE THE SIGNATURE**.
      - Use ONLY the official HTML signature block (`Richard Marlowe / Connections Manager`, logo `https://bit.ly/4hLg86T`, +44 203 440 9800, 30 St Mary Axe London, `rich@navo24.com`, `www.navo24.com`).
      *(See `references/4-touch-sequence-pattern.md` for full sequence details and HTML signature templates.)*
-   - **Mass Cold Outreach & Anti-Spam (100% Dynamic AI Personalization)**:
-     - **NO STATIC REPETITIVE TEMPLATES**: Cold outreach MUST use 100% dynamic AI personalization (unique subject line & body text per lead generated from CRM company name, contact person, city, and specialties). Static templates cause Microsoft Exchange Online Protection (EOP) to flag outbound spam and block sending (`550 5.1.8 Access denied, bad outbound sender AS(42004)`).
-     - **Safe Sending Cadence**: Use human-like delays of **3–5 minutes (180–300s)** between sends to avoid rate-limiting and anti-spam heuristics on Microsoft 365.
+   - **Mass Cold Outreach & Anti-Spam (100% Dynamic AI Personalization & High Combinatorics)**:
+     - **NO STATIC REPETITIVE TEMPLATES**: Cold outreach MUST use 100% dynamic AI personalization with high combinatorial variety (25+ unique subject lines, 12+ greetings, 10+ intros, 12+ contexts, 12+ CTAs -> 500,000+ unique email variations). Static templates cause Microsoft Exchange Online Protection (EOP) to flag outbound spam and block sending (`550 5.1.8 Access denied, bad outbound sender AS(42004)`).
+     - **Safe Sending Cadence**: Use human-like delays of **5 minutes (300s)** per message (~12 emails/hour) as the baseline for cold outreach on primary Microsoft 365 mailboxes.
      - **CC Rules**: CC `lxxmng@navo24.com` & `stefan@navo24.com`. **DO NOT CC `sales@navo24.com`** on cold outreach emails.
      - **Exchange Online Distribution List Recovery**: Distribution Lists (Groups) in Exchange Online do NOT store or queue blocked messages. Once rejected, messages cannot be retroactively pulled or claimed. Use **Exchange Admin Center (`admin.exchange.microsoft.com`) -> Message Trace** filtered by `Rejected/Failed` to audit external senders and subjects that were blocked.
      - **Airtable Status Updates**: Update `Stage` and `status` to `"Contacted"` via Airtable PATCH API strictly record-by-record AFTER each email is actually dispatched.
