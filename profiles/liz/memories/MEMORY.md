@@ -17,3 +17,5 @@ YouTube WL: Playwright 23:00 daily; 'move'=deletion. DP World vacancies cron = H
 Hostinger Account: Business Hosting paid to March 2030 (u473746908, aavalanche.com). SSH: 82.29.199.155:65002. Root `/` = English, mirrored to 8 lang folders. Sendmail headers strictly LF (`\\n`).
 §
 Navo24 unified API key (NAVO_API_KEY tmcp_live_...) covers all 5 Navo APIs. NO AGENT MAY IMPERSONATE STEFAN OR SEND MESSAGES FROM USER ACCOUNT. ALL BOTS WRITE ONLY FROM THEIR OWN BOT ACCOUNTS.
+§
+ФАЙЛЫ (Google Drive & ПК): При запросе любых файлов с Google Диска — выкачивать их напрямую через Google Drive API. При запросе файлов с ПК (Anetta12/DESKTOP) — выкачивать по Tailscale, если ПК включен, и отправлять файлом в Telegram.

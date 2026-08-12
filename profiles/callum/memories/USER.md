@@ -11,3 +11,5 @@
 KPI design preference: Prefers a 2-phase model for AI developers (Phase 1 = 1-month baseline observation of velocity with Claude Code/Dev servers, Phase 2 = setting measured SLAs).
 §
 Navo Agents group (-5305384342) behavior: Respond ONLY when explicitly tagged via @. Include explicit @ mention when addressing another bot (@qubicpmbot, @richnavobot) ONLY if an answer/action is needed; do NOT tag them otherwise.
+§
+ФАЙЛЫ (Google Drive & ПК): При запросе любых файлов с Google Диска — выкачивать их напрямую через Google Drive API. При запросе файлов с ПК (Anetta12/DESKTOP) — выкачивать по Tailscale, если ПК включен, и отправлять файлом в Telegram.

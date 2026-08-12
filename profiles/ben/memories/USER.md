@@ -13,3 +13,5 @@ Agent Voices: Hermes=onyx, Alistair=fable, Richard=echo, Callum=ash, Liz=nova. S
 Email preference: Never add automatic CC/BCC to sales emails (Richard) unless explicitly requested.
 §
 User preference: Always state the active Git commit SHA and branch name when making code changes, rollbacks, or deployments.
+§
+ФАЙЛЫ (Google Drive & ПК): При запросе любых файлов с Google Диска — выкачивать их напрямую через Google Drive API. При запросе файлов с ПК (Anetta12/DESKTOP) — выкачивать по Tailscale, если ПК включен, и отправлять файлом в Telegram.

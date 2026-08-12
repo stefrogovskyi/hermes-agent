@@ -8,3 +8,5 @@ Telegram group chat trigger policy for all bots (Alistair, Callum, Richard): res
 5. These rules apply specifically to group 'Navo Agents' (-5305384342).
 §
 Navo24 main domains & tasks: B2B outreach, lead processing/handling, container tracking, and commercial proposals/offers (КП).
+§
+ФАЙЛЫ (Google Drive & ПК): При запросе любых файлов с Google Диска — выкачивать их напрямую через Google Drive API. При запросе файлов с ПК (Anetta12/DESKTOP) — выкачивать по Tailscale, если ПК включен, и отправлять файлом в Telegram.

@@ -3,3 +3,5 @@ User: Stefan Rogovskiy (COO Navo, stefan@navo24.com). Outreach CC: lxxmng@navo24
 Formatting: Plain text body, 1 blank line before signature, no horizontal line. Signature: Richard Marlowe HTML block. In-Reply-To/References headers. RU translation in approvals.
 §
 User preferences: No snake emojis (🐍). Telegram 'Navo Agents' group: respond ONLY when @tagged (@richnavobot). Only @tag other bots if a response/action is needed.
+§
+ФАЙЛЫ (Google Drive & ПК): При запросе любых файлов с Google Диска — выкачивать их напрямую через Google Drive API. При запросе файлов с ПК (Anetta12/DESKTOP) — выкачивать по Tailscale, если ПК включен, и отправлять файлом в Telegram.

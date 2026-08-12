@@ -17,3 +17,5 @@ YouTube WL: Playwright 23:00 daily; 'move'=deletion. DP World vacancies cron = H
 Hostinger: u473746908, SSH 82.29.199.155:65002. ФАЙЛЫ (Drive & ПК): С Google Диска — выкачивать напрямую через Drive API; с ПК (Anetta12/DESKTOP) — по Tailscale, если ПК включен, и высылать файлом в Telegram.
 §
 Navo24 unified API key (NAVO_API_KEY tmcp_live_...) covers all 5 Navo APIs. NO AGENT MAY IMPERSONATE STEFAN OR SEND MESSAGES FROM USER ACCOUNT. ALL BOTS WRITE ONLY FROM THEIR OWN BOT ACCOUNTS.
+§
+ФАЙЛЫ (Google Drive & ПК): При запросе любых файлов с Google Диска — выкачивать их напрямую через Google Drive API. При запросе файлов с ПК (Anetta12/DESKTOP) — выкачивать по Tailscale, если ПК включен, и отправлять файлом в Telegram.

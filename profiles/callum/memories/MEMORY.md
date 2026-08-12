@@ -51,3 +51,6 @@
 - Active platforms under supervision: navo24.com, trackingmcp.com, schedulesmcp.com, loadingmcp.com, freightratesmcp.com.
 - Auto-execution loop & self-healing enabled via Python / OpenRouter / Nous fallback chain.
 - [2026-08-11] Telegram Group 'Navo Agents' (-5305384342) STRICT RULE: Respond ONLY when explicitly tagged with @username (@callumnavobot). Do NOT respond to plain text mentions, replies, or quotes without an explicit @tag. When replying/quoting another agent (e.g., Alistair @qubicpmbot, Richard @richnavobot), include their @tag ONLY if requiring a response or action from them. Do NOT tag other agents if no response is needed.
+
+§
+ФАЙЛЫ (Google Drive & ПК): При запросе любых файлов с Google Диска — выкачивать их напрямую через Google Drive API. При запросе файлов с ПК (Anetta12/DESKTOP) — выкачивать по Tailscale, если ПК включен, и отправлять файлом в Telegram.
