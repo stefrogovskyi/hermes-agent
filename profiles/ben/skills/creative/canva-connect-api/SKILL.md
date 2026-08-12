@@ -131,12 +131,24 @@ def refresh_access_token(client_id, client_secret, refresh_token):
 ## Support References
 
 * For detailed error transcripts and step-by-step troubleshooting, see `references/oauth-troubleshooting.md`.
+* For binary asset uploads via Python (`POST /v1/asset-uploads`), see `references/asset-upload.md`.
+
+## Asset Uploads API (`POST /v1/asset-uploads`)
+To upload local PNG/JPG images directly into user's Canva library:
+* **Endpoint**: `POST https://api.canva.com/rest/v1/asset-uploads`
+* **Headers**:
+  * `Authorization: Bearer <token>`
+  * `Content-Type: application/octet-stream`
+  * `Asset-Upload-Metadata: {"name_base64": "<base64_title>"}`
+* **Polling**: Check upload progress via `GET https://api.canva.com/rest/v1/asset-uploads/{job_id}` until `job.status == "success"`.
 
 ## Troubleshooting & Best Practices
 
 1. **`invalid_scope` Error**: `Requested scopes are not allowed for this client.`
    * **Cause**: Scopes requested in the `scope` parameter of the Authorization URL are not enabled/checked in the Canva Developer Portal.
    * **Resolution**: Go to `canva.com/developers/integrations` → Select App → **Scopes** → Check all required checkboxes under **Reading and writing** → Click **Save**.
-2. **Redirect URI Restrictions**: Canva enforces exact match on redirect URIs. `localhost` is rejected; use `http://127.0.0.1:<port>` for local testing.
+2. **`invalid_field` on `POST /v1/designs`**: `name must be one of the following: doc, email, presentation, whiteboard`
+   * **Note**: `POST /v1/designs` currently accepts `preset` names: `doc`, `email`, `presentation`, `whiteboard`. Preset names like `instagram_post` are not direct preset strings for `POST /v1/designs`. Use asset uploads or brand template autofills for custom social media graphics.
+3. **Redirect URI Restrictions**: Canva enforces exact match on redirect URIs. `localhost` is rejected; use `http://127.0.0.1:<port>` for local testing.
 3. **Client Secret One-Time Display**: Save the Client Secret immediately upon generation as Canva will not display it again.
 4. **Token Expiry**: Access tokens expire in 14,400 seconds (4 hours). Use the `refresh_token` flow to maintain persistent access without user re-authentication.
