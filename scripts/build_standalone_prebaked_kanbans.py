@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-build_standalone_prebaked_kanbans.py — Двусторонняя персистентная система 6 Канбан-бордов с фиксацией времени перетаскивания, комментариев и полной обратной совместимостью.
+build_standalone_prebaked_kanbans.py — Двусторонняя персистентная система 6 Канбан-бордов с автоматическим слиянием новых карточек с localStorage.
 """
 
 import os, json, subprocess
@@ -17,19 +17,27 @@ agents_config = {
         "cards": [
             {"id": "card_1", "column_id": "todo", "title": "💳 Monobank Merchant Acquiring Token Integration", "desc": "Подключение X-Token ФОП Монобанка для реальных списаний в грн на сайте.", "assignee": "👤 Stefan / Callum", "tag": "BACKLOG", "tag_class": "tag-todo"},
             {"id": "card_2", "column_id": "todo", "title": "🛍️ Silpo Weekly Groceries Order Assembly", "desc": "Еженедельная автосборка корзины Сільпо через Playwright Chromium (>1,700 UAH).", "assignee": "🤖 Hermes", "tag": "PENDING", "tag_class": "tag-todo"},
-            {"id": "card_3", "column_id": "todo", "title": "🇩🇪 Hetzner Cloud VPS Migration", "desc": "Перенос 6 профилей Гермеса и крон-задач на серваки Hetzner для 24/7 автономии.", "assignee": "🤖 Hermes Cluster", "tag": "PLANNED", "tag_class": "tag-todo"},
-            {"id": "card_4", "column_id": "in_progress", "title": "🌐 Avalanche Agency 3-Tier Pipeline", "desc": "Синхронизация dev.aavalanche.com, staging и prod под управлением GitHub.", "assignee": "💻 Callum Vance", "tag": "ACTIVE", "tag_class": "tag-progress"},
-            {"id": "card_5", "column_id": "in_progress", "title": "🚀 AI Project Evaluation & 10-Point Price Graduation", "desc": "ИИ-оценка сложности проекта по 10 уровням, конвертация валюты по IP и модалка оплаты.", "assignee": "💻 Callum Vance", "tag": "ACTIVE", "tag_class": "tag-progress"},
-            {"id": "card_6", "column_id": "in_progress", "title": "🔑 User Auth, Personal Cabinet & Admin Panel", "desc": "Регистрация, вход, Google/Facebook OAuth, Личный Кабинет и таблица пользователей.", "assignee": "💻 Callum Vance", "tag": "ACTIVE", "tag_class": "tag-progress"},
+            {"id": "card_3", "column_id": "completed", "title": "🇩🇪 Hetzner / Servarica Master Node 24/7 Migration", "desc": "Перенос 6 профилей Гермеса и крон-задач на серваки Servarica для 24/7 автономии.", "assignee": "🤖 Hermes Cluster", "tag": "VERIFIED", "tag_class": "tag-done"},
+            {"id": "card_4", "column_id": "completed", "title": "🌐 Avalanche Agency 3-Tier Pipeline", "desc": "Синхронизация dev.aavalanche.com, staging и prod под управлением GitHub.", "assignee": "💻 Callum Vance", "tag": "VERIFIED", "tag_class": "tag-done"},
+            {"id": "card_5", "column_id": "completed", "title": "🚀 AI Project Evaluation & 10-Point Price Graduation", "desc": "ИИ-оценка сложности проекта по 10 уровням, конвертация валюты по IP и модалка оплаты.", "assignee": "💻 Callum Vance", "tag": "VERIFIED", "tag_class": "tag-done"},
+            {"id": "card_6", "column_id": "completed", "title": "🔑 User Auth, Personal Cabinet & Admin Panel", "desc": "Регистрация, вход, Google/Facebook OAuth, Личный Кабинет и таблица пользователей.", "assignee": "💻 Callum Vance", "tag": "VERIFIED", "tag_class": "tag-done"},
             {"id": "card_7", "column_id": "recurring", "title": "📺 YouTube Watch Later Daily Sorter", "desc": "Ежедневный разбор в 23:00 с сопоставлением со 49 реальными плейлистами YouTube.", "assignee": "🤖 Hermes DM", "tag": "DAILY 23:00", "tag_class": "tag-cron"},
             {"id": "card_8", "column_id": "recurring", "title": "🌾 Memory Harvest Cron", "desc": "Ежедневная автосборка фактов и кейсов памяти memory_v2 в 02:00 MSK.", "assignee": "🤖 Hermes", "tag": "DAILY 02:00", "tag_class": "tag-cron"},
             {"id": "card_9", "column_id": "recurring", "title": "🌲 Pinecone Vector Memory Sync", "desc": "Ежедневный векторный синтез эмбеддингов в Pinecone в 03:00 MSK.", "assignee": "🤖 Hermes", "tag": "DAILY 03:00", "tag_class": "tag-cron"},
-            {"id": "card_10", "column_id": "recurring", "title": "🏢 DP World Careers Vacancies Poller", "desc": "Ежедневный мониторинг новых вакансий DP World в 09:00 MSK.", "assignee": "🤖 Hermes DM ONLY", "tag": "DAILY 09:00", "tag_class": "tag-cron"},
+            {"id": "card_10", "column_id": "recurring", "title": "🏢 Global C-Level & Leadership Career Scanner", "desc": "Ежедневный мониторинг 32 гигантов (AI, Tech, Freight) на C-Level роли в 09:00 MSK.", "assignee": "🤖 Hermes DM ONLY", "tag": "DAILY 09:00", "tag_class": "tag-cron"},
             {"id": "card_11", "column_id": "completed", "title": "🤖 100% Multi-Agent Hermes Profiles Cluster", "desc": "Все 6 агентов (Orchestrator, Callum, Richard, Alistair, Liz, Ben) работают на ядре Гермеса!", "assignee": "🤖 6 Cores Live", "tag": "VERIFIED", "tag_class": "tag-done"},
             {"id": "card_12", "column_id": "completed", "title": "🌍 8 Multilingual Language Clones", "desc": "100% отзеркаливание верстки на 8 языков (es, de, fr, it, uk, ru, zh, ar) без сброса сессий.", "assignee": "💻 Callum Vance", "tag": "VERIFIED", "tag_class": "tag-done"},
             {"id": "card_13", "column_id": "completed", "title": "📧 Dual Branded Email Mailer", "desc": "Двойная отправка писем админу на dr.reenforce@gmail.com с info@aavalanche.com.", "assignee": "💻 Callum Vance", "tag": "VERIFIED", "tag_class": "tag-done"},
             {"id": "card_14", "column_id": "completed", "title": "🗺️ Drive & Desktop File Organization", "desc": "Наведен полный порядок на Диске и Рабочем столе с памяткой README_FILE_STRUCTURE.md.", "assignee": "📈 Alistair Sterling", "tag": "VERIFIED", "tag_class": "tag-done"},
-            {"id": "card_15", "column_id": "completed", "title": "🔎 Google Search Console SEO Setup", "desc": "Загружен sitemap.xml для 9 языков и robots.txt, закрыты noindex dev/staging.", "assignee": "🤖 Hermes", "tag": "VERIFIED", "tag_class": "tag-done"}
+            {"id": "card_15", "column_id": "completed", "title": "🔎 Google Search Console SEO Setup", "desc": "Загружен sitemap.xml для 9 языков и robots.txt, закрыты noindex dev/staging.", "assignee": "🤖 Hermes", "tag": "VERIFIED", "tag_class": "tag-done"},
+            {"id": "card_16", "column_id": "in_progress", "title": "📡 Telegram Userbot & Private Channel Listener", "desc": "24/7 Чтение сигналов из канала «Не повредит, Одесса» через сессию @stefrogovskiy с точным временем (ЧЧ:ММ).", "assignee": "🤖 Hermes Userbot", "tag": "ACTIVE 24/7", "tag_class": "tag-progress"},
+            {"id": "card_17", "column_id": "completed", "title": "📚 MindCloud Universal API Reference Library", "desc": "Развернута и локализована оффлайн-база 3,122+ API / 75k+ эндпоинтов для всех 6 профилей.", "assignee": "🤖 Hermes Skill", "tag": "VERIFIED", "tag_class": "tag-done"},
+            {"id": "card_18", "column_id": "completed", "title": "🛡️ Ecosystem 30s Timeout & Context Compression", "desc": "Включен 30s таймаут вызовов моделей и 25% авто-сжатие контекста во всех 6 профилях.", "assignee": "🤖 All Cores", "tag": "VERIFIED", "tag_class": "tag-done"},
+            {"id": "card_19", "column_id": "in_progress", "title": "💬 Telegram Group Silence & Bot Loop Shield", "desc": "Правило require_mention: true, отсечение бот-бот перепалок и молчание в групповых чатах.", "assignee": "🤖 All Bots", "tag": "POLICY ACTIVE", "tag_class": "tag-progress"},
+            {"id": "card_20", "column_id": "completed", "title": "🔄 Multi-Agent Bidirectional Vercel Sync", "desc": "Двусторонняя передача статусов, меток времени перемещений и комментариев через dev.aavalanche.com/kanban_api.php.", "assignee": "💻 Callum / Hermes", "tag": "VERIFIED", "tag_class": "tag-done"},
+            {"id": "card_21", "column_id": "recurring", "title": "🔔 Daily Ecosystem Self-Heal & Audit (04:00 AM)", "desc": "Автоматическая проверка самочувствия всех 5 ботов, токенов и интеграций в 04:00 AM.", "assignee": "🤖 Hermes Watchdog", "tag": "DAILY 04:00", "tag_class": "tag-cron"},
+            {"id": "card_22", "column_id": "recurring", "title": "📂 Daily Full Reality & Google Workspace Indexer", "desc": "Ежедневная дифференциальная индексация файлов и документов Google Диска в FTS5 базу.", "assignee": "🤖 Hermes Indexer", "tag": "DAILY 04:00", "tag_class": "tag-cron"},
+            {"id": "card_23", "column_id": "recurring", "title": "📊 Daily 08:00 AM Kanban Review & Brief", "desc": "Ежедневный утренний сканер движений карточек и комментариев Стефана на 6 канбанах.", "assignee": "🤖 Hermes Brief", "tag": "DAILY 08:00", "tag_class": "tag-cron"}
         ]
     },
     "ben": {
@@ -165,7 +173,7 @@ def generate_standalone_html(agent, cfg):
       --accent-amber: #F59E0B;
     }}
     * {{ box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }}
-    body {{ background-color: var(--bg); color: var(--text-main); min-height: 100vh; padding: 24px; padding-bottom: 90px; }}
+    body {{ background-color: var(--bg); color: var(--text-main); min-height: 100vh; padding: 24px; padding-bottom: 40px; }}
     
     header {{ display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--card-border); flex-wrap: wrap; gap: 12px; }}
     .title-group {{ display: flex; align-items: center; gap: 12px; }}
@@ -174,10 +182,6 @@ def generate_standalone_html(agent, cfg):
     
     .btn-header {{ background: var(--accent); color: #FFF; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 800; cursor: pointer; font-size: 14px; box-shadow: 0 4px 14px rgba(0,0,0,0.4); transition: all 0.2s; }}
     .btn-header:hover {{ opacity: 0.9; transform: translateY(-1px); }}
-
-    /* FLOATING BUTTON ALWAYS VISIBLE */
-    .floating-add-btn {{ position: fixed; bottom: 24px; right: 24px; background: linear-gradient(135deg, var(--accent), var(--accent-sec)); color: #FFF; border: none; padding: 14px 24px; border-radius: 50px; font-weight: 800; font-size: 15px; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 999; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }}
-    .floating-add-btn:hover {{ transform: scale(1.05); }}
 
     .grid {{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }}
     @media (max-width: 1200px) {{ .grid {{ grid-template-columns: repeat(2, 1fr); }} }}
@@ -224,12 +228,6 @@ def generate_standalone_html(agent, cfg):
     </div>
     <button class="btn-header" onclick="openNewModal()">+ Новая Задача</button>
   </header>
-
-  <!-- FLOATING ACTION BUTTON ALWAYS VISIBLE AT BOTTOM RIGHT -->
-  <button class="floating-add-btn" onclick="openNewModal()">
-    <span>➕</span>
-    <span>Добавить Задачу</span>
-  </button>
 
   <div class="grid" id="kanban-grid">
     <!-- COL 1 -->
@@ -311,12 +309,28 @@ def generate_standalone_html(agent, cfg):
     let currentState = {{ "cards": DEFAULT_CARDS, "activity": [] }};
     let draggedCardId = null;
 
+    function mergeCards(serverCards, defaultCards) {{
+      const map = new Map();
+      // Add server/local cards first
+      if (serverCards && Array.isArray(serverCards)) {{
+        serverCards.forEach(c => map.set(c.id, c));
+      }}
+      // Merge missing default cards
+      defaultCards.forEach(c => {{
+        if (!map.has(c.id)) {{
+          map.set(c.id, c);
+        }}
+      }});
+      return Array.from(map.values());
+    }}
+
     function getLocalState() {{
       try {{
-        const raw = localStorage.getItem('kanban_state_' + AGENT);
+        const raw = localStorage.getItem('kanban_state_v23_' + AGENT);
         if (!raw) return null;
         const parsed = JSON.parse(raw);
-        if (parsed && parsed.cards && parsed.cards.length >= DEFAULT_CARDS.length) {{
+        if (parsed && parsed.cards) {{
+          parsed.cards = mergeCards(parsed.cards, DEFAULT_CARDS);
           return parsed;
         }}
         return null;
@@ -325,7 +339,7 @@ def generate_standalone_html(agent, cfg):
 
     function setLocalState(state) {{
       try {{
-        localStorage.setItem('kanban_state_' + AGENT, JSON.stringify(state));
+        localStorage.setItem('kanban_state_v23_' + AGENT, JSON.stringify(state));
         syncWithBackend(state);
       }} catch(e) {{}}
     }}
@@ -345,6 +359,7 @@ def generate_standalone_html(agent, cfg):
         const res = await fetch(API_URL);
         const data = await res.json();
         if (data && data.cards && data.cards.length > 0) {{
+          data.cards = mergeCards(data.cards, DEFAULT_CARDS);
           currentState = data;
           setLocalState(currentState);
           renderBoard();
@@ -560,7 +575,7 @@ for agent, cfg in agents_config.items():
     cmd = f"VERCEL_TOKEN={v_token} vercel \"{v_dir}\" --prod --yes --scope {v_team}"
     res = subprocess.run(cmd, shell=True, capture_output=True, text=True)
     url = res.stdout.strip()
-    print(f"✅ Deployed persistent {agent.upper()} ({len(cfg['cards'])} cards) -> Vercel: {url}")
+    print(f"✅ Deployed auto-merge {agent.upper()} ({len(cfg['cards'])} cards) -> Vercel: {url}")
 
     # Re-alias hermes-stevenson-kanban explicitly
     if agent == "hermes":
