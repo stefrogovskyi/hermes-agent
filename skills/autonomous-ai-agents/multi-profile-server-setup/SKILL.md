@@ -150,6 +150,12 @@ Use when configuring or troubleshooting multi-profile Hermes Agent instances run
     - **Request Timeout (`request_timeout_seconds: 30`):** Set `request_timeout_seconds: 30` in `config.yaml` across all profiles so unresponsive API providers or hanging models time out in 30 seconds max (preventing 15-minute hanging loops).
     - **Auto-Compression (`compression.threshold: 0.25`):** Enable `compression.enabled: true`, `compression.threshold: 0.25`, `compression.target_ratio: 0.15` in `config.yaml` across all profiles so context is compressed automatically at 25% capacity (~25k-50k tokens), preventing 450k+ token context bloat and multi-minute API latency.
 
+11. **Userbot Session Authorization & Security Guardrails:**
+    - **Telegram Security Guard Pitfall:** Entering Telegram 5-digit verification codes sent in chat text triggers Telegram Security Guard blocking and revokes the login attempt.
+    - **Safe Authorization Pattern:** Copy an authorized `.session` file (e.g. `stefan_userbot.session`) over Tailscale or receive it directly as an un-inlined Telegram document attachment.
+    - **Permissions & Git Security:** Always set `chmod 600 /opt/hermes/*.session` so session files are readable only by root on Servarica. Always add `*.session` to `.gitignore`.
+    - **Read-Only Sensor Rule:** Userbot sessions must strictly operate as READ-ONLY sensors (`get_dialogs`, `get_messages`). Agents must NEVER impersonate the user or send messages from the user account. Sub-bots must send messages only from their own bot tokens.
+
 9. **Airtable PAT Token Synchronization & Base Audit:**
    - Always verify Personal Access Tokens (`PAT`) against `https://api.airtable.com/v0/meta/bases` to confirm active base permissions before running CRM or outreach workflows.
    - Sync `AIRTABLE_API_KEY` and `AIRTABLE_PAT` in both `/opt/hermes/profiles/richard/.env` and master `.env`.
