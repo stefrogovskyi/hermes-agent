@@ -53,7 +53,7 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
      - **EXACTLY 1 EXTRA BLANK LINE** before the signature block.
      - **NO HORIZONTAL LINE (`border-top`) BEFORE THE SIGNATURE**.
      - Use ONLY the official HTML signature block (`Richard Marlowe / Connections Manager`, logo `https://bit.ly/4hLg86T`, +44 203 440 9800, 30 St Mary Axe London, `rich@navo24.com`, `www.navo24.com`).
-     *(See `references/4-touch-sequence-pattern.md` for full sequence details and HTML signature templates.)*
+     *(See `references/4-touch-sequence-pattern.md` for full sequence details and HTML signature templates, and `references/b2b-contract-and-kanban-rules.md` for contract drafting and Vercel Kanban UI rules.)*
    - **Mass Cold Outreach & Anti-Spam (100% Dynamic AI Personalization & High Combinatorics)**:
      - **NO STATIC REPETITIVE TEMPLATES**: Cold outreach MUST use 100% dynamic AI personalization with high combinatorial variety (25+ unique subject lines, 12+ greetings, 10+ intros, 12+ contexts, 12+ CTAs -> 500,000+ unique email variations). Static templates cause Microsoft Exchange Online Protection (EOP) to flag outbound spam and block sending (`550 5.1.8 Access denied, bad outbound sender AS(42004)`).
      - **Safe Sending Cadence & User Preference**: Default cold outreach interval is **5 minutes (300s)** per message (~12 emails/hour) for primary Microsoft 365 mailboxes, or **2 minutes (120s)** (~30 emails/hour) if explicitly requested by Stefan. Always respect the user's interval choice.

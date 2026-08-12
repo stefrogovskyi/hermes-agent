@@ -43,7 +43,7 @@ Canva requires **Multi-Factor Authentication (MFA)** to be enabled on the accoun
 2. Select **Public** or **Private** (Enterprise).
 3. Under **Credentials**, copy the **Client ID** and click **Generate secret** to save the **Client Secret**.
 4. Under **Authentication → Authorized redirects**, add your callback URL (for local dev: `http://127.0.0.1:<port>/callback` — note that `localhost` is not allowed).
-5. Under **Scopes**, enable required permissions (e.g. `design:content:read`, `design:content:write`, `asset:read`, `asset:write`, `brandtemplate:read`).
+5. Under **Scopes**, enable required permissions (e.g. `design:content:read`, `design:content:write`, `asset:read`, `asset:write`, `brandtemplate:read`). Note: All requested scopes in the OAuth authorization URL must match what is enabled in the Developer Portal, otherwise Canva returns `invalid_scope`.
 
 ---
 
@@ -132,7 +132,7 @@ def refresh_access_token(client_id, client_secret, refresh_token):
 
 * For detailed error transcripts and step-by-step troubleshooting, see `references/oauth-troubleshooting.md`.
 * For binary asset uploads via Python (`POST /v1/asset-uploads`), see `references/asset-upload.md`.
-* For Navo24 v5.52 Brand Book specifications and creative design templates, see `references/navo24-brand-guidelines.md`.
+* For Navo24 v5.52 Brand Book specifications, design system templates, and Hostinger `.htaccess` routing fixes, see `references/navo24-brand-guidelines.md`.
 
 ## Asset Uploads API (`POST /v1/asset-uploads`)
 To upload local PNG/JPG images directly into user's Canva library:

@@ -5,3 +5,5 @@ Formatting: Plain text body, 1 blank line before signature, no horizontal line. 
 User preferences: No snake emojis (🐍). Telegram 'Navo Agents' group: respond ONLY when @tagged (@richnavobot). Only @tag other bots if a response/action is needed.
 §
 ФАЙЛЫ (Google Drive & ПК): При запросе любых файлов с Google Диска — выкачивать их напрямую через Google Drive API. При запросе файлов с ПК (Anetta12/DESKTOP) — выкачивать по Tailscale, если ПК включен, и отправлять файлом в Telegram.
+§
+User preference: Contracts & B2B agreements must use bilateral mutual phrasing ("The Parties agree that Provider may...") rather than unilateral website disclaimer wording ("We reserve the right"). Do not CC sales@navo24.com on cold campaign emails.
