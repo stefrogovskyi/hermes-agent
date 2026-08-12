@@ -47,6 +47,7 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
      4. **Емейл 4 (Полноценный оффер Early Bird)**:
         `Отлично`
         `Мы работаем с экспедиторскими компаниями через принципиально новую экосистему для цифровой логистики... [3 месяца бесплатного тестового периода, бесплатное обновление сайта, калькулятор фрахта, автотрекинг, объединённая сеть тарифов].`
+   - **Google Drive API File Retrieval**: When files (such as statutory/incorporation documents in `Navo / Statute`) are not synced locally on the server filesystem, use the stored Google OAuth token at `/opt/hermes/google_token.json`. Refresh the access token via `https://oauth2.googleapis.com/token` with `refresh_token`, `client_id`, and `client_secret`, and query `https://www.googleapis.com/drive/v3/files` directly to list and download files from Google Drive.
    - **Signature Rule**:
      - **NO EXTRA PARAGRAPHS OR BLANK LINES** at the very top of the email body text.
      - **EXACTLY 1 EXTRA BLANK LINE** before the signature block.
@@ -55,9 +56,11 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
      *(See `references/4-touch-sequence-pattern.md` for full sequence details and HTML signature templates.)*
    - **Mass Cold Outreach & Anti-Spam (100% Dynamic AI Personalization & High Combinatorics)**:
      - **NO STATIC REPETITIVE TEMPLATES**: Cold outreach MUST use 100% dynamic AI personalization with high combinatorial variety (25+ unique subject lines, 12+ greetings, 10+ intros, 12+ contexts, 12+ CTAs -> 500,000+ unique email variations). Static templates cause Microsoft Exchange Online Protection (EOP) to flag outbound spam and block sending (`550 5.1.8 Access denied, bad outbound sender AS(42004)`).
-     - **Safe Sending Cadence**: Use human-like delays of **5 minutes (300s)** per message (~12 emails/hour) as the baseline for cold outreach on primary Microsoft 365 mailboxes.
+     - **Safe Sending Cadence & User Preference**: Default cold outreach interval is **5 minutes (300s)** per message (~12 emails/hour) for primary Microsoft 365 mailboxes, or **2 minutes (120s)** (~30 emails/hour) if explicitly requested by Stefan. Always respect the user's interval choice.
+     - **Pausing & Delay Timers**: When Stefan requests a pause for N hours (e.g., "stop for 2 hours, then resume with 5 min interval"), kill the active process immediately, set the sleep script interval to 300s, and launch a background timer process (`sleep <N*3600> && PYTHONUNBUFFERED=1 python3 -u script.py >> log 2>&1 &`). Confirm exact resume time.
      - **CC Rules**: CC `lxxmng@navo24.com` & `stefan@navo24.com`. **DO NOT CC `sales@navo24.com`** on cold outreach emails.
      - **Exchange Online Distribution List Recovery**: Distribution Lists (Groups) in Exchange Online do NOT store or queue blocked messages. Once rejected, messages cannot be retroactively pulled or claimed. Use **Exchange Admin Center (`admin.exchange.microsoft.com`) -> Message Trace** filtered by `Rejected/Failed` to audit external senders and subjects that were blocked.
+     - **Telegram Group Response Rules**: In Telegram group chats (e.g., "Navo Agents"), respond ONLY if (1) `@mentioned` (`@richnavobot`), (2) replied/quoted to, or (3) explicitly addressed by name (*Ричард*, *Richard*, *Рич*, *Ричи*). Never jump into group threads unprompted.
      - **Airtable Status Updates**: Update `Stage` and `status` to `"Contacted"` via Airtable PATCH API strictly record-by-record AFTER each email is actually dispatched.
    - **Plain Text Body + HTML Signature Only**: Cold outreach emails MUST use a natural human plain-text body (or simple HTML text). DO NOT send full HTML email newsletter templates, which look like automated marketing blasts. ATTACH ONLY the official HTML signature at the bottom (Richard Marlowe, Senior Sales Manager, domain links).
    - **Verification before Confirming Launch**: Never report a mass outreach batch as "launched/running" based on text alone. Verify that the necessary credentials (full Airtable PAT format `pat<id>.<secret>`, SMTP credentials, or local script) are present and actually executed.
