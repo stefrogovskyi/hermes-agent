@@ -133,15 +133,22 @@ Use when configuring or troubleshooting multi-profile Hermes Agent instances run
    - **Verification:** Regularly audit all profile `config.yaml` and `.env` files to guarantee no profile lacks fallback entries or active primary API keys.
 
 9. **Interactive Multi-Agent Kanban Boards & Rollback Prevention:**
-   - **Preventing Drag-and-Drop Rollbacks:** Unpersisted drag-and-drop or static HTML resets card positions on page refresh. To fix:
-     - Implement HTML5 Drag and Drop (`draggable="true"`, `ondragstart`, `ondragover`, `ondrop`).
+   - **Preventing Drag-and-Drop Rollbacks & Blank Screens (Pre-baked SSR HTML):** Unpersisted drag-and-drop or client-side fetch delays can make boards appear blank or reset positions. To fix:
+     - **Pre-bake Initial Cards in HTML (SSR):** Render initial cards directly inside static `index.html` column containers so the board displays all cards in 0ms without waiting for client-side API fetches or JS hydration.
+     - **Floating Action Button:** Add a fixed floating button (`position: fixed; bottom: 24px; right: 24px; z-index: 9999`) for "+ Добавить Задачу" so task creation is 100% visible on any viewport or mobile device.
      - **Dual Persistence:** Save card positions immediately to `localStorage` (`localStorage.setItem('kanban_state_' + agent, ...)`), then send `POST /kanban_api.php` with `{ agent, action: "move_card", card_id, new_column_id }` to update `kanban_store_<agent>.json` on the server.
+   - **Disabling Vercel SSO / Deployment Protection Redirects:**
+     - **Pitfall:** Vercel projects may default to SSO/Deployment Protection, serving a 477KB login HTML page instead of the 22KB Kanban HTML.
+     - **Fix:** Call Vercel REST API (`PATCH https://api.vercel.com/v9/projects/<project_name>?teamId=<team_id>`) with `{"ssoProtection": null, "passwordProtection": null}` to disable protection and ensure public 200 OK access.
    - **Preventing Browser Auto-Translation Glitches (Japanese/Foreign Translation Fix):**
-     - When hosting Cyrillic HTML pages on Vercel/Surge, browsers (Chrome/Safari) may misidentify the language and auto-translate the page to Japanese or another language.
-     - **Fix:** Include `<meta name="google" content="notranslate">` and `<meta http-equiv="Content-Language" content="ru">` in `<head>`, and configure `vercel.json` headers with `"Content-Type": "text/html; charset=utf-8"`.
+     - Include `<meta name="google" content="notranslate">` and `<meta http-equiv="Content-Language" content="ru">` in `<head>`, and configure `vercel.json` headers with `"Content-Type": "text/html; charset=utf-8"`.
    - **Kanban Hosting Policy (Hard Rule):** All agent Kanban boards MUST be deployed EXCLUSIVELY to Vercel (`https://<agent>-kanban.vercel.app`). **NEVER** deploy or host Kanban boards on the primary production domain `aavalanche.com/kanban/`.
    - **Agent-Specific Themes:** Assign distinct color themes per agent board (Hermes: Cyber Blue/Emerald, Richard: Gold/Emerald, Callum: Electric Cyan/Indigo, Alistair: Executive Violet/Purple, Liz: Coral/Rose, Ben: Growth Orange/Amber).
    - **Daily 08:00 AM Review Cron:** Schedule a daily cron at 08:00 AM (`0 8 * * *`) that polls `kanban_api.php`, aggregates tasks across all agent boards, and delivers a concise Telegram brief.
+
+10. **Context Bloat & Request Timeout Safeguards:**
+    - **Request Timeout (`request_timeout_seconds: 30`):** Set `request_timeout_seconds: 30` in `config.yaml` across all profiles so unresponsive API providers or hanging models time out in 30 seconds max (preventing 15-minute hanging loops).
+    - **Auto-Compression (`compression.threshold: 0.25`):** Enable `compression.enabled: true`, `compression.threshold: 0.25`, `compression.target_ratio: 0.15` in `config.yaml` across all profiles so context is compressed automatically at 25% capacity (~25k-50k tokens), preventing 450k+ token context bloat and multi-minute API latency.
 
 9. **Airtable PAT Token Synchronization & Base Audit:**
    - Always verify Personal Access Tokens (`PAT`) against `https://api.airtable.com/v0/meta/bases` to confirm active base permissions before running CRM or outreach workflows.

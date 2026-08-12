@@ -64,6 +64,20 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
      - **Airtable Status Updates**: Update `Stage` and `status` to `"Contacted"` via Airtable PATCH API strictly record-by-record AFTER each email is actually dispatched.
    - **Plain Text Body + HTML Signature Only**: Cold outreach emails MUST use a natural human plain-text body (or simple HTML text). DO NOT send full HTML email newsletter templates, which look like automated marketing blasts. ATTACH ONLY the official HTML signature at the bottom (Richard Marlowe, Senior Sales Manager, domain links).
    - **Verification before Confirming Launch**: Never report a mass outreach batch as "launched/running" based on text alone. Verify that the necessary credentials (full Airtable PAT format `pat<id>.<secret>`, SMTP credentials, or local script) are present and actually executed.
+5. **Contract & Commercial Agreement Drafting (Wemelogistics LTD / Navo24)**:
+   - **Contract Structure**: B2B client contracts for Navo24 subscriptions MUST combine Part 1 (**Commercial Offer & Special Conditions**) and Part 2 (**General Terms and Conditions of Use** from `T_C Navo.docx`).
+   - **Bilateral B2B Formulations (No Unilateral Website Disclosures)**: Convert unilateral B2C website disclosures ("We reserve the right to amend these Terms at any time", "We may periodically update or alter the content") into formal mutual B2B agreement language:
+     * *Clause 5.1 (Changes to Terms):* "The Parties agree that the Provider may, at its discretion, update or amend these Terms to reflect regulatory changes or platform optimizations, provided that the Provider gives the Client prior written notification or publishes updated terms on the Platform..."
+     * *Clause 5.2 (Changes to Platform):* "The Client acknowledges and agrees that the Provider may, at its discretion, periodically update, enhance, alter, or refresh the content, features, and functionality of navo24.com and associated Digital Solutions..."
+     * *Clause 10.3 (Fee Adjustments):* Require at least thirty (30) days' prior written notice for renewal rate adjustments.
+   - **Numbered Subheadings & Section Formatting**: Ensure Section 4 (`Supplementary Policies`) and all numbered sections have clear, distinct, numbered subheadings (`4.1 Privacy Policy`, `4.2 Membership / Service Agreements`), bold prefixes, and clean vertical paragraph spacing.
+   - **Critical Precedence Clause**: Part 1 (Commercial Offer) MUST explicitly state that in case of any conflict or inconsistency, Part 1 **shall strictly prevail and take precedence** over Part 2 General T&C.
+   - **Service Provider Details**: **WEMELOGISTICS LTD** (Company Number: `14081751`, registered at 1 Robin Hood House, Kingston Vale, London, SW15 3AL), represented by Director **Oleksii Shatunov**.
+   - **Agreed Commercial Logic (PAYG)**:
+     * Pricing Model: Pay As You Go (PAYG) based on unique shipments tracked / API calls executed.
+     * Calculation Window: Calculated from the Subscription Activation Date through the end of that relevant calendar month (e.g. 1 Sep – 30 Sep, or 15 Sep – 30 Sep for mid-month activation).
+     * Invoicing & Payment: Issued monthly in arrears, payment due Net 14 days from invoice date. Client pays net amounts + applicable VAT and intermediary bank transfer/wire fees.
+   - **Format**: Always generate as a formatted Word document (`.docx`) with signature blocks for Oleksii Shatunov (Director, Wemelogistics Ltd) and the Client.
 4. **Airtable PAT Authentication & Base Mapping**:
    - Airtable Personal Access Tokens use the full format `pat<id>.<secret>` (e.g. `patzjFlOTnLygbDs0.64e5...`). Single `pat<id>` prefixes will return 401 Unauthorized.
    - Base mapping for Chinese Freight Forwarder outreach:
