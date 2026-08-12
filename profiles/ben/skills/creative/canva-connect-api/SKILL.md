@@ -132,6 +132,7 @@ def refresh_access_token(client_id, client_secret, refresh_token):
 
 * For detailed error transcripts and step-by-step troubleshooting, see `references/oauth-troubleshooting.md`.
 * For binary asset uploads via Python (`POST /v1/asset-uploads`), see `references/asset-upload.md`.
+* For Navo24 v5.52 Brand Book specifications and creative design templates, see `references/navo24-brand-guidelines.md`.
 
 ## Asset Uploads API (`POST /v1/asset-uploads`)
 To upload local PNG/JPG images directly into user's Canva library:
@@ -149,6 +150,12 @@ To upload local PNG/JPG images directly into user's Canva library:
    * **Resolution**: Go to `canva.com/developers/integrations` → Select App → **Scopes** → Check all required checkboxes under **Reading and writing** → Click **Save**.
 2. **`invalid_field` on `POST /v1/designs`**: `name must be one of the following: doc, email, presentation, whiteboard`
    * **Note**: `POST /v1/designs` currently accepts `preset` names: `doc`, `email`, `presentation`, `whiteboard`. Preset names like `instagram_post` are not direct preset strings for `POST /v1/designs`. Use asset uploads or brand template autofills for custom social media graphics.
-3. **Redirect URI Restrictions**: Canva enforces exact match on redirect URIs. `localhost` is rejected; use `http://127.0.0.1:<port>` for local testing.
-3. **Client Secret One-Time Display**: Save the Client Secret immediately upon generation as Canva will not display it again.
-4. **Token Expiry**: Access tokens expire in 14,400 seconds (4 hours). Use the `refresh_token` flow to maintain persistent access without user re-authentication.
+3. **Logo & Brand Compliance (Navo24 v5.52)**:
+   * **Official Wordmark**: `navo` lowercase wordmark where letter `o` is **The Disc (7 concentric rings)** (`white` → `gold #FFC42E` → `sun #FF7A1F` → `red #E2231A` → `turquoise #12C2C2` → `cobalt #1F4FE6` → `navy #0C2A5E`). Vector SVG: `https://navo24.com/brand/navo-wordmark-white.svg`.
+   * **Dark Ground**: Navy-ink `#0A0E16` or `#0C2A5E` (NEVER pure black `#000000`).
+   * **Typography**: Ranade **Ultralight (200, -0.03em)** for display headlines (never bold display headlines!), Switzer for text, JetBrains Mono for eyebrows/metrics (`● EYEBROW`, tracked `+0.14em`).
+   * **One-Liner Rule**: Subheads stretch across full measure in a single line. Trim copy until it fits.
+   * **No Machine Em-Dashes**: Spaced em-dash (` — `) is banned from prose. Use colons, periods, or semicolons.
+4. **Redirect URI Restrictions**: Canva enforces exact match on redirect URIs. `localhost` is rejected; use `http://127.0.0.1:<port>` for local testing.
+5. **Client Secret One-Time Display**: Save the Client Secret immediately upon generation as Canva will not display it again.
+6. **Token Expiry**: Access tokens expire in 14,400 seconds (4 hours). Use the `refresh_token` flow to maintain persistent access without user re-authentication.
