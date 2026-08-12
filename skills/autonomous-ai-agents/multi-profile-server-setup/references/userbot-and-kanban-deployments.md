@@ -1,46 +1,63 @@
-# Userbot Session & Vercel Kanban Deployments
+# Userbot Session, Vercel Kanban & Timeout Safeguards
 
-## 1. Telegram Userbot Session Setup & Channel Polling
+## 1. Vercel-Only Kanban Hosting & Pre-Baked SSR Cards
 
-### Problem & Pitfall
-Attempting to log into a Telethon userbot session by requesting 5-digit verification codes over Telegram chat triggers Telegram Security Guard blocking. Telegram invalidates the code and blocks the sign-in attempt from new server IPs when the code appears in chat text.
+### Hard Policy
+All agent Kanban boards MUST be deployed EXCLUSIVELY to Vercel (`https://<agent>-kanban.vercel.app`). **NEVER** deploy or host Kanban boards on the primary production domain `aavalanche.com/kanban/`.
 
-### Solution & Safe Pattern
-1. **Reusing Authorized `.session` File:**
-   - Copy the existing, pre-authorized `.session` file (e.g., `router_telethon_session.session`) over Tailscale or receive it directly as an un-inlined Telegram document attachment.
-   - Place the file on the server at `/opt/hermes/stefan_userbot.session`.
+### Pre-Baking HTML Cards (SSR) to Prevent Blank Screens & Rollbacks
+- Render initial cards directly inside static `index.html` column containers so the board displays all cards in 0ms on load without waiting for client-side API fetches or JS hydration.
+- Always include a floating "+ Добавить Задачу" button (`position: fixed; bottom: 24px; right: 24px; z-index: 9999`) so task creation is 100% visible on any screen or mobile device.
 
-2. **File Permissions & Git Security:**
-   - Restrict permissions to root only: `chmod 600 /opt/hermes/stefan_userbot.session`.
-   - Add `*.session` and `stefan_userbot.session` to `/opt/hermes/.gitignore`.
+### Disabling Vercel SSO / Deployment Protection Redirects
+When Vercel projects default to SSO/Deployment Protection, Vercel serves a 477KB login HTML page instead of the 22KB Kanban page. To fix:
+```python
+import requests
 
-3. **Read-Only Channel Polling (`nepovredit_odessa_poller.py`):**
-   - Connect via Telethon: `client = TelegramClient("/opt/hermes/stefan_userbot.session", api_id, api_hash)`.
-   - Use ONLY read operations: `client.get_entity(TARGET_CHANNEL_ID)` and `client.get_messages(channel, limit=15)`.
-   - **User Preference Signal:** Always format scanned signals with exact publication timestamps `HH:MM` (e.g. `15:35`).
-   - **Strict Security Rule:** Never call `send_message` or write methods from the userbot session. Sub-bots write only from their own bot tokens.
+v_token = "VERCEL_TOKEN_HERE"
+v_team = "navo5"
+headers = {"Authorization": f"Bearer {v_token}", "Content-Type": "application/json"}
+
+for proj in ["ben-kanban", "richard-kanban", "callum-kanban", "alistair-kanban", "liz-kanban", "hermes-stevenson-kanban"]:
+    url = f"https://api.vercel.com/v9/projects/{proj}?teamId={v_team}"
+    body = {"ssoProtection": None, "passwordProtection": None}
+    requests.patch(url, headers=headers, json=body)
+```
 
 ---
 
-## 2. Vercel Kanban Deployment & SSO Protection Fix
+## 2. Telethon Userbot Session Authorization & Security
 
-### Problem & Pitfalls
-- **Vercel SSO Redirects:** Vercel projects may default to SSO/Deployment Protection, serving a 477KB login HTML page instead of the 22KB Kanban HTML.
-- **Client-Side Hydration Wiping Cards:** Pure client-side `fetch()` or `localStorage` reads can clear pre-baked cards or render empty columns if `localStorage` holds `{ cards: [] }`.
+### Security Guard Pitfall
+Sending Telegram 5-digit verification codes as chat text triggers Telegram Security Guard blocking and revokes the login attempt.
 
-### Solution
-1. **Disable Vercel SSO Protection via REST API:**
-   ```python
-   import requests
-   
-   headers = {"Authorization": "Bearer " + VERCEL_TOKEN, "Content-Type": "application/json"}
-   url = "https://api.vercel.com/v9/projects/" + project_name + "?teamId=" + VERCEL_TEAM_ID
-   requests.patch(url, headers=headers, json={"ssoProtection": None, "passwordProtection": None})
-   ```
+### Safe Authorization Pattern
+- Transfer an authorized `.session` file (e.g. `router_telethon_session.session`) over Tailscale or receive it directly as an un-inlined Telegram document attachment.
+- Save to `/opt/hermes/stefan_userbot.session` and set `chmod 600 /opt/hermes/*.session` so the file is readable only by root on Servarica.
+- Add `*.session` and `stefan_userbot.session` to `/opt/hermes/.gitignore`.
 
-2. **Pre-bake Initial Cards in HTML (SSR):**
-   - Render card HTML directly inside column containers (`<div class="cards-container" id="cards-todo">{todo_html}</div>`) in static `index.html`.
-   - In client JS, protect `localStorage` initialization: if `localStorage` has fewer cards than `DEFAULT_CARDS`, preserve `DEFAULT_CARDS`.
+### Read-Only Sensor Rule
+Userbot sessions must strictly operate as READ-ONLY sensors (`get_dialogs`, `get_messages`). Agents must NEVER impersonate the user or send messages from the user account. Sub-bots must send messages only from their own bot tokens.
 
-3. **Floating Action Button:**
-   - Add a fixed floating button (`position: fixed; bottom: 24px; right: 24px; z-index: 9999`) for "+ Добавить Задачу" so task creation is visible on all screen sizes.
+---
+
+## 3. Context Bloat & Request Timeout Safeguards
+
+Set `request_timeout_seconds: 30` and aggressive compression in `config.yaml` across all profiles:
+```yaml
+request_timeout_seconds: 30
+
+compression:
+  enabled: true
+  threshold: 0.25      # Compress when context reaches 25% of limit (~25k-50k tokens)
+  target_ratio: 0.15   # Compress down to 15%
+```
+
+---
+
+## 4. Bot-to-Bot Loop Shield for Telegram Group Chats
+
+To prevent infinite bot ping-pong loops in group chats:
+1. Enable `require_mention: true` in `config.yaml`.
+2. Ignore all messages from other bots unless directly tagged via `@mention`.
+3. Do not trigger on untagged replies/quotes from other bots.

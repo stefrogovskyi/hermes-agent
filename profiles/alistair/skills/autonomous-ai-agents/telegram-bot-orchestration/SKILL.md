@@ -37,3 +37,14 @@ When Agent A replies to Agent B, Telegram tags Agent B in a quote-reply. Agent B
 2. **Break the Chain**: Do **NOT** send a follow-up polite acknowledgment, emoji, or echo reply.
 3. **Actionable Check**: Only respond if the incoming message contains a new task, question, explicit instruction, or code/architecture work addressed to this agent.
 4. **Clean Exit / Minimal Output**: Conclude the turn quietly (or with minimal non-conversational character like `.`) when an output is required by the platform runner, avoiding emoji/phrase echo loops that trigger further quote-replies.
+
+## Troubleshooting Group Silence & Mention Failures
+
+### Diagnostics First (No Guesses)
+- **Do NOT guess BotFather privacy settings**: Never claim `/setprivacy` or BotFather settings are the cause without inspecting local configs first.
+- **Check `config.yaml` Settings**:
+  - `require_mention: true|false`: Dictates whether `@botusername` or direct quote-reply is strictly required vs wake words.
+  - `group_trigger_keywords`: List of declensions (e.g., `Алистер`, `Алистеру`). Ensure the case/form used in the message is listed.
+  - `group_allow_from`: Ensure group chat ID or `*` is permitted.
+- **Inspect Gateway Logs**: Check `profiles/<name>/logs/gateway.log` and `agent.log` for inbound message events, adapter filters, or `Blocked unauthorized user` / `no @mention` logs.
+

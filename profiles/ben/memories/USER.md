@@ -6,7 +6,7 @@ Callum Vance (`@callumvancebot`) = Full-Stack Engineer domain agent. Tech Lead: 
 §
 Telegram signals preference: Always include exact publication timestamps (HH:MM).
 §
-Navo Vision: $1B Valuation / $200k/day Rev ($6M+/mo). 100 deals/day @ $2k check. Synergy: 10 Humans + 10 Digital Agents. Freedom for creativity & love.
+Navo Vision: $1B Valuation / $200k/day Rev ($6M+/mo). 100 deals/day @ $2k check. Synergy: 10 Humans + 10 Digital Agents.
 §
 Agent Voices: Hermes=onyx, Alistair=fable, Richard=echo, Callum=ash, Liz=nova. Single msg w/ HTML/Excel/audio. YT API sorting (49 playlists). No 10-limit on WL. auto_tts=false.
 §
@@ -14,4 +14,4 @@ Email preference: Never add automatic CC/BCC to sales emails (Richard) unless ex
 §
 Git preference: Always state active Git commit SHA and branch name when modifying code/deploying.
 §
-Navo design standard: strictly follow navo24.com/brand-book v5.52 (Ranade Ultralight, Switzer, JetBrains Mono, #0A0E16 navy ground, #4A86FF cobalt, #E8A33D amber, 1-line hooks, no pure black #000 or generic AI/neon templates).
+Navo design standard: strictly follow navo24.com/brand-book v5.52 (Ranade Ultralight 200, Switzer, JetBrains Mono, #0A0E16 navy ground, #FCFCFB light paper, #4A86FF cobalt, #E8A33D amber, 1-line hooks, official 7-ring navo wordmark SVG). Never use off-brand gradients or generic cyber templates.

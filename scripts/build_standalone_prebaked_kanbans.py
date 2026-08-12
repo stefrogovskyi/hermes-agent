@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-build_standalone_prebaked_kanbans.py — Сборка 6 полностью персистентных Канбан-бордов с плавающей кнопкой добавления задач и защитой от очистки localStorage!
+build_standalone_prebaked_kanbans.py — Двусторонняя персистентная система 6 Канбан-бордов с фиксацией времени перетаскивания, комментариев и полной обратной совместимостью.
 """
 
 import os, json, subprocess
@@ -39,7 +39,7 @@ agents_config = {
         "card_bg": "#24130A",
         "accent": "#FF6B00",
         "accent_secondary": "#F59E0B",
-        "vercel_name": "ben-jett-kanban",
+        "vercel_name": "ben-kanban",
         "cards": [
             {"id": "c_b1", "column_id": "todo", "title": "🎯 Avalanche Agency PPC & Social Campaigns", "desc": "Запуск лидогенерационных кампаний в LinkedIn и Google Ads для B2B клиентов.", "assignee": "🚀 Ben Jett", "tag": "CAMPAIGN", "tag_class": "tag-todo"},
             {"id": "c_b2", "column_id": "in_progress", "title": "🔥 Avalanche Redesign Landing Conversion Test", "desc": "А/Б тестирование высокой конверсии обновленного темного лендинга.", "assignee": "🚀 Ben Jett", "tag": "TESTING", "tag_class": "tag-progress"},
@@ -113,13 +113,18 @@ def render_cards_html(cards, col_id):
     col_cards = [c for c in cards if c.get("column_id") == col_id]
     html = ""
     for c in col_cards:
+        moved_str = f"<div style='font-size:10px; color:#64748B; margin-top:4px;'>🕒 Перемещено: {c.get('moved_at')}</div>" if c.get('moved_at') else ""
+        comments_cnt = len(c.get('comments', []))
+        comm_str = f"<span style='font-size:11px; color:#3B82F6;'>💬 {comments_cnt}</span>" if comments_cnt > 0 else ""
+        
         html += f"""
-        <div class="card" draggable="true" ondragstart="handleDragStart(event, '{c['id']}')">
+        <div class="card" draggable="true" id="card-el-{c['id']}" ondragstart="handleDragStart(event, '{c['id']}')" onclick="openEditModal('{c['id']}')">
           <div class="card-title">{c['title']}</div>
           <div class="card-desc">{c['desc']}</div>
+          {moved_str}
           <div class="card-footer">
             <span class="tag {c.get('tag_class', 'tag-todo')}">{c.get('tag', 'TASK')}</span>
-            <span class="assignee">{c.get('assignee', '')}</span>
+            <span class="assignee">{c.get('assignee', '')} {comm_str}</span>
           </div>
         </div>
         """
@@ -190,7 +195,7 @@ def generate_standalone_html(agent, cfg):
     .card:hover {{ border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }}
     .card-title {{ font-size: 14px; font-weight: 700; margin-bottom: 6px; line-height: 1.4; color: var(--text-main); }}
     .card-desc {{ font-size: 12px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.5; }}
-    .card-footer {{ display: flex; justify-content: space-between; align-items: center; font-size: 11px; }}
+    .card-footer {{ display: flex; justify-content: space-between; align-items: center; font-size: 11px; margin-top: 8px; }}
 
     .tag {{ font-weight: 600; padding: 3px 8px; border-radius: 6px; }}
     .tag-todo {{ background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); }}
@@ -200,12 +205,14 @@ def generate_standalone_html(agent, cfg):
 
     /* MODALS */
     .modal-overlay {{ position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); display: none; justify-content: center; align-items: center; z-index: 10000; }}
-    .modal-box {{ background: var(--card-bg); border: 1px solid var(--card-border); width: 90%; max-width: 600px; border-radius: 16px; padding: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); }}
+    .modal-box {{ background: var(--card-bg); border: 1px solid var(--card-border); width: 90%; max-width: 600px; border-radius: 16px; padding: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); max-height: 90vh; overflow-y: auto; }}
     .modal-header {{ display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }}
     .modal-close {{ background: none; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; }}
     
     .input-field {{ width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--card-border); border-radius: 8px; padding: 12px; color: #FFF; font-size: 14px; outline: none; margin-bottom: 12px; }}
     .input-field:focus {{ border-color: var(--accent); }}
+    
+    .comment-item {{ background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; font-size: 12px; margin-bottom: 6px; }}
   </style>
 </head>
 <body>
@@ -269,10 +276,39 @@ def generate_standalone_html(agent, cfg):
     </div>
   </div>
 
+  <!-- EDIT / COMMENT CARD MODAL -->
+  <div class="modal-overlay" id="edit-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 style="font-size: 16px; font-weight: 800;" id="edit-modal-title">Редактирование задачи</h2>
+        <button class="modal-close" onclick="closeEditModal()">✕</button>
+      </div>
+      <input type="hidden" id="edit-card-id">
+      <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;" id="edit-card-moved-at"></div>
+      
+      <label style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Заголовок:</label>
+      <input type="text" id="edit-title" class="input-field">
+      
+      <label style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Описание:</label>
+      <textarea id="edit-desc" class="input-field" rows="3"></textarea>
+      
+      <label style="font-size: 12px; font-weight: 700; color: var(--text-muted);">💬 Комментарии:</label>
+      <div id="edit-comments-list" style="margin-bottom: 12px;"></div>
+      
+      <div style="display: flex; gap: 8px;">
+        <input type="text" id="edit-new-comment" class="input-field" placeholder="Добавить комментарий..." style="margin-bottom:0;">
+        <button class="btn-header" style="white-space: nowrap;" onclick="addCommentToCard()">Отправить</button>
+      </div>
+      
+      <button class="btn-header" style="width: 100%; margin-top: 16px;" onclick="saveCardEdits()">Сохранить изменения ➔</button>
+    </div>
+  </div>
+
   <script>
     const AGENT = '{agent}';
+    const API_URL = 'https://dev.aavalanche.com/kanban_api.php?agent=' + AGENT;
     const DEFAULT_CARDS = {json.dumps(cards, ensure_ascii=False)};
-    let currentState = {{ "cards": DEFAULT_CARDS }};
+    let currentState = {{ "cards": DEFAULT_CARDS, "activity": [] }};
     let draggedCardId = null;
 
     function getLocalState() {{
@@ -280,7 +316,6 @@ def generate_standalone_html(agent, cfg):
         const raw = localStorage.getItem('kanban_state_' + AGENT);
         if (!raw) return null;
         const parsed = JSON.parse(raw);
-        // Protect against empty/wiped localStorage
         if (parsed && parsed.cards && parsed.cards.length >= DEFAULT_CARDS.length) {{
           return parsed;
         }}
@@ -291,6 +326,29 @@ def generate_standalone_html(agent, cfg):
     function setLocalState(state) {{
       try {{
         localStorage.setItem('kanban_state_' + AGENT, JSON.stringify(state));
+        syncWithBackend(state);
+      }} catch(e) {{}}
+    }}
+
+    async function syncWithBackend(state) {{
+      try {{
+        await fetch(API_URL, {{
+          method: 'POST',
+          headers: {{ 'Content-Type': 'application/json' }},
+          body: JSON.stringify(state)
+        }});
+      }} catch(e) {{}}
+    }}
+
+    async function fetchFromBackend() {{
+      try {{
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        if (data && data.cards && data.cards.length > 0) {{
+          currentState = data;
+          setLocalState(currentState);
+          renderBoard();
+        }}
       }} catch(e) {{}}
     }}
 
@@ -314,13 +372,18 @@ def generate_standalone_html(agent, cfg):
 
         let cardsHtml = '';
         cols[colId].forEach(c => {{
+          const movedStr = c.moved_at ? `<div style="font-size:10px; color:#64748B; margin-top:4px;">🕒 Перемещено: ${{c.moved_at}}</div>` : '';
+          const commentsCnt = c.comments ? c.comments.length : 0;
+          const commStr = commentsCnt > 0 ? `<span style="font-size:11px; color:#3B82F6;">💬 ${{commentsCnt}}</span>` : '';
+
           cardsHtml += `
-            <div class="card" draggable="true" ondragstart="handleDragStart(event, '${{c.id}}')">
+            <div class="card" draggable="true" id="card-el-${{c.id}}" ondragstart="handleDragStart(event, '${{c.id}}')" onclick="openEditModal('${{c.id}}')">
               <div class="card-title">${{c.title}}</div>
               <div class="card-desc">${{c.desc}}</div>
+              ${{movedStr}}
               <div class="card-footer">
                 <span class="tag ${{c.tag_class || 'tag-todo'}}">${{c.tag || 'TASK'}}</span>
-                <span class="assignee">${{c.assignee || AGENT}}</span>
+                <span class="assignee">${{c.assignee || AGENT}} ${{commStr}}</span>
               </div>
             </div>
           `;
@@ -342,7 +405,22 @@ def generate_standalone_html(agent, cfg):
 
       const card = currentState.cards.find(c => c.id === draggedCardId);
       if (card && card.column_id !== targetColId) {{
+        const nowStr = new Date().toLocaleString("ru-RU", {{ timeZone: "Europe/Kiev" }});
+        const oldCol = card.column_id;
         card.column_id = targetColId;
+        card.moved_at = nowStr;
+
+        if (!currentState.activity) currentState.activity = [];
+        currentState.activity.push({{
+          action: "moved",
+          card_id: card.id,
+          title: card.title,
+          from: oldCol,
+          to: targetColId,
+          timestamp: nowStr,
+          user: "Stefan"
+        }});
+
         setLocalState(currentState);
         renderBoard();
       }}
@@ -352,11 +430,67 @@ def generate_standalone_html(agent, cfg):
     function openNewModal() {{ document.getElementById('new-modal').style.display = 'flex'; }}
     function closeNewModal() {{ document.getElementById('new-modal').style.display = 'none'; }}
 
+    function openEditModal(cardId) {{
+      const card = currentState.cards.find(c => c.id === cardId);
+      if (!card) return;
+
+      document.getElementById('edit-card-id').value = card.id;
+      document.getElementById('edit-title').value = card.title;
+      document.getElementById('edit-desc').value = card.desc;
+      document.getElementById('edit-card-moved-at').innerText = card.moved_at ? '🕒 Последнее перемещение: ' + card.moved_at : '';
+
+      const commList = document.getElementById('edit-comments-list');
+      commList.innerHTML = '';
+      if (card.comments && card.comments.length > 0) {{
+        card.comments.forEach(cm => {{
+          commList.innerHTML += `<div class="comment-item"><b>${{cm.author || 'Stefan'}}</b> (${{cm.timestamp}}): ${{cm.text}}</div>`;
+        }});
+      }} else {{
+        commList.innerHTML = '<div style="font-size:12px; color:var(--text-muted);">Комментариев пока нет</div>';
+      }}
+
+      document.getElementById('edit-modal').style.display = 'flex';
+    }}
+
+    function closeEditModal() {{ document.getElementById('edit-modal').style.display = 'none'; }}
+
+    function addCommentToCard() {{
+      const cardId = document.getElementById('edit-card-id').value;
+      const text = document.getElementById('edit-new-comment').value.trim();
+      if (!text) return;
+
+      const card = currentState.cards.find(c => c.id === cardId);
+      if (card) {{
+        if (!card.comments) card.comments = [];
+        const nowStr = new Date().toLocaleString("ru-RU", {{ timeZone: "Europe/Kiev" }});
+        card.comments.push({{ author: "Stefan", text: text, timestamp: nowStr }});
+        
+        document.getElementById('edit-new-comment').value = '';
+        setLocalState(currentState);
+        openEditModal(cardId);
+        renderBoard();
+      }}
+    }}
+
+    function saveCardEdits() {{
+      const cardId = document.getElementById('edit-card-id').value;
+      const card = currentState.cards.find(c => c.id === cardId);
+      if (card) {{
+        card.title = document.getElementById('edit-title').value.trim();
+        card.desc = document.getElementById('edit-desc').value.trim();
+        setLocalState(currentState);
+        renderBoard();
+        closeEditModal();
+      }}
+    }}
+
     function createNewTask() {{
       const title = document.getElementById('new-title').value.trim();
       const desc = document.getElementById('new-desc').value.trim();
       const col = document.getElementById('new-col').value;
       if (!title) return alert('Укажите название задачи!');
+
+      const nowStr = new Date().toLocaleString("ru-RU", {{ timeZone: "Europe/Kiev" }});
 
       const newCard = {{
         id: 'card_' + Date.now(),
@@ -365,7 +499,9 @@ def generate_standalone_html(agent, cfg):
         desc: desc,
         assignee: AGENT,
         tag: 'NEW',
-        tag_class: 'tag-todo'
+        tag_class: 'tag-todo',
+        moved_at: nowStr,
+        comments: []
       }};
 
       currentState.cards.push(newCard);
@@ -376,7 +512,7 @@ def generate_standalone_html(agent, cfg):
       document.getElementById('new-desc').value = '';
     }}
 
-    // Check LocalStorage on load
+    // Check LocalStorage and Backend on load
     const local = getLocalState();
     if (local && local.cards && local.cards.length > 0) {{
       currentState = local;
@@ -384,6 +520,9 @@ def generate_standalone_html(agent, cfg):
     }} else {{
       setLocalState(currentState);
     }}
+    
+    // Fetch background updates from API
+    fetchFromBackend();
   </script>
 </body>
 </html>
@@ -403,7 +542,6 @@ for agent, cfg in agents_config.items():
     
     v_json = {
         "version": 2,
-        "name": cfg["vercel_name"],
         "builds": [{"src": "index.html", "use": "@vercel/static"}],
         "routes": [{"src": "/(.*)", "dest": "/index.html"}],
         "headers": [
@@ -422,10 +560,13 @@ for agent, cfg in agents_config.items():
     cmd = f"VERCEL_TOKEN={v_token} vercel \"{v_dir}\" --prod --yes --scope {v_team}"
     res = subprocess.run(cmd, shell=True, capture_output=True, text=True)
     url = res.stdout.strip()
-    print(f"✅ Deployed pre-baked {agent.upper()} ({len(cfg['cards'])} cards) -> Vercel: {url}")
+    print(f"✅ Deployed persistent {agent.upper()} ({len(cfg['cards'])} cards) -> Vercel: {url}")
 
     # Re-alias hermes-stevenson-kanban explicitly
     if agent == "hermes":
         cmd_a = f"VERCEL_TOKEN={v_token} vercel alias set {url} hermes-stevenson-kanban.vercel.app --scope {v_team}"
         subprocess.run(cmd_a, shell=True, capture_output=True, text=True)
         print("✅ Re-aliased hermes-stevenson-kanban.vercel.app")
+    elif agent == "ben":
+        cmd_b = f"VERCEL_TOKEN={v_token} vercel alias set {url} vercelkanbanben.vercel.app --scope {v_team}"
+        subprocess.run(cmd_b, shell=True, capture_output=True, text=True)
