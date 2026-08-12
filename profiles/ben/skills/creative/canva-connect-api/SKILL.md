@@ -153,6 +153,7 @@ To upload local PNG/JPG images directly into user's Canva library:
 3. **Logo & Brand Compliance (Navo24 v5.52)**:
    * **Official Wordmark**: `navo` lowercase wordmark where letter `o` is **The Disc (7 concentric rings)** (`white` → `gold #FFC42E` → `sun #FF7A1F` → `red #E2231A` → `turquoise #12C2C2` → `cobalt #1F4FE6` → `navy #0C2A5E`). Vector SVG: `https://navo24.com/brand/navo-wordmark-white.svg`.
    * **Dark Ground**: Navy-ink `#0A0E16` or `#0C2A5E` (NEVER pure black `#000000`).
+   * **Light Ground**: Canvas Paper `#FCFCFB`, `#FFFFFF` cards with hairline border `#E9E8E3`, Signal Soft `#EEF1FE`.
    * **Typography**: Ranade **Ultralight (200, -0.03em)** for display headlines (never bold display headlines!), Switzer for text, JetBrains Mono for eyebrows/metrics (`● EYEBROW`, tracked `+0.14em`).
    * **One-Liner Rule**: Subheads stretch across full measure in a single line. Trim copy until it fits.
    * **No Machine Em-Dashes**: Spaced em-dash (` — `) is banned from prose. Use colons, periods, or semicolons.
