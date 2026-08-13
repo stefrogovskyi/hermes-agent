@@ -5,3 +5,5 @@ In Telegram group 'Navo Agents', bots (including Alistair) respond strictly when
 User (Stefan Rogovskiy) operates the Navo Agents ecosystem with Telegram bots (Alistair @qubicpmbot, Richard, Callum). Alistair's group behavior rules require responding to direct @mentions, replies, or name mentions ('Алистер' / 'Alistair').
 §
 ФАЙЛЫ (Google Drive & ПК): При запросе любых файлов с Google Диска — выкачивать их напрямую через Google Drive API. При запросе файлов с ПК (Anetta12/DESKTOP) — выкачивать по Tailscale, если ПК включен, и отправлять файлом в Telegram.
+§
+User prefers key-based SSH authentication everywhere and avoids passwords whenever possible. Delegates heavily across IT and logistics companies using AI sub-agents (Alistair, Callum, Richard, Ben, Liz).

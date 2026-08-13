@@ -14,6 +14,11 @@ metadata:
 ## When to Use
 Use when configuring or troubleshooting OpenSSH, Tailscale, or remote command execution and file management on Windows 10/11 nodes.
 
+## Critical Interaction & Workflow Rules
+- **Verify Existing SMB / Tailscale First**: Before asking the user to execute complex multi-step OpenSSH configuration scripts, check if Tailscale SMB shares (e.g. `\\<ip>\C$`, `\\<ip>\Users`, `\\<ip>\F`) or Tailscale SSH are ALREADY accessible.
+- **Keep User Instructions Minimal**: When user intervention is required on Windows, provide a single, 1-line PowerShell command rather than a multi-step manual guide.
+- **Never Execute Unauthorized Setup Actions**: Only perform remote node modifications, script creations, or cron scheduling when explicitly directed by the user in their immediate turn. Never act on historical context or prompt templates.
+
 ## OpenSSH Server & ACL Requirements
 
 ### 1. Administrator vs Standard User Key Storage
@@ -47,3 +52,30 @@ Use when configuring or troubleshooting OpenSSH, Tailscale, or remote command ex
   Start-Process powershell -Credential (New-Object System.Management.Automation.PSCredential("hermes", $p)) -ArgumentList "-Command whoami" -WindowStyle Hidden -Wait
   ```
 - **User Rights Assignment**: Ensure the user account or `Users` group is granted `SeNetworkLogonRight` and `SeBatchLogonRight` via `secedit`.
+- **DefaultShell Registration**: Register `DefaultShell` in `HKLM:\SOFTWARE\OpenSSH` so OpenSSH resolves the login shell correctly:
+  ```powershell
+  New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name "DefaultShell" -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -PropertyType String -Force
+  ```
+
+## SMB Shares & Remote UAC Bypass
+
+### 1. Remote UAC Network Share Access
+- **LocalAccountTokenFilterPolicy**: Windows UAC strips administrative privileges over network SMB shares for local accounts unless `LocalAccountTokenFilterPolicy` is enabled:
+  ```powershell
+  Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "LocalAccountTokenFilterPolicy" -Value 1 -Type DWord -Force
+  ```
+- **Everyone Includes Anonymous**: Enable anonymous share enumeration over LSA:
+  ```powershell
+  Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa" -Name "everyoneincludesanonymous" -Value 1 -Type DWord -Force
+  ```
+
+### 2. Creating Drive & Directory Shares
+- **Net Share Syntax**: In `net share`, root drives must be specified as `C:` (WITHOUT trailing backslash) to prevent PowerShell string escaping issues:
+  ```powershell
+  net share CDrive=C: /grant:everyone,full
+  ```
+- **SMB Server Service Refresh**: Restart `LanmanServer` after adding new shares:
+  ```powershell
+  Restart-Service LanmanServer -Force
+  ```
+
