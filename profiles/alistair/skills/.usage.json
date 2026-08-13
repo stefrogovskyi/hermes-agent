@@ -33,30 +33,30 @@
     "archived_at": null,
     "created_at": "2026-08-11T13:20:41.313824+00:00",
     "created_by": "agent",
-    "last_patched_at": "2026-08-13T12:10:09.112343+00:00",
-    "last_reused_patch_generation": 8,
-    "last_used_at": "2026-08-13T12:09:32.040485+00:00",
-    "last_viewed_at": "2026-08-13T12:09:32.038719+00:00",
-    "patch_count": 9,
-    "patch_generation": 9,
+    "last_patched_at": "2026-08-13T15:33:17.679309+00:00",
+    "last_reused_patch_generation": 9,
+    "last_used_at": "2026-08-13T15:33:07.928211+00:00",
+    "last_viewed_at": "2026-08-13T15:33:07.926224+00:00",
+    "patch_count": 10,
+    "patch_generation": 10,
     "pinned": false,
     "state": "active",
-    "use_count": 7,
-    "view_count": 7
+    "use_count": 8,
+    "view_count": 8
   },
   "windows-remote-node-access": {
     "archived_at": null,
     "created_at": "2026-08-13T12:10:29.579448+00:00",
     "created_by": "agent",
     "last_patched_at": "2026-08-13T13:08:26.624498+00:00",
-    "last_reused_patch_generation": 1,
-    "last_used_at": "2026-08-13T13:08:14.948675+00:00",
-    "last_viewed_at": "2026-08-13T13:08:14.946843+00:00",
+    "last_reused_patch_generation": 2,
+    "last_used_at": "2026-08-13T15:32:58.297478+00:00",
+    "last_viewed_at": "2026-08-13T15:32:58.295129+00:00",
     "patch_count": 2,
     "patch_generation": 2,
     "pinned": false,
     "state": "active",
-    "use_count": 3,
-    "view_count": 3
+    "use_count": 4,
+    "view_count": 4
   }
 }

@@ -19,3 +19,6 @@ Hostinger Account: Business Hosting paid to March 2030 (u473746908, aavalanche.c
 Navo24 unified API key (NAVO_API_KEY tmcp_live_...) covers all 5 Navo APIs. NO AGENT MAY IMPERSONATE STEFAN OR SEND MESSAGES FROM USER ACCOUNT. ALL BOTS WRITE ONLY FROM THEIR OWN BOT ACCOUNTS.
 §
 ФАЙЛЫ (Google Drive & ПК): При запросе любых файлов с Google Диска — выкачивать их напрямую через Google Drive API. При запросе файлов с ПК (Anetta12/DESKTOP) — выкачивать по Tailscale, если ПК включен, и отправлять файлом в Telegram.
+§
+ИЗОЛЯЦИЯ ПРОФИЛЕЙ (Cross-Profile Isolation Directive):
+Тебе СТРОГО ЗАПРЕЩЕНО вносить изменения, редактировать файлы, память, скиллы или Канбан-доски ДРУГИХ агентов. Каждый агент (Alistair, Richard, Callum, Liz, Ben) имеет право менять файлы и Канбан ИСКЛЮЧИТЕЛЬНО своего собственного профиля. Только главный Гермес (Orchestrator) обладает правом межпрофильного управления.

@@ -11,3 +11,7 @@
 - **GitHub Repository**:
   - Repo: `stefrogovskiy/aavalanche-website`
   - Always perform `git commit` & `git push origin main` on all code changes automatically.
+
+§
+ИЗОЛЯЦИЯ ПРОФИЛЕЙ (Cross-Profile Isolation Directive):
+Тебе СТРОГО ЗАПРЕЩЕНО вносить изменения, редактировать файлы, память, скиллы или Канбан-доски ДРУГИХ агентов. Каждый агент (Alistair, Richard, Callum, Liz, Ben) имеет право менять файлы и Канбан ИСКЛЮЧИТЕЛЬНО своего собственного профиля. Только главный Гермес (Orchestrator) обладает правом межпрофильного управления.

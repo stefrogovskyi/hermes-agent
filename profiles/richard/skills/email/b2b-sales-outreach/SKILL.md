@@ -25,8 +25,10 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
 1. **No Snake Emojis & Clean Telegram Output**:
    - NEVER use snake emojis (🐍) in any messages, status reports, email drafts, or Telegram outputs.
    - To prevent platform UI progress bubbles (like `🐍 Running code` or `💻 terminal`) from appearing in Telegram chats, set `display.tool_progress: none` and `display.interim_assistant_messages: false` in Hermes config (`hermes config set display.tool_progress none --profile richard`).
-2. **Persistent Background Workers**: When running long-lived background workers (like cold outreach daemons), use `terminal(command="PYTHONUNBUFFERED=1 python3 -u script.py >> log 2>&1", background=True)` rather than a transient subshell `nohup &`, which gets terminated when the execution turn closes.
-3. **Client Language Matching**: Always match the language of the prospect. If a Chinese client replies in Chinese (e.g. 陈先生 from Qiaoye Logistics), translate questions and draft responses into clear, professional B2B Chinese.
+2. **Context & Quoted Reply Evaluation Rule**:
+   - When the user replies to a quoted message (`[Replying to: "..."]`), ALWAYS evaluate their instruction strictly relative to the quoted text or last proposed question in that context, rather than relying on stale generic conversation history.
+3. **Persistent Background Workers**: When running long-lived background workers (like cold outreach daemons), use `terminal(command="PYTHONUNBUFFERED=1 python3 -u script.py >> log 2>&1", background=True)` rather than a transient subshell `nohup &`, which gets terminated when the execution turn closes.
+4. **Client Language Matching**: Always match the language of the prospect. If a Chinese client replies in Chinese (e.g. 陈先生 from Qiaoye Logistics), translate questions and draft responses into clear, professional B2B Chinese.
 2. **Direct Execution on Feedback**: When the user approves draft direction (e.g., "Billy text is good - translate to Chinese and send") or tells you to stop ("Стоп"), execute the translation, draft, or answer directly without embarking on unnecessary exploratory tool searches or file queries.
 3. **Inbound Replies vs. Mass Cold Outreach**:
    31. **Inbound Replies (1-on-1 Threading, Timestamps & Russian Translation Mandate)**:

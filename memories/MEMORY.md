@@ -14,6 +14,6 @@ WORK STYLE: Stefan wants 24/7 autonomous proactive work on long-term tasks. Prio
 §
 YouTube WL: Playwright 23:00 daily; 'move'=deletion. DP World vacancies cron = Hermes Stevenson DM ONLY. DBs: WAL+busy_timeout 10s.
 §
-USERBOT: Сессия @stefrogovskiy (/opt/hermes/stefan_userbot.session) 100% авторизована на Серварике 24/7. Авто-парсер «Не повредит, Одесса» работает с точными метками времени (ЧЧ:ММ).
+USERBOT: @stefrogovskiy (/opt/hermes/stefan_userbot.session) 24/7. «Не повредит, Одесса» с метками (ЧЧ:ММ). ИЗОЛЯЦИЯ ПРОФИЛЕЙ: Субагентам ЗАПРЕЩЕНО менять файлы/Канбаны друг друга. Каждый правит ТОЛЬКО СВОЙ профиль. Главный Гермес — единственный Оркестратор.
 §
 Navo24 unified API key (NAVO_API_KEY tmcp_live_...) covers all 5 Navo APIs. NO AGENT MAY IMPERSONATE STEFAN OR SEND MESSAGES FROM USER ACCOUNT. ALL BOTS WRITE ONLY FROM THEIR OWN BOT ACCOUNTS.

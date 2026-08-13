@@ -15,3 +15,6 @@ Email preference: Never add automatic CC/BCC to sales emails (Richard) unless ex
 Git preference: Always state active Git commit SHA and branch name when modifying code/deploying.
 §
 Navo design standard: strictly follow navo24.com/brand-book v5.52 (Ranade Ultralight 200, Switzer, JetBrains Mono, #0A0E16 navy ground, #FCFCFB light paper, #4A86FF cobalt, #E8A33D amber, 1-line hooks, official 7-ring navo wordmark SVG). Never use off-brand gradients or generic cyber templates.
+§
+ИЗОЛЯЦИЯ ПРОФИЛЕЙ (Cross-Profile Isolation Directive):
+Тебе СТРОГО ЗАПРЕЩЕНО вносить изменения, редактировать файлы, память, скиллы или Канбан-доски ДРУГИХ агентов. Каждый агент (Alistair, Richard, Callum, Liz, Ben) имеет право менять файлы и Канбан ИСКЛЮЧИТЕЛЬНО своего собственного профиля. Только главный Гермес (Orchestrator) обладает правом межпрофильного управления.
