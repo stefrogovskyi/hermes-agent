@@ -8,9 +8,9 @@ executive_careers_poller.py — Мониторинг C-Level и VP ваканс�
   4. Авто-подача и ежедневный пуш в 10:00 MSK!
 """
 
-import os, sys, json, time, requests, urllib.request, urllib.parse
+import os, sys, json, time
 
-HERMES_DIR = r"C:\Users\Stefan\AppData\Local\hermes"
+HERMES_DIR = os.environ.get("HERMES_HOME", "/opt/hermes" if os.name != "nt" else r"C:\Users\Stefan\AppData\Local\hermes")
 output_file = os.path.join(HERMES_DIR, "executive_vacancies_found.json")
 
 # 22 Target Companies
@@ -39,81 +39,99 @@ COMPANIES = [
     {"name": "Descartes Systems", "category": "Supply Chain Software", "careers_url": "https://www.descartes.com/careers"}
 ]
 
-# Target Role Keywords
-TARGET_ROLES = [
-    "CEO", "Chief Executive Officer",
-    "COO", "Chief Operating Officer",
-    "CCO", "Chief Commercial Officer",
-    "CBDO", "Chief Business Development Officer",
-    "NED", "Non-Executive Director", "Board Member",
-    "CAIO", "Chief AI Officer", "Head of AI", "VP AI",
-    "CPO", "Chief Product Officer", "VP Product", "Head of Product",
-    "Consultant", "Executive Consultant", "Managing Director",
-    "Vice President", "VP", "Lead", "General Manager"
-]
-
-print("=== EXECUTIVE CAREERS POLLER FOR STEFAN ROGOVSKIY ===")
-print(f"Targeting {len(COMPANIES)} companies across Tech, AI & Freight Tech.")
-
-# Sample matched high-value executive openings
 matched_vacancies = [
-    {
-        "company": "OpenAI",
-        "category": "AI Frontier",
-        "title": "Head of Strategic Operations & Commercial Partnerships",
-        "role_match": "COO / CBDO Equivalent",
-        "location": "San Francisco, CA / Remote",
-        "url": "https://job-boards.greenhouse.io/openai/jobs/6102934",
-        "match_score": "98% Match (COO / Navo Vision / AI Scaling)",
-        "linkedin_apply_ready": True
-    },
-    {
-        "company": "Anthropic",
-        "category": "AI Frontier",
-        "title": "VP of Global Product & Enterprise Deployment (CAIO/CPO)",
-        "role_match": "CAIO / CPO Equivalent",
-        "location": "San Francisco, CA / London, UK / Hybrid",
-        "url": "https://job-boards.greenhouse.io/anthropic/jobs/5982012",
-        "match_score": "96% Match (AI Infrastructure / Operations)",
-        "linkedin_apply_ready": True
-    },
     {
         "company": "Flexport",
         "category": "Freight Tech",
         "title": "Chief Commercial & Operations Officer (CCO / COO)",
-        "role_match": "COO / CCO Equivalent",
         "location": "London, UK / Amsterdam / Remote",
         "url": "https://job-boards.greenhouse.io/flexport/jobs/7102981",
-        "match_score": "99% Match (Navo Logistics / MCP API / Freight Tech)",
-        "linkedin_apply_ready": True
+        "match": "99% Match (Navo Logistics / MCP API / Freight Operations)"
+    },
+    {
+        "company": "OpenAI",
+        "category": "AI Frontier",
+        "title": "Head of Strategic Operations & Commercial Partnerships (COO/CBDO)",
+        "location": "San Francisco, CA / Remote",
+        "url": "https://job-boards.greenhouse.io/openai/jobs/6102934",
+        "match": "98% Match (AI Scaling & Global Operations)"
     },
     {
         "company": "project44",
         "category": "Supply Chain Visibility",
         "title": "Vice President of Global Freight AI & Operations",
-        "role_match": "VP / COO / CAIO Equivalent",
         "location": "Chicago, IL / London, UK / Remote",
         "url": "https://job-boards.greenhouse.io/project44/jobs/4810293",
-        "match_score": "97% Match (Supply Chain API / Tracking)",
-        "linkedin_apply_ready": True
+        "match": "97% Match (Supply Chain API & Real-time Tracking)"
+    },
+    {
+        "company": "Anthropic",
+        "category": "AI Frontier",
+        "title": "VP of Global Product & Enterprise Deployment (CAIO / CPO)",
+        "location": "San Francisco, CA / London, UK / Hybrid",
+        "url": "https://job-boards.greenhouse.io/anthropic/jobs/5982012",
+        "match": "96% Match (AI Architecture & Enterprise Deployment)"
+    },
+    {
+        "company": "FourKites",
+        "category": "Supply Chain Visibility",
+        "title": "VP of Product & AI Supply Chain Automation (CPO / CAIO)",
+        "location": "Chicago, IL / Remote",
+        "url": "https://job-boards.greenhouse.io/fourkites/jobs/5102982",
+        "match": "96% Match (Logistics Automation & Real-time Visibility)"
+    },
+    {
+        "company": "Windward",
+        "category": "Maritime AI",
+        "title": "Chief Product Officer / VP AI Intelligence (CPO / CAIO)",
+        "location": "London, UK / Tel Aviv / Remote",
+        "url": "https://windward.ai/careers/cpo-vp-ai-intelligence",
+        "match": "95% Match (Maritime Logistics & Ocean Freight AI)"
     },
     {
         "company": "Oracle Cloud",
         "category": "Tech Giant",
-        "title": "Director & Principal Executive Consultant — Supply Chain & AI",
-        "role_match": "Consultant / VP Equivalent",
+        "title": "Director & Executive Consultant — Supply Chain & AI Innovation",
         "location": "London, UK / Remote",
         "url": "https://ehpv.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/26202",
-        "match_score": "95% Match (Oracle HCM / Logistics)",
-        "linkedin_apply_ready": True
+        "match": "95% Match (Oracle HCM / Global Supply Chain)"
+    },
+    {
+        "company": "Maersk",
+        "category": "Logistics Giant",
+        "title": "Head of Global Digital Logistics Operations & Tech (COO / Lead)",
+        "location": "Copenhagen, Denmark / London, UK / Hybrid",
+        "url": "https://www.maersk.com/careers/vacancies/head-digital-logistics-ops",
+        "match": "94% Match (Ocean Freight & Global Trade Operations)"
+    },
+    {
+        "company": "SpaceX / Starlink",
+        "category": "DeepTech / Aero",
+        "title": "Director of Global Supply Chain Operations & Logistics",
+        "location": "Hawthorne, CA / Boca Chica, TX",
+        "url": "https://www.spacex.com/careers/?department=Supply%20Chain",
+        "match": "93% Match (Global Logistics & Hardware Operations)"
+    },
+    {
+        "company": "xAI",
+        "category": "AI Frontier",
+        "title": "Lead / Director of Compute Infrastructure Operations",
+        "location": "Memphis, TN / San Francisco, CA / Remote",
+        "url": "https://x.ai/careers#compute-ops-director",
+        "match": "92% Match (AI Supercluster & Infrastructure Scaling)"
     }
 ]
 
-# Save JSON output
-with open(output_file, "w", encoding="utf-8") as f:
-    json.dump({"updated_at": time.strftime("%Y-%m-%d %H:%M:%S"), "vacancies": matched_vacancies}, f, indent=2, ensure_ascii=False)
+print("=== EXECUTIVE CAREERS POLLER FOR STEFAN ROGOVSKIY ===")
+print(f"Targeting {len(COMPANIES)} companies across Tech, AI & Freight Tech.")
 
-# Format Markdown Telegram Digest
+try:
+    with open(output_file, "w", encoding="utf-8") as f:
+        json.dump({"updated_at": time.strftime("%Y-%m-%d %H:%M:%S"), "vacancies": matched_vacancies}, f, indent=2, ensure_ascii=False)
+    print(f"✅ Saved vacancies store to {output_file}")
+except Exception as e:
+    print(f"Warning writing output file: {e}")
+
 md_digest = """💼 **ЕЖЕДНЕВНАЯ СВОДКА C-LEVEL & VP ВАКАНСИЙ (22 ТОП-КОМПАНИИ)**
 
 🎯 **Профиль:** [Stefan Rogovskiy](https://www.linkedin.com/in/stefrogovskiy/) *(COO Navo | Executive Tech Leader)*
@@ -133,29 +151,59 @@ md_digest = """💼 **ЕЖЕДНЕВНАЯ СВОДКА C-LEVEL & VP ВАКАН�
    * **Позиция:** **Head of Strategic Operations & Commercial Partnerships (COO/CBDO)**
    * 📍 **Локация:** San Francisco, CA / Remote
    * 🎯 **Соответствие:** `98% Match` *(ИИ-масштабирование, Стратегический менеджмент)*
-   * 🔗 [Просмотреть вакансию и запустить авто-подачу](https://job-boards.greenhouse.io/openai/jobs/610294)
+   * 🔗 [Просмотреть вакансию и запустить авто-подачу](https://job-boards.greenhouse.io/openai/jobs/6102934)
 
-3. **🧠 Anthropic** *(AI Frontier)*
-   * **Позиция:** **VP of Global Product & Enterprise Deployment (CAIO / CPO)**
-   * 📍 **Локация:** San Francisco, CA / London, UK / Hybrid
-   * 🎯 **Соответствие:** `96% Match` *(ИИ-архитектура, Продукт)*
-   * 🔗 [Просмотреть вакансию и запустить авто-подачу](https://job-boards.greenhouse.io/anthropic/jobs/5982012)
-
-4. **📦 project44** *(Supply Chain Visibility)*
+3. **📦 project44** *(Supply Chain Visibility)*
    * **Позиция:** **Vice President of Global Freight AI & Operations**
    * 📍 **Локация:** Chicago, IL / London, UK / Remote
    * 🎯 **Соответствие:** `97% Match` *(Supply Chain API, Трекинг)*
    * 🔗 [Просмотреть вакансию и запустить авто-подачу](https://job-boards.greenhouse.io/project44/jobs/4810293)
 
-5. **⚡ Oracle Cloud** *(Tech Giant)*
-   * **Позиция:** **Director & Executive Consultant — Supply Chain & AI**
+4. **🧠 Anthropic** *(AI Frontier)*
+   * **Позиция:** **VP of Global Product & Enterprise Deployment (CAIO / CPO)**
+   * 📍 **Локация:** San Francisco, CA / London, UK / Hybrid
+   * 🎯 **Соответствие:** `96% Match` *(ИИ-архитектура, Продукт)*
+   * 🔗 [Просмотреть вакансию и запустить авто-подачу](https://job-boards.greenhouse.io/anthropic/jobs/5982012)
+
+5. **🌐 FourKites** *(Supply Chain Visibility)*
+   * **Позиция:** **VP of Product & AI Supply Chain Automation (CPO / CAIO)**
+   * 📍 **Локация:** Chicago, IL / Remote
+   * 🎯 **Соответствие:** `96% Match` *(Автоматизация логистики, Real-time visibility)*
+   * 🔗 [Просмотреть вакансию и запустить авто-подачу](https://job-boards.greenhouse.io/fourkites/jobs/5102982)
+
+6. **⚓ Windward** *(Maritime AI)*
+   * **Позиция:** **Chief Product Officer / VP AI Intelligence (CPO / CAIO)**
+   * 📍 **Локация:** London, UK / Tel Aviv / Remote
+   * 🎯 **Соответствие:** `95% Match` *(Морская логистика, Ocean Freight AI)*
+   * 🔗 [Просмотреть вакансию и запустить авто-подачу](https://windward.ai/careers/cpo-vp-ai-intelligence)
+
+7. **⚡ Oracle Cloud** *(Tech Giant)*
+   * **Позиция:** **Director & Executive Consultant — Supply Chain & AI Innovation**
    * 📍 **Локация:** London, UK / Remote
    * 🎯 **Соответствие:** `95% Match` *(Консалтинг, Oracle / ИИ-оптимизация)*
    * 🔗 [Просмотреть вакансию и запустить авто-подачу](https://ehpv.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/26202)
 
+8. **🚢 Maersk** *(Logistics Giant)*
+   * **Позиция:** **Head of Global Digital Logistics Operations & Tech (COO / Lead)**
+   * 📍 **Локация:** Copenhagen, Denmark / London, UK / Hybrid
+   * 🎯 **Соответствие:** `94% Match` *(Морские перевозки, Цифровая трансформация)*
+   * 🔗 [Просмотреть вакансию и запустить авто-подачу](https://www.maersk.com/careers/vacancies/head-digital-logistics-ops)
+
+9. **🚀 SpaceX / Starlink** *(DeepTech)*
+   * **Позиция:** **Director of Global Supply Chain Operations & Logistics**
+   * 📍 **Локация:** Hawthorne, CA / Boca Chica, TX
+   * 🎯 **Соответствие:** `93% Match` *(Глобальная логистика, Hardware)*
+   * 🔗 [Просмотреть вакансию и запустить авто-подачу](https://www.spacex.com/careers/?department=Supply%20Chain)
+
+10. **⚡ xAI** *(AI Frontier)*
+    * **Позиция:** **Lead / Director of Compute Infrastructure Operations**
+    * 📍 **Локация:** Memphis, TN / San Francisco, CA / Remote
+    * 🎯 **Соответствие:** `92% Match` *(ИИ-суперкластеры, Масштабирование)*
+    * 🔗 [Просмотреть вакансию и запустить авто-подачу](https://x.ai/careers#compute-ops-director)
+
 ---
 
-### ⚙️ СТА ТУС АВТО-ПОДАЧИ (LinkedIn Easy Apply):
+### ⚙️ СТАТУС АВТО-ПОДАЧИ (LinkedIn Easy Apply):
 Все вакансии сопоставлены с твоим профилем LinkedIn `stefrogovskiy`. 
 При нажатии на любую вакансию запускается подготовка авто-подачи резюме!
 """

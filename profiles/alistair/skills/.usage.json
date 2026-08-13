@@ -1,18 +1,33 @@
 {
+  "github-code-review": {
+    "archived_at": null,
+    "created_at": "2026-08-13T12:35:53.915656+00:00",
+    "created_by": null,
+    "last_patched_at": null,
+    "last_reused_patch_generation": 0,
+    "last_used_at": "2026-08-13T12:35:53.917643+00:00",
+    "last_viewed_at": "2026-08-13T12:35:53.915668+00:00",
+    "patch_count": 0,
+    "patch_generation": 0,
+    "pinned": false,
+    "state": "active",
+    "use_count": 1,
+    "view_count": 1
+  },
   "hermes-agent": {
     "archived_at": null,
     "created_at": "2026-08-11T13:10:52.689222+00:00",
     "created_by": null,
     "last_patched_at": null,
     "last_reused_patch_generation": 0,
-    "last_used_at": "2026-08-13T12:09:45.122138+00:00",
-    "last_viewed_at": "2026-08-13T12:09:45.120338+00:00",
+    "last_used_at": "2026-08-13T12:34:26.043978+00:00",
+    "last_viewed_at": "2026-08-13T12:34:26.041843+00:00",
     "patch_count": 0,
     "patch_generation": 0,
     "pinned": false,
     "state": "active",
-    "use_count": 5,
-    "view_count": 5
+    "use_count": 6,
+    "view_count": 6
   },
   "telegram-bot-orchestration": {
     "archived_at": null,
@@ -35,13 +50,13 @@
     "created_by": "agent",
     "last_patched_at": null,
     "last_reused_patch_generation": 0,
-    "last_used_at": null,
-    "last_viewed_at": null,
+    "last_used_at": "2026-08-13T12:36:32.534333+00:00",
+    "last_viewed_at": "2026-08-13T12:36:32.532391+00:00",
     "patch_count": 0,
     "patch_generation": 0,
     "pinned": false,
     "state": "active",
-    "use_count": 0,
-    "view_count": 0
+    "use_count": 1,
+    "view_count": 1
   }
 }
