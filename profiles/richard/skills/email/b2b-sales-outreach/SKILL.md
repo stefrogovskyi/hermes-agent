@@ -29,11 +29,33 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
 3. **Client Language Matching**: Always match the language of the prospect. If a Chinese client replies in Chinese (e.g. 陈先生 from Qiaoye Logistics), translate questions and draft responses into clear, professional B2B Chinese.
 2. **Direct Execution on Feedback**: When the user approves draft direction (e.g., "Billy text is good - translate to Chinese and send") or tells you to stop ("Стоп"), execute the translation, draft, or answer directly without embarking on unnecessary exploratory tool searches or file queries.
 3. **Inbound Replies vs. Mass Cold Outreach**:
-   - **Inbound Replies (1-on-1 Threading & Russian Translation Mandate)**:
-     - **Russian Translation Mandate**: ALWAYS provide Stefan with a clear Russian translation of BOTH the client's message and Richard's proposed draft reply (e.g. 💬 **Сообщение клиента (Оригинал)**, 🇷🇺 **Перевод сообщения клиента**, ✍️ **Предлагаемый черновик ответа (Китайский)**, 🇷🇺 **Русский перевод черновика**).
-     - **Thread Headers**: ALWAYS set `In-Reply-To` and `References` headers to the client's original message ID (`msg_id` / `internet_message_id`).
-     - **Exact Subject Preservation**: Keep the exact original subject prefixed with `Re: ` (e.g., `Re: 来自 Navo 的初步建立联系`).
-     - **Quoted History Below Signature**: Below Richard's official HTML signature, ALWAYS attach the quoted original message history (`----- Original Message -----` + client's previous text/HTML). This ensures Outlook and all mail clients group the reply into the EXACT SAME email thread/conversation rather than opening a new standalone message.
+   31. **Inbound Replies (1-on-1 Threading, Timestamps & Russian Translation Mandate)**:
+        - **Mandatory Timestamps**: ALWAYS include the exact Date and Time the email was received (`🕒 Время получения: YYYY-MM-DD HH:MM:SS MSK/UTC`).
+        - **Mandatory Russian Translation**: ALWAYS provide Stefan with a clear Russian translation of BOTH the client's message AND Richard's proposed draft reply (e.g. 💬 **Оригинал сообщения клиента**, 🇷🇺 **Перевод сообщения клиента на русский**, ✍️ **Предлагаемый ответ от Richard Marlowe (оригинал)**, 🇷🇺 **Перевод предлагаемого ответа на русский**).
+        - **Strict Deduplication**: Never send duplicate notifications for the exact same email message ID (`msg_id`).
+        - **Internal M365 Bounce vs Client Bounce**: NEVER auto-delete CRM records on internal M365 outbound errors (`550 5.1.8 Bad outbound sender`). Only auto-delete records for true client non-existent mailboxes (`550 5.1.1 User unknown`).
+        - **Thread Headers**: ALWAYS set `In-Reply-To` and `References` headers to the client's original message ID (`msg_id` / `internet_message_id`).
+        - **Exact Subject Preservation**: Keep the exact original subject prefixed with `Re: ` (e.g., `Re: 来自 Navo 的初步建立联系`).
+        - **Quoted History Below Signature**: Below Richard's official HTML signature, ALWAYS attach the quoted original message history (`----- Original Message -----` + client's previous text/HTML). This ensures Outlook and all mail clients group the reply into the EXACT SAME email thread/conversation rather than opening a new standalone message.
+   32. **Contract & Commercial Agreement Drafting (Wemelogistics LTD / Navo24)**:
+        - **Contract Structure**: B2B client contracts for Navo24 subscriptions MUST combine Part 1 (**Commercial Offer & Special Conditions**) and Part 2 (**General Terms and Conditions of Use** from `T_C Navo.docx`).
+        - **Bilateral B2B Formulations (No Unilateral Website Disclosures)**: Convert unilateral B2C website disclosures ("We reserve the right to amend these Terms at any time", "We may periodically update or alter the content") into formal mutual B2B agreement language:
+          * *Clause 5.1 (Changes to Terms):* "The Parties agree that the Provider may, at its discretion, update or amend these Terms to reflect regulatory changes or platform optimizations, provided that the Provider gives the Client prior written notification or publishes updated terms on the Platform..."
+          * *Clause 5.2 (Changes to Platform):* "The Client acknowledges and agrees that the Provider may, at its discretion, periodically update, enhance, alter, or refresh the content, features, and functionality of navo24.com and associated Digital Solutions..."
+          * *Clause 10.3 (Fee Adjustments):* Require at least thirty (30) days' prior written notice for renewal rate adjustments.
+        - **Numbered Subheadings & Section Formatting**: Ensure Section 4 (`Supplementary Policies`) and all numbered sections have clear, distinct, numbered subheadings (`4.1 Privacy Policy`, `4.2 Membership / Service Agreements`), bold prefixes, and clean vertical paragraph spacing.
+        - **Critical Precedence Clause**: Part 1 (Commercial Offer) MUST explicitly state that in case of any conflict or inconsistency, Part 1 **shall strictly prevail and take precedence** over Part 2 General T&C.
+        - **Service Provider Details**: **WEMELOGISTICS LTD** (Company Number: `14081751`, registered at 1 Robin Hood House, Kingston Vale, London, SW15 3AL), represented by Director **Oleksii Shatunov**.
+        - **Agreed Commercial Logic (PAYG)**:
+          * Pricing Model: Pay As You Go (PAYG) based on unique shipments tracked / API calls executed.
+          * Calculation Window: Calculated from the Subscription Activation Date through the end of that relevant calendar month (e.g. 1 Sep – 30 Sep, or 15 Sep – 30 Sep for mid-month activation).
+          * Invoicing & Payment: Issued monthly in arrears, payment due Net 14 days from invoice date. Client pays net amounts + applicable VAT and intermediary bank transfer/wire fees.
+        - **Format**: Always generate as a formatted Word document (`.docx`) with signature blocks for Oleksii Shatunov (Director, Wemelogistics Ltd) and the Client.
+   33. **Interactive Agent Kanban Board Rules (Vercel Deployments)**:
+        - **Single Vercel URL**: Each agent's Kanban board is hosted EXCLUSIVELY on Vercel (`https://<agent>-kanban.vercel.app`, e.g. `https://richard-kanban.vercel.app`).
+        - **No Floating Bottom Buttons**: DO NOT render a floating "Add Task" / "Добавить задачу" button at the bottom right. Task creation is triggered via the top header button (`+ Новая Задача`).
+        - **Interactive Detail Modals**: Every card MUST be clickable (`onclick="openCardDetailModal(cardId)"`) to open a rich modal containing card title, tag, assignee, status, description, comments section, and full activity timeline log.
+        - **Escape Key Modal Dismissal**: Include a global keyboard listener (`window.addEventListener('keydown', e => if (e.key === 'Escape') closeModal())`) to immediately close all active modals on Esc keypress.
    - **4-Touch Sequence Strategy (Exact Text)**:
      1. **Емейл 1 (Зацепка)**:
         `Здравствуйте, [Имя/Компания]!`
