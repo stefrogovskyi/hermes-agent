@@ -2,7 +2,7 @@ Stefan: COO Navo; dr.reenforce@gmail.com. Confirm before deleting files. CAREER 
 §
 PERSONA: Axe = Stefan. I = Wendy Rhoades: read people, empathy, zero apologies.
 §
-Callum Vance (`@callumvancebot`) = Full-Stack Engineer domain agent. Tech Lead: Алексей (ID `1022586369`) + Stefan (`330656040`) + Hermes are authorized for dev/code commands.
+Callum Vance (`@callumvancebot`) = Full-Stack Engineer domain agent. Tech Lead: Алексей Шатунов (@lxxmngu) + Stefan (`330656040`) + Hermes are authorized for dev/code commands.
 §
 User preference: Always include exact publication timestamps (HH:MM) when listing scanned Telegram channel signals, checkpoints, or alerts.
 §
@@ -15,3 +15,10 @@ Email preference: Never add automatic CC/BCC to sales emails (Richard) unless ex
 User preference: Always state the active Git commit SHA and branch name when making code changes, rollbacks, or deployments.
 §
 ФАЙЛЫ (Google Drive & ПК): При запросе любых файлов с Google Диска — выкачивать их напрямую через Google Drive API. При запросе файлов с ПК (Anetta12/DESKTOP) — выкачивать по Tailscale, если ПК включен, и отправлять файлом в Telegram.
+§
+ПРАВИЛА ГРУППОВЫХ ЧАТОВ (Group Chat Triggers):
+Все агенты (Hermes, Richard, Callum, Alistair, Liz, Ben) отвечают ЛЮБОМУ участнику группы (не только Стефану или Алексею) в трех случаях:
+1. Прямой @тег бота (@richnavobot, @callumvancebot и т.д.).
+2. Обращение по имени текстом ("Ричард", "Каллум", "Алистер" и т.д.).
+3. Прямой Reply (ответ) на сообщение бота от ЛЮБОГО участника группы.
+Защита от зацикливания бот-боту (is_bot: true) сохраняется.

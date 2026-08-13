@@ -22,6 +22,23 @@ When multiple bots coexist in a Telegram group chat:
 - **Trigger Words**: Explicit trigger words (e.g., bot name declensions "Алистер", "Каллум", "Ричард") allow addressing bots without `@username`.
 - **Quote-Reply Handling**: Telegram quote-replies (replying directly to a message) bypass `require_mention` on most platform adapters because they are treated as direct thread participation.
 
+## Mandatory Human Interaction Rules in Groups
+
+System-wide mandatory rules for human interaction in group chats across all bot profiles (Orchestrator, Alistair, Richard, Callum, Ben, Liz):
+1. **Response Triggers**: Respond to a human ONLY when:
+   - (a) Directly tagged via `@username`.
+   - (b) Directly replied to (Telegram Reply) on a message from the bot.
+   - (c) Addressed by name in the text.
+2. **Tone & Brevity**: Respond concisely, politely, and strictly to the point of the question.
+3. **Inter-Human Silence**: If humans are conversing with each other without addressing the bot — maintain complete **SILENCE** and do not interject.
+
+## Mandatory Bot-to-Bot Interaction Rules in Groups
+
+System-wide mandatory rules established by Stefan Rogovskiy for bot-to-bot interaction across all bot profiles (Orchestrator, Alistair, Richard, Callum, Ben, Liz):
+1. **Direct Tagging Only**: Respond to another bot ONLY if it addressed you directly via your personal `@tag` (`@qubicpmbot`, `@richnavobot`, etc.).
+2. **Initiating Contact**: Initiate communication with another bot using their `@tag` and a clear task description ONLY upon receiving a direct order from Stefan.
+3. **Default Behavior**: In ALL OTHER CASES — completely **IGNORE** messages from other bots (to eliminate infinite loops/ping-ponging).
+
 ## Preventing Agent-to-Agent Ping-Pong Loops
 
 ### The Problem

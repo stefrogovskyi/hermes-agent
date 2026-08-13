@@ -1,83 +1,85 @@
+_config_version: 33
+command_allowlist:
+  - script execution via -e/-c flag
+display:
+  interim_assistant_messages: true
+  streaming: true
+  streaming_throttle_ms: 1000
+  tool_progress: all
+fallback_providers:
+  - model: gpt-4o-mini
+    provider: openai
+  - model: gpt-4o
+    provider: openai
+  - model: minimax-m2.7
+    provider: gonka24
+  - model: kimi-k2.6
+    provider: gonka24
+  - model: google/gemma-4-31b-it:free
+    provider: openrouter
+  - model: google/gemma-4-26b-a4b-it:free
+    provider: openrouter
+  - model: poolside/laguna-s-2.1:free
+    provider: nous
+  - model: cohere/north-mini-code:free
+    provider: openrouter
+  - model: openai/gpt-oss-20b:free
+    provider: openrouter
+  - model: inclusionai/ling-3.0-flash:free
+    provider: openrouter
+  - model: nvidia/nemotron-3-ultra-550b-a55b:free
+    provider: openrouter
+  - model: nvidia/nemotron-3-super-120b-a12b:free
+    provider: openrouter
+  - model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
+    provider: openrouter
+  - model: nvidia/nemotron-nano-12b-v2-vl:free
+    provider: openrouter
+  - model: nvidia/nemotron-3-nano-30b-a3b:free
+    provider: openrouter
+  - model: nvidia/nemotron-nano-9b-v2:free
+    provider: openrouter
+group_sessions_per_user: true
 model:
   default: google/gemini-3.6-flash
+  max_retries: 2
   provider: google
   providers:
     gonka24:
       api_key_env: GONKA24_API_KEY
       base_url: https://api.gonka24.com/v1
       models:
-      - minimax-m2.7
-      - kimi-k2.6
+        - minimax-m2.7
+        - kimi-k2.6
   request_timeout_seconds: 30
-  max_retries: 2
   retry_delay_seconds: 1
-fallback_providers:
-- model: gpt-4o-mini
-  provider: openai
-- model: gpt-4o
-  provider: openai
-- model: minimax-m2.7
-  provider: gonka24
-- model: kimi-k2.6
-  provider: gonka24
-- model: google/gemma-4-31b-it:free
-  provider: openrouter
-- model: google/gemma-4-26b-a4b-it:free
-  provider: openrouter
-- model: poolside/laguna-s-2.1:free
-  provider: nous
-- model: cohere/north-mini-code:free
-  provider: openrouter
-- model: openai/gpt-oss-20b:free
-  provider: openrouter
-- model: inclusionai/ling-3.0-flash:free
-  provider: openrouter
-- model: nvidia/nemotron-3-ultra-550b-a55b:free
-  provider: openrouter
-- model: nvidia/nemotron-3-super-120b-a12b:free
-  provider: openrouter
-- model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
-  provider: openrouter
-- model: nvidia/nemotron-nano-12b-v2-vl:free
-  provider: openrouter
-- model: nvidia/nemotron-3-nano-30b-a3b:free
-  provider: openrouter
-- model: nvidia/nemotron-nano-9b-v2:free
-  provider: openrouter
-command_allowlist:
-- script execution via -e/-c flag
-_config_version: 33
 onboarding:
   seen:
     busy_input_prompt: true
-group_sessions_per_user: true
-telegram:
-  enabled: true
-  allowed_users: &id001
-  - 330656040
-  - 1022586369
-  - 593209837
-  allow_from: *id001
-streaming:
-  enabled: true
-display:
-  streaming: true
-  interim_assistant_messages: true
-  tool_progress: all
-  streaming_throttle_ms: 1000
+platforms:
+  telegram:
+    aliases:
+      - callum
+      - каллум
+      - каллума
+      - каллуму
+      - каллумом
+      - каллуме
+      - каллум ванс
+      - callum vance
+      - '@callumvancebot'
+    group_response_mode: mention
 providers:
   google:
     request_timeout_seconds: 30
-platforms:
-  telegram:
-    group_response_mode: mention
-    aliases:
-    - callum
-    - каллум
-    - каллума
-    - каллуму
-    - каллумом
-    - каллуме
-    - каллум ванс
-    - callum vance
-    - '@callumvancebot'
+streaming:
+  enabled: true
+telegram:
+  allow_from: &id001
+    - 330656040
+    - 1022586369
+    - 593209837
+  allowed_users: *id001
+  enabled: true
+  require_mention: true
+  group_trigger_keywords: '[''Каллум'', ''Каллума'', ''Каллуму'', ''Callum'']'

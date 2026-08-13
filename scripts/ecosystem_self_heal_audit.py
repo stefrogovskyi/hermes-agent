@@ -1,9 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-ecosystem_self_heal_audit.py — Ежедневный аудит и самовосстановление всей экосистемы Серварики (04:00 AM).
-"""
-
-import os, sys, time, subprocess, json
+# -*- coding: utf-8 -*
+import os, sys, time, subprocess, json, sqlite3, glob
 
 LOG_FILE = "/opt/hermes/logs/ecosystem_audit.log"
 os.makedirs("/opt/hermes/logs", exist_ok=True)
@@ -15,10 +11,21 @@ def log(msg):
     with open(LOG_FILE, "a", encoding="utf-8") as f:
         f.write(formatted + "\n")
 
+def check_journalctl_conflicts(svc_name):
+    try:
+        cmd = ["journalctl", "-u", svc_name, "-n", "50", "--no-pager"]
+        res = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+        logs = res.stdout or ""
+        if "Conflict: terminated by other getUpdates request" in logs or "could not recover after 5 retries" in logs:
+            return True, "409 Conflict or Telegram polling deadlock detected"
+        if "Updater made no getUpdates progress" in logs:
+            return True, "Telegram polling updater stopped"
+    except Exception:
+        pass
+    return False, None
+
 def main():
-    log("=== STARTING DAILY ECOSYSTEM SELF-HEAL & AUDIT (04:00 AM) ===")
-    
-    # 1. Audit & Self-heal systemd services for all 6 profiles
+    log("=== STARTING ADVANCED ECOSYSTEM SELF-HEAL AND AUDIT ===")
     services = [
         "hermes-default.service",
         "hermes-richard.service",
@@ -27,41 +34,22 @@ def main():
         "hermes-ben.service",
         "hermes-liz.service"
     ]
-    
     restarted = 0
     for svc in services:
         res = subprocess.run(["systemctl", "is-active", "--quiet", svc])
         if res.returncode != 0:
-            log(f"⚠️ Service {svc} is NOT active. Self-healing restart...")
-            subprocess.run(["systemctl", "restart", svc])
+            log(f"[WARNING_not_active] Service {svc} is NOT active. Restarting...")
+            subprocess.run( ["systemctl", "restart", svc] )
+            restarted += 1
+            continue
+        has_conflict, reason = check_journalctl_conflicts(svc)
+        if has_conflict:
+            log(f"[SILENT_POLLING_FAILURE] in {svc} - {reason}! Executing forced self-heal restart...")
+            subprocess.run( ["systemctl", "restart", svc] )
             restarted += 1
         else:
-            log(f"✅ Service {svc}: ACTIVE")
-            
-    # 2. Verify Token Isolation Guardrails
-    profiles = ["richard", "callum", "alistair", "ben", "liz"]
-    for p in profiles:
-        env_p = f"/opt/hermes/profiles/{p}/.env"
-        if os.path.exists(env_p):
-            txt = open(env_p, encoding="utf-8", errors="ignore").read()
-            if "TELEGRAM_BOT_TOKEN=8682188433" in txt or "TELEGRAM_TOKEN=8682188433" in txt:
-                log(f"⚠️ [SECURITY ALERT] Profile {p} contains main Hermes token! Disabling to prevent polling conflict.")
-                # Comment out main token
-                lines = open(env_p).readlines()
-                new_lines = [("# " + l if "8682188433" in l else l) for l in lines]
-                open(env_p, "w").write("".join(new_lines))
-
-    # 3. Trigger Git Autosync
-    git_sync_script = "/opt/hermes/scripts/git_autosync_hidden.sh"
-    if os.path.exists(git_sync_script):
-        log("Running Git Autosync...")
-        subprocess.run(["/bin/bash", git_sync_script])
-
-    # 4. Check Disk & Memory
-    df_res = subprocess.run(["df", "-h", "/opt/hermes"], capture_output=True, text=True)
-    log(f"Disk Usage:\n{df_res.stdout.strip()}")
-
-    log(f"=== ECOSYSTEM AUDIT COMPLETED. Restarted services: {restarted} ===")
+            log(f"[OK_active] Service {svc}: ACTIVE AND HEALTHY")
+    log(f"=== ECOSYSTEM AUDIT COMPLETED. Restarted/Healed services: {restarted} ===")
 
 if __name__ == "__main__":
     main()
