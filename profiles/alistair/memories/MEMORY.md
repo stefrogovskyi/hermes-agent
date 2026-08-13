@@ -10,3 +10,5 @@ Telegram group chat trigger policy for all bots (Alistair, Callum, Richard): res
 Navo24 main domains & tasks: B2B outreach, lead processing/handling, container tracking, and commercial proposals/offers (КП).
 §
 ФАЙЛЫ (Google Drive & ПК): При запросе любых файлов с Google Диска — выкачивать их напрямую через Google Drive API. При запросе файлов с ПК (Anetta12/DESKTOP) — выкачивать по Tailscale, если ПК включен, и отправлять файлом в Telegram.
+§
+User Stefan Rogovskiy owns Windows machines desktop-mst5pt7 (100.79.157.46) and anetta12 (100.119.27.60) on Tailscale network. Windows user is Stefan, local SSH service account is hermes.

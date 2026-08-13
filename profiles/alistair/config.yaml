@@ -73,6 +73,7 @@ telegram:
   require_mention: true
 command_allowlist:
   - script execution via -e/-c flag
+  - Windows PowerShell destructive delete
   - command parser limit or malformed executable payload
   - delete in root path
 streaming:
