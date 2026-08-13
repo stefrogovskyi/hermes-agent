@@ -41,10 +41,10 @@ When Agent A replies to Agent B, Telegram tags Agent B in a quote-reply. Agent B
 ## Troubleshooting Group Silence & Mention Failures
 
 ### Diagnostics First (No Guesses)
-- **Do NOT guess BotFather privacy settings**: Never claim `/setprivacy` or BotFather settings are the cause without inspecting local configs first.
+- **Never attribute unhandled group messages to BotFather `/setprivacy`**: Users often have privacy disabled. Check local `config.yaml` (`require_mention`, `group_trigger_keywords`, `allowed_chats`) and `gateway.log` / `agent.log` first before making claims about Telegram platform settings.
 - **Check `config.yaml` Settings**:
-  - `require_mention: true|false`: Dictates whether `@botusername` or direct quote-reply is strictly required vs wake words.
-  - `group_trigger_keywords`: List of declensions (e.g., `Алистер`, `Алистеру`). Ensure the case/form used in the message is listed.
+  - `require_mention: true|false`: Dictates whether `@botusername` or direct quote-reply is strictly required. When `require_mention: true` is set, text wake-words in `group_trigger_keywords` may be gated depending on platform adapter rules.
+  - `group_trigger_keywords`: List of declensions (e.g., `Алистер`, `Алистеру`). Ensure all required case/declension forms are listed.
   - `group_allow_from`: Ensure group chat ID or `*` is permitted.
-- **Inspect Gateway Logs**: Check `profiles/<name>/logs/gateway.log` and `agent.log` for inbound message events, adapter filters, or `Blocked unauthorized user` / `no @mention` logs.
+- **Inspect Gateway Logs**: Check `profiles/<name>/logs/gateway.log` and `agent.log` for inbound message events, adapter filters, or `no @mention` logs.
 
