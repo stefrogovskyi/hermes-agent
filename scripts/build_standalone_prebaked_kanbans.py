@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-build_standalone_prebaked_kanbans.py — Двусторонняя персистентная система 6 Канбан-бордов с автоматическим слиянием новых карточек с localStorage.
+build_standalone_prebaked_kanbans.py — Двусторонняя персистентная система 6 Канбан-бордов с поддержкой Escape-закрытия модалок и полной изоляцией.
 """
 
 import os, json, subprocess
@@ -256,7 +256,7 @@ def generate_standalone_html(agent, cfg):
   </div>
 
   <!-- NEW TASK MODAL -->
-  <div class="modal-overlay" id="new-modal">
+  <div class="modal-overlay" id="new-modal" onclick="if(event.target===this)closeNewModal()">
     <div class="modal-box">
       <div class="modal-header">
         <h2 style="font-size: 16px; font-weight: 800;">+ Добавить Задачу для {cfg['badge']}</h2>
@@ -275,7 +275,7 @@ def generate_standalone_html(agent, cfg):
   </div>
 
   <!-- EDIT / COMMENT CARD MODAL -->
-  <div class="modal-overlay" id="edit-modal">
+  <div class="modal-overlay" id="edit-modal" onclick="if(event.target===this)closeEditModal()">
     <div class="modal-box">
       <div class="modal-header">
         <h2 style="font-size: 16px; font-weight: 800;" id="edit-modal-title">Редактирование задачи</h2>
@@ -309,13 +309,19 @@ def generate_standalone_html(agent, cfg):
     let currentState = {{ "cards": DEFAULT_CARDS, "activity": [] }};
     let draggedCardId = null;
 
+    // GLOBAL ESCAPE KEY LISTENER TO CLOSE ANY MODALS
+    window.addEventListener('keydown', function(e) {{
+      if (e.key === 'Escape') {{
+        closeEditModal();
+        closeNewModal();
+      }}
+    }});
+
     function mergeCards(serverCards, defaultCards) {{
       const map = new Map();
-      // Add server/local cards first
       if (serverCards && Array.isArray(serverCards)) {{
         serverCards.forEach(c => map.set(c.id, c));
       }}
-      // Merge missing default cards
       defaultCards.forEach(c => {{
         if (!map.has(c.id)) {{
           map.set(c.id, c);
@@ -575,7 +581,7 @@ for agent, cfg in agents_config.items():
     cmd = f"VERCEL_TOKEN={v_token} vercel \"{v_dir}\" --prod --yes --scope {v_team}"
     res = subprocess.run(cmd, shell=True, capture_output=True, text=True)
     url = res.stdout.strip()
-    print(f"✅ Deployed auto-merge {agent.upper()} ({len(cfg['cards'])} cards) -> Vercel: {url}")
+    print(f"✅ Deployed ESC-handler {agent.upper()} ({len(cfg['cards'])} cards) -> Vercel: {url}")
 
     # Re-alias hermes-stevenson-kanban explicitly
     if agent == "hermes":

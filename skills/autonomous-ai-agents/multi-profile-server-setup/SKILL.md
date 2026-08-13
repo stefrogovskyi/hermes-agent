@@ -150,12 +150,20 @@ Use when configuring or troubleshooting multi-profile Hermes Agent instances run
     - **Request Timeout (`request_timeout_seconds: 30`):** Set `request_timeout_seconds: 30` in `config.yaml` across all profiles so unresponsive API providers or hanging models time out in 30 seconds max (preventing 15-minute hanging loops).
     - **Auto-Compression (`compression.threshold: 0.25`):** Enable `compression.enabled: true`, `compression.threshold: 0.25`, `compression.target_ratio: 0.15` in `config.yaml` across all profiles so context is compressed automatically at 25% capacity (~25k-50k tokens), preventing 450k+ token context bloat and multi-minute API latency.
 
-11. **Bidirectional Kanban State Persistence & Activity Logging:**
+11. **Cross-Profile Isolation Directive & Sub-Agent File Barriers:**
+    - **Hard Rule:** Sub-agents (Richard, Callum, Alistair, Liz, Ben) are strictly prohibited from modifying, editing, or running scripts that alter files, memories, skills, or Kanbans outside their own profile directory (`/opt/hermes/profiles/<self>/`).
+    - **Sole Orchestrator:** Only the main Hermes Stevenson Orchestrator profile has cross-profile write authority. Sub-agents edit ONLY their own profile and own Kanban (`<agent>-kanban`).
+
+12. **Telegram Group Chat Silence & Bot Loop Shield:**
+    - Set `require_mention: true` in `config.yaml` for all group chats.
+    - Gateway filter MUST drop messages from `is_bot: true` and untagged replies to prevent infinite bot-to-bot ping-pong chat loops.
+
+13. **Bidirectional Kanban State Persistence & Activity Logging:**
     - **API Backend:** Host `/home/u473746908/domains/aavalanche.com/public_html/dev/kanban_api.php` on Hostinger with CORS enabled (`Access-Control-Allow-Origin: *`).
     - **Client-Side Merging:** JS frontend must merge server cards with default cards (`mergeCards()`) so new tasks added by agents are never hidden by stale browser `localStorage` caches.
     - **Timestamping & Comments:** Record exact timestamps on card drop (`moved_at`) and comment threads (`comments: [{author, text, timestamp}]`) for full auditability during morning 08:00 AM briefs.
 
-11. **Userbot Session Authorization & Security Guardrails:**
+14. **Userbot Session Authorization & Security Guardrails:**
     - **Telegram Security Guard Pitfall:** Entering Telegram 5-digit verification codes sent in chat text triggers Telegram Security Guard blocking and revokes the login attempt.
     - **Safe Authorization Pattern:** Copy an authorized `.session` file (e.g. `stefan_userbot.session`) over Tailscale or receive it directly as an un-inlined Telegram document attachment.
     - **Permissions & Git Security:** Always set `chmod 600 /opt/hermes/*.session` so session files are readable only by root on Servarica. Always add `*.session` to `.gitignore`.

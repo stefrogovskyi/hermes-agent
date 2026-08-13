@@ -14,6 +14,12 @@ WORK STYLE: Stefan wants 24/7 autonomous proactive work on long-term tasks. Prio
 §
 YouTube WL: Playwright 23:00 daily; 'move'=deletion. DP World vacancies cron = Hermes Stevenson DM ONLY. DBs: WAL+busy_timeout 10s.
 §
-USERBOT: @stefrogovskiy (/opt/hermes/stefan_userbot.session) 24/7. «Не повредит, Одесса» с метками (ЧЧ:ММ). ИЗОЛЯЦИЯ ПРОФИЛЕЙ: Субагентам ЗАПРЕЩЕНО менять файлы/Канбаны друг друга. Каждый правит ТОЛЬКО СВОЙ профиль. Главный Гермес — единственный Оркестратор.
+ПРОДАЖИ И CRM: Все сообщения, отчёты, лиды, CRM-данные и бенчмарки по B2B-продажам (TrackingMCP, SeaRates, FreightRatesMCP) отправляет ИСКЛЮЧИТЕЛЬНО Ричард (@richnavobot). Гермес и другие агенты НЕ высылают отчеты по продажам.
 §
 Navo24 unified API key (NAVO_API_KEY tmcp_live_...) covers all 5 Navo APIs. NO AGENT MAY IMPERSONATE STEFAN OR SEND MESSAGES FROM USER ACCOUNT. ALL BOTS WRITE ONLY FROM THEIR OWN BOT ACCOUNTS.
+§
+ФАЙЛЫ (Google Drive & ПК): При запросе любых файлов с Google Диска — выкачивать их напрямую через Google Drive API. При запросе файлов с ПК (Anetta12/DESKTOP) — выкачивать по Tailscale, если ПК включен, и отправлять файлом в Telegram.
+§
+ПРИОРИТЕТ И СКОРОСТЬ СКАЧИВАНИЯ ФАЙЛОВ (Tailscale vs Google Drive API):
+1. Tailscale SMB/SSH (Основной приоритет): Прямое P2P-соединение без лимитов и квот. Используется для мгновенного скачивания любых рабочих файлов и документов с ПК Stefan (100.79.157.46) и Annetto (100.119.27.60).
+2. Google Drive API (Вторичный приоритет): Используется ИСКЛЮЧИТЕЛЬНО для файлов, хранящихся только в облаке Google (Google Docs, Sheets, Slides). Из-за интернет-маршрутизации и квот Google API работает медленнее, чем прямой канал Tailscale.
