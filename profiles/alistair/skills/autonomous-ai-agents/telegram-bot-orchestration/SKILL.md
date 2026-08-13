@@ -39,9 +39,10 @@ When Agent A replies to Agent B, Telegram tags Agent B in a quote-reply. Agent B
 4. **Clean Exit / Minimal Output**: Conclude the turn quietly (or with minimal non-conversational character like `.`) when an output is required by the platform runner, avoiding emoji/phrase echo loops that trigger further quote-replies.
 
 ## Troubleshooting Group Silence & Mention Failures
+For detailed step-by-step log analysis and common fallacies, see `references/telegram_group_troubleshooting.md`.
 
 ### Diagnostics First (No Guesses)
-- **Never attribute unhandled group messages to BotFather `/setprivacy`**: Users often have privacy disabled. Check local `config.yaml` (`require_mention`, `group_trigger_keywords`, `allowed_chats`) and `gateway.log` / `agent.log` first before making claims about Telegram platform settings.
+- **Never attribute unhandled group messages to BotFather `/setprivacy`**: Users often have privacy disabled. Check local `config.yaml` (`require_mention`, `group_trigger_keywords`, `allowed_chats`) and `gateway.log` / `agent.log` first before making claims about Telegram platform settings. Blaming `/setprivacy` when the user has already disabled group privacy causes user frustration.
 - **Check `config.yaml` Settings**:
   - `require_mention: true|false`: Dictates whether `@botusername` or direct quote-reply is strictly required. When `require_mention: true` is set, text wake-words in `group_trigger_keywords` may be gated depending on platform adapter rules.
   - `group_trigger_keywords`: List of declensions (e.g., `Алистер`, `Алистеру`). Ensure all required case/declension forms are listed.

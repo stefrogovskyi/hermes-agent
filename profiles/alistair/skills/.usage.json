@@ -18,15 +18,15 @@
     "archived_at": null,
     "created_at": "2026-08-11T13:20:41.313824+00:00",
     "created_by": "agent",
-    "last_patched_at": "2026-08-13T06:39:25.589033+00:00",
-    "last_reused_patch_generation": 4,
-    "last_used_at": "2026-08-13T06:39:17.912728+00:00",
-    "last_viewed_at": "2026-08-13T06:39:17.910380+00:00",
-    "patch_count": 5,
-    "patch_generation": 5,
+    "last_patched_at": "2026-08-13T06:47:37.848548+00:00",
+    "last_reused_patch_generation": 5,
+    "last_used_at": "2026-08-13T06:47:21.048697+00:00",
+    "last_viewed_at": "2026-08-13T06:47:21.046823+00:00",
+    "patch_count": 8,
+    "patch_generation": 8,
     "pinned": false,
     "state": "active",
-    "use_count": 5,
-    "view_count": 5
+    "use_count": 6,
+    "view_count": 6
   }
 }
