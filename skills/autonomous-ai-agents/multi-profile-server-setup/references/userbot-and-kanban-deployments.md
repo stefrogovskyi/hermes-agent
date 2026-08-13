@@ -7,7 +7,12 @@ All agent Kanban boards MUST be deployed EXCLUSIVELY to Vercel (`https://<agent>
 
 ### Pre-Baking HTML Cards (SSR) to Prevent Blank Screens & Rollbacks
 - Render initial cards directly inside static `index.html` column containers so the board displays all cards in 0ms on load without waiting for client-side API fetches or JS hydration.
-- Always include a floating "+ Добавить Задачу" button (`position: fixed; bottom: 24px; right: 24px; z-index: 9999`) so task creation is 100% visible on any screen or mobile device.
+- Avoid redundant floating buttons if header button `+ Новая Задача` is available.
+
+### Smart Merging (`mergeCards`) & Bidirectional Persistence
+- Client JS frontend must merge server cards with default cards (`mergeCards(serverCards, defaultCards)`) and use versioned `localStorage` keys so newly added cards on the backend are never hidden by stale browser caches.
+- Record exact timestamps on drag-and-drop (`moved_at`) and comment threads (`comments: [{author, text, timestamp}]`) for full auditability during daily 08:00 AM briefs.
+- Host `/home/u473746908/domains/aavalanche.com/public_html/dev/kanban_api.php` on Hostinger with CORS enabled (`Access-Control-Allow-Origin: *`).
 
 ### Disabling Vercel SSO / Deployment Protection Redirects
 When Vercel projects default to SSO/Deployment Protection, Vercel serves a 477KB login HTML page instead of the 22KB Kanban page. To fix:
@@ -55,7 +60,16 @@ compression:
 
 ---
 
-## 4. Bot-to-Bot Loop Shield for Telegram Group Chats
+## 4. Cron Schedules & Ukrainian Timezone Alignment
+
+- Server cron schedules run in UTC. To schedule tasks for Ukrainian time (Kyiv / `Europe/Kyiv`):
+  - `23:00 Kyiv Time` = `0 20 * * *` UTC.
+  - `09:00 Kyiv Time` = `0 6 * * *` UTC.
+  - `08:00 Kyiv Time` = `0 5 * * *` UTC.
+
+---
+
+## 5. Bot-to-Bot Loop Shield for Telegram Group Chats
 
 To prevent infinite bot ping-pong loops in group chats:
 1. Enable `require_mention: true` in `config.yaml`.
