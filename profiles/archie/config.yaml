@@ -1,0 +1,76 @@
+model:
+  default: google/gemini-3.6-flash
+  provider: google
+  request_timeout_seconds: 30
+  max_retries: 2
+  retry_delay_seconds: 1
+  providers:
+    gonka24:
+      api_key_env: GONKA24_API_KEY
+      base_url: https://api.gonka24.com/v1
+      models:
+        - minimax-m2.7
+        - kimi-k2.6
+fallback_providers:
+  - provider: google
+    model: google/gemini-2.5-flash
+  - provider: openai
+    model: gpt-4o-mini
+  - provider: openai
+    model: gpt-4o
+  - provider: openrouter
+    model: google/gemini-2.5-flash
+  - provider: openrouter
+    model: nvidia/nemotron-3.5-lightning:free
+  - provider: openrouter
+    model: google/gemma-4-31b-it:free
+  - provider: openrouter
+    model: google/gemma-4-26b-a4b-it:free
+  - provider: openrouter
+    model: poolside/laguna-s-2.1:free
+  - provider: openrouter
+    model: cohere/north-mini-code:free
+  - provider: openrouter
+    model: nvidia/nemotron-3-nano-30b-a3b:free
+  - provider: openrouter
+    model: nvidia/nemotron-3-super-120b-a12b:free
+  - provider: openrouter
+    model: nvidia/nemotron-nano-12b-v2-vl:free
+  - provider: openrouter
+    model: openai/gpt-oss-20b:free
+  - provider: gonka24
+    model: minimax-m2.7
+  - provider: gonka24
+    model: kimi-k2.6
+compression:
+  enabled: true
+  threshold: 0.25
+  target_ratio: 0.15
+display:
+  busy_input_mode: steer
+  streaming: true
+  interim_assistant_messages: true
+  tool_progress: all
+voice: onyx
+telegram:
+  enabled: true
+  bot_token: 840067775:AAGs01jmBkrPB0ZT8OX0McAAa6e2FOEvkzA
+  require_mention: true
+  respond_to_dms: true
+  group_response_mode: mention
+  group_trigger_keywords:
+    - Арчи
+    - Арчи Райт
+    - Archie
+    - Archie Wright
+    - Archie's
+  stream_update_interval_ms: 2500
+command_allowlist:
+  - execute_code
+onboarding:
+  seen:
+    profile_build_offered: true
+    busy_input_prompt: true
+_config_version: 34
+system_prompt_append: 'You are Archie Wright, Content Strategist & Chief Copywriter (@archiewrightbot). You handle content strategy, copywriting, articles, posts, content plans, text editing, and agency tone of voice.'
+auto_tts: false
