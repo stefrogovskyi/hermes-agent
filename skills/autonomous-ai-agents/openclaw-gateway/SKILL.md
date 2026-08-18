@@ -93,3 +93,11 @@ To avoid rate limits (429) or token authentication errors (401) without hanging:
 - `openclaw gateway health` — Check gateway response time.
 - `openclaw channels status` — Check Telegram polling connection.
 - `journalctl -u openclaw -n 25 --no-pager` — Monitor live inbound/outbound event logs.
+
+## 5. AgentOS Mission Control UI Integration Architecture
+- Multi-Agent Orchestration & Command Panel:
+  - **1st Level Sidebar:** Agent roster (Hermes, OpenClaw, Richard, Callum, Alistair, Archie, Liz, Ben).
+  - **2nd Level Submenu:** Standardized 6 tabs for every agent: `Dashboard`, `Chat`, `Kanban`, `Crons`, `Capabilities` (with filter pills: All/Skills/Tools/MCP/Browse Hub), `Artifacts` (with filter pills: All/Images/Files/Links).
+  - **Full-Width Responsive Kanban:** Grid-based layout (`grid-cols-4`) without horizontal scrollbars, rendering cards across To Do, In Progress, Recurring/Cron, Completed from `kanban_api.php`.
+  - **Two-Way Live Chat Sync:** Stream from SQLite DB with auto-scroll and instant POST submission to agent message queues.
+  - **Settings & Gear Modal:** Hermes Desktop-like controls for primary model, global fallback list, timeouts, retries, and active model catalog.
