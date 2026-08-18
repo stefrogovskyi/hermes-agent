@@ -1,9 +1,9 @@
-# Archie Wright — Content Strategist & Chief Copywriter (@archiewrightbot)
-
-ПРАВИЛА ОБЩЕНИЯ МЕЖДУ БОТАМИ В ГРУППАХ (Alistair, Callum, Richard, Ben, Liz, Archie):
-1. Отвечать другому боту ТОЛЬКО если он обратился напрямую через персональный @tag бота.
-2. Инициировать общение с другим ботом через @tag и четкое ТЗ ТОЛЬКО при получении прямого приказа от Стефана.
-3. ВО ВСЕХ ОСТАЛЬНЫХ СЛУЧАЯХ — полностью ИГНОРИРОВАТЬ сообщения других ботов (исключение бесконечных петель/зацикливания).
-
-ИЗОЛЯЦИЯ ПРОФИЛЕЙ (Cross-Profile Isolation Directive):
-Тебе СТРОГО ЗАПРЕЩЕНО вносить изменения, редактировать файлы, память, скиллы или Канбан-доски ДРУГИХ агентов. Каждый агент имеет право менять файлы и Канбан ИСКЛЮЧИТЕЛЬНО своего собственного профиля. Только главный Гермес (Orchestrator) обладает правом межпрофильного управления.
+*   CLI wrapper for all calls: `skills/productivity/google-workspace/scripts/google_api.py` (sheets get/update/append, drive upload/download/delete). Restart hermes-archie.service after any credential change.
+§
+Google Sheets 'Unable to parse range' errors are usually because the tab isn't literally named 'Sheet1' (custom/Cyrillic names common) — fetch the real tab name via spreadsheets().get() and quote it in every range. Row 1 is always the header; sheet-driven queues read/write starting at row 2, never overwrite row 1.
+§
+verify with `hermes auth list`. Global model config can silently drift back to defaults (e.g. google/gemini) — Hermes then skips cron runs with a protective 'prevent unintended spend: config drifted' error instead of switching silently; periodically verify `hermes config get model` shows anthropic/claude-sonnet-5, restore with `hermes config set model.provider/default` + restart service if drifted.
+§
+Пайплайн "Блограйтинг" (кронджоб 26c9e7168400, Sheet 1FI4w3NqDJEzhrqcyJKRWu4sCd57oKSMrfgPEt44b63k, вкладка "Блогпосты Сирейтс", 23217 строк): сейчас 1 статья/час намеренно (Stefan попросил, вернёмся к ускорению позже по его сигналу). Стратегия на будущее: большинство неанглийских статей в таблице — непереведённые версии тех же самых английских статей, поэтому приоритет — сначала рерайтить английские версии, потом переводить готовые рерайты на другие языки вместо рерайта каждого языка с нуля. Когда Stefan скажет ускоряться, учесть эту стратегию при пересборке кронджоба (фильтр по колонке C="English" в первую очередь).
+§
+Archie's Telegram bot technical username is @WordCraftBot (displays as 'Archie Wright' in chat) — useful for direct Telegram Bot API calls, e.g. sendMessage with remove_keyboard to clear stale reply-keyboards.

@@ -3,46 +3,70 @@ auto_tts: false
 command_allowlist:
 - script execution via -e/-c flag
 - recursive delete
+compression:
+  enabled: true
+  target_ratio: 0.1
+  threshold: 0.2
 display:
+  busy_input_mode: steer
   interim_assistant_messages: true
   streaming: true
   streaming_throttle_ms: 1000
   tool_progress: all
-fallback_providers:
-- model: gpt-4o-mini
-  provider: openai
-- model: gpt-4o
-  provider: openai
+fallback:
+- model: google/gemini-2.5-flash
+  provider: google
+- model: google/gemini-1.5-flash
+  provider: google
 - model: minimax-m2.7
   provider: gonka24
 - model: kimi-k2.6
   provider: gonka24
+- model: gpt-4o-mini
+  provider: openai
+fallback_providers:
+- model: google/gemini-2.5-flash
+  provider: google
+- model: gpt-4o-mini
+  provider: openai
+- model: gpt-4o
+  provider: openai
+- model: google/gemini-2.5-flash
+  provider: openrouter
+- model: nvidia/nemotron-3.5-lightning:free
+  provider: openrouter
 - model: google/gemma-4-31b-it:free
   provider: openrouter
 - model: google/gemma-4-26b-a4b-it:free
   provider: openrouter
 - model: poolside/laguna-s-2.1:free
-  provider: nous
+  provider: openrouter
 - model: cohere/north-mini-code:free
-  provider: openrouter
-- model: openai/gpt-oss-20b:free
-  provider: openrouter
-- model: inclusionai/ling-3.0-flash:free
-  provider: openrouter
-- model: nvidia/nemotron-3-ultra-550b-a55b:free
-  provider: openrouter
-- model: nvidia/nemotron-3-super-120b-a12b:free
-  provider: openrouter
-- model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
-  provider: openrouter
-- model: nvidia/nemotron-nano-12b-v2-vl:free
   provider: openrouter
 - model: nvidia/nemotron-3-nano-30b-a3b:free
   provider: openrouter
-- model: nvidia/nemotron-nano-9b-v2:free
+- model: nvidia/nemotron-3-super-120b-a12b:free
   provider: openrouter
+- model: nvidia/nemotron-nano-12b-v2-vl:free
+  provider: openrouter
+- model: openai/gpt-oss-20b:free
+  provider: openrouter
+- model: minimax-m2.7
+  provider: gonka24
+- model: kimi-k2.6
+  provider: gonka24
+- model: nvidia/nemotron-3.5-lightning-30b-a3b
+  provider: nvidia
+- model: nvidia/llama-3.3-nemotron-super-49b-v1.5
+  provider: nvidia
+- model: nvidia/nemotron-3-super-120b-a12b
+  provider: nvidia
+- model: nvidia/nemotron-mini-4b-instruct
+  provider: nvidia
+- model: meta/llama-3.1-8b-instruct
+  provider: nvidia
 model:
-  default: google/gemini-3.6-flash
+  default: google/gemini-3.7-flash
   max_retries: 2
   provider: google
   providers:
@@ -61,36 +85,60 @@ platforms:
   telegram:
     aliases:
     - liz
-    - "\u043B\u0438\u0437"
-    - "\u043B\u0438\u0437 \u0445\u0430\u0440\u043F\u0435\u0440"
+    - лиз
+    - лиз харпер
     - liz harper
     - '@lizharperbot'
     group_response_mode: mention
+provider: google
 providers:
+  gonka24:
+    request_timeout_seconds: 25
   google:
     request_timeout_seconds: 30
+  nous:
+    request_timeout_seconds: 30
+  nvidia:
+    request_timeout_seconds: 20
+  openai:
+    request_timeout_seconds: 30
+  openrouter:
+    request_timeout_seconds: 25
+request_timeout_seconds: 15
 streaming:
   enabled: true
-system_prompt_append: "In Telegram group chats: respond ONLY if (1) @mentioned, (2)\
-  \ replied/quoted to, or (3) your name (\u041B\u0438\u0437 / Liz's) is explicitly\
-  \ mentioned in any declension/case in RU/UK/EN.\nYou are Liz Harper, Chief People\
-  \ Officer & HR Manager at Navo & Enlight Group (@lizharperbot).\nYou speak in an\
-  \ empathetic, warm, highly organized, supportive professional tone.\nYou manage\
-  \ team onboarding, hiring pipelines, internal communications, and employee performance.\n\
-  You run on the full-scale autonomous Hermes Agent core. You execute commands via\
-  \ terminal, manage team documentation, track onboarding workflows, and resolve HR\
-  \ tasks autonomously.\n"
+system_prompt_append: 'In Telegram group chats: respond ONLY if (1) @mentioned, (2)
+  replied/quoted to, or (3) your name (Лиз / Liz''s) is explicitly mentioned in any
+  declension/case in RU/UK/EN.
+
+  You are Liz Harper, Chief People Officer & HR Manager at Navo & Enlight Group (@lizharperbot).
+
+  You speak in an empathetic, warm, highly organized, supportive professional tone.
+
+  You manage team onboarding, hiring pipelines, internal communications, and employee
+  performance.
+
+  You run on the full-scale autonomous Hermes Agent core. You execute commands via
+  terminal, manage team documentation, track onboarding workflows, and resolve HR
+  tasks autonomously.
+
+  '
 telegram:
   bot_token: 8857115619:AAEmD4grJNd68IpbAcedKGsrOxG_yJ4dJzg
   enabled: true
   group_response_mode: mention
   group_trigger_keywords:
-  - "\u041B\u0438\u0437"
-  - "\u041B\u0438\u0437\u0437\u0438"
-  - "\u0415\u043B\u0438\u0437\u0430\u0432\u0435\u0442\u0430"
+  - Лиз
+  - Лиззи
+  - Елизавета
   - Liz
   - Liz Harper
   - Liz's
   require_mention: true
   respond_to_dms: true
+  stream_update_interval_ms: 2500
+tools:
+  disabled:
+  - cronjob
+  - skill_manage
 voice: nova

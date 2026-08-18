@@ -132,6 +132,7 @@ def refresh_access_token(client_id, client_secret, refresh_token):
 
 * For detailed error transcripts and step-by-step troubleshooting, see `references/oauth-troubleshooting.md`.
 * For binary asset uploads via Python (`POST /v1/asset-uploads`), see `references/asset-upload.md`.
+* For Avalanche Agency v2.2 Brand Book specs, tokens, and pillar guidelines, see `references/avalanche-agency-brand-guidelines.md`.
 * For Navo24 v5.52 Brand Book specifications, design system templates, and Hostinger `.htaccess` routing fixes, see `references/navo24-brand-guidelines.md`.
 
 ## Asset Uploads API (`POST /v1/asset-uploads`)

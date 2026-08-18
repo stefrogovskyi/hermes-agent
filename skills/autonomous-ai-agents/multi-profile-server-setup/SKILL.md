@@ -18,12 +18,92 @@ Use when configuring or troubleshooting multi-profile Hermes Agent instances run
 
 - `references/vercel-surge-kanban-sync.md` — Detailed guide for Vercel/Surge CLI deployments, `localStorage` + API dual persistence for Kanban boards, and `notranslate` headers to prevent Japanese auto-translation glitches.
 - `references/troubleshooting.md` — Diagnostic steps for gateway logs and systemd services.
+- `references/ai-copywriting-style-priming.md` — Guide on Few-Shot Human Style Priming vs. abstract rules for AI copywriting.
+- `references/agentos-and-openclaw-deployment.md` — Complete deployment, systemd daemons, Telegram channel integration, and Admin-gated Hostinger setup for AgentOS (`aavalanche.com/agentos/`) and OpenClaw (`:18789`).
+
+### 15. Few-Shot Human Style Priming vs Abstract Rules
+- **Rule Checklist Pitfall:** Abstract 8-step rules alone do not eliminate the "90% AI" robotic fingerprint.
+- **Solution:** Combine Few-Shot Human Examples (`HUMAN_STYLE_GUIDE.md`) with Anti-AI negative prompts and two-pass editing. Route long-form copywriting to Anthropic Claude (Claude 3.5/3.7 Sonnet).
+- `references/ai-copywriting-style-priming.md` — Guide on Few-Shot Human Style Priming vs. abstract rules for AI copywriting.
+
+### 15. Agent Identity Recovery & Profile Migration Audits
+- **Identity File Hierarchy:** Each profile's persona and core domain boundaries are defined in `/opt/hermes/profiles/<name>/SOUL.md` and `AGENTS.md`, while historical context lives in `/opt/hermes/profiles/<name>/memories/MEMORY.md`.
+- **Original Source Audits:** When recovering an agent's original backstory or company context after an "amnesia" report, inspect both the profile's `SOUL.md` and any legacy migration scripts (e.g., `/opt/hermes/scripts/convert_<name>_to_hermes_profile.py` or original Google Drive setup folders) to verify whether the agent originated from a specific entity (e.g. Avalanche Agency / Enlight Group vs Navo).
 
 ## Key Concepts & Architecture
 
 1. **Systemd Services per Profile:**
-   - Each Hermes profile (`default`, `richard`, `callum`, `alistair`, `ben`, `liz`) runs as an independent systemd daemon: `hermes-<profile>.service`.
+   - Each Hermes profile (`default`, `richard`, `callum`, `alistair`, `ben`, `liz`, `archie`) runs as an independent systemd daemon: `hermes-<profile>.service`.
    - Executable command: `hermes --profile <profile> gateway run`.
+
+16. **OpenClaw & Mission Control Agentic OS Integration:**
+    - **OpenClaw Gateway Daemon:** OpenClaw (`/opt/openclaw/app`) runs as `openclaw.service` on loopback port 18789 (`ws://127.0.0.1:18789`). Auth mode configured via `openclaw config set gateway.auth.mode none|token`. CLI executable symlinked to `/usr/local/bin/openclaw`.
+    - **Telegram Ingress & Pairing:** OpenClaw Telegram channel uses polling (`openclaw channels add --channel telegram --token <token>`). First-time user messages trigger pairing code approval (`openclaw pairing approve telegram <CODE>`), which sets the user as `commands.ownerAllowFrom`.
+    - **Free Model Fallback Architecture & Providers:** To avoid paid tier/401 token expiration traps, configure OpenRouter, HuggingFace, NVIDIA NIM, and Gonka24 free models via `~/.openclaw/openclaw.json` and Hermes `config.yaml`:
+      ```yaml
+      fallback_providers:
+        - provider: google
+          model: google/gemini-2.5-flash
+        - provider: openrouter
+          model: nvidia/nemotron-3.5-lightning:free
+        - provider: huggingface
+          model: meta-llama/Llama-3.3-70B-Instruct
+        - provider: nvidia
+          model: nvidia/nemotron-3.5-lightning-30b-a3b
+        - provider: gonka24
+          model: minimax-m2.7
+      ```
+      Pass `OPENROUTER_API_KEY`, `HF_TOKEN`, `NVIDIA_API_KEY`, `GONKA24_API_KEY` directly in `openclaw.service` and profile `.env` files.
+    - **Mission Control AgentOS Dashboard (`aavalanche.com/agentos/`):**
+      - Hosted on Hostinger (`/domains/aavalanche.com/public_html/agentos/index.php`).
+      - Protected by Admin-only SQLite session check (`$_SESSION['role'] === 'admin'`).
+      - **Critical Redirect Support:** `login.html` MUST read `URLSearchParams(window.location.search).get('redirect')` and redirect back to the target URL after successful login instead of hardcoding `/dashboard`.
+      - **Two-Level Submenu Architecture (6 Standard Tabs per Agent):**
+        - Leftmost sidebar selects the Agent (`hermes`, `openclaw`, `richard`, `callum`, `alistair`, `archie`, `liz`, `ben`).
+        - Secondary submenu renders exactly 6 standard tabs for each agent: `Dashboard`, `Chat`, `Kanban`, `Crons`, `Capabilities`, `Artifacts`.
+        - **Subheader Filter Pills:** `Capabilities` filters by `All`, `Skills`, `Tools`, `MCP`, `Browse Hub`; `Artifacts` filters by `All`, `Images`, `Files`, `Links`.
+        - **Single-Screen Kanban Grid:** All Kanban boards render in a responsive 4-column layout (`grid-cols-4`) taking 100% viewport width without horizontal wrapping or window scrollbars.
+        - **Hermes Desktop Settings Modal:** Accessible via the gear icon in the footer/header; exposes active primary models, parameters, timeouts, and the complete multi-provider catalog (Google, OpenAI, NVIDIA NIM, HF Router, Gonka24, OpenRouter).
+        - **Hostinger Proxying & Port Reusability:** When proxying API requests from Hostinger (`agentos/index.php`) to the local VPS daemon (`server.py`), target the external VPS IP (`38.49.219.217:8888`) or configured public proxy, and always enable `SO_REUSEADDR` (`allow_reuse_address = True`) on Python's TCPServer to prevent `Address already in use` (Errno 98) crashes on service restarts.
+
+    - **GitHub Auto-Sync & Permission Scopes (Hard Rule):**
+      - **Token Scope Pitfall:** Fine-grained GitHub tokens created without repository write permissions (`Scopes: none` or public-only) will successfully authenticate against user APIs (`https://api.github.com/user`), but fail on `git push` with `403 Forbidden` (`Permission to <repo> denied`).
+      - **Automated Sync Workflow:** Ensure `GITHUB_TOKEN` in `.env` has explicit `repo` scope, or configure passwordless SSH (`~/.ssh/id_ed25519.pub` added to GitHub SSH Keys).
+      - Cron job `git_autosync_hidden.sh` should execute every 30 minutes (`0302075fc0ce`), automatically staging user data (`skills/`, `memories/`, `memory_v2/`, `scripts/`, `mission-control/`, profile configs), committing updates, and pushing upstream.
+
+    - **Timezone Conversion for Morning Briefs:** Cron expressions in Hermes execute in UTC. To schedule a morning report for 09:00 AM MSK (UTC+3), set the cron schedule to `0 6 * * *` (06:00 UTC). Setting `0 9 * * *` results in delivery at 12:00 PM MSK (3 hours late).
+    - **Linux Dynamic Paths in Cron Scripts:** Never hardcode Windows paths (e.g., `C:\Users\Stefan\...`) in scripts executed by cron jobs on Linux servers. Always use `HERMES_HOME = os.environ.get("HERMES_HOME", "/opt/hermes")` and `os.path.join(HERMES_HOME, "cache")` to avoid `FileNotFoundError` during automated background executions.
+
+1.1. **Creating a New Agent Profile Step-by-Step:**
+   - Create profile: `hermes profile create <profile_name> --clone-from default --description "<Description>"`
+   - Configure `.env`: set `TELEGRAM_BOT_TOKEN` for the new bot and mirror all master API keys from `/opt/hermes/.env`.
+   - Configure `SOUL.md` & `AGENTS.md`: define persona, role, company context, and strict domain boundary.
+   - Pre-approve Telegram user: write `/opt/hermes/profiles/<profile_name>/platforms/pairing/telegram-approved.json` with user Telegram ID (e.g. `330656040`) to bypass manual pairing code prompts.
+   - Systemd unit `/etc/systemd/system/hermes-<profile_name>.service`:
+     ```ini
+     [Unit]
+     Description=Hermes Agent Profile (<profile_name>) Gateway Daemon
+     After=network.target network-online.target
+     StartLimitIntervalSec=0
+
+     [Service]
+     Type=simple
+     User=root
+     WorkingDirectory=/opt/hermes
+     Environment=HERMES_HOME=/opt/hermes
+     Environment=HERMES_PROFILE=<profile_name>
+     ExecStart=/opt/hermes/hermes-agent/venv/bin/hermes --profile <profile_name> gateway run
+     Restart=always
+     RestartSec=2s
+     KillMode=mixed
+     TimeoutStopSec=5s
+     StandardOutput=journal
+     StandardError=journal
+
+     [Install]
+     WantedBy=multi-user.target
+     ```
+   - Reload and start: `systemctl daemon-reload && systemctl enable hermes-<profile_name>.service && systemctl start hermes-<profile_name>.service`
 
 2. **Telegram Token Isolation:**
    - **Critical Pitfall:** When creating a new profile via `hermes profile create <name> --clone`, the new profile inherits `.env` containing `TELEGRAM_BOT_TOKEN` from the source profile.
@@ -151,8 +231,30 @@ Use when configuring or troubleshooting multi-profile Hermes Agent instances run
     - **Auto-Compression (`compression.threshold: 0.25`):** Enable `compression.enabled: true`, `compression.threshold: 0.25`, `compression.target_ratio: 0.15` in `config.yaml` across all profiles so context is compressed automatically at 25% capacity (~25k-50k tokens), preventing 450k+ token context bloat and multi-minute API latency.
 
 11. **Cross-Profile Isolation Directive & Sub-Agent File Barriers:**
-    - **Hard Rule:** Sub-agents (Richard, Callum, Alistair, Liz, Ben) are strictly prohibited from modifying, editing, or running scripts that alter files, memories, skills, or Kanbans outside their own profile directory (`/opt/hermes/profiles/<self>/`).
-    - **Sole Orchestrator:** Only the main Hermes Stevenson Orchestrator profile has cross-profile write authority. Sub-agents edit ONLY their own profile and own Kanban (`<agent>-kanban`).
+    - **Hard Rule:** Sub-agents (Richard, Callum, Alistair, Liz, Ben, Archie) are strictly prohibited from modifying, editing, or running scripts that alter files, memories, skills, or Kanbans outside their own profile directory (`/opt/hermes/profiles/<self>/`).
+    - **Agent Roster & Domain Boundaries:**
+      - **Hermes Stevenson** (`@hermes_stevenson_bot`): Orchestrator, cross-profile management, master cron jobs.
+      - **Richard Marlowe** (`@richnavobot`): B2B Sales, CRM, outreach, Navo24 leadgen.
+      - **Callum Vance** (`@callumvancebot`): Code, GitHub, Vercel/Hostinger deployments, API integrations.
+      - **Alistair Sterling** (`@qubicpmbot`): Operations, PM, OODA cycles, strictly managing his own `alistair-kanban` (no cross-agent Kanban control).
+      - **Liz Harper** (`@lizharperbot`): HR, onboarding, 10 Human + 10 Digital team synergy.
+      - **Ben Jett** (`@benjettbot`): CMO & Growth Manager at **Avalanche Agency & Enlight Group** (PPC, SEO, landing conversions).
+      - **Archie Wright** (`@archiewrightbot`): **Content Strategist & Chief Copywriter** (content strategy, copywriting, articles, posts, Tone of Voice).
+    - **Sole Orchestrator:** Only the main Hermes Stevenson Orchestrator profile has cross-profile write authority. Sub-agents edit ONLY their own profile and own Kanban (`<agent>-kanban`). Alistair manages strictly `alistair-kanban` and operations; Ben manages strictly `ben-kanban` (PPC/SEO for Avalanche Agency & Enlight Group); Archie Wright manages strictly `archie-kanban` and Content Strategy & Copywriting.
+
+12. **Few-Shot Human Style Priming vs Abstract Rules for AI Copywriting:**
+    - **Pitfall:** Writing checklists and multi-step rules alone do NOT eliminate the "90% AI" robotic fingerprint (e.g. "в современном мире", "ключевой аспект", "погрузимся в", excessive bullet lists).
+    - **Fix:** Embed 3–5 real human-written text samples into the agent's memory/skill (Few-Shot Style Priming) and use a two-pass editing step with an explicit Anti-AI negative prompt filter.
+    - **Model Selection:** Prefer Anthropic Claude (Claude 3.5/3.7 Sonnet) for long-form copywriting tasks over Gemini Flash or GPT-4o-mini due to Claude's lower baseline AI-ism rate.
+
+13. **Windows Desktop App Profile Discovery:**
+    - The Hermes Desktop app on Windows scans `%LOCALAPPDATA%\hermes\profiles\`. To make a newly created server profile (e.g. `archie`) appear in the Desktop sidebar, ensure the matching profile directory exists in `%LOCALAPPDATA%\hermes\profiles\<name>\` on the local PC.
+    - **Sub-Agent Identity Files & Amnesia Recovery:**
+      - Each sub-agent's identity, company affiliation, and domain boundary are defined in `/opt/hermes/profiles/<name>/SOUL.md`, `AGENTS.md`, and `memories/MEMORY.md`.
+      - When updating sub-agent identity or memory files from the Orchestrator, pass `cross_profile=True` (if soft guard triggers) and restart the target service (`systemctl restart hermes-<profile>.service`) to apply changes immediately.
+
+12. **Windows Desktop App Profile Discovery:**
+    - The Hermes Desktop app on Windows scans `%LOCALAPPDATA%\hermes\profiles\`. To make a newly created server profile (e.g. `archie`) appear in the Desktop sidebar, ensure the matching profile directory exists in `%LOCALAPPDATA%\hermes\profiles\<name>\` on the local PC.
 
 12. **Telegram Group Chat Silence & Bot Loop Shield:**
     - Set `require_mention: true` in `config.yaml` for all group chats.

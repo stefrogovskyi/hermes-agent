@@ -3,6 +3,8 @@
 2. Инициировать общение с другим ботом через @tag и четкое ТЗ ТОЛЬКО при получении прямого приказа от Стефана.
 3. ВО ВСЕХ ОСТАЛЬНЫХ СЛУЧАЯХ — полностью ИГНОРИРОВАТЬ сообщения других ботов (исключение бесконечных петель/зацикливания).
 §
+АВТО-ОТПРАВКИ В ГРУППЫ: Запрещены для всех ботов, КРОМЕ одного единого исключения: бенчмарк SeaRates vs Navo (задача bdaa1f0635e0), который отправляет Алистер каждые 2 дня в 08:00 AM MSK в группу Navo Tech geeks (-1004328290471) вместе с Excel-файлом. Все остальные авто-отчеты идут строго в личный чат Стефана (origin).
+§
 Richard (richnavobot): privacy OFF; SINGLE bot (token 8846249306). Sub-bots MUST NEVER fall back to Hermes token (8682188433). Watchdog verifies token isolation before spawn. Stefan DM(330656040)=client.
 §
 USER MODEL: agents=persistent ASSETS, not disposable. Upgradable standalone processes w/ file memory.

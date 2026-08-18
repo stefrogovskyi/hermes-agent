@@ -1,9 +1,9 @@
 {
-  "last_report_path": null,
-  "last_run_at": "2026-08-10T09:53:22.524945+00:00",
-  "last_run_duration_seconds": null,
-  "last_run_summary": "deferred first run — curator seeded, will run after one interval; use `hermes curator run --dry-run` to preview now",
+  "last_report_path": "/opt/hermes/profiles/alistair/logs/curator/20260817-102731",
+  "last_run_at": "2026-08-17T10:27:31.169538+00:00",
+  "last_run_duration_seconds": 0.605495,
+  "last_run_summary": "auto: no changes; llm: skipped (consolidation off)",
   "last_run_summary_shown_at": null,
   "paused": false,
-  "run_count": 0
+  "run_count": 1
 }

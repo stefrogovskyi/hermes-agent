@@ -1,0 +1,54 @@
+{
+  "jobs": [
+    {
+      "id": "8a64758c4172",
+      "name": "sea_rates_vs_navo_benchmark",
+      "prompt": "Запустить регулярный бенчмарк трекинга SeaRates vs Navo API по случайным контейнерам из /opt/hermes/data/daily_statistics_tracking.xlsx. Сгенерировать 5-вкладочный Excel-отчет высокого качества (по шаблону клиента), подавить ошибки ДССА, обязательно тегнуть @thegaffermcp_bot (Гафера) и отправить отчёт в группу Navo Tech geeks с Excel-файлом.",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": "gemini",
+      "model_snapshot": "google/gemini-3.6-flash",
+      "base_url": null,
+      "script": "ocean_tracking_benchmark.py",
+      "no_agent": false,
+      "monitor_script": null,
+      "monitor_url": null,
+      "monitor_state": null,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 2880,
+        "display": "every 2880m"
+      },
+      "schedule_display": "every 2880m",
+      "repeat": {
+        "times": null,
+        "completed": 1
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-08-13T19:46:54.327618+00:00",
+      "next_run_at": "2026-08-17T19:48:11.905242+00:00",
+      "last_run_at": "2026-08-15T19:48:11.905242+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "telegram:-1004328290471",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "330656040",
+        "chat_name": "Stefan Rogovskiy",
+        "thread_id": null,
+        "user_id": "330656040"
+      },
+      "enabled_toolsets": null,
+      "workdir": null,
+      "fire_claim": null
+    }
+  ],
+  "updated_at": "2026-08-15T19:48:11.905560+00:00"
+}

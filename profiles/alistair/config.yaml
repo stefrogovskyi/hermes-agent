@@ -1,50 +1,75 @@
 _config_version: 33
 auto_tts: false
 command_allowlist:
-- script execution via -e/-c flag
 - Windows PowerShell destructive delete
-- command parser limit or malformed executable payload
+- script execution via -e/-c flag
 - delete in root path
+- command parser limit or malformed executable payload
+- execute_code
+compression:
+  enabled: true
+  target_ratio: 0.1
+  threshold: 0.2
 display:
+  busy_input_mode: steer
   interim_assistant_messages: true
   streaming: true
   streaming_throttle_ms: 1000
   tool_progress: all
-fallback_providers:
-- model: gpt-4o-mini
-  provider: openai
-- model: gpt-4o
-  provider: openai
+fallback:
+- model: google/gemini-2.5-flash
+  provider: google
+- model: google/gemini-1.5-flash
+  provider: google
 - model: minimax-m2.7
   provider: gonka24
 - model: kimi-k2.6
   provider: gonka24
+- model: gpt-4o-mini
+  provider: openai
+fallback_providers:
+- model: google/gemini-2.5-flash
+  provider: google
+- model: gpt-4o-mini
+  provider: openai
+- model: gpt-4o
+  provider: openai
+- model: google/gemini-2.5-flash
+  provider: openrouter
+- model: nvidia/nemotron-3.5-lightning:free
+  provider: openrouter
 - model: google/gemma-4-31b-it:free
   provider: openrouter
 - model: google/gemma-4-26b-a4b-it:free
   provider: openrouter
 - model: poolside/laguna-s-2.1:free
-  provider: nous
+  provider: openrouter
 - model: cohere/north-mini-code:free
-  provider: openrouter
-- model: openai/gpt-oss-20b:free
-  provider: openrouter
-- model: inclusionai/ling-3.0-flash:free
-  provider: openrouter
-- model: nvidia/nemotron-3-ultra-550b-a55b:free
-  provider: openrouter
-- model: nvidia/nemotron-3-super-120b-a12b:free
-  provider: openrouter
-- model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
-  provider: openrouter
-- model: nvidia/nemotron-nano-12b-v2-vl:free
   provider: openrouter
 - model: nvidia/nemotron-3-nano-30b-a3b:free
   provider: openrouter
-- model: nvidia/nemotron-nano-9b-v2:free
+- model: nvidia/nemotron-3-super-120b-a12b:free
   provider: openrouter
+- model: nvidia/nemotron-nano-12b-v2-vl:free
+  provider: openrouter
+- model: openai/gpt-oss-20b:free
+  provider: openrouter
+- model: minimax-m2.7
+  provider: gonka24
+- model: kimi-k2.6
+  provider: gonka24
+- model: nvidia/nemotron-3.5-lightning-30b-a3b
+  provider: nvidia
+- model: nvidia/llama-3.3-nemotron-super-49b-v1.5
+  provider: nvidia
+- model: nvidia/nemotron-3-super-120b-a12b
+  provider: nvidia
+- model: nvidia/nemotron-mini-4b-instruct
+  provider: nvidia
+- model: meta/llama-3.1-8b-instruct
+  provider: nvidia
 model:
-  default: google/gemini-3.6-flash
+  default: google/gemini-3.7-flash
   max_retries: 2
   provider: google
   providers:
@@ -64,40 +89,63 @@ platforms:
   telegram:
     aliases:
     - alistair
-    - "\u0430\u043B\u0438\u0441\u0442\u0435\u0440"
-    - "\u0430\u043B\u0438\u0441\u0442\u0435\u0440\u0430"
-    - "\u0430\u043B\u0438\u0441\u0442\u0435\u0440\u0443"
-    - "\u0430\u043B\u0438\u0441\u0442\u0435\u0440\u043E\u043C"
-    - "\u0430\u043B\u0438\u0441\u0442\u0435\u0440\u0435"
-    - "\u0430\u043B\u0438\u0441\u0442\u0435\u0440 \u0441\u0442\u0435\u0440\u043B\u0438\
-      \u043D\u0433"
+    - алистер
+    - алистера
+    - алистеру
+    - алистером
+    - алистере
+    - алистер стерлинг
     - alistair sterling
     - '@qubicpmbot'
     group_response_mode: mention
+provider: google
 providers:
+  gonka24:
+    request_timeout_seconds: 25
   google:
     request_timeout_seconds: 30
+  nous:
+    request_timeout_seconds: 30
+  nvidia:
+    request_timeout_seconds: 20
+  openai:
+    request_timeout_seconds: 30
+  openrouter:
+    request_timeout_seconds: 25
+request_timeout_seconds: 15
 streaming:
   enabled: true
-system_prompt_append: "In Telegram group chats: respond ONLY if (1) @mentioned (@qubicpmbot),\
-  \ (2) replied/quoted to, or (3) your name (\u0410\u043B\u0438\u0441\u0442\u0435\u0440\
-  \ / Alistair) is explicitly mentioned in any declension/case."
+system_prompt_append: 'In Telegram group chats: respond ONLY if (1) @mentioned (@qubicpmbot),
+  (2) directly replied/quoted to, or (3) your name (Алистер / Alistair / Алик) is
+  explicitly mentioned in the text. If you are NOT addressed in one of these three
+  ways, or if the question is directed to someone else (e.g. @lxxmngu, @PixelProphet),
+  you MUST REMAIN COMPLETELY SILENT and output NO text.'
 telegram:
   bot_token: 8738625022:AAG1ijTON2GaWu9stugzR45n-tx4ziwu3qQ
   enabled: true
   group_allow_from: '*'
   group_response_mode: mention
   group_trigger_keywords:
-  - "\u0410\u043B\u0438\u0441\u0442\u0435\u0440"
-  - "\u0410\u043B\u0438\u0441\u0442\u0435\u0440\u0430"
-  - "\u0410\u043B\u0438\u0441\u0442\u0435\u0440\u0443"
-  - "\u0410\u043B\u0438\u0441\u0442\u0435\u0440\u043E\u043C"
-  - "\u0410\u043B\u0438\u0441\u0442\u0435\u0440\u0435"
-  - "\u0410\u043B\u0438\u043A"
+  - Алистер
+  - Алистера
+  - Алистеру
+  - Алистером
+  - Алистере
+  - Алик
   - Alistair
   - Alister
   - Alistair Sterling
   - Alistair's
+  mention_patterns:
+  - \bалистер[а-я]*\b
+  - \balistair\b
+  - \balister\b
+  - \bалик\b
   require_mention: true
   respond_to_dms: true
+  stream_update_interval_ms: 2500
+tools:
+  disabled:
+  - cronjob
+  - skill_manage
 voice: fable

@@ -32,7 +32,8 @@ def main():
         "hermes-callum.service",
         "hermes-alistair.service",
         "hermes-ben.service",
-        "hermes-liz.service"
+        "hermes-liz.service",
+        "hermes-archie.service"
     ]
     restarted = 0
     for svc in services:

@@ -79,7 +79,8 @@ Guidelines, tokens, typography standards, and copy rules for all Navo24 platform
   - Do NOT lock viewport height (`height: 100vh; overflow: hidden`) on mobile — allow smooth scrolling.
   - Implement mobile touch swipe support (`touchstart` / `touchend`).
   - Provide a sticky bottom mobile control bar (`← Назад | Слайд N из 8 | Вперед →`).
-- **Deployments:** Package with static `index.html` + `vercel.json` (`cleanUrls: true`) for 1-click Vercel deployment.
+- **Modal Window UX Rule:** ALL modal windows in Navo apps and dashboards MUST support closing via Escape key (`e.key === 'Escape'` keydown listener) and backdrop click.
+- **Deployments:** Package with static `index.html` + `vercel.json` (`cleanUrls: true`) for 1-click Vercel deployment using `VERCEL_TOKEN=vcp_2QMSKEwYW3Dg4vdKOTB8q7IRCr2uCEFWeXgVMDAr18jPnuhEKf0KYAYO vercel <dir> --prod --yes --scope navo5`.
 
 ## 7. AI-Augmented Developer KPI & Velocity Benchmarking
 

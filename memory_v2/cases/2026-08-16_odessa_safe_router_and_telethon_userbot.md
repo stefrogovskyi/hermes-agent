@@ -12,3 +12,9 @@
 - Created skill `odessa-safe-router` with executable runner `scripts/odessa_group_router.py`.
 - Synchronized to both Windows (`C:\Users\Stefan\AppData\Local\hermes\skills\productivity\odessa-safe-router\`) and Linux VPS (`/opt/hermes/skills/productivity/odessa-safe-router/`).
 - Verified live scan returns 150+ live signals with exact timestamps (`[HH:MM]`), parses roadblocks/patrols (`##блокпост`, `тцк`, etc.), and outputs Google Maps route URLs.
+
+## Telethon Session Watchdog & Self-Healing
+- **Watchdog Script:** `/opt/hermes/scripts/odessa_session_watchdog.py` (and launcher `/opt/hermes/scripts/odessa_session_watchdog.sh`).
+- **Mechanism:** Runs every 6 hours (`0 */6 * * *`). Tests session validity via Telethon `get_me()`. On success, takes an atomic backup (`/opt/hermes/backups/stefan_userbot.session.bak`) and updates `/opt/hermes/backups/stefan_userbot.session.meta.json`.
+- **Alerting & Recovery:** If session is invalidated (e.g. revoked key), immediately sends Telegram alert to Stefan with recovery instructions (`python3 /opt/hermes/scripts/reauth_userbot.py`).
+- **Hermes Cron:** Registered as internal Hermes cron job `66619135fb8e` (`Odessa Session Watchdog`).

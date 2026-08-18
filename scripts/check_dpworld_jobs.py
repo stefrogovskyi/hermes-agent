@@ -3,7 +3,8 @@ import json
 import urllib.request
 from datetime import datetime
 
-CACHE_DIR = r'C:\Users\Stefan\AppData\Local\hermes\cache'
+HERMES_HOME = os.environ.get("HERMES_HOME", "/opt/hermes")
+CACHE_DIR = os.path.join(HERMES_HOME, "cache")
 os.makedirs(CACHE_DIR, exist_ok=True)
 CACHE_FILE = os.path.join(CACHE_DIR, 'dpworld_seen_jobs.json')
 

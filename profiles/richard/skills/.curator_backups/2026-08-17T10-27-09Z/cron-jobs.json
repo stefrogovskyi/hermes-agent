@@ -1,0 +1,54 @@
+{
+  "jobs": [
+    {
+      "id": "3bc4af76626f",
+      "name": "richard-inbound-email-poller",
+      "prompt": "Run `python \"C:/Users/Stefan/My Drive/Equity/My Biz/Partner companies/Navo/6. Departments/Sales/Richard Marlowe/check_inbound.py\"` via terminal.\n\nIf the output contains `NEW_INBOUND_COUNT:`, extract each new client email (From, Subject, Body/Preview).\nFor each new client email:\n1. Analyze the inquiry as Richard Marlowe (Navo Sales Manager).\n2. Formulate a personalized draft response in Chinese/English.\n3. Preserve the exact Subject, `in_reply_to`, and include `quoted_html`.\n4. Start the message IMMEDIATELY with:\n   📩 **Новое входящее письмо от клиента!**\n   (Do NOT write words like \"Report\", \"Script executed\", or \"Daily Summary\").\n5. Format the notification as:\n   - 👤 **Отправитель:** ...\n   - 🏢 **Компания:** ...\n   - 📌 **Тема:** ...\n   - 💬 **Цитата сообщения клиента:** ...\n   - ✍️ **Предлагаемый черновик ответа (Richard Marlowe):** ...\n   - Ask: \"Черновик готов. Отправляем?\"\n\nIF THE OUTPUT IS `NO_NEW_EMAILS`:\nStay 100% SILENT. Do NOT write anything to Telegram.",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": "gemini",
+      "model_snapshot": "google/gemini-3.7-flash",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 3,
+        "display": "every 3m"
+      },
+      "schedule_display": "every 3m",
+      "repeat": {
+        "times": null,
+        "completed": 2704
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-08-06T01:50:50.302578+03:00",
+      "next_run_at": "2026-08-17T10:28:00.223995+00:00",
+      "last_run_at": "2026-08-17T10:25:00.223995+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "330656040",
+        "chat_name": "Stefan Rogovskiy",
+        "thread_id": null,
+        "user_id": "330656040"
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file"
+      ],
+      "workdir": null,
+      "fire_claim": null
+    }
+  ],
+  "updated_at": "2026-08-17T10:25:00.224323+00:00"
+}

@@ -102,12 +102,16 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
      * Calculation Window: Calculated from the Subscription Activation Date through the end of that relevant calendar month (e.g. 1 Sep – 30 Sep, or 15 Sep – 30 Sep for mid-month activation).
      * Invoicing & Payment: Issued monthly in arrears, payment due Net 14 days from invoice date. Client pays net amounts + applicable VAT and intermediary bank transfer/wire fees.
    - **Format**: Always generate as a formatted Word document (`.docx`) with signature blocks for Oleksii Shatunov (Director, Wemelogistics Ltd) and the Client.
-4. **Airtable PAT Authentication & Base Mapping**:
-   - Airtable Personal Access Tokens use the full format `pat<id>.<secret>` (e.g. `patzjFlOTnLygbDs0.64e5...`). Single `pat<id>` prefixes will return 401 Unauthorized.
-   - Base mapping for Chinese Freight Forwarder outreach:
+4. **Airtable Ownership & Base Mapping**:
+   - **Exclusive Domain Responsibility (Airtable & Interface Designer)**: Airtable CRM operations, data structures, and Airtable Interface Designer configurations belong EXCLUSIVELY to Richard Marlowe (AI Senior Sales Manager). DO NOT redirect Airtable CRM interface/workflow requests to Callum Vance — Richard owns Airtable CRM and Airtable Interface Designer layouts (e.g., Kanban by status/stage, record detail sidebars, accounts/contacts lists).
+   - **Primary Navo CRM Base**:
+     * **Navo CRM** = Base ID `appbxvl9BBaTiLMlf` (Main B2B CRM with 5 core tables: `Accounts`, `Contacts`, `Leads`, `Opportunities`, `Timeline Events`). Always target `Navo CRM` for CRM interface creation, distinct from prospecting bases.
+   - **Prospecting Outbound Bases**:
      * `CN FF 1` = Base ID `appdWYgvtQR2Fgaeq` (Table `CNFF-1`)
      * `CN FF 2` = Base ID `appa1AH0vV4fl1BVQ` (Table `CNFF-2`)
      * `CN FF 3` = Base ID `appVItBOee1awOPHh` (Table `CNFF-3`)
+   - **Outreach Audit & Completion Rule**: When auditing prospecting bases (`CN FF 1-3`), any records missing an `email` address cannot receive email outreach and should be marked `Stage: Postponed` / `status: Postponed` with a comment `[Audit] No email address provided in base profile. Marked Postponed.` to cleanly achieve 100% processing of reachable contacts without leaving records stuck as uncontacted `Lead`.
+   - Airtable Personal Access Tokens use the full format `pat<id>.<secret>` (e.g. `patzjFlOTnLygbDs0.64e5...`). Single `pat<id>` prefixes will return 401 Unauthorized.
 
 ## Pitfalls & Common Mistakes
 

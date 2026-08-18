@@ -31,6 +31,7 @@ System-wide mandatory rules for human interaction in group chats across all bot 
    - (c) Addressed by name in the text.
 2. **Tone & Brevity**: Respond concisely, politely, and strictly to the point of the question.
 3. **Inter-Human Silence**: If humans are conversing with each other without addressing the bot — maintain complete **SILENCE** and do not interject.
+4. **Quote-Replies Tagging Others**: If a user replies (Quote-Reply) to a bot's message but explicitly addresses another team member or bot via `@mention` (e.g. `@colleague @otherbot что с этим?`), the bot must not take over the task or answer in depth. If triggered by the platform adapter on the quote-reply, keep the response strictly to acknowledging routing/hand-off to the tagged parties without interfering in their domain.
 
 ## Mandatory Bot-to-Bot Interaction Rules in Groups
 

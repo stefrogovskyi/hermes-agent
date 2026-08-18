@@ -11,79 +11,44 @@ log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] [GitAutosync] $1" | tee -a "$LOG_FILE"
 }
 
-log "Starting Git Autosync run..."
-
-# 1. Sync hermes-agent repository
-if [ -d "$HERMES_DIR/hermes-agent/.git" ]; then
-    cd "$HERMES_DIR/hermes-agent" || exit 1
-    CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
-    
-    # Fetch latest
-    git fetch origin >/dev/null 2>&1
-    
-    # Pull rebase if behind
-    BEHIND=$(git rev-list --count HEAD..origin/"$CURRENT_BRANCH" 2>/dev/null || echo "0")
-    if [ "$BEHIND" -gt 0 ]; then
-        log "Pulling $BEHIND new commits on branch $CURRENT_BRANCH..."
-        git pull --rebase origin "$CURRENT_BRANCH" >> "$LOG_FILE" 2>&1
-    else
-        log "hermes-agent repo is up to date on $CURRENT_BRANCH."
-    fi
+# 1. Fetch Github Token from .env
+if [ -f "$HERMES_DIR/.env" ]; then
+    GH_TOKEN=$(grep -E "^GITHUB_TOKEN=" "$HERMES_DIR/.env" | cut -d= -f2 | tr -d '\r\n')
 fi
 
-# 2. Check/Initialize Git for /opt/hermes user data (skills, scripts, memories)
-if [ ! -d "$HERMES_DIR/.git" ]; then
-    log "Initializing git repository in $HERMES_DIR for user workspace sync..."
-    cd "$HERMES_DIR" || exit 1
-    git init >> "$LOG_FILE" 2>&1
-    
-    cat << 'EOF' > "$HERMES_DIR/.gitignore"
-*.db
-*.db-journal
-*.db-wal
-*.db-shm
-*.pid
-*.lock
-*.log
-.env
-auth.json
-audio_cache/
-image_cache/
-sessions/
-logs/
-cache/
-state/
-kanban/
-pairing/
-pending_messages/
-cron/output/
-models_dev_cache.json
-hermes-agent/
-profiles/*/.env
-profiles/*/auth.json
-profiles/*/*.db*
-profiles/*/sessions/
-profiles/*/logs/
-profiles/*/cache/
-profiles/*/state/
-profiles/*/cron/output/
-EOF
-    git config user.name "Hermes Agent (Stefan Servarica)"
-    git config user.email "dr.reenforce@gmail.com"
-fi
-
-# Auto-commit local changes to skills, scripts, memories, config (excluding secrets/dbs)
 cd "$HERMES_DIR" || exit 1
-git add skills/ scripts/ memories/ config.yaml SOUL.md profiles/*/config.yaml profiles/*/SOUL.md profiles/*/memories/ profiles/*/skills/ >/dev/null 2>&1
+
+# 2. Ensure git config
+git config user.name "Stefan Rogovskiy"
+git config user.email "dr.reenforce@gmail.com"
+
+# 3. Add changes
+git add skills/ scripts/ memories/ memory_v2/ config.yaml SOUL.md mission-control/ profiles/*/config.yaml profiles/*/SOUL.md profiles/*/memories/ profiles/*/skills/ >/dev/null 2>&1
 
 UNCOMMITTED=$(git status --porcelain 2>/dev/null | wc -l)
 if [ "$UNCOMMITTED" -gt 0 ]; then
-    COMMIT_MSG="auto-sync: update skills, memories, and scripts ($(date '+%Y-%m-%d %H:%M'))"
+    COMMIT_MSG="auto-sync: update AgentOS, skills, memories, and ecosystem ($(date '+%Y-%m-%d %H:%M'))"
     git commit -m "$COMMIT_MSG" >> "$LOG_FILE" 2>&1
-    log "Committed $UNCOMMITTED local updates: $COMMIT_MSG"
+    log "Committed $UNCOMMITTED updates: $COMMIT_MSG"
 else
-    log "No changes in skills, memories, or scripts."
+    log "No local changes to commit."
 fi
 
-log "Git Autosync completed successfully."
+# 4. Push to remote if token is present
+if [ -n "$GH_TOKEN" ]; then
+    CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "master")
+    AUTH_REMOTE="https://stefrogovskyi:${GH_TOKEN}@github.com/stefrogovskyi/hermes-agent.git"
+    
+    # Push changes
+    git push "$AUTH_REMOTE" "$CURRENT_BRANCH" >> "$LOG_FILE" 2>&1
+    if [ $? -eq 0 ]; then
+        log "Successfully pushed $CURRENT_BRANCH to github.com/stefrogovskyi/hermes-agent!"
+    else
+        log "Failed to push to GitHub remote."
+    fi
+else
+    log "Skipping push: GITHUB_TOKEN not found."
+fi
+
+log "Git Autosync completed."
 exit 0

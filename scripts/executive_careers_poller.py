@@ -1,211 +1,395 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-executive_careers_poller.py — Мониторинг C-Level и VP вакансий по 22 гигантам (Tech & Logistics):
-  1. Компания: Google, Microsoft, Amazon, Oracle, SpaceX, xAI, Tesla, Anthropic, OpenAI, DeepMind,
-     Flexport, Freightos, iContainers, Maersk, MSC, FourKites, project44, Windward, E2open/WiseTech, Cargofy, Manhattan, Descartes.
-  2. Роли: CEO, COO, CCO, CBDO, NED, CAIO (AI), CPO (Product), Consultant, VP, Head of.
-  3. Профиль: Стефан Роговский (COO Navo | https://www.linkedin.com/in/stefrogovskiy/)
-  4. Авто-подача и ежедневный пуш в 10:00 MSK!
+executive_careers_poller.py — ЧЕСТНЫЙ мониторинг executive-вакансий.
+
+v2.0 (2026-08-17): полностью переписан. Прежняя версия печатала захардкоженный
+список выдуманных вакансий с фейковыми URL. Теперь:
+  - Только реальные вызовы официальных Job Board API (Greenhouse, Ashby)
+  - Каждая вакансия в выводе существует и кликабельна (URL приходит из API)
+  - Дедупликация против seen-store: показываем только НОВОЕ
+  - Никаких выдуманных "% Match" — вместо них честные matched-keywords
 """
 
-import os, sys, json, time
+import os, json, re, time, urllib.request
+import html as html_mod
 
-HERMES_DIR = os.environ.get("HERMES_HOME", "/opt/hermes" if os.name != "nt" else r"C:\Users\Stefan\AppData\Local\hermes")
-output_file = os.path.join(HERMES_DIR, "executive_vacancies_found.json")
+HERMES_DIR = os.environ.get("HERMES_HOME", "/opt/hermes")
+SEEN_FILE = os.path.join(HERMES_DIR, "state", "exec_careers_seen.json")
+OUT_FILE = os.path.join(HERMES_DIR, "executive_vacancies_found.json")
+os.makedirs(os.path.dirname(SEEN_FILE), exist_ok=True)
 
-# 22 Target Companies
-COMPANIES = [
-    {"name": "Google", "category": "Tech Giant", "careers_url": "https://careers.google.com/jobs/results/?q=COO%20OR%20VP%20OR%20CPO%20OR%20AI"},
-    {"name": "Microsoft", "category": "Tech Giant", "careers_url": "https://careers.microsoft.com/v2/global/en/home.html"},
-    {"name": "Amazon", "category": "Tech Giant", "careers_url": "https://www.amazon.jobs/en/search?base_query=Director+OR+VP+OR+Product"},
-    {"name": "Oracle", "category": "Tech Giant", "careers_url": "https://ehpv.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1"},
-    {"name": "SpaceX", "category": "DeepTech / Aero", "careers_url": "https://www.spacex.com/careers/"},
-    {"name": "xAI", "category": "AI Frontier", "careers_url": "https://x.ai/careers"},
-    {"name": "Tesla", "category": "Tech / Auto", "careers_url": "https://www.tesla.com/careers"},
-    {"name": "Anthropic", "category": "AI Frontier", "careers_url": "https://job-boards.greenhouse.io/anthropic"},
-    {"name": "OpenAI", "category": "AI Frontier", "careers_url": "https://job-boards.greenhouse.io/openai"},
-    {"name": "DeepMind", "category": "AI Frontier", "careers_url": "https://deepmind.google/careers/"},
-    {"name": "Flexport", "category": "Freight Tech", "careers_url": "https://job-boards.greenhouse.io/flexport"},
-    {"name": "Freightos", "category": "Freight Tech", "careers_url": "https://www.freightos.com/careers/"},
-    {"name": "iContainers", "category": "Freight Tech", "careers_url": "https://www.icontainers.com/about-us/careers/"},
-    {"name": "Maersk", "category": "Logistics Giant", "careers_url": "https://www.maersk.com/careers"},
-    {"name": "MSC", "category": "Logistics Giant", "careers_url": "https://www.msc.com/en/careers"},
-    {"name": "FourKites", "category": "Supply Chain Visibility", "careers_url": "https://job-boards.greenhouse.io/fourkites"},
-    {"name": "project44", "category": "Supply Chain Visibility", "careers_url": "https://job-boards.greenhouse.io/project44"},
-    {"name": "Windward", "category": "Maritime AI / Intelligence", "careers_url": "https://windward.ai/careers/"},
-    {"name": "E2open / WiseTech", "category": "Supply Chain Software", "careers_url": "https://www.e2open.com/careers/"},
-    {"name": "Cargofy", "category": "Freight Tech AI", "careers_url": "https://cargofy.com/careers"},
-    {"name": "Manhattan Associates", "category": "Supply Chain Software", "careers_url": "https://www.manh.com/company/careers"},
-    {"name": "Descartes Systems", "category": "Supply Chain Software", "careers_url": "https://www.descartes.com/careers"}
+# Официальные API карьерных досок (проверены живыми вызовами 2026-08-17)
+GREENHOUSE_BOARDS = [
+    ("Anthropic", "anthropic", "AI Frontier"),
+    ("SpaceX", "spacex", "DeepTech / Aero"),
+    ("Flexport", "flexport", "Freight Tech"),
+    ("project44", "project44", "Supply Chain Visibility"),
+    ("FourKites", "fourkites", "Supply Chain Visibility"),
+]
+ASHBY_BOARDS = [
+    ("OpenAI", "openai", "AI Frontier"),
 ]
 
-matched_vacancies = [
-    {
-        "company": "Flexport",
-        "category": "Freight Tech",
-        "title": "Chief Commercial & Operations Officer (CCO / COO)",
-        "location": "London, UK / Amsterdam / Remote",
-        "url": "https://job-boards.greenhouse.io/flexport/jobs/7102981",
-        "match": "99% Match (Navo Logistics / MCP API / Freight Operations)"
-    },
-    {
-        "company": "OpenAI",
-        "category": "AI Frontier",
-        "title": "Head of Strategic Operations & Commercial Partnerships (COO/CBDO)",
-        "location": "San Francisco, CA / Remote",
-        "url": "https://job-boards.greenhouse.io/openai/jobs/6102934",
-        "match": "98% Match (AI Scaling & Global Operations)"
-    },
-    {
-        "company": "project44",
-        "category": "Supply Chain Visibility",
-        "title": "Vice President of Global Freight AI & Operations",
-        "location": "Chicago, IL / London, UK / Remote",
-        "url": "https://job-boards.greenhouse.io/project44/jobs/4810293",
-        "match": "97% Match (Supply Chain API & Real-time Tracking)"
-    },
-    {
-        "company": "Anthropic",
-        "category": "AI Frontier",
-        "title": "VP of Global Product & Enterprise Deployment (CAIO / CPO)",
-        "location": "San Francisco, CA / London, UK / Hybrid",
-        "url": "https://job-boards.greenhouse.io/anthropic/jobs/5982012",
-        "match": "96% Match (AI Architecture & Enterprise Deployment)"
-    },
-    {
-        "company": "FourKites",
-        "category": "Supply Chain Visibility",
-        "title": "VP of Product & AI Supply Chain Automation (CPO / CAIO)",
-        "location": "Chicago, IL / Remote",
-        "url": "https://job-boards.greenhouse.io/fourkites/jobs/5102982",
-        "match": "96% Match (Logistics Automation & Real-time Visibility)"
-    },
-    {
-        "company": "Windward",
-        "category": "Maritime AI",
-        "title": "Chief Product Officer / VP AI Intelligence (CPO / CAIO)",
-        "location": "London, UK / Tel Aviv / Remote",
-        "url": "https://windward.ai/careers/cpo-vp-ai-intelligence",
-        "match": "95% Match (Maritime Logistics & Ocean Freight AI)"
-    },
-    {
-        "company": "Oracle Cloud",
-        "category": "Tech Giant",
-        "title": "Director & Executive Consultant — Supply Chain & AI Innovation",
-        "location": "London, UK / Remote",
-        "url": "https://ehpv.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/26202",
-        "match": "95% Match (Oracle HCM / Global Supply Chain)"
-    },
-    {
-        "company": "Maersk",
-        "category": "Logistics Giant",
-        "title": "Head of Global Digital Logistics Operations & Tech (COO / Lead)",
-        "location": "Copenhagen, Denmark / London, UK / Hybrid",
-        "url": "https://www.maersk.com/careers/vacancies/head-digital-logistics-ops",
-        "match": "94% Match (Ocean Freight & Global Trade Operations)"
-    },
-    {
-        "company": "SpaceX / Starlink",
-        "category": "DeepTech / Aero",
-        "title": "Director of Global Supply Chain Operations & Logistics",
-        "location": "Hawthorne, CA / Boca Chica, TX",
-        "url": "https://www.spacex.com/careers/?department=Supply%20Chain",
-        "match": "93% Match (Global Logistics & Hardware Operations)"
-    },
-    {
-        "company": "xAI",
-        "category": "AI Frontier",
-        "title": "Lead / Director of Compute Infrastructure Operations",
-        "location": "Memphis, TN / San Francisco, CA / Remote",
-        "url": "https://x.ai/careers#compute-ops-director",
-        "match": "92% Match (AI Supercluster & Infrastructure Scaling)"
-    }
+# Workday cxs API (Manhattan — проверен 2026-08-17 total=41; Maersk — вскрыт через
+# перехват api.maersk.com в браузере: тенант maersk.wd3 / site Maersk_Careers, ~1360 вакансий)
+WORKDAY_BOARDS = [
+    ("Manhattan Associates", "manh.wd5.myworkdayjobs.com", "manh", "External", "Supply Chain Software"),
+    ("Maersk", "maersk.wd3.myworkdayjobs.com", "maersk", "Maersk_Careers", "Logistics Giant"),
+]
+# SmartRecruiters public API (WiseTech — проверен вживую 2026-08-17)
+SMARTRECRUITERS_BOARDS = [
+    ("WiseTech Global", "WiseTechGlobal", "Supply Chain Software"),
+]
+# Comeet-виджеты, вшитые в HTML карьерной страницы (Windward)
+COMEET_HTML_PAGES = [
+    ("Windward", "https://windward.ai/careers/", "Maritime AI"),
 ]
 
-print("=== EXECUTIVE CAREERS POLLER FOR STEFAN ROGOVSKIY ===")
-print(f"Targeting {len(COMPANIES)} companies across Tech, AI & Freight Tech.")
+# ===== Блок IT Ukraine (добавлен 2026-08-17 по запросу Стефана) =====
+# Ashby: Grammarly ныне Superhuman Platform Inc (81 вакансия, проверено).
+ASHBY_BOARDS_IT = [
+    ("Grammarly/Superhuman", "Superhuman%20Platform%20Inc", "IT Product"),
+]
+# Greenhouse: GitLab (196 вакансий, проверено).
+GREENHOUSE_BOARDS_IT = [
+    ("GitLab", "gitlab", "IT Product"),
+]
+# DOU RSS-фиды jobs.dou.ua/vacancies/<slug>/feeds/ (проверены 2026-08-17;
+# Google Ukraine на DOU вакансий не публикует — идёт отдельной ветвью через careers.google.com)
+DOU_FEEDS = [
+    ("EPAM", "epam-systems"), ("GlobalLogic", "globallogic"),
+    ("SoftServe", "softserve"), ("Luxoft", "luxoft"),
+    ("DataArt", "dataart"), ("Ciklum", "ciklum"),
+    ("Wix", "wix"), ("Genesis", "genesis-technology-partners"),
+    ("SKELAR", "skelar"), ("Grammarly (UA)", "grammarly"),
+]
+# Фильтр ролей IT-блока: BizDev / PM / Product / Delivery / senior-уровень ($5k+ де-факто
+# начинается с senior/lead/head; junior/mid и чисто инженерные роли отсекаем)
+IT_TITLE_PATTERNS = [
+    r"\bbusiness development\b", r"\bbizdev\b", r"\bpartnership", r"\baccount (director|executive|manager)\b",
+    r"\b(product|program|project|delivery|engagement) (manager|director|lead|owner)\b",
+    r"\bproduct owner\b", r"\bhead of\b", r"\bdirector\b", r"\bVP\b", r"\bvice president\b",
+    r"\bchief\b", r"\bC[EOTIPC]O\b", r"\bgeneral manager\b", r"\bcountry manager\b",
+    r"\bsales (manager|director|executive|lead)\b", r"\bgtm\b", r"\bgo-to-market\b",
+    r"\bstrategy\b", r"\bconsultant\b", r"\bsolution architect\b", r"\bengagement\b",
+    r"\bgrowth (manager|lead|director)\b", r"\brevenue\b", r"\bcommercial\b",
+]
+IT_EXCLUDE_PATTERNS = [
+    r"\bjunior\b", r"\btrainee\b", r"\bintern\b", r"\bстажер",
+    r"\b(qa|test)\b", r"\bsupport\b", r"\brecruiter\b", r"\btalent\b",
+    r"\brepresentative\b", r"\bSDR\b", r"\bBDR\b",  # джуниорские сейлз-роли (<$5k)
+]
+IT_TITLE_RE = re.compile("|".join(IT_TITLE_PATTERNS), re.IGNORECASE)
+IT_EXCLUDE_RE = re.compile("|".join(IT_EXCLUDE_PATTERNS), re.IGNORECASE)
 
-try:
-    with open(output_file, "w", encoding="utf-8") as f:
-        json.dump({"updated_at": time.strftime("%Y-%m-%d %H:%M:%S"), "vacancies": matched_vacancies}, f, indent=2, ensure_ascii=False)
-    print(f"✅ Saved vacancies store to {output_file}")
-except Exception as e:
-    print(f"Warning writing output file: {e}")
+# Роли Стефана: C-Level / VP / Head of / Director / Lead
+TITLE_PATTERNS = [
+    r"\bchief\b", r"\bC[EOTIPC]O\b", r"\bVP\b", r"\bvice president\b",
+    r"\bhead of\b", r"\bdirector\b", r"\bpresident\b", r"\bgeneral manager\b",
+    r"\b(senior )?lead\b", r"\bprincipal\b",
+]
+# Усилители релевантности под профиль (логистика/операции/AI/продукт/комм)
+PROFILE_KEYWORDS = [
+    "operations", "supply chain", "logistics", "freight", "commercial",
+    "partnerships", "product", "strategy", "business development", "revenue",
+    "go-to-market", "gtm", "sales", "ai", "growth", "enterprise",
+]
 
-md_digest = """💼 **ЕЖЕДНЕВНАЯ СВОДКА C-LEVEL & VP ВАКАНСИЙ (22 ТОП-КОМПАНИИ)**
+TITLE_RE = re.compile("|".join(TITLE_PATTERNS), re.IGNORECASE)
 
-🎯 **Профиль:** [Stefan Rogovskiy](https://www.linkedin.com/in/stefrogovskiy/) *(COO Navo | Executive Tech Leader)*
-🏷️ **Целевые роли:** `CEO`, `COO`, `CCO`, `CBDO`, `NED`, `CAIO (AI)`, `CPO (Product)`, `VP`, `Consultant`
 
----
+def http_json(url):
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (exec-careers-poller)"})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        return json.loads(r.read().decode())
 
-### 🚀 НАЙДЕННЫЕ РЕЛЕВАНТНЫЕ ВАКАНСИИ (100% МАТЧ):
 
-1. **🏢 Flexport** *(Freight Tech)*
-   * **Позиция:** **Chief Commercial & Operations Officer (CCO / COO)**
-   * 📍 **Локация:** London, UK / Amsterdam / Remote
-   * 🎯 **Соответствие:** `99% Match` *(Логистика, MCP API, Управление операциями)*
-   * 🔗 [Просмотреть вакансию и запустить авто-подачу](https://job-boards.greenhouse.io/flexport/jobs/7102981)
+def fetch_greenhouse(company, slug, category):
+    out = []
+    try:
+        data = http_json(f"https://boards-api.greenhouse.io/v1/boards/{slug}/jobs")
+        for j in data.get("jobs", []):
+            out.append({
+                "uid": f"gh:{slug}:{j['id']}",
+                "company": company, "category": category,
+                "title": j.get("title", "").strip(),
+                "location": (j.get("location") or {}).get("name", ""),
+                "url": j.get("absolute_url", ""),
+                "updated_at": j.get("updated_at", ""),
+            })
+    except Exception as e:
+        print(f"⚠️ {company} (greenhouse/{slug}): {e}")
+    return out
 
-2. **🤖 OpenAI** *(AI Frontier)*
-   * **Позиция:** **Head of Strategic Operations & Commercial Partnerships (COO/CBDO)**
-   * 📍 **Локация:** San Francisco, CA / Remote
-   * 🎯 **Соответствие:** `98% Match` *(ИИ-масштабирование, Стратегический менеджмент)*
-   * 🔗 [Просмотреть вакансию и запустить авто-подачу](https://job-boards.greenhouse.io/openai/jobs/6102934)
 
-3. **📦 project44** *(Supply Chain Visibility)*
-   * **Позиция:** **Vice President of Global Freight AI & Operations**
-   * 📍 **Локация:** Chicago, IL / London, UK / Remote
-   * 🎯 **Соответствие:** `97% Match` *(Supply Chain API, Трекинг)*
-   * 🔗 [Просмотреть вакансию и запустить авто-подачу](https://job-boards.greenhouse.io/project44/jobs/4810293)
+def fetch_ashby(company, slug, category):
+    out = []
+    try:
+        data = http_json(f"https://api.ashbyhq.com/posting-api/job-board/{slug}")
+        for j in data.get("jobs", []):
+            out.append({
+                "uid": f"ashby:{slug}:{j.get('id')}",
+                "company": company, "category": category,
+                "title": j.get("title", "").strip(),
+                "location": j.get("location", ""),
+                "url": j.get("jobUrl", ""),
+                "updated_at": j.get("publishedAt", ""),
+            })
+    except Exception as e:
+        print(f"⚠️ {company} (ashby/{slug}): {e}")
+    return out
 
-4. **🧠 Anthropic** *(AI Frontier)*
-   * **Позиция:** **VP of Global Product & Enterprise Deployment (CAIO / CPO)**
-   * 📍 **Локация:** San Francisco, CA / London, UK / Hybrid
-   * 🎯 **Соответствие:** `96% Match` *(ИИ-архитектура, Продукт)*
-   * 🔗 [Просмотреть вакансию и запустить авто-подачу](https://job-boards.greenhouse.io/anthropic/jobs/5982012)
 
-5. **🌐 FourKites** *(Supply Chain Visibility)*
-   * **Позиция:** **VP of Product & AI Supply Chain Automation (CPO / CAIO)**
-   * 📍 **Локация:** Chicago, IL / Remote
-   * 🎯 **Соответствие:** `96% Match` *(Автоматизация логистики, Real-time visibility)*
-   * 🔗 [Просмотреть вакансию и запустить авто-подачу](https://job-boards.greenhouse.io/fourkites/jobs/5102982)
+def fetch_workday(company, host, tenant, site, category):
+    out = []
+    try:
+        url = f"https://{host}/wday/cxs/{tenant}/{site}/jobs"
+        body = json.dumps({"appliedFacets": {}, "limit": 20, "offset": 0, "searchText": ""}).encode()
+        offset = 0
+        while True:
+            body = json.dumps({"appliedFacets": {}, "limit": 20, "offset": offset, "searchText": ""}).encode()
+            req = urllib.request.Request(url, data=body, headers={
+                "User-Agent": "Mozilla/5.0", "Content-Type": "application/json", "Accept": "application/json"})
+            data = json.loads(urllib.request.urlopen(req, timeout=30).read().decode())
+            jobs = data.get("jobPostings", [])
+            for j in jobs:
+                ext = j.get("externalPath", "")
+                out.append({
+                    "uid": f"wd:{tenant}:{ext}",
+                    "company": company, "category": category,
+                    "title": j.get("title", "").strip(),
+                    "location": j.get("locationsText", ""),
+                    "url": f"https://{host}/en-US/{site}{ext}" if ext else f"https://{host}",
+                    "updated_at": j.get("postedOn", ""),
+                })
+            offset += 20
+            if offset >= data.get("total", 0) or not jobs:
+                break
+    except Exception as e:
+        print(f"⚠️ {company} (workday/{tenant}): {e}")
+    return out
 
-6. **⚓ Windward** *(Maritime AI)*
-   * **Позиция:** **Chief Product Officer / VP AI Intelligence (CPO / CAIO)**
-   * 📍 **Локация:** London, UK / Tel Aviv / Remote
-   * 🎯 **Соответствие:** `95% Match` *(Морская логистика, Ocean Freight AI)*
-   * 🔗 [Просмотреть вакансию и запустить авто-подачу](https://windward.ai/careers/cpo-vp-ai-intelligence)
 
-7. **⚡ Oracle Cloud** *(Tech Giant)*
-   * **Позиция:** **Director & Executive Consultant — Supply Chain & AI Innovation**
-   * 📍 **Локация:** London, UK / Remote
-   * 🎯 **Соответствие:** `95% Match` *(Консалтинг, Oracle / ИИ-оптимизация)*
-   * 🔗 [Просмотреть вакансию и запустить авто-подачу](https://ehpv.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/26202)
+def fetch_smartrecruiters(company, slug, category):
+    out = []
+    try:
+        data = http_json(f"https://api.smartrecruiters.com/v1/companies/{slug}/postings?limit=100")
+        for j in data.get("content", []):
+            loc = j.get("location", {})
+            out.append({
+                "uid": f"sr:{slug}:{j.get('id')}",
+                "company": company, "category": category,
+                "title": j.get("name", "").strip(),
+                "location": ", ".join(x for x in [loc.get("city"), loc.get("country")] if x),
+                "url": f"https://jobs.smartrecruiters.com/{slug}/{j.get('id')}",
+                "updated_at": j.get("releasedDate", ""),
+            })
+    except Exception as e:
+        print(f"⚠️ {company} (smartrecruiters/{slug}): {e}")
+    return out
 
-8. **🚢 Maersk** *(Logistics Giant)*
-   * **Позиция:** **Head of Global Digital Logistics Operations & Tech (COO / Lead)**
-   * 📍 **Локация:** Copenhagen, Denmark / London, UK / Hybrid
-   * 🎯 **Соответствие:** `94% Match` *(Морские перевозки, Цифровая трансформация)*
-   * 🔗 [Просмотреть вакансию и запустить авто-подачу](https://www.maersk.com/careers/vacancies/head-digital-logistics-ops)
 
-9. **🚀 SpaceX / Starlink** *(DeepTech)*
-   * **Позиция:** **Director of Global Supply Chain Operations & Logistics**
-   * 📍 **Локация:** Hawthorne, CA / Boca Chica, TX
-   * 🎯 **Соответствие:** `93% Match` *(Глобальная логистика, Hardware)*
-   * 🔗 [Просмотреть вакансию и запустить авто-подачу](https://www.spacex.com/careers/?department=Supply%20Chain)
+def fetch_comeet_html(company, page_url, category):
+    """Comeet-виджет: позиции вшиты в HTML (проверено на Windward 2026-08-17)."""
+    out = []
+    try:
+        req = urllib.request.Request(page_url, headers={
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.9",
+        })
+        html = urllib.request.urlopen(req, timeout=30).read().decode("utf-8", "ignore")
+        pat = re.compile(
+            r'<a class="comeet-position" href="([^"]+)"[^>]*data-location="([^"]*)"'
+            r'.*?comeet-position-name">\s*(?:<!--.*?-->)?\s*([^<]+?)\s*</div>', re.S)
+        for href, loc, title in pat.findall(html):
+            if href.startswith("//"):
+                href = "https:" + href
+            out.append({
+                "uid": f"comeet:{company}:{href}",
+                "company": company, "category": category,
+                "title": title.strip(), "location": loc,
+                "url": href, "updated_at": "",
+            })
+    except Exception as e:
+        print(f"⚠️ {company} (comeet-html): {e}")
+    return out
 
-10. **⚡ xAI** *(AI Frontier)*
-    * **Позиция:** **Lead / Director of Compute Infrastructure Operations**
-    * 📍 **Локация:** Memphis, TN / San Francisco, CA / Remote
-    * 🎯 **Соответствие:** `92% Match` *(ИИ-суперкластеры, Масштабирование)*
-    * 🔗 [Просмотреть вакансию и запустить авто-подачу](https://x.ai/careers#compute-ops-director)
 
----
+def fetch_descartes():
+    """Descartes: WordPress REST API careers.descartes.com (вскрыт через браузер 2026-08-17,
+    сам сайт за Cloudflare, но /wp-json/wp/v2/job-listings отдаётся прямым запросом с браузерным UA)."""
+    out = []
+    try:
+        url = "https://careers.descartes.com/wp-json/wp/v2/job-listings?per_page=100"
+        req = urllib.request.Request(url, headers={
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36",
+            "Accept": "application/json"})
+        with urllib.request.urlopen(req, timeout=25) as r:
+            data = json.loads(r.read().decode())
+        for p in data:
+            title = html_mod.unescape((p.get("title") or {}).get("rendered") or "").strip()
+            link = p.get("link") or ""
+            if not title or not link:
+                continue
+            out.append({
+                "uid": f"descartes:{p.get('id')}",
+                "company": "Descartes", "category": "Logistics Software",
+                "title": title, "location": "", "url": link,
+                "updated_at": (p.get("modified") or "")[:10],
+            })
+        COUNTS_UNUSED = len(data)
+    except Exception as e:
+        print(f"⚠️ Descartes (wp-json): {e}")
+    return out
 
-### ⚙️ СТАТУС АВТО-ПОДАЧИ (LinkedIn Easy Apply):
-Все вакансии сопоставлены с твоим профилем LinkedIn `stefrogovskiy`. 
-При нажатии на любую вакансию запускается подготовка авто-подачи резюме!
-"""
 
-print(md_digest)
+def fetch_dou_feed(company, slug):
+    """DOU RSS: jobs.dou.ua/vacancies/<slug>/feeds/ (title содержит роль и город)."""
+    out = []
+    try:
+        url = f"https://jobs.dou.ua/vacancies/{slug}/feeds/"
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=25) as r:
+            xml = r.read().decode("utf-8", errors="ignore")
+        items = re.findall(r"<item>(.*?)</item>", xml, re.S)
+        for it in items:
+            tm = re.search(r"<title>(.*?)</title>", it, re.S)
+            lm = re.search(r"<link>(.*?)</link>", it, re.S)
+            if not tm or not lm:
+                continue
+            title = html_mod.unescape(tm.group(1)).strip()
+            link = lm.group(1).strip()
+            # title формата "Role в Company, Город"
+            role = title.split(" в ")[0].strip() if " в " in title else title
+            loc = title.rsplit(", ", 1)[-1] if ", " in title else ""
+            out.append({
+                "uid": f"dou:{slug}:{link.rstrip('/').rsplit('/', 1)[-1]}",
+                "company": company, "category": "IT Ukraine",
+                "title": role, "location": loc, "url": link, "updated_at": "",
+            })
+    except Exception as e:
+        print(f"⚠️ {company} (dou/{slug}): {e}")
+    return out
+
+
+def is_it_match(title):
+    return bool(IT_TITLE_RE.search(title)) and not IT_EXCLUDE_RE.search(title)
+
+
+def is_exec(title):
+    return bool(TITLE_RE.search(title))
+
+
+def profile_hits(title):
+    t = title.lower()
+    return [k for k in PROFILE_KEYWORDS if k in t]
+
+
+def main():
+    seen = set()
+    if os.path.exists(SEEN_FILE):
+        try:
+            seen = set(json.load(open(SEEN_FILE)).get("uids", []))
+        except Exception:
+            seen = set()
+    first_run = not seen
+
+    all_jobs = []
+    for c, s, cat in GREENHOUSE_BOARDS:
+        all_jobs.extend(fetch_greenhouse(c, s, cat))
+    for c, s, cat in ASHBY_BOARDS:
+        all_jobs.extend(fetch_ashby(c, s, cat))
+    for c, h, t, st, cat in WORKDAY_BOARDS:
+        all_jobs.extend(fetch_workday(c, h, t, st, cat))
+    for c, s, cat in SMARTRECRUITERS_BOARDS:
+        all_jobs.extend(fetch_smartrecruiters(c, s, cat))
+    for c, u, cat in COMEET_HTML_PAGES:
+        all_jobs.extend(fetch_comeet_html(c, u, cat))
+    all_jobs.extend(fetch_descartes())
+
+    # ===== Блок IT Ukraine (BizDev/PM/Product/Delivery, senior+) =====
+    it_jobs = []
+    for c, s, cat in GREENHOUSE_BOARDS_IT:
+        it_jobs.extend(fetch_greenhouse(c, s, cat))
+    for c, s, cat in ASHBY_BOARDS_IT:
+        it_jobs.extend(fetch_ashby(c, s, cat))
+    for c, s in DOU_FEEDS:
+        it_jobs.extend(fetch_dou_feed(c, s))
+
+    if not all_jobs:
+        print("❌ Ни один источник не ответил — сеть/API недоступны. Отчёт не формируется.")
+        return
+
+    execs = [j for j in all_jobs if is_exec(j["title"])]
+    for j in execs:
+        j["keywords"] = profile_hits(j["title"])
+    new = [j for j in execs if j["uid"] not in seen]
+    # Сортировка: сначала больше совпадений с профилем
+    new.sort(key=lambda j: len(j["keywords"]), reverse=True)
+
+    # IT Ukraine: свой фильтр (BizDev/PM/senior+), свои новинки
+    it_matches = [j for j in it_jobs if is_it_match(j["title"])]
+    for j in it_matches:
+        j["keywords"] = profile_hits(j["title"])
+    it_new = [j for j in it_matches if j["uid"] not in seen]
+    it_new.sort(key=lambda j: len(j["keywords"]), reverse=True)
+
+    # Обновляем seen-store всеми текущими uid (окно не растёт бесконечно)
+    current_uids = {j["uid"] for j in execs} | {j["uid"] for j in it_matches}
+    json.dump({"uids": sorted(seen | current_uids), "updated_at": time.strftime("%Y-%m-%d %H:%M:%S")},
+              open(SEEN_FILE, "w"))
+    json.dump({"updated_at": time.strftime("%Y-%m-%d %H:%M:%S"), "new": new, "it_new": it_new,
+               "total_exec_open": len(execs), "total_it_open": len(it_matches)},
+              open(OUT_FILE, "w"), ensure_ascii=False, indent=2)
+
+    by_src = {}
+    for j in all_jobs:
+        by_src[j["company"]] = by_src.get(j["company"], 0) + 1
+    print(f"=== EXECUTIVE CAREERS POLLER v2 (реальные API) ===")
+    print("Источники:", ", ".join(f"{k}={v}" for k, v in sorted(by_src.items())))
+    print(f"Всего открытых executive-позиций: {len(execs)}; НОВЫХ с прошлого прогона: {len(new)}")
+    print()
+
+    if first_run:
+        print("(Первый прогон: baseline создан. Показываю топ-15 наиболее релевантных из текущих открытых.)")
+        show = [j for j in execs if j["keywords"]]
+        show.sort(key=lambda j: len(j["keywords"]), reverse=True)
+        new = show[:15]
+    elif not new:
+        print("Новых executive-вакансий с прошлого прогона нет.")
+        new = []
+
+    for j in new[:20]:
+        kw = ", ".join(j["keywords"]) if j.get("keywords") else "—"
+        print(f"• {j['company']} — {j['title']}")
+        print(f"  📍 {j['location'] or 'n/a'} | 🏷 {kw}")
+        print(f"  🔗 {j['url']}")
+        print()
+
+    # ===== Секция IT Ukraine =====
+    it_src = {}
+    for j in it_jobs:
+        it_src[j["company"]] = it_src.get(j["company"], 0) + 1
+    print("=== IT UKRAINE (BizDev/PM/Product/Delivery, senior+) ===")
+    print("Источники:", ", ".join(f"{k}={v}" for k, v in sorted(it_src.items())) or "нет данных")
+    print(f"Подходящих открытых: {len(it_matches)}; НОВЫХ: {len(it_new)}")
+    print()
+    if first_run:
+        show_it = sorted([j for j in it_matches], key=lambda j: len(j["keywords"]), reverse=True)[:15]
+    elif not it_new:
+        print("Новых IT-вакансий с прошлого прогона нет.")
+        show_it = []
+    else:
+        show_it = it_new[:20]
+    for j in show_it:
+        kw = ", ".join(j["keywords"]) if j.get("keywords") else "—"
+        print(f"• {j['company']} — {j['title']}")
+        print(f"  📍 {j['location'] or 'n/a'} | 🏷 {kw}")
+        print(f"  🔗 {j['url']}")
+        print()
+
+
+if __name__ == "__main__":
+    main()
