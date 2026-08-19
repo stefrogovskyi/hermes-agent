@@ -122,7 +122,12 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
   * Only true recipient-side NDRs (`550 5.1.1 User unknown`, `Host not found`, `Mailbox disabled`) indicate a dead lead that should be deleted/marked bounced.
   * *(See `references/m365-eop-and-crm-bounce-handling.md` for complete M365 EOP error diagnostics, inbound poller code patterns, and Distribution List recovery details.)*
 - **CRITICAL: Premature CRM Status Updates**: Never bulk-update Airtable records from `Lead` to `Contacted` in advance or without actually dispatching the emails. Sending a batch of 500 emails with a 1-minute interval physically takes **~8.3 hours** — updating Airtable in seconds without real SMTP/API dispatch corrupts lead tracking and creates false completion reports. Always update Airtable status record-by-record AFTER each email is actually sent.
-- **Inbound Poller Duplication (MS Graph)**: Always mark processed MS Graph messages as `isRead = True` and persist their IDs in `/opt/hermes/profiles/richard/processed_msg_ids.json`. Without marking read and persisting seen IDs, the 3-minute poller cron job will repeatedly trigger duplicate alerts for the same messages over 100 times.
+- **Inbound Poller Duplication & MS Graph API Credentials**:
+  * MS Graph Inbound endpoint: `https://graph.microsoft.com/v1.0/me/mailFolders/inbox/messages?$top=15&$orderby=receivedDateTime desc`.
+  * Authentication: OAuth Password Grant (`TENANT_ID = "dc47c5b1-313f-47eb-ab6f-5f0716f400b5"`, `CLIENT_ID = "1fec8e78-bce4-4aaf-ab1b-5451cc387264"`, user `rich@navo24.com`).
+  * Filter out and auto-record system bounce/undeliverable messages (`microsoftexchange`, `postmaster`, `undeliverable`) so they do not trigger false alerts.
+  * Always persist seen message IDs in `/opt/hermes/profiles/richard/processed_msg_ids.json`.
+- **Cron Job Model Drift Protection Recovery**: When the active profile LLM model is upgraded or changed (e.g., `gemini-3.6-flash` -> `gemini-3.7-flash`), Hermes Spend Protection skips cron runs with a drift alert. To recover, update the cron job configuration and `model_snapshot` in `/opt/hermes/profiles/richard/cron/jobs.json` to match the active model.
 - **Faking/Simulating Batch Triggers**: Confirming a mass email launch without executing a real tool or background process results in missed emails and user frustration. Always run real background processes (`terminal(background=True, notify_on_complete=True)`) with proper 60s delays and log files (e.g. `/root/cn_ff_1_outreach.log`).
 - **Real SMTP Dispatch Settings**:
   * Host: `smtp.office365.com:587` (STARTTLS)
