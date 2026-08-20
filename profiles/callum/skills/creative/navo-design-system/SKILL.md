@@ -80,6 +80,7 @@ Guidelines, tokens, typography standards, and copy rules for all Navo24 platform
   - Implement mobile touch swipe support (`touchstart` / `touchend`).
   - Provide a sticky bottom mobile control bar (`← Назад | Слайд N из 8 | Вперед →`).
 - **Modal Window UX Rule:** ALL modal windows in Navo apps and dashboards MUST support closing via Escape key (`e.key === 'Escape'` keydown listener) and backdrop click.
+- **Interactive Slide Decks:** Support keyboard controls (`← / →`, `Space`, `Home`, `End`), touch swipe (`touchstart` / `touchend`), progress bar indicator, slide counter (`Slide X of N`), and both Light/Dark modes with `localStorage` persistence.
 - **Deployments:** Package with static `index.html` + `vercel.json` (`cleanUrls: true`) for 1-click Vercel deployment using `VERCEL_TOKEN=vcp_2QMSKEwYW3Dg4vdKOTB8q7IRCr2uCEFWeXgVMDAr18jPnuhEKf0KYAYO vercel <dir> --prod --yes --scope navo5`.
 
 ## 7. AI-Augmented Developer KPI & Velocity Benchmarking
@@ -89,4 +90,41 @@ Guidelines, tokens, typography standards, and copy rules for all Navo24 platform
   - Do NOT set arbitrary hardcoded SLA numbers (e.g. "48 hours Cycle Time") without project-specific baseline data.
   - Phase 1 focuses on 0 Prod Regressions (Sev-1) + 100% AI Review & Test pass, while logging real velocity with Claude Code on Dev-servers.
   - Log AI tool usage via GitHub PR templates (`[x] Claude Code Assisted`) and CI/CD time-to-dev-server metrics to set accurate company SLAs on Month 2.
+
+## 8. Multilingual, Navigation & Account Standards (9 Languages)
+
+- **URL Structure & Hierarchy:**
+  - Root `navo24.com/` is default English.
+  - Multilingual localized versions use clean prefix paths: `navo24.com/es`, `navo24.com/de`, `navo24.com/fr`, `navo24.com/it`, `navo24.com/uk`, `navo24.com/ru`, `navo24.com/zh`, `navo24.com/ar`.
+- **Dynamic Localization & i18n Rules:**
+  - Never leave hardcoded English strings in shared marketing components (`MarketingNav`, `HomePage`, `MarketingFooter`). All rendered copy must call `t(...)` from `useTranslation()` linked to `src/locales/{lang}.json`.
+  - Route wrapper (`LanguageRouteWrapper` at `/:lang/*`) must automatically synchronize `i18n.changeLanguage(lang)` and set `document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr')`.
+- **Language Switcher & Flags:**
+  - 9 standard languages: English, Español, Deutsch, Français, Italiano, Українська, Русский, 中文, العربية.
+  - **Russian (`ru`) Flag Directive:** Strictly use the White-Blue-White flag (⬜🟦⬜ / SVG with three equal horizontal stripes: White, `#0083D6` Blue, White).
+  - **Arabic (`ar`):** Must toggle document direction to RTL (`document.documentElement.setAttribute('dir', 'rtl')`).
+- **Header Auth State & User Menu:**
+  - Unauthenticated: Display "Sign in" and "Start free" button.
+  - Authenticated: Display user avatar button with hover dropdown popover:
+    - User email and role tag (*SUPERADMIN / MEMBER*).
+    - Workspace Home (`/home`), Shipments Board (`/dashboard`), Analytics (`/analytics`), Settings (`/settings`).
+    - Superadmin only: Blog Publisher (`/home/blog`), Superuser Panel (`/admin`).
+    - Sign out action.
+- **Editorial & Blog Publishing (`/home/blog`):**
+  - Superadmin RTF studio with Brand Book fonts (Ranade, Switzer, JetBrains Mono), 11-step self-audit metrics (99% originality, <15% AI score), and live corner-drag image resizing handles.
+- **Deployment Pipeline Target:**
+  - Staging deliverables must be committed and pushed to `dev` branch to trigger `.github/workflows/deploy-web-staging.yml` deploying to Cloudflare Pages (`https://tracking.staging.navo24.com/`). Avoid temporary Vercel deploys for main product features.
+
+## 9. Mobile Responsiveness & Viewport Overflow Rules
+
+- **Navbar Header Isolation (< 760px):**
+  - Keep the mobile navbar header ultra-clean: **Logo + Language Switcher + Theme Toggle + Hamburger**.
+  - Long CTA buttons (*«Start free»* / *«Comenzar gratis»* / *«Sign in»*) must be hidden from the top bar on mobile (`.marketing-nav-cta { display: none !important; }`) and placed prominently full-width inside the hamburger drawer to prevent top bar overflow.
+- **Ambient Glow & Pseudo-elements:**
+  - Absolute ambient glow pseudo-elements (e.g. `.cp-hero::before`) must use `width: min(1320px, 100vw)` and the parent section MUST have `overflow: hidden; position: relative;` to prevent off-canvas horizontal scrolling.
+- **Grid Auto-fit Clamping:**
+  - Do not use fixed pixel minimums like `minmax(300px, 1fr)` on mobile grids with container padding, as 320px–360px phones will overflow. Use `minmax(min(260px, 100%), 1fr)` and explicit single-column collapse (`grid-template-columns: 1fr !important`).
+- **Global Viewport Safeguard:**
+  - `html, body { overflow-x: hidden; max-width: 100vw; }` to guarantee zero horizontal drag.
+
 

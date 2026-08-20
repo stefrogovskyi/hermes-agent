@@ -21,6 +21,38 @@ Use when configuring or troubleshooting multi-profile Hermes Agent instances run
 - `references/ai-copywriting-style-priming.md` — Guide on Few-Shot Human Style Priming vs. abstract rules for AI copywriting.
 - `references/agentos-and-openclaw-deployment.md` — Complete deployment, systemd daemons, Telegram channel integration, and Admin-gated Hostinger setup for AgentOS (`aavalanche.com/agentos/`) and OpenClaw (`:18789`).
 
+### 17. GitHub Push Protection & Secret Scanning Unblock Pattern
+- **Push Protection Block (GH013):** GitHub blocks `git push` if historical commits or tracked markdown files contain strings resembling API keys (Airtable PAT, Vercel tokens, Google Secrets), even on private/personal repos.
+- **Resolution Path:**
+  1. Inspect the terminal push stderr for generated GitHub unblock URLs (`https://github.com/<owner>/<repo>/security/secret-scanning/unblock-secret/<HASH>`).
+  2. Ask the user to click "Allow secret" on those specific links (or remove references and squash/amend git history).
+  3. Re-run `git push` immediately after user authorization.
+
+### 18. Multi-Profile Agent Roster
+- Added **Harrison Croft** (`harrison`): General Legal Counsel & Chief Compliance Officer at Navo (`hermes-harrison.service`). Focuses on MSA, NDA, API licensing, Maritime/FreightTech compliance (Incoterms 2020, Bill of Lading, FMC, FIATA/BIFA), and enterprise contract redlines.
+
+### 19. Open Pairing Mode & Telegram Allowlist Syntax (Hard Rule)
+- **YAML Array Syntax Requirement:** In Hermes Telegram adapter (`platforms.telegram.allow_from` / `group_allow_from`), values must be structured YAML lists, NOT single-quoted JSON string literals:
+  ```yaml
+  platforms:
+    telegram:
+      enabled: true
+      require_mention: true
+      allow_from:
+        - "*"
+        - "330656040"
+      group_allow_from:
+        - "*"
+  ```
+- **Pitfall:** Single-quoted JSON strings like `allow_from: '["*"]'` get evaluated as a literal string set containing `["*"]`, which rejects real numerical Telegram User IDs with `[Telegram] Blocked unauthorized user <ID> in chat <ID>`.
+
+### 20. Telegram Multi-User Consultations vs Owner RBAC Protection
+- **Problem & Vulnerability:** When an agent is opened for team-wide consultations (`allow_from: ["*"]`), incoming messages from employees can prompt the bot to offer "Set Home Chat" or allow other users to issue admin slash-commands (`/new`, `/set`, profile reconfiguration), potentially hijacking the bot's delivery destination or changing its persona.
+- **Enforcing Owner-Only Governance:**
+  1. **Lock `home_channel`:** Explicitly hardcode `home_channel.chat_id: "<OWNER_ID>"` under `platforms.telegram`.
+  2. **Restrict `allow_admin_from`:** List exclusively the owner's Telegram ID under `allow_admin_from`.
+  3. **Personal Security in `SOUL.md`:** Instruct the agent that Stefan is the sole executive owner; all other team members are clients/colleagues who receive advice but cannot alter system settings.
+
 ### 15. Few-Shot Human Style Priming vs Abstract Rules
 - **Rule Checklist Pitfall:** Abstract 8-step rules alone do not eliminate the "90% AI" robotic fingerprint.
 - **Solution:** Combine Few-Shot Human Examples (`HUMAN_STYLE_GUIDE.md`) with Anti-AI negative prompts and two-pass editing. Route long-form copywriting to Anthropic Claude (Claude 3.5/3.7 Sonnet).

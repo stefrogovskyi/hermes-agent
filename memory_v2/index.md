@@ -11,6 +11,9 @@
 
 ## Cases
 | Дата | Тема | Файл | Ключевой урок |
+| 2026-08-19 | AgentOS Mission Control Upgrade & Kanban Unification | cases/2026-08-19_agentos_mission_control_upgrade_and_kanban_unification.md | Все 6 канбанов размещены на Vercel (`https://<agent>-kanban.vercel.app`), иконка Канбан исправлена на Lucide `kanban`, `server.py` использует `ReusableTCPServer`. |
+| 2026-08-19 | Git Autosync & GitHub Push Protection Fix | cases/2026-08-19_git_autosync_github_push_protection_bypass.md | GitHub Push Protection блокирует пуш при обнаружении секретов в истории коммитов; расписание крона обновлено на `0 0 * * *` (03:00 Киев). |
+| 2026-08-19 | Firecrawl PDF Inspector Skill Integration | cases/2026-08-19_firecrawl_pdf_inspector_skill_integration.md | Подключена библиотека Firecrawl `pdf-inspector` для классификации и OCR PDF; создан CLI обертка `pdf_inspect_cli.py` и скилл `productivity/pdf-inspector`. |
 | 2026-08-18 | Cron Duplication on Desktop Wake & Explicit LLM Model Pinning | cases/2026-08-18_cron_duplicate_desktop_wake_and_model_pinning.md | Фоновые кроны 24/7 строго на VPS `stefan1`; все LLM-кроны обязан принудительно пинить к явной модели (`model: ...`) в конфигурации, чтобы предотвратить сбои при глобальной смене модели. |
 | 2026-08-18 | Archie 4-Layer Anti-AI Copywriting, Audit & Point-Patch Pipeline | cases/2026-08-18_archie_4_layer_anti_ai_copywriting_and_audit.md | 3-этапный цикл Archie: глубокий человечный рерайт -> независимый 4-слойный аудит (плагиат n-gram >=6, AI-слова, структурные тики, факты) -> точечный патч замечаний. |
 | 2026-08-16 | Odessa Safe Router & Telethon Userbot Session Watchdog | cases/2026-08-16_odessa_safe_router_and_telethon_userbot.md | Скилл `odessa-safe-router` сканирует группу «Не повредит, Одесса» через Telethon (`stefan_userbot.session`); добавлен крон-вахтёр (`0 */6 * * *`) с автобэкапом и алертом. |

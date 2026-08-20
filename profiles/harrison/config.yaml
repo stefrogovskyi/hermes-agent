@@ -1,0 +1,66 @@
+model: google/gemini-3.7-flash
+provider: google
+
+fallback_providers:
+  - model: poolside/laguna-s-2.1:free
+    provider: nous
+  - model: nvidia/nemotron-3-ultra-550b-a55b:free
+    provider: openrouter
+  - model: nvidia/nemotron-3-super-120b-a12b:free
+    provider: openrouter
+  - model: google/gemma-4-31b-it:free
+    provider: openrouter
+  - model: google/gemma-4-26b-a4b-it:free
+    provider: openrouter
+  - model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
+    provider: openrouter
+  - model: cohere/north-mini-code:free
+    provider: openrouter
+  - model: openai/gpt-oss-20b:free
+    provider: openrouter
+  - model: inclusionai/ling-3.0-flash:free
+    provider: openrouter
+  - model: nvidia/nemotron-nano-12b-v2-vl:free
+    provider: openrouter
+  - model: nvidia/nemotron-3-nano-30b-a3b:free
+    provider: openrouter
+  - model: nvidia/nemotron-nano-9b-v2:free
+    provider: openrouter
+  - model: nvidia/nemotron-3.5-lightning-30b-a3b
+    provider: nvidia
+  - model: minimax-m2.7
+    provider: gonka24
+  - model: kimi-k2.6
+    provider: gonka24
+  - model: gpt-4o-mini
+    provider: openai
+  - model: gpt-4o
+    provider: openai
+
+request_timeout_seconds: 30
+
+compression:
+  enabled: true
+  threshold: 0.25
+  target_ratio: 0.15
+
+# Главный владелец (Admin / Owner)
+owner_id: "330656040"
+
+platforms:
+  telegram:
+    enabled: true
+    require_mention: true
+    # Home channel закреплен исключительно за Стефаном (330656040)
+    home_channel:
+      platform: telegram
+      chat_id: "330656040"
+    # Доступ к административным командам и изменению настроек только у Стефана
+    allow_admin_from:
+      - "330656040"
+    # Доступ к диалогам и консультациям для всех сотрудников
+    allow_from:
+      - "*"
+      - "330656040"
+    group_allow_from:
+      - "*"
