@@ -60,8 +60,14 @@ When Agent A replies to Agent B, Telegram tags Agent B in a quote-reply. Agent B
 For detailed step-by-step log analysis and common fallacies, see `references/telegram_group_troubleshooting.md`.
 
 ### Diagnostics First (No Guesses)
-- **Never attribute unhandled group messages to BotFather `/setprivacy`**: Users often have privacy disabled. Check local `config.yaml` (`require_mention`, `group_trigger_keywords`, `allowed_chats`) and `gateway.log` / `agent.log` first before making claims about Telegram platform settings. Blaming `/setprivacy` when the user has already disabled group privacy causes user frustration.
-- **`require_mention: true` Behavior**: When `require_mention: true` is enabled in `config.yaml`, the Telegram platform adapter strictly requires `@botusername` or a direct quote-reply. Plain text wake-words in `group_trigger_keywords` will NOT wake the bot in groups without an explicit `@mention` or quote-reply unless `require_mention` is `false`. Do NOT invent platform-side privacy issues when `require_mention: true` is the actual gate.
+- **Never attribute unhandled group messages to BotFather `/setprivacy`**: Users often have privacy disabled. Check local `config.yaml` (`require_mention`, `mention_patterns`, `allowed_chats`) and `gateway.log` / `agent.log` first before making claims about Telegram platform settings. Blaming `/setprivacy` when the user has already disabled group privacy causes user frustration.
+- **Configuring Name Triggers with `require_mention: true`**:
+  - Always use `telegram.mention_patterns` in `config.yaml` as a list of regex patterns (e.g., `['\\bалистер[а-я]*\\b', '\\balistair\\b', '\\balister\\b', '\\bалик\\b']`).
+  - **Do NOT include `(?i)` in `mention_patterns`**: The gateway automatically compiles all patterns with `re.IGNORECASE`. Adding embedded `(?i)` flags causes Python regex syntax errors (`global flags not at the start of the expression`), breaking pattern matching and resulting in complete silence on name triggers.
+  - Avoid setting `require_mention: false` in active group chats: without filtering, the bot receives all background messages and risks chiming into conversations between humans directed at third parties.
+- **Script-Based Cron Jobs & Model Drift**:
+  - For recurring jobs that run deterministic reporting scripts (e.g. API benchmarks, status checkers, exports), configure the cron job with `no_agent: true`.
+  - This prevents scheduler aborts due to model drift guardrails (`Skipped to prevent unintended spend: global inference config drifted since this job was created`) when default inference models are upgraded.
 - **Strict User Intent & No Unrequested Task Execution**: Never schedule, execute, or report unrequested cron jobs or task pipelines based on background context templates or stale prompts. Only act on explicit user instructions given in their current turn.
 - **Conciseness on Demand**: When the user asks for a concise answer (e.g., "Ответь кратко"), respond directly in 1-3 short sentences without unnecessary background narration or fluff.
 - **Check `config.yaml` Settings**:

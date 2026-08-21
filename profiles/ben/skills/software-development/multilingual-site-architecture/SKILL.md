@@ -140,6 +140,44 @@ Use this skill when managing, generating, or updating large-scale multi-language
     - Validate `aud === $GOOGLE_CLIENT_ID` and extract verified user details (`email`, `name`, `picture`, `email_verified`).
     - After successful authentication, preserve the user's active language by redirecting to `/<lang>/dashboard` (or `/dashboard` for English).
 
+15. **Interactive AI Sales Rep Widget & Lead-Capture Ecosystem:**
+    - Deploy a lightweight, standalone JS widget (`ai-widget.js`) injected across all pages before `</body>` to provide instant 24/7 client discovery and live sales qualification.
+    - Incorporate interactive elements: pulsing online status badge, conversational quick-reply pills, simulated typing indicators, and markdown formatting for readability.
+    - Backend handling (`auth.php?action=ai_chat`): parse incoming user messages, detect contact handles (Telegram `@username`, email, phone numbers), log qualified leads into the database/CRM, and trigger team alerts.
+    - Ecosystem cross-linking: highlight the live widget via prominent showcase cards on category hub pages (e.g. `ai-agents`) linking directly to dedicated conversion landing pages (e.g. `ai-sales-agent`).
+
+16. **Consistent Standalone Page Navbar CSS & Responsive Drawer Injections:**
+    - When generating standalone child landing pages (such as `/ai-sales-agent`), do not rely solely on body inline styles. Ensure the standard site-wide navigation `<style>` blocks (`#mobile-responsive-system`, `.services-nav-item:hover #services-dropdown-menu`, `.company-dropdown-container:hover #company-dropdown-menu`, `.mobile-menu-btn`, `.mobile-nav-drawer`) are fully included in the `<head>` or before `</body>`.
+    - This guarantees that top navigation, dropdowns, and responsive mobile drawers render with 100% visual fidelity across both light-themed and dark-themed pages.
+
+17. **Bulletproof Dropdown Hover Bridge & Event Propagation Pitfalls:**
+    - When building hover dropdown menus (like language selectors `#lang-menu`, solutions `#services-dropdown-menu`, company `#company-dropdown-menu`), avoid placing the dropdown list with an empty gap (e.g. `top: 46px` when the button is `34px` high). Moving the cursor down crosses that 10px empty space, causing the browser to immediately lose `:hover` and close the menu.
+    - Solution:
+      1. Position with `top: calc(100% + 4px);` relative to an inline container (`.lang-dropdown-container`).
+      2. Attach an invisible `::before` pseudo-element bridge spanning `top: -14px; height: 18px;` over the gap so the mouse never leaves the hover bounding box while transitioning into the menu:
+         ```css
+         #lang-menu::before, #services-dropdown-menu::before, #company-dropdown-menu::before {
+           content: "";
+           position: absolute;
+           top: -14px; left: -10px; right: -10px; height: 18px; background: transparent; z-index: 1999;
+         }
+         ```
+      3. In click toggle handlers (`toggleLangDropdown(e)`), always pass the event and call `if (e) e.stopPropagation();` to prevent the click event from bubbling to `document.addEventListener('click')`, which would immediately close the newly opened menu.
+
+18. **Browser Cache-Busting for Static Assets & Dynamic Widgets:**
+    - When updating standalone JavaScript files (such as `ai-widget.js`, analytics scripts, or CSS theme overrides) across an existing static site, browsers often cache the previous version locally on disk for hours or days.
+    - Always append an explicit cache-busting version query string to the script tag (e.g. `<script src="/ai-widget.js?v=2.2" defer></script>`) across all HTML files during batch generation, so all client browsers immediately fetch the latest version without requiring manual hard refreshes.
+
+19. **Autonomous AI Sales Agent Studio & Dual-Engine Architecture:**
+    - When embedding an autonomous AI sales widget into customer portals and marketing sites, structure a dual-engine architecture:
+      - **Deterministic BANT Engine (Default / Fast):** Latency <0.1s, deterministic intent matching, regex-based lead contact capture (Telegram `@username`, email, phone), zero token cost, and 100% reliable fallback.
+      - **Generative OpenRouter LLM + RAG:** Injects real-time articles from an `ai_knowledge_base` SQLite table into the system prompt, synthesizes grounded answers without hallucinations, and supports free/low-cost models (e.g. `google/gemini-2.0-flash-thinking-exp:free`, `deepseek/deepseek-r1:free`, `openai/gpt-4o-mini`).
+    - Expose a dedicated management studio in the admin cabinet (`/dashboard`) allowing administrators to dynamically switch engine modes, test API keys, edit knowledge base articles, adjust prompt temperatures, and review live visitor chat transcripts.
+
+20. **Admin Dashboard UI Harmonization & Hostinger CDN Cache Invalidation:**
+    - When adding new workspace tabs or navigation items into existing dashboards (e.g. `dashboard.html`), ensure new elements strictly follow the standard styling of neighboring navigation items (`dash-nav-item`) without persistent inline highlights, custom borders, or contrasting backgrounds unless explicitly requested.
+    - When deploying static HTML updates behind edge caching proxies (such as Hostinger CDN `hcdn`), the CDN edge may continue serving cached pages if file modification times (`mtime`) appear unchanged to the edge. Run a touch pass over deployed files on the remote server (`find <web_root> -name '*.html' -exec touch {} \;`) to ensure edge caches register updated file timestamps immediately.
+
 ## Synchronization Workflow
 
 1. **Define Dictionaries & Slugs:**

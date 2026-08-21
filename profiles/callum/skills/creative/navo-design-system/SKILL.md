@@ -48,6 +48,7 @@ Guidelines, tokens, typography standards, and copy rules for all Navo24 platform
 ## 3. Copy & Prose Rules (§08 The Voice)
 
 - **Spaced Em-Dash Rule:** The spaced em-dash (` — `) is **banned from prose** as an AI-writing tell. Use colons, semicolons, commas, or periods instead. (Allowed only in titles/labels like `"TrackingMCP — Dashboard"`).
+- **Zero-Emoji UI Rule (Strict Brand Standard):** Gratuitous and arbitrary emoji icons (`✍️`, `👁️`, `🎯`, `🕒`, `📚`, `🔍`, `🖼️`, `⚡`, `🏠`, `📦`, `📊`, `⚙️`, `🛡️`, `🚪`, etc.) are **strictly prohibited** in tab labels, buttons, navigation bars, headers, and UI controls. Interface elements must be clean, typography-led (Switzer, Ranade, JetBrains Mono) or accompanied strictly by brand SVG line icons (stroke width 1.8–2.0px).
 - **Endorsement Rule (§06):** Legal footers and product endorsements must use `© 2026 [Product] · a Navo24 product` in lowercase JetBrains Mono (10–11px, `ink-500`).
 - **Team Names:** Robert's title is Full-Stack Developer (first name "Роберт" only, do NOT add "Vance" surname). Callum Vance is Tech Lead.
 
@@ -104,14 +105,22 @@ Guidelines, tokens, typography standards, and copy rules for all Navo24 platform
   - **Russian (`ru`) Flag Directive:** Strictly use the White-Blue-White flag (⬜🟦⬜ / SVG with three equal horizontal stripes: White, `#0083D6` Blue, White).
   - **Arabic (`ar`):** Must toggle document direction to RTL (`document.documentElement.setAttribute('dir', 'rtl')`).
 - **Header Auth State & User Menu:**
-  - Unauthenticated: Display "Sign in" and "Start free" button.
-  - Authenticated: Display user avatar button with hover dropdown popover:
+  - Unauthenticated: Display ONLY the primary "Start free" button (do NOT add a separate "Sign in" button — "Start free" serves as the single action point).
+  - Authenticated: Display ONLY the user avatar button (`UserAccountMenu`) styled in brand Cobalt blue (`color: var(--signal)` / `#1F4FE6`, `background: rgba(31, 79, 230, 0.12)`, `border: 1px solid rgba(31, 79, 230, 0.32)`) with hover/click dropdown popover. Do NOT show an extra blue "Dashboard →" button in the header navbar or mobile drawer (the avatar dropdown already provides direct access to all workspace destinations). The dropdown menu contains:
     - User email and role tag (*SUPERADMIN / MEMBER*).
     - Workspace Home (`/home`), Shipments Board (`/dashboard`), Analytics (`/analytics`), Settings (`/settings`).
     - Superadmin only: Blog Publisher (`/home/blog`), Superuser Panel (`/admin`).
     - Sign out action.
-- **Editorial & Blog Publishing (`/home/blog`):**
+- **Routing & User Navigation Preservation:**
+  - Never automatically redirect logged-in users away from the public marketing homepage (`/`) into `/home` or `/dashboard`. A user (logged-in or guest) must always land on the exact URL they requested. Logged-in users access the workspace via the user account dropdown.
+- **Static Hosting & Client Sub-Routes (Cloudflare Pages):**
+  - Cloudflare Pages serves physical assets before `_redirects`. Every localized prefix route (`/es`, `/de`, `/fr`, `/it`, `/uk`, `/ru`, `/zh`, `/ar`) AND client-side application sub-routes (e.g. `/home/blog`, `/blog-editor`, `/sales/accounts`, `/sales/people`) MUST have static HTML shells pre-emitted at build time for both `dist/<route>.html` AND `dist/<route>/index.html` (via `prerender.mjs`) to avoid CDN 404 fallbacks on direct page hits and page refreshes.
+- **Editorial & Rich-Text Editor State Management (`contentEditable`):**
   - Superadmin RTF studio with Brand Book fonts (Ranade, Switzer, JetBrains Mono), 11-step self-audit metrics (99% originality, <15% AI score), and live corner-drag image resizing handles.
+  - **React contentEditable Rule:** NEVER bind `dangerouslySetInnerHTML` directly onto a `contentEditable` element on every controlled re-render. Doing so collides with React's DOM reconciler during typing, causing `TypeError: Cannot read properties of null (reading 'innerHTML')`. Instead, synchronize initial/tab-switch HTML via `ref.current.innerHTML` in `useEffect`, and read `e.currentTarget.innerHTML` in `onInput` without letting React manage child nodes.
+  - **Asynchronous Auth & Ref Mounting Rule:** When the editor wraps around an asynchronous auth check (`if (checking) return <Spinner />`), `useEffect` hooks for syncing `post.contentHtml` into `contentRef.current.innerHTML` and attaching image click/resize listeners MUST include `checking` in their dependency array (`[checking, activeTab, post.id, post.contentHtml]`), otherwise effects run during the early return when `contentRef.current` is `null` and fail to bind once auth resolves.
+  - **Direct In-Canvas Image Drag Resizing:** Images inside the editor must be directly resizable via an absolute transform overlay on the clicked `<img>` with 4 corner drag handles (`nw`, `ne`, `se`, `sw`) and a floating action pill (`Left`, `Center`, `Right`, `100%`, presets, `Delete`). Never put separate image control boxes outside the editor canvas.
+  - **Articles Catalog & Search:** Provide an "All Articles" management tab placed at the end of the editor tab hierarchy (`Content Editor` [default] → `Live Brand Preview` → `SEO & AI Quality` → `Version History` → `All Articles`) with instant live search across titles, slugs, categories, tags, and authors, segmented status filters (`All`, `Published`, `Draft`, `Scheduled`), category filtering, and 1-click `Edit` / `Preview` / `Delete` actions.
 - **Deployment Pipeline Target:**
   - Staging deliverables must be committed and pushed to `dev` branch to trigger `.github/workflows/deploy-web-staging.yml` deploying to Cloudflare Pages (`https://tracking.staging.navo24.com/`). Avoid temporary Vercel deploys for main product features.
 

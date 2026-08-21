@@ -33,13 +33,13 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
 3. **Inbound Replies vs. Mass Cold Outreach**:
    31. **Inbound Replies (1-on-1 Threading, Timestamps & Russian Translation Mandate)**:
         - **Mandatory Timestamps**: ALWAYS include the exact Date and Time the email was received (`🕒 Время получения: YYYY-MM-DD HH:MM:SS MSK/UTC`).
-        - **Mandatory Russian Translation**: ALWAYS provide Stefan with a clear Russian translation of BOTH the client's message AND Richard's proposed draft reply (e.g. 💬 **Оригинал сообщения клиента**, 🇷🇺 **Перевод сообщения клиента на русский**, ✍️ **Предлагаемый ответ от Richard Marlowe (оригинал)**, 🇷🇺 **Перевод предлагаемого ответа на русский**). Never omit translations when presenting incoming Chinese/foreign client messages.
+        - **Mandatory Russian Translation**: ALWAYS provide Stefan with a clear Russian translation of BOTH the client's message AND Richard's proposed draft reply (e.g. 💬 **Цитата сообщения клиента (оригинал)**, 🇷🇺 **Перевод сообщения клиента на русский**, ✍️ **Предлагаемый черновик ответа (Richard Marlowe)**, 🇷🇺 **Перевод черновика ответа на русский**). Never omit translations when presenting incoming Chinese/foreign client messages.
         - **Microsoft Graph API 1-on-1 Reply Workflow**:
           * Auth: OAuth Password Grant (`TENANT_ID = "dc47c5b1-313f-47eb-ab6f-5f0716f400b5"`, `CLIENT_ID = "1fec8e78-bce4-4aaf-ab1b-5451cc387264"`).
           * Replying: Call `POST /me/messages/{id}/createReply`, prepend Richard's HTML response + official signature before original body, set CCs (`stefan@navo24.com`, `lxxmng@navo24.com`), and send via `POST /me/messages/{draft_id}/send`.
           * Navo CRM Lead Logging: Automatically create/update records in Navo CRM (`appbxvl9BBaTiLMlf`) table `Leads` with fields: `Lead Title`, `Email`, `Status` (`Open`), `Source` (`Email Outreach`), `Owner` (`Richard Marlowe (AI)`), `Comments`.
         - **Strict Deduplication**: Never send duplicate notifications for the exact same email message ID (`msg_id`).
-        - **Internal M365 Bounce vs Client Bounce**: NEVER auto-delete CRM records on internal M365 outbound errors (`550 5.1.8 Bad outbound sender`). Only auto-delete records for true client non-existent mailboxes (`550 5.1.1 User unknown`).
+        - **Internal M365 Bounce vs Client Bounce**: NEVER auto-delete CRM records on internal M365 outbound errors (`550 5.1.8 Bad outbound sender` or `550 5.7.708 Tenant outbound restriction`). See `references/m365-eop-and-crm-bounce-handling.md` for self-service unblocking steps via `Diag: Outbound Email Blocked`.
         - **Thread Headers**: ALWAYS set `In-Reply-To` and `References` headers to the client's original message ID (`msg_id` / `internet_message_id`).
         - **Exact Subject Preservation**: Keep the exact original subject prefixed with `Re: ` (e.g., `Re: 来自 Navo 的初步建立联系`).
         - **Quoted History Below Signature**: Below Richard's official HTML signature, ALWAYS attach the quoted original message history (`----- Original Message -----` + client's previous text/HTML). This ensures Outlook and all mail clients group the reply into the EXACT SAME email thread/conversation rather than opening a new standalone message.
@@ -83,12 +83,20 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
      - Use ONLY the official HTML signature block (`Richard Marlowe / Connections Manager`, logo `https://bit.ly/4hLg86T`, +44 203 440 9800, 30 St Mary Axe London, `rich@navo24.com`, `www.navo24.com`).
      *(See `references/4-touch-sequence-pattern.md` for full sequence details and HTML signature templates, and `references/b2b-contract-and-kanban-rules.md` for contract drafting and Vercel Kanban UI rules.)*
    - **Mass Cold Outreach & Anti-Spam (100% Dynamic AI Personalization & High Combinatorics)**:
-     - **Mass Cold Outreach via Resend (`e.navo24.com`)**:
-       * Outbound bulk cold emails MUST be sent from `sales@e.navo24.com` via Resend REST API (`https://api.resend.com/emails`), with `Reply-To: richard@navo24.com` and RFC 8058 `List-Unsubscribe` headers.
+     - **Primary Outbound Channel Rule (User Direct Mandate)**:
+       * All primary email sending, 1-on-1 replies, and outbound communications must be sent **directly from Richard (`rich@navo24.com`)** via Microsoft Graph API / M365.
+       * Do **NOT** use `sales@e.navo24.com` / Resend for outreach or replies unless Stefan explicitly gives a direct instruction to switch.
+     - **Outbound Spam Filter Protection & Anti-Repetition Rules**:
+       * **Zero-Overlap Unique Phrasing Mandate**: When sending responses, qualification questions, or follow-ups to a batch of prospective clients, **every email must be 100% uniquely phrased (0 identical boilerplate paragraphs or questions)**. EOP heuristics flag repeated corporate blurbs across multiple outbound messages.
+       * **Cadence**: Enforce a **5-minute (300s) delay** between sends for all multi-recipient batches.
+       * **M365 Policy Replication**: After modifying Exchange Online policies via PowerShell (`Set-HostedOutboundSpamFilterPolicy`), allow **30–60 minutes for edge cluster replication** before retrying rejected recipients.
+     - **Mass Cold Outreach via Resend (`e.navo24.com`) [On Explicit User Direction Only]**:
+       * Outbound bulk cold emails MUST be sent from `sales@e.navo24.com` via Resend REST API (`https://api.resend.com/emails`), with `Reply-To: rich@navo24.com` (routes directly to Richard's active M365 inbox) and RFC 8058 `List-Unsubscribe` headers.
        * Strictly adhere to the warm-up ramp (Day 1-2: 50, Day 3-4: 150, Day 5-7: 500, Day 8-10: 1,000/day).
        *(See `references/resend-outreach-and-warmup.md` for full implementation and sending code).*
      - **NO STATIC REPETITIVE TEMPLATES**: Cold outreach MUST use 100% dynamic AI personalization with high combinatorial variety (25+ unique subject lines, 12+ greetings, 10+ intros, 12+ contexts, 12+ CTAs -> 500,000+ unique email variations). Static templates cause Microsoft Exchange Online Protection (EOP) to flag outbound spam and block sending (`550 5.1.8 Access denied, bad outbound sender AS(42004)`).
      - **Safe Sending Cadence & User Preference**: Default cold outreach interval is **5 minutes (300s)** per message (~12 emails/hour) for primary Microsoft 365 mailboxes, or **2 minutes (120s)** (~30 emails/hour) if explicitly requested by Stefan. Always respect the user's interval choice.
+     - **Qualified Leads Retry & Follow-Up Cadence**: When retrying dispatches or sending 1-on-1 qualification follow-ups to batches of interested leads after unblocking or policy changes, enforce a **5-minute (300s) delay** between each message and **100% unique text phrasing** per recipient to prevent triggering repetitive outbound content filters.
      - **Pausing & Delay Timers**: When Stefan requests a pause for N hours (e.g., "stop for 2 hours, then resume with 5 min interval"), kill the active process immediately, set the sleep script interval to 300s, and launch a background timer process (`sleep <N*3600> && PYTHONUNBUFFERED=1 python3 -u script.py >> log 2>&1 &`). Confirm exact resume time.
      - **CC Rules**: CC `lxxmng@navo24.com` & `stefan@navo24.com`. **DO NOT CC `sales@navo24.com`** on cold outreach emails.
      - **Exchange Online Distribution List Recovery**: Distribution Lists (Groups) in Exchange Online do NOT store or queue blocked messages. Once rejected, messages cannot be retroactively pulled or claimed. Use **Exchange Admin Center (`admin.exchange.microsoft.com`) -> Message Trace** filtered by `Rejected/Failed` to audit external senders and subjects that were blocked.

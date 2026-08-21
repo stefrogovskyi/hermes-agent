@@ -39,3 +39,6 @@ Use when generating comparative benchmark reports, API performance comparisons, 
 
 5. **Dynamic Sampling for Recurring Cron Benchmarks:**
    - For recurring (e.g., 48-hour) cron benchmarks, randomly sample track IDs from a master registry workbook (e.g., 20,000-row dataset) to maintain fresh, un-cached API test coverage across lines.
+
+## Reference Documentation
+- For exact SeaRates v3 endpoint parameters, query structures, and response error codes, see `references/searates_container_tracking_api.md`.

@@ -4,7 +4,7 @@
 - **Sending Service**: Resend REST API (`https://api.resend.com/emails`)
 - **Verified Subdomain**: `e.navo24.com` (AWS us-east-1 / Resend verified)
 - **Sender Address (`from`)**: `Richard <sales@e.navo24.com>` (or `sales@e.navo24.com`)
-- **Reply Address (`reply_to`)**: `richard@navo24.com` (or `rich@navo24.com` -> routes directly to Richard's Outlook inbox)
+- **Reply Address (`reply_to`)**: `rich@navo24.com` (MUST route directly to Richard's active M365 mailbox `rich@navo24.com` — do not use `richard@navo24.com` unless alias is specifically verified in Exchange Online)
 - **Root Domain Protection**: Root `navo24.com` has DMARC `p=reject` and M365 email. Using `@navo24.com` for bulk cold outreach triggers `550 5.1.8 Bad outbound sender`. Bulk cold sending MUST ALWAYS go through `e.navo24.com` via Resend.
 
 ## 2. Mandatory Headers (RFC 8058 / Gmail & Yahoo Bulk Sender Compliance)

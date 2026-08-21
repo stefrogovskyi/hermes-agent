@@ -107,10 +107,30 @@ Use when configuring or troubleshooting multi-profile Hermes Agent instances run
     - **Linux Dynamic Paths in Cron Scripts:** Never hardcode Windows paths (e.g., `C:\Users\Stefan\...`) in scripts executed by cron jobs on Linux servers. Always use `HERMES_HOME = os.environ.get("HERMES_HOME", "/opt/hermes")` and `os.path.join(HERMES_HOME, "cache")` to avoid `FileNotFoundError` during automated background executions.
 
 1.1. **Creating a New Agent Profile Step-by-Step:**
-   - Create profile: `hermes profile create <profile_name> --clone-from default --description "<Description>"`
+   - Create profile directory structure: `/opt/hermes/profiles/<name>/{memories,skills,platforms/pairing}`.
    - Configure `.env`: set `TELEGRAM_BOT_TOKEN` for the new bot and mirror all master API keys from `/opt/hermes/.env`.
-   - Configure `SOUL.md` & `AGENTS.md`: define persona, role, company context, and strict domain boundary.
-   - Pre-approve Telegram user: write `/opt/hermes/profiles/<profile_name>/platforms/pairing/telegram-approved.json` with user Telegram ID (e.g. `330656040`) to bypass manual pairing code prompts.
+   - Configure `SOUL.md` & `AGENTS.md`: define persona, role, company context, and strict domain boundaries.
+   - **Pre-approve Telegram user & RBAC Security:**
+     - Write `/opt/hermes/profiles/<name>/platforms/pairing/telegram-approved.json` with owner Telegram ID (`330656040`).
+     - In `config.yaml`, configure explicit RBAC to prevent unauthorized users from hijacking Home Chat or administrative commands:
+       ```yaml
+       platforms:
+         telegram:
+           enabled: true
+           require_mention: true
+           home_channel:
+             platform: telegram
+             chat_id: "330656040"
+           allow_admin_from:
+             - "330656040"
+           allow_from:
+             - "*"
+           group_allow_from:
+             - "*"
+       ```
+     - In `SOUL.md`, explicitly define the single owner/lead to prevent social engineering / prompt injection aiming to alter agent configuration.
+   - **Sync profile metadata to Windows Desktop app across Tailscale:**
+     - Copy `SOUL.md`, `AGENTS.md`, `config.yaml`, and `memories/` to `%LOCALAPPDATA%\hermes\profiles\<name>\` on the workstation (`desktop-mst5pt7` / `100.79.157.46`).
    - Systemd unit `/etc/systemd/system/hermes-<profile_name>.service`:
      ```ini
      [Unit]

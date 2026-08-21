@@ -1,154 +1,73 @@
 _config_version: 33
 approvals:
-  mode: auto
+  mode: manual
 auto_tts: false
 command_allowlist:
-- write_file
-- execute_code
-- python3 /root/cn_ff_1_outreach.py
-- cat << 'EOF' > /root/cn_ff_1_outreach.py
-- delete in root path
-- script execution via -e/-c flag
+  - write_file
+  - execute_code
+  - python3 /root/cn_ff_1_outreach.py
+  - cat << 'EOF' > /root/cn_ff_1_outreach.py
+  - delete in root path
+  - script execution via -e/-c flag
 compression:
   enabled: true
-  target_ratio: 0.1
-  threshold: 0.2
+  target_ratio: 0.15
+  threshold: 0.15
 display:
   busy_input_mode: steer
   interim_assistant_messages: false
   streaming: true
   streaming_throttle_ms: 1000
   tool_progress: none
-fallback:
-- model: google/gemini-2.5-flash
-  provider: google
-- model: google/gemini-1.5-flash
-  provider: google
-- model: minimax-m2.7
-  provider: gonka24
-- model: kimi-k2.6
-  provider: gonka24
-- model: gpt-4o-mini
-  provider: openai
-fallback_providers:
-- model: google/gemini-2.5-flash
-  provider: google
-- model: gpt-4o-mini
-  provider: openai
-- model: gpt-4o
-  provider: openai
-- model: google/gemini-2.5-flash
-  provider: openrouter
-- model: nvidia/nemotron-3.5-lightning:free
-  provider: openrouter
-- model: google/gemma-4-31b-it:free
-  provider: openrouter
-- model: google/gemma-4-26b-a4b-it:free
-  provider: openrouter
-- model: poolside/laguna-s-2.1:free
-  provider: openrouter
-- model: cohere/north-mini-code:free
-  provider: openrouter
-- model: nvidia/nemotron-3-nano-30b-a3b:free
-  provider: openrouter
-- model: nvidia/nemotron-3-super-120b-a12b:free
-  provider: openrouter
-- model: nvidia/nemotron-nano-12b-v2-vl:free
-  provider: openrouter
-- model: openai/gpt-oss-20b:free
-  provider: openrouter
-- model: minimax-m2.7
-  provider: gonka24
-- model: kimi-k2.6
-  provider: gonka24
-- model: nvidia/nemotron-3.5-lightning-30b-a3b
-  provider: nvidia
-- model: nvidia/llama-3.3-nemotron-super-49b-v1.5
-  provider: nvidia
-- model: nvidia/nemotron-3-super-120b-a12b
-  provider: nvidia
-- model: nvidia/nemotron-mini-4b-instruct
-  provider: nvidia
-- model: meta/llama-3.1-8b-instruct
-  provider: nvidia
 model:
   default: google/gemini-3.7-flash
   max_retries: 2
   provider: google
-  providers:
-    gonka24:
-      api_key_env: GONKA24_API_KEY
-      base_url: https://api.gonka24.com/v1
-      models:
-      - minimax-m2.7
-      - kimi-k2.6
   request_timeout_seconds: 30
-  retry_delay_seconds: 1
+fallback_providers:
+  - model: poolside/laguna-s-2.1:free
+    provider: nous
+  - model: nvidia/nemotron-3-ultra-550b-a55b:free
+    provider: openrouter
+  - model: nvidia/nemotron-3-super-120b-a12b:free
+    provider: openrouter
+  - model: google/gemma-4-31b-it:free
+    provider: openrouter
+  - model: google/gemma-4-26b-a4b-it:free
+    provider: openrouter
+  - model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
+    provider: openrouter
+  - model: cohere/north-mini-code:free
+    provider: openrouter
+  - model: openai/gpt-oss-20b:free
+    provider: openrouter
+  - model: inclusionai/ling-3.0-flash:free
+    provider: openrouter
+  - model: nvidia/nemotron-nano-12b-v2-vl:free
+    provider: openrouter
+  - model: nvidia/nemotron-3-nano-30b-a3b:free
+    provider: openrouter
+  - model: nvidia/nemotron-nano-9b-v2:free
+    provider: openrouter
+  - model: nvidia/nemotron-3.5-lightning-30b-a3b
+    provider: nvidia
+  - model: minimax-m2.7
+    provider: gonka24
+  - model: kimi-k2.6
+    provider: gonka24
+  - model: gpt-4o-mini
+    provider: openai
+  - model: gpt-4o
+    provider: openai
+request_timeout_seconds: 30
+platforms:
+  telegram:
+    enabled: true
+    require_mention: true
+    allow_from:
+      - '330656040'
+    group_allow_from:
+      - '*'
 onboarding:
   seen:
     busy_input_prompt: true
-    profile_build_offered: true
-platforms:
-  telegram:
-    aliases:
-    - richard
-    - ричард
-    - ричарда
-    - ричарду
-    - ричардом
-    - ричарде
-    - рич
-    - richard marlowe
-    - '@richnavobot'
-    group_response_mode: mention
-provider: google
-providers:
-  gonka24:
-    request_timeout_seconds: 25
-  google:
-    request_timeout_seconds: 30
-  nous:
-    request_timeout_seconds: 30
-  nvidia:
-    request_timeout_seconds: 20
-  openai:
-    request_timeout_seconds: 30
-  openrouter:
-    request_timeout_seconds: 25
-request_timeout_seconds: 15
-streaming:
-  enabled: true
-system_prompt_append: 'You are Richard Marlowe, Senior AI Sales Agent at Navo (@richnavobot).
-
-  You speak in a confident, professional, high-converting B2B sales tone.
-
-  You are an expert on Navo IT Products & MCP APIs (TrackingMCP, SchedulesMCP, AirCargoMCP,
-  LoadingMCP, FreightRatesMCP).
-
-  You run on the full-scale autonomous Hermes Agent core. You handle client inquiries,
-  calculate pricing, generate quotes, and manage deal pipelines autonomously.
-
-  '
-telegram:
-  bot_token: 8846249306:AAE7qkGYcY-q3pbPE-Ikuger7MFHylRb9Sc
-  enabled: true
-  group_response_mode: mention
-  group_trigger_keywords:
-  - Ричард
-  - Ричарда
-  - Ричарду
-  - Ричардом
-  - Ричарде
-  - Рич
-  - Ричи
-  - Richard
-  - Richard Marlowe
-  - Richard's
-  require_mention: true
-  respond_to_dms: true
-  stream_update_interval_ms: 2500
-tools:
-  disabled:
-  - cronjob
-  - skill_manage
-voice: echo
