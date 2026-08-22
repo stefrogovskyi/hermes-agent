@@ -17,9 +17,14 @@ metadata:
 Use when configuring or troubleshooting multi-profile Hermes Agent instances running as systemd background services on Linux servers, or setting up Git workspace synchronization.
 
 - `references/vercel-surge-kanban-sync.md` — Detailed guide for Vercel/Surge CLI deployments, `localStorage` + API dual persistence for Kanban boards, and `notranslate` headers to prevent Japanese auto-translation glitches.
+- `references/telegram-rbac-and-owner-protection.md` — Gating `home_channel`, `allow_admin_from`, preventing "Set Home Chat" hijack, and native YAML list formatting for `allow_from`.
 - `references/troubleshooting.md` — Diagnostic steps for gateway logs and systemd services.
 - `references/ai-copywriting-style-priming.md` — Guide on Few-Shot Human Style Priming vs. abstract rules for AI copywriting.
 - `references/agentos-and-openclaw-deployment.md` — Complete deployment, systemd daemons, Telegram channel integration, and Admin-gated Hostinger setup for AgentOS (`aavalanche.com/agentos/`) and OpenClaw (`:18789`).
+- `references/telegram_security_and_rbac.md` — Guide for Telegram RBAC, owner lock down, preventing 'Set Home Chat' hijacking, and unblocking GitHub secret scanning.
+- `references/telegram_rbac_and_secret_protection.md` — Multi-user RBAC, Telegram Home Channel lock, native YAML allow_from formatting, and GitHub secret-scanning unblock workflows.
+- `references/access-control-and-framework-bridging.md` — Multi-profile access control, GitHub push protection, and native framework deployment patterns (Aeon GitHub Actions).
+- `references/multi_profile_rbac_and_serverless_bridging.md` — Multi-profile Telegram RBAC governance, Owner isolation, context auto-compression safeguards, and Serverless/Aeon bridge architectures.
 
 ### 17. GitHub Push Protection & Secret Scanning Unblock Pattern
 - **Push Protection Block (GH013):** GitHub blocks `git push` if historical commits or tracked markdown files contain strings resembling API keys (Airtable PAT, Vercel tokens, Google Secrets), even on private/personal repos.

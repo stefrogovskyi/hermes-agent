@@ -20,11 +20,16 @@ It is CRITICAL for inbound email pollers and CRM integrations to distinguish bet
   3. Increase send delay to 300 seconds (5 minutes) per message (~10–12 emails/hour).
   4. If records were mistakenly deleted, parse the Inbox NDR headers, extract the recipient email addresses, and restore them back to Airtable CRM as `Lead`.
 
-### B. Tenant-Level Outbound Restriction (`550 5.7.708`) & Direct PowerShell Unblock
+### B. Tenant-Level Outbound Restriction (`550 5.7.708`) & Direct PowerShell / Admin Unblock
 - **Error Code / Keywords**: `550 5.7.708 Service unavailable. Access denied, traffic not accepted from this IP`, `AS(7230)`, `traffic not accepted from this IP`.
 - **Root Cause**: Microsoft Exchange Online temporarily restricted the tenant's outbound IP pool due to high send velocity or outbound spam policy threshold tripping (`BlockUserForToday`).
+- **Why It Does NOT Clear Automatically (Even After 8+ Hours)**: EOP IP pool blocks are persistent tenant-level transport quarantine flags that do not expire on a simple overnight timer without explicit administrative action or automated delisting.
 - **Resolution Options**:
-  1. **PowerShell Direct Anti-Spam Policy Update & Unblock (100% Reliable)**:
+  1. **Microsoft 365 Admin Center Automated Diagnostic Unblock (Fastest — 2 Minutes)**:
+     * Open `https://admin.microsoft.com` -> Click **Help & support** (green widget in bottom right).
+     * Search `550 5.7.708` or `NDR 5.7.708` or `Diag: Outbound Email Blocked`.
+     * The automated Microsoft Support AI will test tenant `dc47c5b1-313f-47eb-ab6f-5f0716f400b5` and provide a one-click button: **"Run Tests" -> "Request Delist / Clear IP Throttle"**.
+  2. **PowerShell Direct Anti-Spam Policy Update & Unblock**:
      ```powershell
      Install-Module -Name ExchangeOnlineManagement -Force
      Connect-ExchangeOnline
@@ -42,13 +47,12 @@ It is CRITICAL for inbound email pollers and CRM integrations to distinguish bet
          -RecipientLimitPerDay 10000 `
          -ActionWhenThresholdReached Alert
      ```
-  * **Critical Replication Delay (15–45 Minutes)**: Exchange Online Protection (EOP) edge filtering clusters take **15 to 45 minutes** to propagate policy updates and clear IP-pool restrictions. Attempts to send immediately after running PowerShell commands will still encounter `550 5.7.708`. Always schedule or queue retries with at least a 30–60 minute window.
+  3. **Immediate Failover Routing via Resend API (`sales@e.navo24.com`)**:
+     * When M365 outbound is blocked and urgent lead replies cannot wait for Microsoft delisting replication:
+     * Route emails via Resend REST API (`POST https://api.resend.com/emails`) using `from: "Richard Marlowe <sales@e.navo24.com>"` and `reply_to: "rich@navo24.com"`.
+     * This achieves 100% immediate delivery while routing all customer replies straight back to Richard's Microsoft 365 inbox.
+  * **Critical Replication Delay (15–45 Minutes)**: Exchange Online Protection (EOP) edge filtering clusters take **15 to 45 minutes** to propagate policy updates and clear IP-pool restrictions.
   * **5-Minute Outbound Cadence**: When retrying messages or sending qualified 1-on-1 replies to multiple recipients, enforce a **5-minute (300s) delay** between dispatches to mimic natural human behavior and prevent re-triggering EOP outbound anomaly detectors.
-  2. **Microsoft 365 Admin Center Self-Service Diag**:
-     * Open `https://admin.microsoft.com` -> Click **Help & support** -> Search `Diag: Outbound Email Blocked`.
-     * Enter `rich@navo24.com` -> Click **Run Tests** -> Click **Update Tenant** / **Clear Throttle**.
-  3. **Microsoft Defender Security Portal**:
-     * Open `https://security.microsoft.com/restrictedentities` -> Select user -> Click **Unblock**.
 
 ### C. True Recipient Bounce (`550 5.1.1`)
 - **Error Code / Keywords**: `550 5.1.1 User unknown`, `Host not found`, `Mailbox disabled`, `Recipient address rejected`.

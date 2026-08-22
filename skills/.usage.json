@@ -110,14 +110,14 @@
     "created_by": "agent",
     "last_patched_at": "2026-08-17T16:11:54.746860+00:00",
     "last_reused_patch_generation": 11,
-    "last_used_at": "2026-08-17T20:28:11.719735+00:00",
-    "last_viewed_at": "2026-08-17T20:28:11.716247+00:00",
+    "last_used_at": "2026-08-21T06:01:39.357395+00:00",
+    "last_viewed_at": "2026-08-21T06:01:39.354053+00:00",
     "patch_count": 11,
     "patch_generation": 11,
     "pinned": false,
     "state": "active",
-    "use_count": 10,
-    "view_count": 10
+    "use_count": 11,
+    "view_count": 11
   },
   "autonomous-ai-agents:multi-profile-server-setup": {
     "archived_at": null,
@@ -770,14 +770,14 @@
     "created_by": null,
     "last_patched_at": null,
     "last_reused_patch_generation": 0,
-    "last_used_at": "2026-08-20T03:00:21.098351+00:00",
-    "last_viewed_at": "2026-08-16T02:00:49.943791+00:00",
+    "last_used_at": "2026-08-21T03:00:36.243565+00:00",
+    "last_viewed_at": "2026-08-21T03:00:36.240549+00:00",
     "patch_count": 0,
     "patch_generation": 0,
     "pinned": false,
     "state": "active",
-    "use_count": 20,
-    "view_count": 2
+    "use_count": 23,
+    "view_count": 3
   },
   "merge-reconciler": {
     "archived_at": null,
@@ -813,16 +813,16 @@
     "archived_at": null,
     "created_at": "2026-08-10T10:16:20.656831+00:00",
     "created_by": "agent",
-    "last_patched_at": "2026-08-20T18:47:05.410869+00:00",
-    "last_reused_patch_generation": 54,
-    "last_used_at": "2026-08-20T18:47:02.446576+00:00",
-    "last_viewed_at": "2026-08-20T18:47:02.442506+00:00",
-    "patch_count": 55,
-    "patch_generation": 55,
+    "last_patched_at": "2026-08-21T22:47:51.917326+00:00",
+    "last_reused_patch_generation": 64,
+    "last_used_at": "2026-08-21T22:47:50.027099+00:00",
+    "last_viewed_at": "2026-08-21T22:47:50.023871+00:00",
+    "patch_count": 65,
+    "patch_generation": 65,
     "pinned": false,
     "state": "active",
-    "use_count": 64,
-    "view_count": 64
+    "use_count": 69,
+    "view_count": 69
   },
   "nano-pdf": {
     "archived_at": null,

@@ -224,6 +224,14 @@ if (isset($_GET['api'])) {
               </div>
               <span class="text-[9px] text-gray-400 font-mono">Legal</span>
             </button>
+
+            <button onclick="selectAgent('aeon')" id="agent-aeon" class="agent-nav-btn w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs text-gray-400 hover:bg-dark-800 hover:text-white transition">
+              <div class="flex items-center space-x-2">
+                <i data-lucide="cpu" class="w-3.5 h-3.5 text-cyan-400"></i>
+                <span class="truncate">Aeon Stevenson</span>
+              </div>
+              <span class="text-[9px] text-gray-400 font-mono">Autonomous</span>
+            </button>
           </div>
         </div>
 
@@ -453,6 +461,7 @@ if (isset($_GET['api'])) {
       liz: { name: 'Liz Harper', role: 'Executive Assistant', category: 'Autonomous Agent', badge: 'Operations' },
       ben: { name: 'Ben', role: 'Operations Specialist', category: 'Autonomous Agent', badge: 'Logistics' },
       harrison: { name: 'Harrison Croft', role: 'General Legal Counsel & Compliance', category: 'Autonomous Agent', badge: 'Legal & Maritime' },
+      aeon: { name: 'Aeon Stevenson', role: 'Autonomous Harness & Self-Healing Lead (@aeondeskbot)', category: 'Autonomous Agent', badge: 'Aeon Framework' },
       career_scanner: { name: 'Career Scanner v2', role: '11 Verified APIs + Workday + Oracle', category: 'Feeds & Ingress', badge: 'Daily 09:00 MSK' },
       odessa_router: { name: 'Odessa Safe Router', role: 'Telethon Closed TG Group Ingress', category: 'Safety Feeds', badge: 'Session Active' }
     };

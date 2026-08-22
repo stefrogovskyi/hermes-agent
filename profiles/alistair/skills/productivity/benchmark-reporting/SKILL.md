@@ -40,5 +40,9 @@ Use when generating comparative benchmark reports, API performance comparisons, 
 5. **Dynamic Sampling for Recurring Cron Benchmarks:**
    - For recurring (e.g., 48-hour) cron benchmarks, randomly sample track IDs from a master registry workbook (e.g., 20,000-row dataset) to maintain fresh, un-cached API test coverage across lines.
 
+6. **Strict Alignment Between Message Caption and Report Content:**
+   - Never hardcode optimistic statuses (e.g. `LIVE & ACTIVE`, default remaining quota numbers) in message summaries or caption templates as fallbacks.
+   - If an API returns an error, auth failure (e.g. `API_KEY_WRONG`), or empty payload, the delivery caption must directly and truthfully report the exact error status (`❌ SeaRates API Status: ERROR (API_KEY_WRONG)`), remaining 100% consistent with the generated `.xlsx` report.
+
 ## Reference Documentation
 - For exact SeaRates v3 endpoint parameters, query structures, and response error codes, see `references/searates_container_tracking_api.md`.

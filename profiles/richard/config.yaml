@@ -3,12 +3,12 @@ approvals:
   mode: manual
 auto_tts: false
 command_allowlist:
-  - write_file
-  - execute_code
-  - python3 /root/cn_ff_1_outreach.py
-  - cat << 'EOF' > /root/cn_ff_1_outreach.py
-  - delete in root path
-  - script execution via -e/-c flag
+- write_file
+- execute_code
+- python3 /root/cn_ff_1_outreach.py
+- cat << 'EOF' > /root/cn_ff_1_outreach.py
+- delete in root path
+- script execution via -e/-c flag
 compression:
   enabled: true
   target_ratio: 0.15
@@ -19,55 +19,57 @@ display:
   streaming: true
   streaming_throttle_ms: 1000
   tool_progress: none
+fallback_providers:
+- model: stealth/ox-alpha
+  provider: openrouter
+- model: poolside/laguna-s-2.1:free
+  provider: nous
+- model: nvidia/nemotron-3-ultra-550b-a55b:free
+  provider: openrouter
+- model: nvidia/nemotron-3-super-120b-a12b:free
+  provider: openrouter
+- model: google/gemma-4-31b-it:free
+  provider: openrouter
+- model: google/gemma-4-26b-a4b-it:free
+  provider: openrouter
+- model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
+  provider: openrouter
+- model: cohere/north-mini-code:free
+  provider: openrouter
+- model: openai/gpt-oss-20b:free
+  provider: openrouter
+- model: inclusionai/ling-3.0-flash:free
+  provider: openrouter
+- model: nvidia/nemotron-nano-12b-v2-vl:free
+  provider: openrouter
+- model: nvidia/nemotron-3-nano-30b-a3b:free
+  provider: openrouter
+- model: nvidia/nemotron-nano-9b-v2:free
+  provider: openrouter
+- model: nvidia/nemotron-3.5-lightning-30b-a3b
+  provider: nvidia
+- model: minimax-m2.7
+  provider: gonka24
+- model: kimi-k2.6
+  provider: gonka24
+- model: gpt-4o-mini
+  provider: openai
+- model: gpt-4o
+  provider: openai
 model:
   default: google/gemini-3.7-flash
   max_retries: 2
   provider: google
   request_timeout_seconds: 30
-fallback_providers:
-  - model: poolside/laguna-s-2.1:free
-    provider: nous
-  - model: nvidia/nemotron-3-ultra-550b-a55b:free
-    provider: openrouter
-  - model: nvidia/nemotron-3-super-120b-a12b:free
-    provider: openrouter
-  - model: google/gemma-4-31b-it:free
-    provider: openrouter
-  - model: google/gemma-4-26b-a4b-it:free
-    provider: openrouter
-  - model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
-    provider: openrouter
-  - model: cohere/north-mini-code:free
-    provider: openrouter
-  - model: openai/gpt-oss-20b:free
-    provider: openrouter
-  - model: inclusionai/ling-3.0-flash:free
-    provider: openrouter
-  - model: nvidia/nemotron-nano-12b-v2-vl:free
-    provider: openrouter
-  - model: nvidia/nemotron-3-nano-30b-a3b:free
-    provider: openrouter
-  - model: nvidia/nemotron-nano-9b-v2:free
-    provider: openrouter
-  - model: nvidia/nemotron-3.5-lightning-30b-a3b
-    provider: nvidia
-  - model: minimax-m2.7
-    provider: gonka24
-  - model: kimi-k2.6
-    provider: gonka24
-  - model: gpt-4o-mini
-    provider: openai
-  - model: gpt-4o
-    provider: openai
-request_timeout_seconds: 30
-platforms:
-  telegram:
-    enabled: true
-    require_mention: true
-    allow_from:
-      - '330656040'
-    group_allow_from:
-      - '*'
 onboarding:
   seen:
     busy_input_prompt: true
+platforms:
+  telegram:
+    allow_from:
+    - '330656040'
+    enabled: true
+    group_allow_from:
+    - '*'
+    require_mention: true
+request_timeout_seconds: 30

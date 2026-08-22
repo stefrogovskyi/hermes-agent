@@ -11,6 +11,7 @@
 
 ## Cases
 | Дата | Тема | Файл | Ключевой урок |
+| 2026-08-21 | Callum & Ben Frontend Deployments, SPA Routing & Enterprise AI Sales Showcase | cases/2026-08-21_callum_ben_frontend_routing_and_ai_sales_agent.md | Callum: 5-я вкладка поиска статей в блог-редакторе, рендеринг иконок и SPA-роутинг без 404 на staging; Ben: деплой промо-блока AI Sales Agent на Hostinger и стилизация меню. |
 | 2026-08-19 | AgentOS Mission Control Upgrade & Kanban Unification | cases/2026-08-19_agentos_mission_control_upgrade_and_kanban_unification.md | Все 6 канбанов размещены на Vercel (`https://<agent>-kanban.vercel.app`), иконка Канбан исправлена на Lucide `kanban`, `server.py` использует `ReusableTCPServer`. |
 | 2026-08-19 | Git Autosync & GitHub Push Protection Fix | cases/2026-08-19_git_autosync_github_push_protection_bypass.md | GitHub Push Protection блокирует пуш при обнаружении секретов в истории коммитов; расписание крона обновлено на `0 0 * * *` (03:00 Киев). |
 | 2026-08-19 | Firecrawl PDF Inspector Skill Integration | cases/2026-08-19_firecrawl_pdf_inspector_skill_integration.md | Подключена библиотека Firecrawl `pdf-inspector` для классификации и OCR PDF; создан CLI обертка `pdf_inspect_cli.py` и скилл `productivity/pdf-inspector`. |

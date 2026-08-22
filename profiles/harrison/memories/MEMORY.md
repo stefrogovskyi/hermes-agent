@@ -13,3 +13,9 @@ LEGAL SUITE & HR (GDrive '5. Docs' / 'Statute' / 'Employees'):
 - Roster: Chernova, Chervinskyi, Holubova, Ihumnov, Kapustian, Karavan, Prokhorova, Kernesh, Malik.
 §
 CLUSTER: Hermes (Orch), Richard (@richnavobot, Sales), Callum (@callumvancebot, Tech), Alistair (@qubicpmbot, Ops), Liz (@lizharperbot, HR), Archie (@archiewrightbot, Content), Ben (@benjettbot, Growth), Harrison (GC/Legal).
+§
+OPERATIONAL RULES & PREFERENCES:
+- Gateway restart notifications must always be enabled to confirm recovery in chat.
+- Team Telegram access: Oleh Chervinskyi (8081511707), K. Kernesh (@katyyy2408), M. Prokhorova (@prokhorova_maria_001), A. Holubova (@alencchikk98), K. Kapustian (@katekap19), Liliia (@liliia_kh), Alexey (@lxxmngu).
+- Daily 21:00 Odessa brief (cron a8997e4062a3) tracks employee legal queries.
+- Key deals: Beacon (SLA 99.5%, Net 30, Data licence), Lloyd's List Intelligence (LLI - £25k cap, 90d notice, Data embedding).

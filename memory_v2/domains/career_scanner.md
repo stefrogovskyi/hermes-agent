@@ -10,3 +10,9 @@
 
 ## Inspection Strategy
 - Scan both official company career portals (ATS / career websites) and LinkedIn job boards daily at 09:00 UTC.
+
+## Execution & Data Integrity Rule
+- Strictly use scraped job postings from official APIs (Greenhouse/Ashby/Workday/SmartRecruiters/Comeet/WP-REST/Oracle HCM/DOU RSS).
+- NEVER fabricate job vacancies, company names, links, or match scores ("99% Match").
+- Every URL must be copied byte-for-byte from API output.
+- If a source fails or is blocked (⚠️ in script output), report it transparently in the final digest.

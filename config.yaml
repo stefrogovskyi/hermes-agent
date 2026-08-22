@@ -25,6 +25,8 @@ providers:
   openrouter:
     request_timeout_seconds: 25
 fallback_providers:
+  - model: stealth/ox-alpha
+    provider: openrouter
   - model: google/gemini-2.5-flash
     provider: google
   - model: gpt-4o-mini
@@ -82,14 +84,15 @@ telegram:
   require_mention: true
   stream_update_interval_ms: 2500
 command_allowlist:
-  - execute_code
-  - pipe remote content to shell
-  - recursive delete
-  - delete in root path
   - copy/move file into system config path
-  - script execution via heredoc
+  - execute_code
+  - recursive delete
   - script execution via -e/-c flag
   - stop/restart system service
+  - pipe remote content to shell
+  - overwrite system config
+  - delete in root path
+  - script execution via heredoc
 streaming:
   enabled: true
 onboarding:

@@ -14,6 +14,8 @@ display:
   streaming: true
   tool_progress: all
 fallback_providers:
+- model: stealth/ox-alpha
+  provider: openrouter
 - model: google/gemini-2.5-flash
   provider: google
 - model: gpt-4o-mini
