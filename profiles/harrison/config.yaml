@@ -43,11 +43,7 @@ compression:
   threshold: 0.25
   target_ratio: 0.15
 command_allowlist:
-  - command parser limit or malformed executable payload
   - script execution via -e/-c flag
-onboarding:
-  seen:
-    busy_input_prompt: true
 _config_version: 34
 owner_id: '330656040'
 platforms:
@@ -59,13 +55,8 @@ platforms:
       chat_id: '330656040'
     allow_admin_from:
       - '330656040'
-    allow_from: '["330656040", "8081511707", "1022586369", "593209837", "149598904",
-      "@katyyy2408", "@prokhorova_maria_001", "@alencchikk98", "@katekap19", "@liliia_kh",
-      "@lxxmngu", "@OlehChervinskyi"]'
     group_allow_from:
       - '*'
-    user_allowed_commands: '["start", "help", "reset", "clear", "new", "status", "whoami",
-      "session"]'
 request_timeout_seconds: 30
 
 # ── Security ──────────────────────────────────────────────────────────

@@ -14,8 +14,11 @@ LEGAL SUITE & HR (GDrive '5. Docs' / 'Statute' / 'Employees'):
 §
 CLUSTER: Hermes (Orch), Richard (@richnavobot, Sales), Callum (@callumvancebot, Tech), Alistair (@qubicpmbot, Ops), Liz (@lizharperbot, HR), Archie (@archiewrightbot, Content), Ben (@benjettbot, Growth), Harrison (GC/Legal).
 §
-OPERATIONAL RULES & PREFERENCES:
-- Gateway restart notifications must always be enabled to confirm recovery in chat.
-- Team Telegram access: Oleh Chervinskyi (8081511707), K. Kernesh (@katyyy2408), M. Prokhorova (@prokhorova_maria_001), A. Holubova (@alencchikk98), K. Kapustian (@katekap19), Liliia (@liliia_kh), Alexey (@lxxmngu).
-- Daily 21:00 Odessa brief (cron a8997e4062a3) tracks employee legal queries.
-- Key deals: Beacon (SLA 99.5%, Net 30, Data licence), Lloyd's List Intelligence (LLI - £25k cap, 90d notice, Data embedding).
+DEALS & COMMS:
+- Daily 21:00 Odessa brief (a8997e4062a3) logs team legal queries.
+- Key deals: Beacon (SLA 99.5%, Net 30, Data licence), LLI (Lloyds - £25k cap, 90d notice, Data embedding).
+- Authorized team: Stefan (330656040), Alexey (1022586369), Oleg (8081511707), Katya K. (149598904), M. Prokhorova, A. Holubova, K. Kapustian, Liliia.
+§
+GRANTS & FUNDING ENGINE (cron 678be6e4b9fc @ 09:00):
+- Scope: Global G20 non-dilutive. EU (Horizon/FSTP), UK (Innovate UK), US (NSF/DOT), Singapore (MPA MINT Fund), Canada (IRAP), Australia, Japan (JETRO/MLIT), Qatar (QRDI), UAE (Hub71).
+- Protocols: Auto-filing for open forms; 1-click pack for 2FA/Director sign. Submission reports + auto-sync to Google Sheet. Outreach: contact@navo24.com (Harrison Croft).

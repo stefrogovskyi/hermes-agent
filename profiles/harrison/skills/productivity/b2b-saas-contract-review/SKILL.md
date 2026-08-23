@@ -41,6 +41,7 @@ Instead of amending public baseline Terms of Service (which triggers version con
 | **Payment Terms** | Extend payment from 10 days to Net 30 from receipt of invoice | **LOW** | Accept Net 30 from date of receipt of valid VAT invoice. |
 | **SLA & Uptime** | Demand availability commitment and penalties | **MEDIUM** | Offer 99.5% Monthly Uptime Target. **Exclude upstream third-party/carrier downtime**, planned maintenance, and Force Majeure. |
 | **Data Quality / Accuracy** | Request warranties on external raw data feeds | **HIGH** | Exclude strict accuracy warranties for third-party/carrier feeds. Commit to reasonable diligence in connector maintenance and multi-source failover. |
+| **Enterprise Procurement / Supplier Terms** | Customer insists on incorporating their standard Supplier / Purchase Terms | **CRITICAL** | **Never concede full precedence.** Supplier terms designed for procurement/consulting impose unlimited liability and breach warranties on third-party carrier data. **Solution:** Accept compliance clauses (Bribery, Modern Slavery, Sanctions, GDPR) in an Annex, but keep SaaS Special Conditions prevailing for all IP, liability, and data delivery terms. |
 
 ### 3. SLA & Support Incident Classification Standard
 

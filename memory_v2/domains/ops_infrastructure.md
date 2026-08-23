@@ -10,3 +10,8 @@
 - Account session: `@stefrogovskiy` (`/opt/hermes/stefan_userbot.session`).
 - Active parsing targets: Channel "Не повредит, Одесса" with precise timestamps (HH:MM).
 - Safe auth method: Direct `.session` file import without interactive SMS/OTP codes in chat.
+
+## Aeon Stevenson Framework (@aeondeskbot)
+- Host/Engine: Native Aeon (`stefrogovskyi/aeon`) running in GitHub Actions cloud runners (Serverless / Cron Polling).
+- Purpose: Background task automation, CI/CD skill execution (`/run <skill>`), self-healing scripts, auto-reviewing PRs.
+- Telegram Commands: `/status`, `/harness`, `/run <skill>`, `/cancel`.
