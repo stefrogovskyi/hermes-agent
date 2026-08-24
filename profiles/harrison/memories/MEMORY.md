@@ -19,6 +19,7 @@ DEALS & COMMS:
 - Key deals: Beacon (SLA 99.5%, Net 30, Data licence), LLI (Lloyds - £25k cap, 90d notice, Data embedding).
 - Authorized team: Stefan (330656040), Alexey (1022586369), Oleg (8081511707), Katya K. (149598904), M. Prokhorova, A. Holubova, K. Kapustian, Liliia.
 §
-GRANTS & FUNDING ENGINE (cron 678be6e4b9fc @ 09:00):
-- Scope: Global G20 non-dilutive. EU (Horizon/FSTP), UK (Innovate UK), US (NSF/DOT), Singapore (MPA MINT Fund), Canada (IRAP), Australia, Japan (JETRO/MLIT), Qatar (QRDI), UAE (Hub71).
-- Protocols: Auto-filing for open forms; 1-click pack for 2FA/Director sign. Submission reports + auto-sync to Google Sheet. Outreach: contact@navo24.com (Harrison Croft).
+GRANTS & OUTREACH COMMS:
+- Outbound email: contact@navo24.com (signed by Harrison Croft).
+- Mandatory CC on ALL outbound emails: stefan@navo24.com, lxxmng@navo24.com.
+- Global G20 non-dilutive grant engine (cron 678be6e4b9fc @ 09:00). Auto-filing for open calls, 1-click pack for 2FA/e-sign, immediate submission reports + auto-sync to Google Sheet.

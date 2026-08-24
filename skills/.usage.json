@@ -619,15 +619,15 @@
     "created_at": "2026-08-17T14:53:38.760416+00:00",
     "created_by": "agent",
     "last_patched_at": "2026-08-17T14:54:00.037276+00:00",
-    "last_reused_patch_generation": 0,
-    "last_used_at": "2026-08-17T14:53:53.160675+00:00",
-    "last_viewed_at": "2026-08-17T14:53:53.156847+00:00",
+    "last_reused_patch_generation": 1,
+    "last_used_at": "2026-08-23T07:00:08.091390+00:00",
+    "last_viewed_at": "2026-08-23T07:00:08.084423+00:00",
     "patch_count": 1,
     "patch_generation": 1,
     "pinned": false,
     "state": "active",
-    "use_count": 1,
-    "view_count": 1
+    "use_count": 2,
+    "view_count": 2
   },
   "himalaya": {
     "archived_at": null,
@@ -785,13 +785,13 @@
     "created_by": null,
     "last_patched_at": null,
     "last_reused_patch_generation": 0,
-    "last_used_at": "2026-08-22T03:00:45.152029+00:00",
+    "last_used_at": "2026-08-23T03:00:01.446533+00:00",
     "last_viewed_at": "2026-08-21T03:00:36.240549+00:00",
     "patch_count": 0,
     "patch_generation": 0,
     "pinned": false,
     "state": "active",
-    "use_count": 25,
+    "use_count": 27,
     "view_count": 3
   },
   "merge-reconciler": {
@@ -829,15 +829,15 @@
     "created_at": "2026-08-10T10:16:20.656831+00:00",
     "created_by": "agent",
     "last_patched_at": "2026-08-22T20:12:04.268545+00:00",
-    "last_reused_patch_generation": 65,
-    "last_used_at": "2026-08-22T20:11:59.447356+00:00",
-    "last_viewed_at": "2026-08-22T20:11:59.443711+00:00",
+    "last_reused_patch_generation": 67,
+    "last_used_at": "2026-08-23T07:00:08.099223+00:00",
+    "last_viewed_at": "2026-08-23T07:00:08.095615+00:00",
     "patch_count": 67,
     "patch_generation": 67,
     "pinned": false,
     "state": "active",
-    "use_count": 71,
-    "view_count": 71
+    "use_count": 72,
+    "view_count": 72
   },
   "nano-pdf": {
     "archived_at": null,
@@ -920,14 +920,14 @@
     "created_by": null,
     "last_patched_at": "2026-08-16T14:58:32.571601+00:00",
     "last_reused_patch_generation": 1,
-    "last_used_at": "2026-08-17T04:43:04.011448+00:00",
-    "last_viewed_at": "2026-08-17T04:43:04.009230+00:00",
+    "last_used_at": "2026-08-23T11:22:36.095363+00:00",
+    "last_viewed_at": "2026-08-23T11:22:36.091950+00:00",
     "patch_count": 1,
     "patch_generation": 1,
     "pinned": false,
     "state": "active",
-    "use_count": 3,
-    "view_count": 3
+    "use_count": 4,
+    "view_count": 4
   },
   "openclaw-gateway": {
     "archived_at": null,
@@ -1385,13 +1385,13 @@
     "created_by": null,
     "last_patched_at": null,
     "last_reused_patch_generation": 0,
-    "last_used_at": "2026-08-17T19:11:20.680050+00:00",
-    "last_viewed_at": "2026-08-17T19:11:20.677403+00:00",
+    "last_used_at": "2026-08-23T18:01:39.254471+00:00",
+    "last_viewed_at": "2026-08-23T18:01:39.251075+00:00",
     "patch_count": 0,
     "patch_generation": 0,
     "pinned": false,
     "state": "active",
-    "use_count": 1,
-    "view_count": 1
+    "use_count": 2,
+    "view_count": 2
   }
 }

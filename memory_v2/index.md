@@ -11,6 +11,8 @@
 
 ## Cases
 | Дата | Тема | Файл | Ключевой урок |
+| 2026-08-22 | 3-Level Sub-Agent Health Check Protocol & Harrison Recovery | cases/2026-08-22_three_level_agent_health_check_and_harrison_recovery.md | `systemctl is-active` недостаточно; обязателен 3-уровневый чек (OS -> Telegram API getMe/getWebhookInfo -> Journalctl logs) для выявления молчаливых зависаний. |
+| 2026-08-22 | Harrison Croft Non-Dilutive Equity-Free Grant Acquisition Architecture | cases/2026-08-22_harrison_equity_free_grants_outreach.md | Архитектура поиска и подачи на безразводные гранты (до $500k) в ЕС, Катаре, США, G20 через contact@navo24.com с ведением Google Sheet реестра и отчетами. |
 | 2026-08-22 | Aeon Stevenson Launch & GitHub Actions Serverless Engine | cases/2026-08-22_aeon_stevenson_github_actions_framework_launch.md | Aeon Stevenson (@aeondeskbot) запущен на нативном движке Aeon (`stefrogovskyi/aeon`) в режиме Serverless / Cron Polling в GitHub Actions для фоновых асинхронных заданий; исправлен маршрутизатор LLM Gateway. |
 | 2026-08-21 | Callum & Ben Frontend Deployments, SPA Routing & Enterprise AI Sales Showcase | cases/2026-08-21_callum_ben_frontend_routing_and_ai_sales_agent.md | Callum: 5-я вкладка поиска статей в блог-редакторе, рендеринг иконок и SPA-роутинг без 404 на staging; Ben: деплой промо-блока AI Sales Agent на Hostinger и стилизация меню. |
 | 2026-08-19 | AgentOS Mission Control Upgrade & Kanban Unification | cases/2026-08-19_agentos_mission_control_upgrade_and_kanban_unification.md | Все 6 канбанов размещены на Vercel (`https://<agent>-kanban.vercel.app`), иконка Канбан исправлена на Lucide `kanban`, `server.py` использует `ReusableTCPServer`. |

@@ -65,14 +65,14 @@
     "created_by": "agent",
     "last_patched_at": null,
     "last_reused_patch_generation": 0,
-    "last_used_at": null,
-    "last_viewed_at": null,
+    "last_used_at": "2026-08-23T06:00:02.525500+00:00",
+    "last_viewed_at": "2026-08-23T06:00:02.518083+00:00",
     "patch_count": 0,
     "patch_generation": 0,
     "pinned": false,
     "state": "active",
-    "use_count": 0,
-    "view_count": 0
+    "use_count": 1,
+    "view_count": 1
   },
   "productivity:b2b-saas-contract-review": {
     "archived_at": null,

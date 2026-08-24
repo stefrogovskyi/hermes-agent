@@ -15,3 +15,14 @@
 - Host/Engine: Native Aeon (`stefrogovskyi/aeon`) running in GitHub Actions cloud runners (Serverless / Cron Polling).
 - Purpose: Background task automation, CI/CD skill execution (`/run <skill>`), self-healing scripts, auto-reviewing PRs.
 - Telegram Commands: `/status`, `/harness`, `/run <skill>`, `/cancel`.
+
+## 3-Level Sub-Agent Health Check Protocol
+- Level 1 (OS): `systemctl is-active hermes-<agent>`
+- Level 2 (Telegram API): `getMe` and `getWebhookInfo` / `getUpdates` (token check & pending_update_count)
+- Level 3 (Logs): `journalctl -u hermes-<agent>` for `ReadTimeout`, `TimedOut`, `Blocked unauthorized user`, or silent polling freezes.
+
+## Harrison Croft (@harrisoncroftbot) Grant Operations
+- Objective: Non-dilutive equity-free grant acquisition for Navo24 (up to $500k).
+- Focus regions: EU, Qatar, USA, Australia, China, Japan, Canada, G20 countries.
+- Email / Identity: `contact@navo24.com`, signed as Harrison Croft.
+- Artifacts: Submission reports, Google Sheet tracking link, direct submission reports to Stefan.
