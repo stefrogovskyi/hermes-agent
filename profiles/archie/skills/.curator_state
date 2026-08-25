@@ -1,9 +1,9 @@
 {
-  "last_report_path": "/opt/hermes/profiles/archie/logs/curator/20260817-100422",
-  "last_run_at": "2026-08-17T10:04:22.015466+00:00",
-  "last_run_duration_seconds": 0.655659,
+  "last_report_path": "/opt/hermes/profiles/archie/logs/curator/20260824-104830",
+  "last_run_at": "2026-08-24T10:48:30.768729+00:00",
+  "last_run_duration_seconds": 0.651334,
   "last_run_summary": "auto: no changes; llm: skipped (consolidation off)",
   "last_run_summary_shown_at": null,
   "paused": false,
-  "run_count": 1
+  "run_count": 2
 }

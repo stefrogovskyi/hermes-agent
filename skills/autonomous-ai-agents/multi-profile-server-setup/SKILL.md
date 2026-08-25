@@ -19,6 +19,7 @@ Use when configuring or troubleshooting multi-profile Hermes Agent instances run
 - `references/vercel-surge-kanban-sync.md` — Detailed guide for Vercel/Surge CLI deployments, `localStorage` + API dual persistence for Kanban boards, and `notranslate` headers to prevent Japanese auto-translation glitches.
 - `references/telegram-rbac-and-owner-protection.md` — Gating `home_channel`, `allow_admin_from`, preventing "Set Home Chat" hijack, and native YAML list formatting for `allow_from`.
 - `references/3-level-agent-healthcheck-and-monitoring.md` — 3-Level honest health check for sub-agents: systemd OS level, Telegram API queue check (getWebhookInfo), and journalctl error log inspection.
+- `references/dual_bot_token_collision_and_healthcheck_diagnostics.md` — Resolving dual-process Telegram bot token collisions (HTTP 409, Gateway Shutdown alerts, approval prompts) and 3-level silent hang health check diagnostics.
 - `references/troubleshooting.md` — Diagnostic steps for gateway logs and systemd services.
 - `references/ai-copywriting-style-priming.md` — Guide on Few-Shot Human Style Priming vs. abstract rules for AI copywriting.
 - `references/agentos-and-openclaw-deployment.md` — Complete deployment, systemd daemons, Telegram channel integration, and Admin-gated Hostinger setup for AgentOS (`aavalanche.com/agentos/`) and OpenClaw (`:18789`).

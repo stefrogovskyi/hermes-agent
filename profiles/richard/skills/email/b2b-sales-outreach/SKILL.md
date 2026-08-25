@@ -158,8 +158,9 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
   * *(See `references/m365-eop-and-crm-bounce-handling.md` for complete M365 EOP error diagnostics, inbound poller code patterns, and Distribution List recovery details.)*
 - **CRITICAL: Premature CRM Status Updates**: Never bulk-update Airtable records from `Lead` to `Contacted` in advance or without actually dispatching the emails. Sending a batch of 500 emails with a 1-minute interval physically takes **~8.3 hours** — updating Airtable in seconds without real SMTP/API dispatch corrupts lead tracking and creates false completion reports. Always update Airtable status record-by-record AFTER each email is actually sent.
 - **Inbound Poller Duplication & MS Graph API Credentials**:
-  * MS Graph Inbound endpoint: `https://graph.microsoft.com/v1.0/me/mailFolders/inbox/messages?$top=15&$orderby=receivedDateTime desc`.
-  * Authentication: OAuth Password Grant (`TENANT_ID = "dc47c5b1-313f-47eb-ab6f-5f0716f400b5"`, `CLIENT_ID = "1fec8e78-bce4-4aaf-ab1b-5451cc387264"`, user `rich@navo24.com`).
+  * MS Graph Inbound endpoint: `https://graph.microsoft.com/v1.0/users/rich@navo24.com/mailFolders/inbox/messages?$top=15&$orderby=receivedDateTime desc`.
+  * Authentication: OAuth2 Client Credentials (`grant_type: client_credentials`, `TENANT_ID = "dc47c5b1-313f-47eb-ab6f-5f0716f400b5"`, `CLIENT_ID = "807fed17-45a8-4c7c-9a28-5997bbd30970"`, Azure App `Rich email graph inbox api`).
+  * Attachments & Screenshots: Always fetch `/users/rich@navo24.com/messages/{id}/attachments` (capturing both regular files and inline `cid:` images even when `hasAttachments` is False), save to `/opt/hermes/profiles/richard/attachments/`, and inspect via vision/document tools.
   * Filter out and auto-record system bounce/undeliverable messages (`microsoftexchange`, `postmaster`, `undeliverable`) so they do not trigger false alerts.
   * Always persist seen message IDs in `/opt/hermes/profiles/richard/processed_msg_ids.json`.
 - **Cron Job Model Drift Protection Recovery**: When the active profile LLM model is upgraded or changed (e.g., `gemini-3.6-flash` -> `gemini-3.7-flash`), Hermes Spend Protection skips cron runs with a drift alert. To recover, update the cron job configuration and `model_snapshot` in `/opt/hermes/profiles/richard/cron/jobs.json` to match the active model.
@@ -173,6 +174,24 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
    - Carrier & Route Focus: Ask which primary shipping lines and trade lanes they operate on.
    - Service/Feature Priorities: Ask which platform capabilities (tracking, schedules, loading, API/MCP) matter most to their workflow.
    - Decision-Maker Clarification: Clarify whether to continue direct discussion with the respondent or involve their leadership/management.
-5. **Signature & CC Rules**:
-   - CC team emails (`lxxmng@navo24.com`, `stefan@navo24.com`) as required.
-   - Use standard polite closing (`顺祝商祺， / Best regards,` + `Richard Marlowe`). Let Outlook signature auto-attach without adding redundant custom signatures.
+5. **Signature, CC & Resend Outreach Rules**:
+   - **Strict Execution on Recipient Directives (No Speculative Debating)**: When the user requests specific recipients in `To`, `CC`, or `Reply-To` (e.g. `To: [Client]`, `CC: sales@navo24.com` or `CC: support@navo24.com`, `Reply-To: sales@navo24.com`), execute the exact configuration without philosophical debates or over-explaining mail client display behaviors.
+   - **Resend Gateway CC vs Reply-To De-duplication Rule**:
+     * In Resend / AWS SES, when `From` or `Reply-To` uses the identical local-part as `CC` (e.g., `From: sales@...`, `Reply-To: sales@...`, and `CC: sales@...`), the SMTP engine de-duplicates the identical mailbox entity and suppresses rendering of the `Cc:` MIME header.
+     * To ensure 100% clean CC rendering across all email clients (Spark, Outlook, Gmail, Apple Mail), maintain distinct functional addresses:
+       - `From:` `Richard Marlowe <rich@e.navo24.com>` (Sender)
+       - `CC:` `support@navo24.com` (or individual team inboxes)
+       - `Reply-To:` `sales@navo24.com` (Inbound Sales routing)
+   - **Mass Customer Broadcast via Excel (`Customers.xlsx`) Workflow**:
+     * **Environment**: Always execute mass outreach scripts using the active virtualenv python (`/opt/hermes/hermes-agent/venv/bin/python3 script.py > outreach.log 2>&1`) in the background.
+     * **Rate & Interval**: Send with a 0.8s–1.0s delay between emails (well under Resend's 10 req/s cap) to ensure smooth delivery of 700+ emails in ~10–12 minutes without rate limit errors.
+     * **Personalization Parsing**:
+       - Name present -> `Dear [Name],`
+       - Name missing -> `Dear Partner,`
+     * **Standard Headers**: Include RFC 8058 `List-Unsubscribe` for inbox deliverability.
+   - **SeaRates Portfolio Transition & Navo24 Migration Broadcast Template**:
+     * Highlights corporate decisions on the suspension of SeaRates and DFA digital brand portfolio.
+     * Recommends active paid subscribers contact respective SeaRates refund team as noted in their SeaRates login banner.
+     * Introduces Navo24 founded by core SeaRates leadership team with AI logistics technology and developer portal link (`https://navo24.com/developers/`).
+     * Directs demo inquiries and replies to `sales@navo24.com` with Richard Marlowe's official signature.
+   - **HTML Layout**: Clean, responsive, readable typography (15px `#1e293b`, 1.6 line height), callout box for critical refund/action items, and standard Richard Marlowe HTML signature with 1 blank line before signature and no top horizontal rule.

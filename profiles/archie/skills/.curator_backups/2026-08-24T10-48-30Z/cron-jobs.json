@@ -1,0 +1,115 @@
+{
+  "jobs": [
+    {
+      "id": "6bfc22f3db3e",
+      "name": "Пайплайн Блог Сирейтс",
+      "prompt": "\nfrom hermes_tools import terminal, delegate_task, execute_code, json_parse, shell_quote\nfrom datetime import datetime\nimport json\nimport os\nimport sys\n\nGOOGLE_SHEET_ID = \"1FI4w3NqDJEzhrqcyJKRWu4sCd57oKSMrfgPEt44b63k\"\nNAVO_BLOG_POSTS_FOLDER_ID = \"14SwSwwYvop7GLM6R0eDTG5ZLlUTLZr-Z\"\nARCHIE_PROFILE_ROOT = \"/opt/hermes/profiles/archie\" # Ensure this is correct\n\ndef run_pipeline():\n    report_data = {\n        \"Время выполнения\": datetime.now().strftime(\"%Y-%m-%d %H:%M:%S\"),\n        \"Статус\": \"Ошибка\",\n        \"Описание ошибки\": \"Неизвестная ошибка.\",\n        \"Строка таблицы\": \"N/A\"\n    }\n\n    try:\n        # 1. Read Google Sheet\n        # Use execute_code to run python for Sheets API directly\n        # The Sheets API expects ranges like 'Sheet1!A:G'\n        sheets_get_cmd = f\"python {ARCHIE_PROFILE_ROOT}/skills/productivity/google-workspace/scripts/google_api.py sheets get {GOOGLE_SHEET_ID} 'Sheet1!A:G'\"\n        \n        # Using terminal for direct script execution\n        get_sheet_result = terminal(command=sheets_get_cmd)\n        \n        if get_sheet_result.get(\"exit_code\") != 0:\n            raise Exception(f\"Failed to read Google Sheet: {get_sheet_result.get('output', 'No output')}\")\n\n        sheet_data = json_parse(get_sheet_result.get(\"output\"))\n\n        if not sheet_data or len(sheet_data) < 2: # Check if sheet is empty or only has header\n            # If no data rows, it means no articles in queue or sheet is empty\n            print(\"[SILENT]\") # Nothing to process\n            return\n\n        # 2. Find the first \"В очереди\" article, starting from the second row (index 1)\n        row_index_to_process = -1\n        article_details = None\n\n        for i, row in enumerate(sheet_data):\n            if i == 0: continue # Skip header row\n\n            if len(row) > 3 and row[3] == \"В очереди\": # Column D is index 3\n                row_index_to_process = i + 1 # 1-indexed row number\n                # Pad row to ensure we have all expected columns\n                while len(row) < 7: # Ensure columns A-G exist (0-indexed 0 to 6)\n                    row.append('')\n                article_details = {\n                    \"original_title\": row[0], # Column A\n                    \"article_url\": row[1],    # Column B\n                    \"article_language\": row[2] # Column C\n                }\n                break\n        \n        if row_index_to_process == -1:\n            print(\"[SILENT]\") # No articles \"В очереди\"\n            return\n\n        report_data[\"Строка таблицы\"] = row_index_to_process\n        report_data[\"Обработанная статья (оригинальное название)\"] = article_details[\"original_title\"]\n        report_data[\"Ссылка на оригинал\"] = article_details[\"article_url\"]\n        report_data[\"Язык\"] = article_details[\"article_language\"]\n\n        # 3. Update status to \"В процессе\"\n        update_status_cmd = f\"python {ARCHIE_PROFILE_ROOT}/skills/productivity/google-workspace/scripts/google_api.py sheets update {GOOGLE_SHEET_ID} 'Sheet1!D{row_index_to_process}' --values '{{\"values\": [[\"В процессе\"]]}}'\"\n        update_status_result = terminal(command=update_status_cmd)\n        \n        if update_status_result.get(\"exit_code\") != 0:\n            raise Exception(f\"Failed to update status to 'В процессе': {update_status_result.get('output', 'No output')}\")\n\n        # 4. Run avalanche-copywriting skill\n        delegate_result = delegate_task(\n            goal='Глубоко и полностью перепиши статью, используя человеческий, не-AI язык. Избегай прямого копирования или парафраза оригинального текста. Сгенерируй новое, уникальное и SEO-оптимизированное название статьи (не более 60 символов), уникальный мета-title (не более 60 символов) и уникальный мета-description (не более 160 символов). Все эти элементы должны быть адаптированы для целевого языка. Вывод должен быть в формате DOCX.',\n            context=f'URL оригинальной статьи: {article_details[\"article_url\"]}. Язык статьи: {article_details[\"article_language\"]}. Оригинальное название статьи: {article_details[\"original_title\"]}.',\n            skills=['avalanche-copywriting']\n        )\n\n        if delegate_result.get(\"status\") != \"completed\":\n            raise Exception(f\"Avalanche copywriting failed: {delegate_result.get('result', 'No result')}\")\n        \n        # Assuming delegate_task returns output_path, new_title, meta_title, meta_description\n        skill_output = json_parse(delegate_result.get(\"result\"))\n        docx_file_path = skill_output.get(\"output_path\")\n        new_article_title = skill_output.get(\"new_article_title\", \"Untitled Article\")\n        meta_title = skill_output.get(\"meta_title\", \"\")\n        meta_description = skill_output.get(\"meta_description\", \"\")\n\n        if not docx_file_path:\n            raise Exception(\"Avalanche copywriting did not return DOCX file path.\")\n\n        report_data[\"Обработанная статья (новое название)\"] = new_article_title\n        report_data[\"Мета Title\"] = meta_title\n        report_data[\"Мета Description\"] = meta_description\n        \n        # 5. Upload DOCX to Google Drive\n        generated_article_name = f\"{new_article_title} ({article_details['article_language']}).docx\"\n        upload_docx_cmd = f\"python {ARCHIE_PROFILE_ROOT}/skills/productivity/google-workspace/scripts/google_api.py drive upload {shell_quote(docx_file_path)} --name {shell_quote(generated_article_name)} --parent {NAVO_BLOG_POSTS_FOLDER_ID} --mime-type application/vnd.openxmlformats-officedocument.wordprocessingml.document\"\n        \n        upload_result = terminal(command=upload_docx_cmd)\n        \n        if upload_result.get(\"exit_code\") != 0:\n            raise Exception(f\"Failed to upload DOCX to Google Drive: {upload_result.get('output', 'No output')}\")\n        \n        drive_file_info = json_parse(upload_result.get(\"output\"))\n        drive_link = drive_file_info.get(\"webViewLink\")\n\n        if not drive_link:\n            raise Exception(\"Failed to get Google Drive link after upload.\")\n\n        report_data[\"Ссылка на сгенерированный DOCX\"] = drive_link\n\n        # 6. Update Google Sheet with new title, link, and final status\n        # Update Column E (new article title)\n        update_col_e_cmd = f\"python {ARCHIE_PROFILE_ROOT}/skills/productivity/google-workspace/scripts/google_api.py sheets update {GOOGLE_SHEET_ID} 'Sheet1!E{row_index_to_process}' --values '{{\"values\": [[{shell_quote(new_article_title)}]]}}'\"\n        update_col_e_result = terminal(command=update_col_e_cmd)\n        if update_col_e_result.get(\"exit_code\") != 0:\n            print(f\"Warning: Failed to update Column E: {update_col_e_result.get('output', 'No output')}\", file=sys.stderr)\n\n        # Update Column F (Drive link)\n        update_col_f_cmd = f\"python {ARCHIE_PROFILE_ROOT}/skills/productivity/google-workspace/scripts/google_api.py sheets update {GOOGLE_SHEET_ID} 'Sheet1!F{row_index_to_process}' --values '{{\"values\": [[{shell_quote(drive_link)}]]}}'\"\n        update_col_f_result = terminal(command=update_col_f_cmd)\n        if update_col_f_result.get(\"exit_code\") != 0:\n            print(f\"Warning: Failed to update Column F: {update_col_f_result.get('output', 'No output')}\", file=sys.stderr)\n\n        # Update Column D (Status to \"Готово\")\n        update_final_status_cmd = f\"python {ARCHIE_PROFILE_ROOT}/skills/productivity/google-workspace/scripts/google_api.py sheets update {GOOGLE_SHEET_ID} 'Sheet1!D{row_index_to_process}' --values '{{\"values\": [[\"Готово\"]]}}'\"\n        update_final_status_result = terminal(command=update_final_status_cmd)\n        if update_final_status_result.get(\"exit_code\") != 0:\n            print(f\"Warning: Failed to update final status to 'Готово': {update_final_status_result.get('output', 'No output')}\", file=sys.stderr)\n        \n        report_data[\"Статус\"] = \"Успешно\"\n\n    except Exception as e:\n        report_data[\"Статус\"] = \"Ошибка\"\n        report_data[\"Описание ошибки\"] = str(e)\n        # Attempt to update status to \"Ошибка\" in the sheet if possible\n        if report_data[\"Строка таблицы\"] != \"N/A\":\n            try:\n                error_row_index = report_data[\"Строка таблицы\"]\n                update_error_status_cmd = f\"python {ARCHIE_PROFILE_ROOT}/skills/productivity/google-workspace/scripts/google_api.py sheets update {GOOGLE_SHEET_ID} 'Sheet1!D{error_row_index}' --values '{{\"values\": [[\"Ошибка\"]]}}'\"\n                terminal(command=update_error_status_cmd)\n            except Exception as update_err:\n                report_data[\"Описание ошибки\"] += f\" (Также не удалось обновить статус на Ошибка в таблице: {update_err})\"\n    finally:\n        # Final report\n        if report_data[\"Статус\"] == \"Успешно\":\n            final_report = f\"\"\"\n**Отчёт Пайплайна Блога SeaRates**\n**Время выполнения:** {report_data[\"Время выполнения\"]}\n**Статус:** {report_data[\"Статус\"]}\n**Обработанная статья (новое название):** {report_data[\"Обработанная статья (новое название)\"]}\n**Мета Title:** {report_data[\"Мета Title\"]}\n**Мета Description:** {report_data[\"Мета Description\"]}\n**Ссылка на оригинал:** {report_data[\"Ссылка на оригинал\"]}\n**Язык:** {report_data[\"Язык\"]}\n**Ссылка на сгенерированный DOCX:** {report_data[\"Ссылка на сгенерированный DOCX\"]}\n\"\"\"\n        elif report_data[\"Статус\"] == \"Ошибка\" and report_data[\"Строка таблицы\"] == \"N/A\":\n            final_report = f\"\"\"\n**Отчёт Пайплайна Блога SeaRates**\n**Время выполнения:** {report_data[\"Время выполнения\"]}\n**Статус:** {report_data[\"Статус\"]}\n**Описание ошибки:** {report_data[\"Описание ошибки\"]}\n**Строка таблицы:** {report_data[\"Строка таблицы\"]}\n\"\"\"\n        else: # Error with known row\n             final_report = f\"\"\"\n**Отчёт Пайплайна Блога SeaRates**\n**Время выполнения:** {report_data[\"Время выполнения\"]}\n**Статус:** {report_data[\"Статус\"]}\n**Описание ошибки:** {report_data[\"Описание ошибки\"]}\n**Строка таблицы:** {report_data[\"Строка таблицы\"]}\n**Обработанная статья (оригинальное название):** {report_data.get(\"Обработанная статья (оригинальное название)\", \"N/A\")}\n**Ссылка на оригинал:** {report_data.get(\"Ссылка на оригинал\", \"N/A\")}\n**Язык:** {report_data.get(\"Язык\", \"N/A\")}\n\"\"\"\n        print(final_report)\n\nrun_pipeline()\n",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": "anthropic",
+      "model_snapshot": "claude-sonnet-5",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "monitor_script": null,
+      "monitor_url": null,
+      "monitor_state": null,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 60,
+        "display": "every 60m"
+      },
+      "schedule_display": "every 60m",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": false,
+      "state": "paused",
+      "paused_at": "2026-08-15T14:45:50.030150+00:00",
+      "paused_reason": null,
+      "created_at": "2026-08-15T14:32:20.335267+00:00",
+      "next_run_at": "2026-08-15T15:32:20.748028+00:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "330656040",
+        "chat_name": "Stefan Rogovskiy",
+        "thread_id": null,
+        "user_id": "330656040"
+      },
+      "enabled_toolsets": [
+        "google-workspace",
+        "delegation",
+        "terminal",
+        "file",
+        "execute_code"
+      ],
+      "workdir": "/opt/hermes/profiles/archie"
+    },
+    {
+      "id": "26c9e7168400",
+      "name": "Пайплайн Блог Сирейтс (Блограйтинг)",
+      "prompt": "Ты обрабатываешь ОДНУ статью из очереди Google Sheets \"Блогпосты Сирейтс\" по скиллу avalanche-copywriting (\"Блограйтинг\"). Это повторяющийся почасовой запуск — за один прогон обработай РОВНО ОДНУ статью, затем остановись и пришли отчёт.\n\nПАРАМЕТРЫ:\n- Sheet ID: 1FI4w3NqDJEzhrqcyJKRWu4sCd57oKSMrfgPEt44b63k\n- Точное имя вкладки (НЕ \"Sheet1\"): \"Блогпосты Сирейтс\" — используй это имя буквально и в кавычках в каждом range, например \"Блогпосты Сирейтс!A1:G23217\"\n- Колонки: A=Название статьи (оригинал), B=Ссылка (оригинал), C=Язык, D=Статус, E=Название статьи на Наво, F=Ссылка на Наво/Файл Наво\n- Строка 1 = заголовки, НИКОГДА их не трогай. Данные статей начинаются со строки 2.\n- **КРИТИЧНО — размер таблицы: в листе РЕАЛЬНО 23217 строк (не ~100!). Таблица многоязычная (English, German, Korean, Vietnamese и другие языки вперемешку). При чтении диапазона ВСЕГДА используй \"Блогпосты Сирейтс!A2:G23217\" (весь диапазон данных), НИКОГДА не ограничивай чтение маленьким диапазоном вроде A1:G100 — это приведёт к тому, что 99% очереди останется невидимой и необработанной.**\n- Если Google Sheets API вернёт ошибку из-за размера ответа при чтении A2:G23217 целиком, читай батчами (например по 5000 строк за раз: A2:G5001, A5002:G10001 и т.д.) пока не найдёшь первую строку со статусом \"В очереди\"/пустым статусом — но НЕ останавливайся на первых 100 строках.\n- Возможны единичные полностью пустые строки или строки с мусорными данными (артефакты прошлых операций) — если встретишь строку без ссылки в колонке B или с явно нерелевантным содержимым, пропусти её, не обрабатывай как статью, и не считай её при подсчёте \"осталось в очереди\".\n- Google API CLI (используй ТОЛЬКО абсолютный путь): /opt/hermes/profiles/archie/skills/productivity/google-workspace/scripts/google_api.py\n- Google Drive папка для результатов: \"Navo Blog Posts\", ID 14SwSwwYvop7GLM6R0eDTG5ZLlUTLZr-Z\n\nШАГ 0 — Найти статью:\nПрочитай данные постранично начиная с \"Блогпосты Сирейтс!A2:G5001\" (и далее батчами по 5000 строк если нужно, вплоть до строки 23217). Найди ПЕРВУЮ строку (по порядку от строки 2) со статусом в колонке D равным \"В очереди\", пустым, или отсутствующим, у которой ЕСТЬ валидная ссылка в колонке B. Если такой строки нет во всей таблице до строки 23217 — все статьи обработаны, пришли отчёт \"Очередь пуста, все статьи обработаны\" и останови выполнение, ничего больше не делай.\nСразу же обнови статус этой строки в колонке D на \"В процессе\", чтобы повторный запуск не подхватил ту же статью.\n\nШАГ 1 — Скилл:\nЗагрузи полный текст скилла avalanche-copywriting (skill_view). Следуй ЕГО 8-ШАГОВОМУ ПРОЦЕССУ И ВСЕМ 11 ПРАВИЛАМ ДОСЛОВНО (em-dash запрет, лимит метафор 1-2 на статью, разрушение textbook-архитектуры, запрет explicit connectors, лимит contrastive negation максимум 1, лимит афористичных предложений, запрет parallel twin-sentence, запрет symmetric antithesis pairs, ЗАПРЕТ ВЫДУМАННЫХ ФАКТОВ — правило 11, критично для release-notes/новостных статей).\n\nШАГ 2 — Считывание оригинала:\nПрочитай статью по ссылке из колонки B (web_extract). Язык статьи — из колонки C; финальный рерайт должен быть на этом языке (если язык не английский — рерайт и все meta-поля тоже должны быть на этом языке).\n\nШАГ 3 — Trend keywords:\nweb_search 2-3 запроса по теме статьи для трендовых ключевых слов на языке статьи.\n\nШАГ 4 — Глубокий рерайт (delegate_task):\nДелегируй субагенту полный рерайт по 8-шаговому процессу скилла, передав полный оригинал, ключевые слова и ВСЕ 11 правил явно в промпте (не полагайся что субагент сам прочитает скилл — процитируй правила прямо в задании, включая правило 11 про запрет выдуманных фактов). Требуй новый заголовок, meta-title (макс 60 симв), meta-description (макс 155 симв).\n\nШАГ 5 — Независимый аудит (delegate_task, ОТДЕЛЬНЫЙ субагент):\nДай ему ТОЛЬКО оригинал и рерайт (без самоотчёта первого субагента). Попроси проверить ЧЕТЫРЕ слоя: (a) плагиат/сходство, (b) словарные AI-маркеры (тире, клише), (c) структурные/риторические тики (textbook-архитектура, connectors, contrastive negation, афористичность, symmetric antithesis), (d) фактическая достоверность — каждое конкретное утверждение/механизм/цифра в рерайте должны прослеживаться до оригинала, флагни любые выдуманные технические детали — с конкретными цитатами и счётчиками.\n\nШАГ 6 — Доработка по аудиту (delegate_task):\nЕсли аудит нашёл проблемы — третий субагент точечно исправляет именно найденные места.\n\nШАГ 7 — ТВОЯ СОБСТВЕННАЯ программная проверка (execute_code, НЕ доверяй самоотчётам субагентов):\n- Подсчитай em-dash (—) в теле, заголовке, meta-title, meta-description — должно быть 0.\n- Построй 6-граммы финального текста и оригинала (нормализуй: lowercase, убери пунктуацию), найди пересечения — допустимы только устоявшиеся отраслевые термины и собственные имена (компании/перевозчики/продукты), любое совпадение 6+ слов подряд кроме терминов/имён — переписать вручную самому.\n- Подсчитай длины title/meta_title/meta_description — уложись в лимиты.\n- Перечитай рерайт рядом с оригиналом и вручную проверь на выдуманные факты (правило 11) — если находишь придуманные механизмы/цифры/причинно-следственные объяснения которых нет в оригинале, убери их сам.\n- Если есть нарушения — исправь их сам напрямую в тексте (не делегируй повторно), затем перепроверь.\n\nШАГ 8 — Сборка и публикация:\nСобери DOCX через python-docx (h1=заголовок, курсив 9pt = meta title/description, h2 = подзаголовки разделов если есть, обычные параграфы = текст). Загрузи через google_api.py drive upload с --parent 14SwSwwYvop7GLM6R0eDTG5ZLlUTLZr-Z и правильным --mime-type application/vnd.openxmlformats-officedocument.wordprocessingml.document.\n\nШАГ 9 — Обновление таблицы:\nОбнови в найденной строке: колонка D = \"Готово\", колонка E = новый заголовок, колонка F = webViewLink файла на Диске. Прочитай строку обратно через sheets get, чтобы подтвердить фактическую запись (не верь только \"updatedCells\").\n\nШАГ 10 — Отчёт пользователю:\nВ финальном ответе укажи: номер строки, название оригинальной статьи, язык, новый заголовок, ссылку на DOCX, статус проверок (em-dash count, n-gram overlap count, факт-чек результат), и сколько статей осталось в очереди — посчитай ТОЧНО по всей таблице (все 23217 строк), не только по первым сотням.\n\nВАЖНО: если на любом шаге происходит ошибка — обнови статус строки в D на \"Ошибка\" с кратким описанием проблемы вместо того чтобы оставить \"В процессе\" висящим, и сообщи об этом в отчёте.",
+      "skills": [],
+      "skill": null,
+      "model": "google/gemini-3.6-flash",
+      "provider": "gemini",
+      "provider_snapshot": "anthropic",
+      "model_snapshot": "claude-sonnet-5",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "monitor_script": null,
+      "monitor_url": null,
+      "monitor_state": null,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 60,
+        "display": "every 60m"
+      },
+      "schedule_display": "every 60m",
+      "repeat": {
+        "times": null,
+        "completed": 158
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-08-15T21:13:28.057556+00:00",
+      "next_run_at": "2026-08-24T11:05:26.928231+00:00",
+      "last_run_at": "2026-08-24T10:05:26.928231+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "330656040",
+        "chat_name": "Stefan Rogovskiy",
+        "thread_id": null,
+        "user_id": "330656040"
+      },
+      "enabled_toolsets": [
+        "google-workspace",
+        "delegation",
+        "terminal",
+        "file",
+        "execute_code",
+        "web"
+      ],
+      "workdir": "/opt/hermes/profiles/archie",
+      "fire_claim": null
+    }
+  ],
+  "updated_at": "2026-08-24T10:05:26.928545+00:00"
+}

@@ -11,6 +11,7 @@
 
 ## Cases
 | Дата | Тема | Файл | Ключевой урок |
+| 2026-08-24 | Ecosystem Self-Healing Upgrade, Token Isolation & Azure MS Graph Re-Auth | cases/2026-08-24_ecosystem_self_heal_and_azure_ms_graph_reauth.md | Динамический поиск всех `hermes-*.service` и `openclaw-*.service` в `ecosystem_self_heal_audit.py`; 100% изоляция токенов; обновление MS Graph секретов Azure `Navo Booking`. |
 | 2026-08-22 | 3-Level Sub-Agent Health Check Protocol & Harrison Recovery | cases/2026-08-22_three_level_agent_health_check_and_harrison_recovery.md | `systemctl is-active` недостаточно; обязателен 3-уровневый чек (OS -> Telegram API getMe/getWebhookInfo -> Journalctl logs) для выявления молчаливых зависаний. |
 | 2026-08-22 | Harrison Croft Non-Dilutive Equity-Free Grant Acquisition Architecture | cases/2026-08-22_harrison_equity_free_grants_outreach.md | Архитектура поиска и подачи на безразводные гранты (до $500k) в ЕС, Катаре, США, G20 через contact@navo24.com с ведением Google Sheet реестра и отчетами. |
 | 2026-08-22 | Aeon Stevenson Launch & GitHub Actions Serverless Engine | cases/2026-08-22_aeon_stevenson_github_actions_framework_launch.md | Aeon Stevenson (@aeondeskbot) запущен на нативном движке Aeon (`stefrogovskyi/aeon`) в режиме Serverless / Cron Polling в GitHub Actions для фоновых асинхронных заданий; исправлен маршрутизатор LLM Gateway. |

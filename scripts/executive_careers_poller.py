@@ -11,7 +11,7 @@ v2.0 (2026-08-17): полностью переписан. Прежняя вер�
   - Никаких выдуманных "% Match" — вместо них честные matched-keywords
 """
 
-import os, json, re, time, urllib.request
+import os, json, re, time, urllib.request, urllib.parse
 import html as html_mod
 
 HERMES_DIR = os.environ.get("HERMES_HOME", "/opt/hermes")
@@ -245,6 +245,40 @@ def fetch_descartes():
     return out
 
 
+def fetch_amazon_execs():
+    """Amazon.jobs Search API: ищет открытые руководящие позиции."""
+    out = []
+    queries = ["Director", "VP", "Vice President", "General Manager", "Head of"]
+    seen_ids = set()
+    for q in queries:
+        try:
+            url = f"https://www.amazon.jobs/en/search.json?base_query={urllib.parse.quote(q)}&result_limit=50"
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
+            with urllib.request.urlopen(req, timeout=15) as r:
+                data = json.loads(r.read().decode())
+            for j in data.get("jobs", []):
+                jid = str(j.get("id_icims") or j.get("job_path") or j.get("id"))
+                if not jid or jid in seen_ids:
+                    continue
+                seen_ids.add(jid)
+                title = j.get("title", "").strip()
+                loc = f"{j.get('city', '')}, {j.get('state', '')}, {j.get('country_code', '')}".strip(', ')
+                job_path = j.get("job_path", "")
+                full_url = f"https://www.amazon.jobs{job_path}" if job_path.startswith("/") else f"https://www.amazon.jobs/en/jobs/{jid}"
+                out.append({
+                    "uid": f"amazon:{jid}",
+                    "company": "Amazon / AWS",
+                    "category": "Big Tech / Cloud",
+                    "title": title,
+                    "location": loc,
+                    "url": full_url,
+                    "updated_at": j.get("posted_date", ""),
+                })
+        except Exception as e:
+            print(f"⚠️ Amazon ({q}): {e}")
+    return out
+
+
 def fetch_dou_feed(company, slug):
     """DOU RSS: jobs.dou.ua/vacancies/<slug>/feeds/ (title содержит роль и город)."""
     out = []
@@ -308,6 +342,7 @@ def main():
     for c, u, cat in COMEET_HTML_PAGES:
         all_jobs.extend(fetch_comeet_html(c, u, cat))
     all_jobs.extend(fetch_descartes())
+    all_jobs.extend(fetch_amazon_execs())
 
     # ===== Блок IT Ukraine (BizDev/PM/Product/Delivery, senior+) =====
     it_jobs = []

@@ -56,7 +56,9 @@ When an enterprise customer requests an SLA, define standard severity tiers:
 ### 4. Output Checklist
 
 - [ ] Clear Risk Rating (Low / Medium / High / Critical) provided for each client point.
+- [ ] Side-by-side comparative diff / audit matrix clearly formatted.
 - [ ] Ready-to-use contractual drafting in clear, legally enforceable English.
 - [ ] IP / raw data reselling boundaries explicitly safeguarded.
 - [ ] SLA exclusions for third-party carrier/upstream systems clearly stated.
+- [ ] Constructive Executive / Legal Cover Letter drafted (see `templates/enterprise_redline_cover_letter_template.md`) explaining the commercial rationale to customer procurement without antagonism.
 - [ ] Actionable next steps outlined for sales and executive leadership.

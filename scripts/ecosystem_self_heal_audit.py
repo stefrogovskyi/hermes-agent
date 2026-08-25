@@ -25,14 +25,17 @@ def check_journalctl_conflicts(svc_name):
     return False, None
 
 def get_hermes_services():
-    svc_files = glob.glob("/etc/systemd/system/hermes-*.service")
+    svc_files = glob.glob("/etc/systemd/system/hermes-*.service") + glob.glob("/etc/systemd/system/aeon-*.service") + glob.glob("/etc/systemd/system/openclaw.service")
     services = []
-    for f in sorted(svc_files):
+    for f in sorted(set(svc_files)):
         svc_name = os.path.basename(f)
-        if svc_name != "hermes-self-heal.service":
-            services.append(svc_name)
-    if "openclaw.service" in [os.path.basename(p) for p in glob.glob("/etc/systemd/system/*.service")]:
-        services.append("openclaw.service")
+        if svc_name == "hermes-self-heal.service":
+            continue
+        res_en = subprocess.run(["systemctl", "is-enabled", svc_name], capture_output=True, text=True)
+        if res_en.stdout.strip() not in ["enabled", "linked", "alias"]:
+            log(f"[SKIPPED_disabled] Service {svc_name} is disabled, skipping")
+            continue
+        services.append(svc_name)
     return services
 
 def main():

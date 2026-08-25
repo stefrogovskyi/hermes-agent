@@ -22,13 +22,16 @@ It is CRITICAL for inbound email pollers and CRM integrations to distinguish bet
 
 ### B. Tenant-Level Outbound Restriction (`550 5.7.708`) & Direct PowerShell / Admin Unblock
 - **Error Code / Keywords**: `550 5.7.708 Service unavailable. Access denied, traffic not accepted from this IP`, `AS(7230)`, `traffic not accepted from this IP`.
-- **Root Cause**: Microsoft Exchange Online temporarily restricted the tenant's outbound IP pool due to high send velocity or outbound spam policy threshold tripping (`BlockUserForToday`).
+- **Root Cause**: Microsoft Exchange Online temporarily restricted the tenant's outbound IP pool due to high send velocity or outbound spam policy threshold tripping (`BlockUserForToday`), or automated Graph API sends from datacenter IPs using deprecated ROPC (Password Grant) instead of Azure App OAuth2 Client Credentials.
+- **Why First-Line Support Finds Nothing in Admin Center**: First-tier Microsoft support typically checks `Restricted Entities / Restricted Users`. Since the mailbox itself is clean and uncompromised, no blocks show in the UI. `5.7.708 AS(7230)` is a tenant-level EOP backend transport suppression.
 - **Why It Does NOT Clear Automatically (Even After 8+ Hours)**: EOP IP pool blocks are persistent tenant-level transport quarantine flags that do not expire on a simple overnight timer without explicit administrative action or automated delisting.
 - **Resolution Options**:
-  1. **Microsoft 365 Admin Center Automated Diagnostic Unblock (Fastest — 2 Minutes)**:
-     * Open `https://admin.microsoft.com` -> Click **Help & support** (green widget in bottom right).
-     * Search `550 5.7.708` or `NDR 5.7.708` or `Diag: Outbound Email Blocked`.
-     * The automated Microsoft Support AI will test tenant `dc47c5b1-313f-47eb-ab6f-5f0716f400b5` and provide a one-click button: **"Run Tests" -> "Request Delist / Clear IP Throttle"**.
+  1. **Azure App Registration (OAuth2 Client Credentials)**: Upgrade authentication from username/password (ROPC) to OAuth2 `grant_type: client_credentials` using registered App `Rich email graph inbox api` (`807fed17-45a8-4c7c-9a28-5997bbd30970`) with Application permissions `Mail.Send` and `Mail.ReadWrite`.
+  2. **Microsoft Support Escalation Template**:
+     * Escalate directly to **Tier 2 / Exchange Online Delivery Engineering (EOP Escalation Team)**.
+     * State clearly: *Request to lift `550 5.7.708 AS(7230)` Outbound Suppression / IP Exemption for Tenant `dc47c5b1-313f-47eb-ab6f-5f0716f400b5` (navo24.com).*
+  3. **Microsoft 365 Admin Center Automated Diagnostic Unblock**:
+     * Open `https://admin.microsoft.com` -> Click **Help & support** -> Search `550 5.7.708` / `Diag: Outbound Email Blocked` -> Click **"Request Delist / Clear IP Throttle"**.
   2. **PowerShell Direct Anti-Spam Policy Update & Unblock**:
      ```powershell
      Install-Module -Name ExchangeOnlineManagement -Force
