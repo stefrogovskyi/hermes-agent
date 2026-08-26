@@ -3,16 +3,16 @@
     "archived_at": null,
     "created_at": "2026-08-19T16:26:02.566667+00:00",
     "created_by": "agent",
-    "last_patched_at": "2026-08-24T21:06:37.349853+00:00",
-    "last_reused_patch_generation": 4,
-    "last_used_at": "2026-08-24T21:06:36.019433+00:00",
-    "last_viewed_at": "2026-08-24T21:06:36.017561+00:00",
-    "patch_count": 5,
-    "patch_generation": 5,
+    "last_patched_at": "2026-08-25T18:45:11.046790+00:00",
+    "last_reused_patch_generation": 5,
+    "last_used_at": "2026-08-25T18:44:56.979296+00:00",
+    "last_viewed_at": "2026-08-25T18:44:56.976960+00:00",
+    "patch_count": 7,
+    "patch_generation": 7,
     "pinned": false,
     "state": "active",
-    "use_count": 4,
-    "view_count": 4
+    "use_count": 5,
+    "view_count": 5
   },
   "document-to-action-items": {
     "archived_at": null,
@@ -80,14 +80,14 @@
     "created_by": "agent",
     "last_patched_at": null,
     "last_reused_patch_generation": 0,
-    "last_used_at": "2026-08-24T06:00:18.154815+00:00",
-    "last_viewed_at": "2026-08-24T06:00:18.153020+00:00",
+    "last_used_at": "2026-08-25T06:00:34.725898+00:00",
+    "last_viewed_at": "2026-08-25T06:00:34.723781+00:00",
     "patch_count": 0,
     "patch_generation": 0,
     "pinned": false,
     "state": "active",
-    "use_count": 2,
-    "view_count": 2
+    "use_count": 3,
+    "view_count": 3
   },
   "productivity:b2b-saas-contract-review": {
     "archived_at": null,

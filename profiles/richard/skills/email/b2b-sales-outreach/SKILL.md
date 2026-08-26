@@ -35,8 +35,13 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
    - When onboarding technical clients (e.g. IT heads testing via Postman), clearly explain that `POST /v1/containers` returns `202 Accepted` ("Tracking started") as an asynchronous registration step.
    - Guide them to fetch complete shipment milestones, container numbers, vessel AIS, and ETA via `GET /v1/containers/{id}` (or by booking/container number), or subscribe to real-time Webhook push events.
 5. **Persistent Background Workers**: When running long-lived background workers (like cold outreach daemons), use `terminal(command="PYTHONUNBUFFERED=1 python3 -u script.py >> log 2>&1", background=True)` rather than a transient subshell `nohup &`, which gets terminated when the execution turn closes.
-4. **Client Language Matching**: Always match the language of the prospect. If a Chinese client replies in Chinese (e.g. 陈先生 from Qiaoye Logistics), translate questions and draft responses into clear, professional B2B Chinese.
-2. **Direct Execution on Feedback & No Hanging Queues**:
+4. **Client Language Matching & Strategic Carrier/Freight Positioning**:
+   - **Language Matching**: Always match the language of the prospect. If a Chinese client replies in Chinese (e.g. 陈先生 from Qiaoye Logistics, Tom Ma from Soho Logistics), translate questions and draft responses into clear, professional B2B Chinese.
+   - **Forwarder Capabilities & Digital API Tariff Integration Strategy**: When Chinese freight forwarders describe their logistics capabilities (e.g., FTL nationwide pickup, fixed LTL routes to Central Asia/CIS, OOG/FR special containers, or DG handling), adopt a platform-aggregator perspective:
+     * Thank them warmly for presenting their routes and service capabilities.
+     * State that as a digital logistics platform, Navo is very interested in offering their freight services to our global client base.
+     * Proactively propose integrating and sharing their freight tariffs, routes, and schedules via **API or digital data interface (Data Feed)** to broadcast them directly to end customers.
+5. **Direct Execution on Feedback & No Hanging Queues**:
    - When the user approves draft direction (e.g., "Billy text is good - translate to Chinese and send") or confirms sending ("Да", "Отправляй", "OK"), execute the send **IMMEDIATELY in that turn**.
    - **NO ARTIFICIAL CRON QUEUES**: NEVER defer approved responses into a lingering 1-hour cron job or background batch when immediate dispatch is expected. Lingering queues cause loss of conversation sequence, duplicate approvals, and stale context.
    - When Stefan says "Стоп", stop immediately without exploratory searches.
@@ -132,8 +137,12 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
      * Calculation Window: Calculated from the Subscription Activation Date through the end of that relevant calendar month (e.g. 1 Sep – 30 Sep, or 15 Sep – 30 Sep for mid-month activation).
      * Invoicing & Payment: Issued monthly in arrears, payment due Net 14 days from invoice date. Client pays net amounts + applicable VAT and intermediary bank transfer/wire fees.
    - **Format**: Always generate as a formatted Word document (`.docx`) with signature blocks for Oleksii Shatunov (Director, Wemelogistics Ltd) and the Client.
-4. **Airtable Ownership & Base Mapping**:
+4. **Airtable Ownership, CRM Dual-Tracking & Base Mapping**:
    - **Exclusive Domain Responsibility (Airtable & Interface Designer)**: Airtable CRM operations, data structures, and Airtable Interface Designer configurations belong EXCLUSIVELY to Richard Marlowe (AI Senior Sales Manager). DO NOT redirect Airtable CRM interface/workflow requests to Callum Vance — Richard owns Airtable CRM and Airtable Interface Designer layouts (e.g., Kanban by status/stage, record detail sidebars, accounts/contacts lists).
+   - **CRM Dual-Tracking Rule (Prospecting Base -> Main Navo CRM)**:
+     * When any prospect replies from the outbound prospecting bases (`CN FF 1-3`), perform dual-layer tracking:
+       1. In the Prospecting Base (`CN FF 1-3`), update the record: `Stage` -> `"Pitched"` (or `"Lead"`), `status` -> `"Replied - <key topic>"` (e.g. `Replied - API tariffs offered`).
+       2. In the Main **Navo CRM** (`appbxvl9BBaTiLMlf`), create or update the corresponding card in table **`Leads`** (`Lead Title`, `Email`, `Phone/WeChat`, `Status: Open`, `Source: Email Outreach`, `Owner: Richard Marlowe (AI)`, `Comments` with full Russian synthesis of company strengths, contact details, and next steps).
    - **Primary Navo CRM Base**:
      * **Navo CRM** = Base ID `appbxvl9BBaTiLMlf` (Main B2B CRM with 5 core tables: `Accounts`, `Contacts`, `Leads`, `Opportunities`, `Timeline Events`). Always target `Navo CRM` for CRM interface creation, distinct from prospecting bases.
    - **Prospecting Outbound Bases**:
@@ -141,6 +150,9 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
      * `CN FF 2` = Base ID `appa1AH0vV4fl1BVQ` (Table `CNFF-2`)
      * `CN FF 3` = Base ID `appVItBOee1awOPHh` (Table `CNFF-3`)
    - **Outreach Audit & Completion Rule**: When auditing prospecting bases (`CN FF 1-3`), any records missing an `email` address cannot receive email outreach and should be marked `Stage: Postponed` / `status: Postponed` with a comment `[Audit] No email address provided in base profile. Marked Postponed.` to cleanly achieve 100% processing of reachable contacts without leaving records stuck as uncontacted `Lead`.
+   - **Excel Multi-Recipient Cleaning & Parsing**:
+     * In client databases (`Customers.xlsx`), email cells may contain multiple addresses delimited by `;`, `/`, or annotated with non-ASCII text (e.g. `maritimeproductmanagement@...; Vicky.Papaioannou@...` or `email@domain.com - не актуальный`).
+     * The outreach parser must strip out non-ASCII suffixes and split multi-value cells into distinct, clean individual email dispatches so zero valid recipient inboxes are skipped.
    - Airtable Personal Access Tokens use the full format `pat<id>.<secret>` (e.g. `patzjFlOTnLygbDs0.64e5...`). Single `pat<id>` prefixes will return 401 Unauthorized.
 
 ## Pitfalls & Common Mistakes
@@ -174,7 +186,17 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
    - Carrier & Route Focus: Ask which primary shipping lines and trade lanes they operate on.
    - Service/Feature Priorities: Ask which platform capabilities (tracking, schedules, loading, API/MCP) matter most to their workflow.
    - Decision-Maker Clarification: Clarify whether to continue direct discussion with the respondent or involve their leadership/management.
-5. **Signature, CC & Resend Outreach Rules**:
+- **1-on-1 Direct Client Correspondence (Non-Broadcast)**:
+  * **From:** `Richard Marlowe <rich@e.navo24.com>` (via Resend REST API).
+  * **Reply-To:** `rich@navo24.com` (routes client replies directly into Richard's Microsoft 365 inbox).
+  * **CC List:** **NONE** (nobody in CC for direct 1-on-1 negotiations).
+  * **Signature:** Official HTML signature with 1 blank line before and no top border line.
+- **Handling In-Depth B2B Replacement / Migration Inquiries (ex-SeaRates Evaluation)**:
+  * When prospects actively choosing a replacement for SeaRates submit detailed technical/commercial questionnaires (e.g., coverage of niche lanes, index vs. bookable rates, LCL, free tier, SLAs, lineage):
+    1. **Radical Honesty & Factuality**: Never make up coverage claims or promise bookable tariffs where only market indices exist. If a corridor (e.g., Venezuela feeder ports) or mode (LCL per CBM) is not published, state it directly in Point 1.
+    2. **Component Role Separation**: Clearly separate **FreightRatesMCP** (weekly spot market index benchmark), **SchedulesMCP** (carrier transit times, cut-offs, vessel schedules across 5k+ lanes), and **TrackingMCP** (234 carriers, 4 AIS feeds, DCSA milestone events).
+    3. **Enterprise Continuity & Lineage**: Highlight contractual deprecation notice periods (12 months), 99.9% SLA, full JSON/Webhook exportability, and transparent corporate background (Wemelogistics Ltd UK #14081751, 30 St Mary Axe London, co-founders Oleksii Shatunov & Stefan Rogovskiy).
+- **Signature, CC & Resend Outreach Rules**:
    - **Strict Execution on Recipient Directives (No Speculative Debating)**: When the user requests specific recipients in `To`, `CC`, or `Reply-To` (e.g. `To: [Client]`, `CC: sales@navo24.com` or `CC: support@navo24.com`, `Reply-To: sales@navo24.com`), execute the exact configuration without philosophical debates or over-explaining mail client display behaviors.
    - **Resend Gateway CC vs Reply-To De-duplication Rule**:
      * In Resend / AWS SES, when `From` or `Reply-To` uses the identical local-part as `CC` (e.g., `From: sales@...`, `Reply-To: sales@...`, and `CC: sales@...`), the SMTP engine de-duplicates the identical mailbox entity and suppresses rendering of the `Cc:` MIME header.

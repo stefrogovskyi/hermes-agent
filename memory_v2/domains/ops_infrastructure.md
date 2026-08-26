@@ -21,6 +21,13 @@
 - Level 2 (Telegram API): `getMe` and `getWebhookInfo` / `getUpdates` (token check & pending_update_count)
 - Level 3 (Logs): `journalctl -u hermes-<agent>` for `ReadTimeout`, `TimedOut`, `Blocked unauthorized user`, or silent polling freezes.
 
+## SketchForge-3D Local CAD & MCP Bridge
+- Host / Service: `sketchforge.service` on port `3030` (`/opt/sketchforge-3d`).
+- Access: `http://100.99.146.42:3030/` (Tailscale) / `http://38.49.219.217:3030/`.
+- MCP Bridge: `scripts/sketchforge-mcp-server.mjs` providing native geometry creation, scene reading, and viewport screenshot validation for AI agents.
+- Skill: `sketchforge-3d` (`/opt/hermes/skills/creative/sketchforge-3d/SKILL.md`).
+- Case: `2026-08-25_sketchforge_3d_mcp_cad_editor.md`.
+
 ## Harrison Croft (@harrisoncroftbot) Grant Operations
 - Objective: Non-dilutive equity-free grant acquisition for Navo24 (up to $500k).
 - Focus regions: EU, Qatar, USA, Australia, China, Japan, Canada, G20 countries.

@@ -10,6 +10,9 @@
 
 ## Inspection Strategy
 - Scan both official company career portals (ATS / career websites) and LinkedIn job boards daily at 09:00 UTC.
+- Scraper Integration: `/opt/hermes/scripts/executive_careers_poller.py` with custom modules for Big Tech (Amazon `amazon.jobs`, Google, Microsoft, Tesla headless WAF bypass).
+- Skill: `big-tech-career-scanner` (`/opt/hermes/skills/research/big-tech-career-scanner/SKILL.md`).
+- Case: `2026-08-25_big_tech_career_scanner_integration.md`.
 
 ## Execution & Data Integrity Rule
 - Strictly use scraped job postings from official APIs (Greenhouse/Ashby/Workday/SmartRecruiters/Comeet/WP-REST/Oracle HCM/DOU RSS).

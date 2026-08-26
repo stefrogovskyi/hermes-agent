@@ -53,7 +53,28 @@ When an enterprise customer requests an SLA, define standard severity tiers:
 
 *Maintenance Window Rules:* Schedule planned maintenance during off-peak hours (e.g. 22:00–06:00 UK time or weekends) and commit to at least 48 hours advance notice.
 
-### 4. Output Checklist
+### 4. Responding to Counterparty Margin Comments in Word (.docx)
+
+When a customer legal team sends contract markups with margin comments (e.g. Word Review comments):
+* **Word Rendering Pitfall:** Modern Microsoft Word (365, Desktop Dark Mode, Web) often collapses or fails to display threaded replies from new authors stored in `commentsExtended.xml`.
+* **Reliable Solution:** Inject the official legal response **directly inside the existing comment element** in `word/comments.xml` below the counterparty's original text, separated by a clean horizontal rule:
+  ```text
+  [Counterparty original comment text]
+  ────────────────────────────
+  Navo24 (Harrison Croft, GC) Response: [Specific legal position / counter-clause]
+  ```
+* Ensure responses are constructive, cite operational reality (e.g. multi-carrier telemetry vs generative AI), and provide specific compromises rather than flat rejections.
+
+### 5. International Withholding Tax & DTAA Exemption Packs (India / Cross-Border)
+
+When cross-border enterprise customers request tax compliance documentation to avoid 20–25% withholding tax (TDS):
+* **Core Treaty Package:**
+  1. **Tax Residency Certificate (TRC):** HMRC Certificate of Residence for the current financial year.
+  2. **Form 10F:** Self-declaration under Rule 21AB of the Indian Income-tax Act.
+  3. **No-PE Declaration:** Certified letterhead confirmation that Provider has no fixed place of business, employees, or Permanent Establishment under Article 5.
+  4. **Article 7 Qualification:** Software subscriptions and API access qualify as **Business Profits** under Article 7 (not Royalties under Article 12) per the landmark Indian Supreme Court ruling *Engineering Analysis Centre of Excellence (2021)*, entitling Provider to **0% Nil Withholding Tax**.
+
+### 6. Output Checklist
 
 - [ ] Clear Risk Rating (Low / Medium / High / Critical) provided for each client point.
 - [ ] Side-by-side comparative diff / audit matrix clearly formatted.

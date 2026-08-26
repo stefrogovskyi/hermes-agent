@@ -67,9 +67,28 @@ onboarding:
 platforms:
   telegram:
     allow_from:
+    - '*'
     - '330656040'
+    - '8081511707'
+    - '149598904'
+    - '593209837'
+    - '1022586369'
+    - '386283612'
+    - '345948971'
     enabled: true
     group_allow_from:
     - '*'
     require_mention: true
+    home_channel:
+      platform: telegram
+      chat_id: '330656040'
+    allow_admin_from:
+    - '330656040'
+    user_allowed_commands:
+    - start
+    - help
+    - status
+    - clear
+    - new
+    - info
 request_timeout_seconds: 30

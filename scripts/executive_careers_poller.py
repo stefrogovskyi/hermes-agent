@@ -21,6 +21,7 @@ os.makedirs(os.path.dirname(SEEN_FILE), exist_ok=True)
 
 # Официальные API карьерных досок (проверены живыми вызовами 2026-08-17)
 GREENHOUSE_BOARDS = [
+    ("xAI", "xai", "Frontier AI"),
     ("Anthropic", "anthropic", "AI Frontier"),
     ("SpaceX", "spacex", "DeepTech / Aero"),
     ("Flexport", "flexport", "Freight Tech"),
@@ -279,6 +280,67 @@ def fetch_amazon_execs():
     return out
 
 
+def fetch_nvidia_execs():
+    """NVIDIA Workday CXS API: ищет открытые руководящие позиции."""
+    out = []
+    url = "https://nvidia.wd5.myworkdayjobs.com/wday/cxs/nvidia/NVIDIAExternalCareerSite/jobs"
+    queries = ["Director", "VP", "Vice President", "Head of", "General Manager"]
+    seen_ids = set()
+    for q in queries:
+        try:
+            payload = json.dumps({"appliedFacets":{},"limit":20,"offset":0,"searchText":q}).encode()
+            req = urllib.request.Request(url, data=payload, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)', 'Content-Type': 'application/json'})
+            with urllib.request.urlopen(req, timeout=15) as r:
+                data = json.loads(r.read().decode())
+            for j in data.get("jobPostings", []):
+                path = j.get("externalPath", "")
+                jid = path.rstrip("/").rsplit("/", 1)[-1]
+                if not jid or jid in seen_ids:
+                    continue
+                seen_ids.add(jid)
+                title = j.get("title", "").strip()
+                loc = j.get("locationsText", "")
+                full_url = f"https://nvidia.wd5.myworkdayjobs.com/en-US/NVIDIAExternalCareerSite{path}"
+                out.append({
+                    "uid": f"nvidia:{jid}",
+                    "company": "NVIDIA",
+                    "category": "AI Hardware / Compute",
+                    "title": title,
+                    "location": loc,
+                    "url": full_url,
+                    "updated_at": j.get("postedOn", ""),
+                })
+        except Exception as e:
+            print(f"⚠️ NVIDIA ({q}): {e}")
+    return out
+
+
+def fetch_remotive_execs():
+    """Remotive Remote Jobs API: мониторинг глобальных remote leadership позиций."""
+    out = []
+    try:
+        url = "https://remotive.com/api/remote-jobs?limit=100"
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=15) as r:
+            data = json.loads(r.read().decode())
+        for j in data.get("jobs", []):
+            comp = j.get("company_name", "").strip()
+            title = j.get("title", "").strip()
+            jid = str(j.get("id"))
+            out.append({
+                "uid": f"remotive:{jid}",
+                "company": comp,
+                "category": "Remote Global / Tech",
+                "title": title,
+                "location": j.get("candidate_required_location", "Remote"),
+                "url": j.get("url", ""),
+                "updated_at": (j.get("publication_date") or "")[:10],
+            })
+    except Exception as e:
+        print(f"⚠️ Remotive: {e}")
+    return out
+
+
 def fetch_dou_feed(company, slug):
     """DOU RSS: jobs.dou.ua/vacancies/<slug>/feeds/ (title содержит роль и город)."""
     out = []
@@ -343,6 +405,8 @@ def main():
         all_jobs.extend(fetch_comeet_html(c, u, cat))
     all_jobs.extend(fetch_descartes())
     all_jobs.extend(fetch_amazon_execs())
+    all_jobs.extend(fetch_nvidia_execs())
+    all_jobs.extend(fetch_remotive_execs())
 
     # ===== Блок IT Ukraine (BizDev/PM/Product/Delivery, senior+) =====
     it_jobs = []

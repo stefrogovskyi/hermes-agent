@@ -44,5 +44,22 @@ Use when generating comparative benchmark reports, API performance comparisons, 
    - Never hardcode optimistic statuses (e.g. `LIVE & ACTIVE`, default remaining quota numbers) in message summaries or caption templates as fallbacks.
    - If an API returns an error, auth failure (e.g. `API_KEY_WRONG`), or empty payload, the delivery caption must directly and truthfully report the exact error status (`❌ SeaRates API Status: ERROR (API_KEY_WRONG)`), remaining 100% consistent with the generated `.xlsx` report.
 
+7. **Asynchronous Tracking Pipeline Resolution (Polling Protocol):**
+   - When querying container tracking APIs that return asynchronous job statuses (e.g. `HTTP 202 Accepted`, `TRACKING_IN_PROGRESS`, `retry_after_seconds`), do NOT stop after the first request and ask the user if they want to poll again.
+   - Proactively resolve the task: either poll the endpoint in a bounded loop or launch an autonomous background poller (`terminal(background=true, notify_on_complete=true)`) to wait for carrier data resolution and automatically deliver the final resolved tracking result directly into the chat when ready.
+
+8. **Multi-Stage Pipeline Latency & SLA Monitoring (Navo Pipeline Standard):**
+   - When auditing or benchmarking tracking systems (e.g., Navo Tracking vs SeaRates), break down latency across the full multi-stage architecture:
+     1. **Carrier / SCAC Detection & Classification**: Identifying line and entity (BL, booking, container).
+     2. **Checkpoint 1 (Inbound DB Log)**: Logging the incoming query to the database.
+     3. **Line Scrape & Vessel DB Query**: Carrier parser call and internal vessel database lookup (visible on administrative dashboards).
+     4. **Checkpoint 2 (Raw Parser DB Write)**: Storing raw line output before enrichment.
+     5. **AIS Enrichment**: Polling and querying external AIS providers (MarineAsia, MarineTraffic, VesselFinder).
+     6. **Consolidation & Normalization**: Standardizing payload format (`compat` vs `native`).
+     7. **Checkpoint 3 (Client DB Write)**: Saving the finalized payload for client access.
+     8. **Client Delivery (SLA Verification)**: Response delivery evaluated against the strict **≤ 60 seconds** SLA (operating across reserved fleet of 20 dedicated machines).
+   - Reports must explicitly separate Line Parse Latency ($T_{parse}$), AIS Latency ($T_{ais}$), and Database Persistence Overhead ($T_{db}$) rather than reporting a single black-box response time.
+   - Always reference live telemetry from the administrative dashboard for accurate stage timings.
+
 ## Reference Documentation
 - For exact SeaRates v3 endpoint parameters, query structures, and response error codes, see `references/searates_container_tracking_api.md`.

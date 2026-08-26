@@ -3,6 +3,10 @@
 ## Problem
 Messaging algorithms on WhatsApp and SMS gateways detect identical text templates repeated across distinct recipients and flag the sending number as automated spam, leading to shadowbans or permanent phone suspensions.
 
+## Rating-Aware Angle Switching
+- **High Rating (>= 4.0★):** Lead with social proof, stellar customer satisfaction, and the risk of losing high-ticket clients due to lack of 24/7 online booking.
+- **Low Rating (< 4.0★):** Pivot from pure booking to **reputation recovery & private feedback funnels**. Emphasize that without an official site and feedback capture mechanism, dissatisfied customers air grievances publicly on Google Maps, and show how automated 5★ review collection lifts their rating.
+
 ## Architecture & Code Pattern
 
 ```python

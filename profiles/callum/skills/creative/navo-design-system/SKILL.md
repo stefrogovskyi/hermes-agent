@@ -48,7 +48,10 @@ Guidelines, tokens, typography standards, and copy rules for all Navo24 platform
 ## 3. Copy & Prose Rules (§08 The Voice)
 
 - **Spaced Em-Dash Rule:** The spaced em-dash (` — `) is **banned from prose** as an AI-writing tell. Use colons, semicolons, commas, or periods instead. (Allowed only in titles/labels like `"TrackingMCP — Dashboard"`).
-- **Zero-Emoji UI Rule (Strict Brand Standard):** Gratuitous and arbitrary emoji icons (`✍️`, `👁️`, `🎯`, `🕒`, `📚`, `🔍`, `🖼️`, `⚡`, `🏠`, `📦`, `📊`, `⚙️`, `🛡️`, `🚪`, etc.) are **strictly prohibited** in tab labels, buttons, navigation bars, headers, and UI controls. Interface elements must be clean, typography-led (Switzer, Ranade, JetBrains Mono) or accompanied strictly by brand SVG line icons (stroke width 1.8–2.0px).
+- **Zero-Emoji UI Rule (Strict Brand Standard):** Gratuitous, arbitrary, or colorful emoji icons (`✍️`, `👁️`, `🎯`, `🕒`, `📚`, `🔍`, `🖼️`, `⚡`, `🏠`, `📦`, `📊`, `⚙️`, `🛡️`, `🚪`, etc.) are **strictly prohibited** in tab labels, buttons, navigation bars, headers, and UI controls. No unauthorized emojis anywhere in Navo UI. Interface elements must be clean, typography-led (Switzer, Ranade, JetBrains Mono) or accompanied strictly by brand SVG line icons (stroke width 1.8–2.0px).
+- **Dual-Staging & Repository Topography:**
+  - **Umbrella Portal (`navo24.com`):** Repo `Navo24S/navo24-web` (Astro v5, TailwindCSS v4). Staging for Stefan's isolated branch is on `https://stefan.staging.navo24.com/` (`navo24-web-stefan.pages.dev`).
+  - **Product Web App (`trackingmcp.com`):** Repo `Navo24S/trackingmcp` (React SPA, Vite, Supabase). Staging is on `https://tracking.staging.navo24.com/` (`navo24-tracking-web-staging.pages.dev`).
 - **Endorsement Rule (§06):** Legal footers and product endorsements must use `© 2026 [Product] · a Navo24 product` in lowercase JetBrains Mono (10–11px, `ink-500`).
 - **Team Names:** Robert's title is Full-Stack Developer (first name "Роберт" only, do NOT add "Vance" surname). Callum Vance is Tech Lead.
 
@@ -139,5 +142,31 @@ Guidelines, tokens, typography standards, and copy rules for all Navo24 platform
   - Do not use fixed pixel minimums like `minmax(300px, 1fr)` on mobile grids with container padding, as 320px–360px phones will overflow. Use `minmax(min(260px, 100%), 1fr)` and explicit single-column collapse (`grid-template-columns: 1fr !important`).
 - **Global Viewport Safeguard:**
   - `html, body { overflow-x: hidden; max-width: 100vw; }` to guarantee zero horizontal drag.
+
+## 10. Social Media & Marketing Visuals (LinkedIn & X)
+
+- **Canvas & Resolution Standards:**
+  - LinkedIn Standard: `1200 x 675` (16:9 landscape) rendered with `device_scale_factor: 2` (produces `2400 x 1350` ultra-crisp Retina PNG).
+  - Square / Carousel: `1200 x 1200` (1:1).
+- **Background & Atmospheric Lighting:**
+  - Deep Obsidian / Navy ground (`#060911` or `#070C18`).
+  - Subtle radial glow pseudo-elements: Cobalt (`rgba(31, 79, 230, 0.22)`, blur `60px`) at top-right, Turquoise (`rgba(18, 194, 194, 0.14)`, blur `70px`) at bottom-left.
+  - Ambient grid overlay: `40px 40px` with `rgba(255, 255, 255, 0.03)` masked radially.
+- **Typography & Headline Composition:**
+  - Eyebrows & Meta: JetBrains Mono (`11-12px`, uppercase, tracking `+0.14em`, color `#4A86FF` or `#12C2C2`).
+  - Core Statement: Ranade Light 300 (`36-42px`, line-height `1.18`, tracking `-0.03em`), bolding key phrase in white/cobalt gradient (`#FFFFFF` to `#90B2FF`) and brand terms in turquoise (`#12C2C2`).
+  - Subtitle: Switzer Regular 400 (`15-17px`, line-height `1.5`, color `#8E9BAE`).
+  - Punchline Pill: JetBrains Mono badge (`#E2ECFF`, border `1px solid rgba(74, 134, 255, 0.35)`, background `rgba(31, 79, 230, 0.12)`).
+- **Interactive Architectural & Execution Mockup Cards:**
+  - Glassmorphic card styling: `background: rgba(14, 20, 36, 0.85)`, `border: 1px solid rgba(255, 255, 255, 0.10)`, `backdrop-filter: blur(16px)`, `border-radius: 14px`.
+  - Top border gradient accent: `linear-gradient(90deg, transparent, #4A86FF, #12C2C2, transparent)`.
+  - Real Domain Elements: Verified container ID (e.g. `MSCU9284102`), UN/LOCODE port route (`Rotterdam NLRTM ➔ Singapore SGSIN`), 3-tier status rows:
+    - *Signal:* Problem / trigger in Amber (`#E8A33D`).
+    - *Resolution:* Autonomous action in Cobalt (`#1F4FE6` / `#4A86FF`).
+    - *Impact:* Preserved SLA / $0 demurrage in Turquoise (`#12C2C2`).
+    - *Terminal Log:* Real DCSA API call (`POST /v1/containers/... [200 OK]`).
+- **Rendering Workflow (Playwright):**
+  - Render HTML template to PNG via headless Chromium using Playwright: launch with `--no-sandbox`, viewport `1200x675`, `device_scale_factor: 2`, wait 2000ms for Fontshare fonts (`Ranade`, `Switzer`) to hydrate before `page.screenshot()`.
+
 
 

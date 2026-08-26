@@ -37,7 +37,13 @@ Use when identifying local SMBs on Google Maps / OSM lacking websites, generatin
    - **Branded Email Inbound:** Automated forwarding from domain address (`contact@domain.com` -> inbox).
    - **Automated Scheduling:** Daily batch ingestion via cron tasks.
 
-## Pitfalls & Best Practices
+## Key Operating Directives
+- **Hard KPI Goal: 20 Delivered Contacts Daily:** The pipeline does not merely scrape 20 rows; it actively loops through multi-city and multi-niche query pools until exactly 20 contacts receive a delivered WhatsApp message or Email.
+- **Universal Google Rating Spectrum & Reputation Angle:** Businesses of any rating are targeted. For ratings < 4.0, pitch pivots to an automated reputation recovery & private feedback routing angle alongside 24/7 AI booking.
+- **Schedule & Delays:** Cron runs daily at 19:00 Kyiv (16:00 UTC). Delay between successful sends is 120-150s (2-2.5 min) to complete within the 3600s cron timeout ceiling while maintaining anti-spam protection.
+- **Signature & Link:** Ben Jett, Account Executive, Avalanche Agency, linking directly to https://aavalanche.com.
+- **Anti-Spam Dynamic Pitch Variations:** Greetings, hooks, pain points, value propositions, and CTAs are dynamically shuffled per lead to prevent pattern detection.
+- **Enrichment Module:** Public registries and business directories are scanned for emails to run multichannel outreach.
 - **Anti-Spam Dynamic Text Variations (Crucial):** Never dispatch identical boilerplate templates to multiple leads. Construct modular variation engines (4 greetings × 4 niche hooks × 4 pain points × 4 value props × 4 CTAs) to generate uniquely phrased messages for every lead. Enforce a minimum length check (>50 chars) and guard against placeholder strings before transmission.
 - **Root Domain Links:** For outreach footers and signatures, use clean top-level domain URLs (`https://aavalanche.com`) rather than subpages unless specifically requested.
 - **Cold Email IMAP Sent Sync & Anti-Spam (MailChannels):** SMTP transmission does not automatically copy messages to webmail `Sent` folders. Append sent messages via IMAP directly to `INBOX.Sent` with the `\Seen` flag. Ensure valid `Message-ID`, RFC `Date`, `From`, `Reply-To`, `X-Mailer`, and dual `text/plain` + `text/html` multipart payloads to prevent `550 5.7.1 [CS]` MailChannels/Hostinger blocks.
