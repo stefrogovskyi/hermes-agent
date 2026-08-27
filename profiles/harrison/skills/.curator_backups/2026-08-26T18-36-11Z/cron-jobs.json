@@ -1,0 +1,103 @@
+{
+  "jobs": [
+    {
+      "id": "a8997e4062a3",
+      "name": "daily_employee_communications_summary",
+      "prompt": "Сформируй и пришли Стефану ежедневную сводку (daily briefing) о коммуникациях юрисконсульта Harrison Croft со всеми сотрудниками и подрядчиками Navo за последние 24 часа.\n\nИнструкция:\n1. Проверь базу данных сессий и сообщений (/opt/hermes/profiles/harrison/state.db) за последние 24 часа.\n2. Исключи прямые диалоги со Стефаном (ID 330656040). Сфокусируйся на обращениях от команды:\n   - Олег Червинский (@OlehChervinskyi / 8081511707)\n   - Мария Прохорова (@prokhorova_maria_001)\n   - Алена Голубова (@alencchikk98)\n   - Катерина Капустян (@katekap19)\n   - Лилия (@liliia_kh)\n   - Катерина (@katyyy2408)\n   - Алексей (@lxxmngu)\n   - и другие члены команды/подрядчики.\n3. Если за сутки были обращения:\n   - Сгруппируй по сотрудникам;\n   - Кратко опиши суть запроса (клиентские условия, NDA, контракты, опционы, комплаенс, рабочие вопросы);\n   - Укажи, какой ответ/решение предоставил Harrison Croft;\n   - Зафиксируй статус и необходимые следующие шаги.\n4. Если обращений за последние 24 часа не было:\n   - Кратко сообщи, что новых запросов от команды за отчетный период не поступало.\n5. Форматируй сводку структурированно, четко и на русском языке.",
+      "skills": [],
+      "skill": null,
+      "model": "google/gemini-3.6-flash",
+      "provider": "gemini",
+      "provider_snapshot": "gemini",
+      "model_snapshot": "google/gemini-3.7-flash",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "monitor_script": null,
+      "monitor_url": null,
+      "monitor_state": null,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 18 * * *",
+        "display": "0 18 * * *"
+      },
+      "schedule_display": "0 18 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 8
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-08-19T17:10:23.019175+00:00",
+      "next_run_at": "2026-08-27T18:00:00+00:00",
+      "last_run_at": "2026-08-26T18:01:37.604418+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "330656040",
+        "chat_name": "Stefan Rogovskiy",
+        "thread_id": null,
+        "user_id": "330656040"
+      },
+      "enabled_toolsets": null,
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "678be6e4b9fc",
+      "name": "daily_grant_scout_and_applications",
+      "prompt": "Сформируй и пришли Стефану ежедневный утренний отчет по поиску и подаче неразмывающих грантов (Non-Dilutive Grants) для Navo24 (WEMELOGISTICS LTD).\n\nИнструкция к исполнению:\n1. Выполни глубокий поиск новых и активных грантовых программ, конкурсов и открытых заявок (Open Calls) в регионах:\n   - Великобритания: Innovate UK (BridgeAI, Smart Grants, Clean Maritime, Freight Innovation Fund);\n   - Евросоюз: Horizon Europe, EU Cascade Funding / FSTP (F6S, FundingBox, EIT Digital, SMART4ALL);\n   - Ближний Восток: Катар (QRDI Innovation Pilot Grant, Product Development Grant, QSTP), ОАЭ (Hub71, NTDP);\n   - Глобальные гранты на AI/MCP и декарбонизацию логистики.\n2. Проверь и обнови локальный трекер грантов: /opt/hermes/profiles/harrison/grants/grant_tracker.json.\n3. Используй данные из досье компании: /opt/hermes/profiles/harrison/grants/grant_core_dossier.md (WEMELOGISTICS LTD, Company No. 14081751, London SW15 3AL, TRL 7-8, MCP-архитектура, DCSA-нормализация, CO2-оптимизация через LoadingMCP).\n4. Для новых открытых заявок подготовь предварительные драфты ответов на ключевые вопросы грантодателя (Problem, Innovation, Commercialization, Team, Budget).\n5. При необходимости внешнего аутрича/коммуникаций с координаторами программ использовать почту contact@navo24.com с подписью:\n   Harrison Croft, General Legal Counsel & Chief Compliance Officer at Navo (WEMELOGISTICS LTD).\n6. Отправь Стефану четкую утреннюю сводку:\n   - Топ-3 свежих найденных гранта (название, сумма без эквити, дедлайн, сложность);\n   - Статус по активным подачам (Tier 1 Fast-track £25k-£50k, Tier 2 Qatar $500k, EU FSTP);\n   - Рекомендуемые шаги и конкретные действия на сегодня.",
+      "skills": [],
+      "skill": null,
+      "model": "google/gemini-3.6-flash",
+      "provider": "gemini",
+      "provider_snapshot": "gemini",
+      "model_snapshot": "google/gemini-3.7-flash",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "monitor_script": null,
+      "monitor_url": null,
+      "monitor_state": null,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 6 * * *",
+        "display": "0 6 * * *"
+      },
+      "schedule_display": "0 6 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 4
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-08-22T16:33:47.425665+00:00",
+      "next_run_at": "2026-08-27T06:00:00+00:00",
+      "last_run_at": "2026-08-26T06:02:06.451500+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "330656040",
+        "chat_name": "Stefan Rogovskiy",
+        "thread_id": null,
+        "user_id": "330656040"
+      },
+      "enabled_toolsets": null,
+      "workdir": null,
+      "fire_claim": null
+    }
+  ],
+  "updated_at": "2026-08-26T18:01:37.604939+00:00"
+}

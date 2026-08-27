@@ -24,17 +24,21 @@ GREENHOUSE_BOARDS = [
     ("xAI", "xai", "Frontier AI"),
     ("Anthropic", "anthropic", "AI Frontier"),
     ("SpaceX", "spacex", "DeepTech / Aero"),
+    ("Altos Labs (Bezos)", "altoslabs", "Biotech / Anti-aging"),
     ("Flexport", "flexport", "Freight Tech"),
     ("project44", "project44", "Supply Chain Visibility"),
     ("FourKites", "fourkites", "Supply Chain Visibility"),
 ]
 ASHBY_BOARDS = [
     ("OpenAI", "openai", "AI Frontier"),
+    ("Prometheus", "prometheus", "Frontier AI / Tech"),
 ]
 
 # Workday cxs API (Manhattan — проверен 2026-08-17 total=41; Maersk — вскрыт через
 # перехват api.maersk.com в браузере: тенант maersk.wd3 / site Maersk_Careers, ~1360 вакансий)
 WORKDAY_BOARDS = [
+    ("NVIDIA", "nvidia.wd5.myworkdayjobs.com", "nvidia", "NVIDIAExternalCareerSite", "AI Hardware / Compute"),
+    ("Blue Origin (Bezos)", "blueorigin.wd5.myworkdayjobs.com", "blueorigin", "BlueOrigin", "DeepTech / Space"),
     ("Manhattan Associates", "manh.wd5.myworkdayjobs.com", "manh", "External", "Supply Chain Software"),
     ("Maersk", "maersk.wd3.myworkdayjobs.com", "maersk", "Maersk_Careers", "Logistics Giant"),
 ]
@@ -341,6 +345,104 @@ def fetch_remotive_execs():
     return out
 
 
+def fetch_google_careers_playwright():
+    """Headless Playwright: парсинг открытых Director/VP ролей напрямую из Google Careers SPA."""
+    out = []
+    try:
+        import asyncio
+        from playwright.async_api import async_playwright
+        
+        async def _run():
+            async with async_playwright() as p:
+                browser = await p.chromium.launch(headless=True)
+                context = await browser.new_context(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+                page = await context.new_page()
+                await page.goto("https://www.google.com/about/careers/applications/jobs/results/?q=Director", timeout=45000)
+                await page.wait_for_timeout(8000)
+                cards = await page.evaluate("""() => {
+                    const res = [];
+                    const headings = Array.from(document.querySelectorAll('h2, h3, [role="heading"]'));
+                    for (const h of headings) {
+                        const text = h.innerText.trim();
+                        if (text && (text.includes('Director') || text.includes('Lead') || text.includes('VP') || text.includes('Head'))) {
+                            let p = h.parentElement;
+                            let link = '';
+                            for (let i = 0; i < 5 && p; i++) {
+                                const a = p.querySelector('a');
+                                if (a && a.href) { link = a.href; break; }
+                                p = p.parentElement;
+                            }
+                            res.push({ title: text, link: link });
+                        }
+                    }
+                    return res;
+                }""")
+                await browser.close()
+                return cards
+        
+        items = asyncio.run(_run())
+        for it in items:
+            title = it['title']
+            url = it['link'] or "https://careers.google.com"
+            out.append({
+                "uid": "google:" + re.sub(r'[^a-zA-Z0-9]', '', title)[:30],
+                "company": "Google",
+                "title": title,
+                "location": "Global / US",
+                "url": url,
+                "category": "Big Tech / AI",
+                "updated_at": "",
+            })
+    except Exception as e:
+        print("Google Playwright parser error:", e)
+    return out
+
+
+def fetch_microsoft_careers_playwright():
+    """Headless Playwright: парсинг открытых ролей напрямую из Microsoft Careers SPA."""
+    out = []
+    try:
+        import asyncio
+        from playwright.async_api import async_playwright
+        
+        async def _run():
+            async with async_playwright() as p:
+                browser = await p.chromium.launch(headless=True)
+                context = await browser.new_context(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+                page = await context.new_page()
+                await page.goto("https://jobs.careers.microsoft.com/global/en/search?q=Director&lc=United%20States&l=en_us&pg=1&pgSz=20&o=Relevance", timeout=45000)
+                await page.wait_for_timeout(8000)
+                cards = await page.evaluate("""() => {
+                    const res = [];
+                    const elements = Array.from(document.querySelectorAll('[data-automation-id="job-title"], h2, h3, a[href*="/job/"]'));
+                    for (const el of elements) {
+                        const text = el.innerText.trim();
+                        const a = el.tagName === 'A' ? el : el.closest('a') || el.querySelector('a');
+                        if (text && a && a.href) {
+                            res.push({ title: text.split('\\n')[0], link: a.href });
+                        }
+                    }
+                    return res;
+                }""")
+                await browser.close()
+                return cards
+                
+        items = asyncio.run(_run())
+        for it in items:
+            title = it['title']
+            url = it['link']
+            out.append({
+                "uid": "ms:" + re.sub(r'[^a-zA-Z0-9]', '', title)[:30],
+                "company": "Microsoft",
+                "title": title,
+                "location": "United States / Global",
+                "url": url,
+                "category": "Big Tech / Cloud",
+                "updated_at": "",
+            })
+    except Exception as e:
+        print("Microsoft Playwright parser error:", e)
+    return out
 def fetch_dou_feed(company, slug):
     """DOU RSS: jobs.dou.ua/vacancies/<slug>/feeds/ (title содержит роль и город)."""
     out = []
@@ -405,7 +507,9 @@ def main():
         all_jobs.extend(fetch_comeet_html(c, u, cat))
     all_jobs.extend(fetch_descartes())
     all_jobs.extend(fetch_amazon_execs())
-    all_jobs.extend(fetch_nvidia_execs())
+    all_jobs.extend(fetch_remotive_execs())
+    all_jobs.extend(fetch_google_careers_playwright())
+    all_jobs.extend(fetch_microsoft_careers_playwright())
     all_jobs.extend(fetch_remotive_execs())
 
     # ===== Блок IT Ukraine (BizDev/PM/Product/Delivery, senior+) =====

@@ -97,7 +97,7 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
      - **EXACTLY 1 EXTRA BLANK LINE** before the signature block.
      - **NO HORIZONTAL LINE (`border-top`) BEFORE THE SIGNATURE**.
      - Use ONLY the official HTML signature block (`Richard Marlowe / Connections Manager`, logo `https://bit.ly/4hLg86T`, +44 203 440 9800, 30 St Mary Axe London, `rich@navo24.com`, `www.navo24.com`).
-     *(See `references/4-touch-sequence-pattern.md` for full sequence details and HTML signature templates, and `references/b2b-contract-and-kanban-rules.md` for contract drafting and Vercel Kanban UI rules.)*
+     *(See `references/4-touch-sequence-pattern.md` for full sequence details and HTML signature templates, `references/b2b-contract-and-kanban-rules.md` for contract drafting and Vercel Kanban UI rules, and `references/technical-api-inquiries-and-schedules.md` for Tracking & Schedules REST API inquiry patterns, SeaRates comparison, and billing rules.)*
    - **Mass Cold Outreach & Anti-Spam (100% Dynamic AI Personalization & High Combinatorics)**:
      - **Primary Outbound Channel Rule (User Direct Mandate)**:
        * All primary email sending, 1-on-1 replies, and outbound communications must be sent **directly from Richard (`rich@navo24.com`)** via Microsoft Graph API / M365.

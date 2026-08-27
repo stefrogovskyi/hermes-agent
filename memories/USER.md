@@ -1,4 +1,4 @@
-Stefan: COO Navo; dr.reenforce@gmail.com. Confirm deletions. CAREER SCANNER: Daily 09:00 scan of C-Level & Leadership roles (Big Tech/AI: Anthropic, xAI, SpaceX, OpenAI; FreightTech: DP World, Maersk, Flexport, project44) to TG DM.
+CAREER SCANNER: Daily 09:00 scan of C-Level & Leadership roles (Big Tech/AI: Google, Microsoft, NVIDIA, Amazon, Anthropic, xAI, SpaceX, OpenAI, Blue Origin, Altos Labs, Prometheus; FreightTech: DP World, Maersk, Flexport, project44) to TG DM.
 §
 User prefers exact publication timestamps (HH:MM).
 §

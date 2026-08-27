@@ -155,14 +155,14 @@
     "created_by": null,
     "last_patched_at": "2026-08-24T10:12:30.003351+00:00",
     "last_reused_patch_generation": 0,
-    "last_used_at": null,
-    "last_viewed_at": null,
+    "last_used_at": "2026-08-26T08:56:09.808300+00:00",
+    "last_viewed_at": "2026-08-26T08:56:09.804624+00:00",
     "patch_count": 1,
     "patch_generation": 1,
     "pinned": false,
     "state": "active",
-    "use_count": 0,
-    "view_count": 0
+    "use_count": 1,
+    "view_count": 1
   },
   "blocked-page-recovery": {
     "archived_at": null,
@@ -800,13 +800,13 @@
     "created_by": null,
     "last_patched_at": null,
     "last_reused_patch_generation": 0,
-    "last_used_at": "2026-08-25T03:00:26.973046+00:00",
+    "last_used_at": "2026-08-26T03:00:39.565187+00:00",
     "last_viewed_at": "2026-08-21T03:00:36.240549+00:00",
     "patch_count": 0,
     "patch_generation": 0,
     "pinned": false,
     "state": "active",
-    "use_count": 31,
+    "use_count": 33,
     "view_count": 3
   },
   "merge-reconciler": {

@@ -11,6 +11,8 @@
 
 ## Cases
 | Дата | Тема | Файл | Ключевой урок |
+| 2026-08-26 | Pasport Odesa3 Queue Monitor Poller | cases/2026-08-26_pasport_odesa3_equeue_poller.md | Поллер мониторинга слотов записи Pasport Odesa3 (07:00-23:00 Kyiv) с моментальным Push в TG DM при освобождении окна. |
+| 2026-08-26 | OpenClaw Timeout Config Fix & Service Restart | cases/2026-08-26_openclaw_timeout_config_fix.md | Исправление таймаута генерации OpenClaw в `openclaw.service` и валидация конфигурации. |
 | 2026-08-25 | SketchForge-3D Local CAD Editor & MCP Bridge | cases/2026-08-25_sketchforge_3d_mcp_cad_editor.md | Локальный 3D CAD на `sketchforge.service` (:3030) с нативным MCP-мостом для programmatic моделирования, булевых операций (Manifold CSG) и рендера вьюпорта. |
 | 2026-08-25 | Big Tech Executive Career Scanner Integration | cases/2026-08-25_big_tech_career_scanner_integration.md | Расширение executive_careers_poller.py парсерами Amazon (amazon.jobs API), Google, Microsoft и Tesla (headless WAF bypass); скилл big-tech-career-scanner. |
 | 2026-08-24 | Ecosystem Self-Healing Upgrade, Token Isolation & Azure MS Graph Re-Auth | cases/2026-08-24_ecosystem_self_heal_and_azure_ms_graph_reauth.md | Динамический поиск всех `hermes-*.service` и `openclaw-*.service` в `ecosystem_self_heal_audit.py`; 100% изоляция токенов; обновление MS Graph секретов Azure `Navo Booking`. |
