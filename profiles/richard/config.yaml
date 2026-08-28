@@ -49,6 +49,18 @@ fallback_providers: &id001
   provider: gonka24
 - model: gpt-4o-mini
   provider: openai
+- model: stepfun/step-3.7-flash:free
+  provider: nous
+- model: upstage/solar-pro4:free
+  provider: nous
+- model: tencent/hy3:free
+  provider: nous
+- model: meituan/longcat-2.0:free
+  provider: nous
+- model: poolside/laguna-s-2.1:free
+  provider: nous
+- model: poolside/laguna-xs-2.1:free
+  provider: nous
 - model: nvidia/nemotron-3-super-120b-a12b:free
   provider: openrouter
 - model: google/gemma-4-31b-it:free
