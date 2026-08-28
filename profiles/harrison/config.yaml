@@ -1,19 +1,37 @@
 model:
   default: google/gemini-3.7-flash
   provider: google
-fallback_providers:
-- model: gpt-4o-mini
-  provider: openai
+fallback_providers: &id001
 - model: gpt-4o
   provider: openai
+- model: deepseek/deepseek-chat
+  provider: openrouter
+- model: google/gemini-3.6-flash
+  provider: google
+- model: google/gemini-2.5-pro
+  provider: google
+- model: meta-llama/llama-3.3-70b-instruct
+  provider: openrouter
+- model: qwen/qwen-2.5-72b-instruct
+  provider: openrouter
 - model: minimax-m2.7
   provider: gonka24
 - model: kimi-k2.6
   provider: gonka24
-- model: deepseek/deepseek-chat
+- model: gpt-4o-mini
+  provider: openai
+- model: nvidia/nemotron-3-super-120b-a12b:free
   provider: openrouter
-- model: meta-llama/llama-3.3-70b-instruct
+- model: google/gemma-4-31b-it:free
   provider: openrouter
+- model: google/gemma-4-26b-a4b-it:free
+  provider: openrouter
+- model: minimax/minimax-m3:free
+  provider: openrouter
+- model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
+  provider: openrouter
+- model: google/gemini-2.5-flash
+  provider: google
 compression:
   enabled: true
   threshold: 0.25
@@ -39,14 +57,4 @@ platforms:
     group_allow_from:
     - '*'
 request_timeout_seconds: 30
-fallback:
-- model: google/gemini-2.5-flash
-  provider: google
-- model: google/gemini-1.5-flash
-  provider: google
-- model: minimax-m2.7
-  provider: gonka24
-- model: kimi-k2.6
-  provider: gonka24
-- model: gpt-4o-mini
-  provider: openai
+fallback: *id001
