@@ -8,11 +8,17 @@ fallback_providers: &id001
   provider: openrouter
 - model: google/gemini-3.6-flash
   provider: google
+- model: nousresearch/hermes-3-llama-3.1-405b
+  provider: openrouter
 - model: google/gemini-2.5-pro
   provider: google
 - model: meta-llama/llama-3.3-70b-instruct
   provider: openrouter
+- model: nousresearch/hermes-3-llama-3.1-70b
+  provider: openrouter
 - model: qwen/qwen-2.5-72b-instruct
+  provider: openrouter
+- model: mistralai/mistral-small-24b-instruct-2501
   provider: openrouter
 - model: minimax-m2.7
   provider: gonka24
@@ -29,6 +35,8 @@ fallback_providers: &id001
 - model: minimax/minimax-m3:free
   provider: openrouter
 - model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
+  provider: openrouter
+- model: mistralai/mistral-nemo
   provider: openrouter
 - model: google/gemini-2.5-flash
   provider: google
