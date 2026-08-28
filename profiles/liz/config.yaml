@@ -25,48 +25,18 @@ fallback:
 - model: gpt-4o-mini
   provider: openai
 fallback_providers:
-- model: stealth/ox-alpha
-  provider: openrouter
-- model: google/gemini-2.5-flash
-  provider: google
 - model: gpt-4o-mini
   provider: openai
 - model: gpt-4o
   provider: openai
-- model: google/gemini-2.5-flash
-  provider: openrouter
-- model: nvidia/nemotron-3.5-lightning:free
-  provider: openrouter
-- model: google/gemma-4-31b-it:free
-  provider: openrouter
-- model: google/gemma-4-26b-a4b-it:free
-  provider: openrouter
-- model: poolside/laguna-s-2.1:free
-  provider: openrouter
-- model: cohere/north-mini-code:free
-  provider: openrouter
-- model: nvidia/nemotron-3-nano-30b-a3b:free
-  provider: openrouter
-- model: nvidia/nemotron-3-super-120b-a12b:free
-  provider: openrouter
-- model: nvidia/nemotron-nano-12b-v2-vl:free
-  provider: openrouter
-- model: openai/gpt-oss-20b:free
-  provider: openrouter
 - model: minimax-m2.7
   provider: gonka24
 - model: kimi-k2.6
   provider: gonka24
-- model: nvidia/nemotron-3.5-lightning-30b-a3b
-  provider: nvidia
-- model: nvidia/llama-3.3-nemotron-super-49b-v1.5
-  provider: nvidia
-- model: nvidia/nemotron-3-super-120b-a12b
-  provider: nvidia
-- model: nvidia/nemotron-mini-4b-instruct
-  provider: nvidia
-- model: meta/llama-3.1-8b-instruct
-  provider: nvidia
+- model: deepseek/deepseek-chat
+  provider: openrouter
+- model: meta-llama/llama-3.3-70b-instruct
+  provider: openrouter
 model:
   default: google/gemini-3.7-flash
   max_retries: 2
