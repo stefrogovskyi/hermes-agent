@@ -97,7 +97,29 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
      - **EXACTLY 1 EXTRA BLANK LINE** before the signature block.
      - **NO HORIZONTAL LINE (`border-top`) BEFORE THE SIGNATURE**.
      - Use ONLY the official HTML signature block (`Richard Marlowe / Connections Manager`, logo `https://bit.ly/4hLg86T`, +44 203 440 9800, 30 St Mary Axe London, `rich@navo24.com`, `www.navo24.com`).
-     *(See `references/4-touch-sequence-pattern.md` for full sequence details and HTML signature templates, `references/b2b-contract-and-kanban-rules.md` for contract drafting and Vercel Kanban UI rules, and `references/technical-api-inquiries-and-schedules.md` for Tracking & Schedules REST API inquiry patterns, SeaRates comparison, and billing rules.)*
+     *(See `references/4-touch-sequence-pattern.md` for full sequence details and HTML signature templates, `references/25-sources-audit-and-scrapers.md` for the complete 25-source technical audit and scrapers, `references/b2b-contract-and-kanban-rules.md` for contract drafting and Vercel Kanban UI rules, and `references/technical-api-inquiries-and-schedules.md` for Tracking & Schedules REST API inquiry patterns, SeaRates comparison, and billing rules.)*
+   - **RFC 5322 Recipient Header Formatting Rule**:
+     * In all outbound cold emails and responses, ALWAYS format the `To` field as `f"{person_name} <{email}>"` (e.g. `Colin Charnock <c.charnock@tglobal.com>`). Passing bare email strings causes mail user agents (Outlook, Apple Mail) in CC copies to suppress the recipient display name or collapse the field.
+   - **Multi-Source Diversity & Strict Regional Filtering Mandate**:
+     * **Strict Multi-Source Distribution & Single-Pass Full Run**: Distribute daily outreach across all 19 active sources evenly (19 sources x 5 leads = 95 verified emails per morning run). Run in a full single pass rather than small fragmented batches of 20-30.
+     * **SeaRates Founding Team Pedigree Value Prop**: In cold outreach intros, ALWAYS cite that Navo24 was founded by the key founding and engineering team behind SeaRates to immediately establish credibility with forwarders and BCOs.
+     * **STRICT Anti-Generic Mailbox Policy**: NEVER send outreach to departmental or generic mailboxes (`info@`, `sales@`, `pricing@`, `export@`, `import@`, `ocean@`, `procurement@`, `dispatch@`, `overseas@`, `operations@`, `customs@`, `quotes@`, `help@`, `desk@`). Filter via `is_personal_decision_maker_email()` to target ONLY named personal executive emails (`first.last@`, `flast@`, `name@` for VP Supply Chain, Ocean Freight Director, Head of Logistics, C-Level).
+     * **Cross-CRM Deduplication Mandate**: Before dispatching, cross-check candidate emails across ALL active CRM bases (`Online Outreach` `appdJR8VVczRxcVke`, `Navo CRM` `appbxvl9BBaTiLMlf` Leads & Contacts, and `Rich Outreach` `appEoWQjvhgN8LIX7`) to ensure ZERO duplicate outreach.
+     * **Strict Regional & Geographic Tagging (No Generic "Global")**: When targeting specific regions (e.g., Western Hemisphere / North & South America), enforce strict country-level filtering (`country_iso in ['US', 'CA', 'MX', 'BR', 'AR', 'CL', 'CO', 'PE']`) and tag each lead with its exact country name (United States, Canada, Mexico, Brazil, Argentina, Chile). NEVER assign a lazy "Global" label when regional targeting is requested.
+     * **Full 5-Product Suite Inclusion**: Every cold outreach email body MUST list the full 5-component portfolio:
+       1. `Tracking API (Ocean & Air)` (234 ocean carriers, DCSA events, observed ETAs, D&D free-time)
+       2. `Schedules API` (72,000+ sailings, reliability benchmarks, 255 ports)
+       3. `FreightRates API` (Live ex-Asia spot rates benchmarking, container indices)
+       4. `AirTracking API` (Real-time AWB status across global airlines)
+       5. `Loading 3D` (Container load optimization, CTU Code / IMDG compliance)
+     * **Weekday-Only B2B Scheduling**: All recurring cold outreach cron jobs MUST run strictly on business weekdays (`0 4 * * 1-5` / Monday through Friday), leaving weekends completely silent to maintain professional B2B delivery standards.
+   - **Commercial Quotation & Negotiation Guidelines**:
+     * **Volume Quota Interpretation**: Always confirm whether shipment volumes represent a total contract pool or a monthly recurring allowance (e.g., 300 shipments/mo on a 12-month contract = 3,600 total shipments; unit rate = Total Price / 3,600).
+     * **Concise Price Presentation**: When presenting updated pricing to prospects (e.g., short-term 3-month contracts in local currency like IDR), keep the email clean, direct, and focused on the bottom-line price and deliverables rather than displaying long multi-step arithmetic.
+     * **Dynamic Currency & Tax Inquiries**: When quoting foreign currencies (e.g., IDR, EUR, AED), specify that billing is issued from the international legal entity for client convenience and recommend local tax advisor review for cross-border withholding tax implications.
+   - **Target Audience Scope (BCOs, Trading Conglomerates & Shippers First)**:
+     * Never restrict prospecting solely to freight forwarding directors.
+     * High-volume priority: BCOs (Beneficial Cargo Owners), Commodity Trading Houses (Agri, Energy, Metals), Chemical and Industrial Manufacturers shipping 100s–1,000s of containers directly (e.g. Bunge, ADM, Dow, BASF, Trafigura). Target: `Head of Logistics`, `VP Supply Chain`, `Director of International Trade`, `Import/Export Director`, `Commercial General Manager`.
    - **Mass Cold Outreach & Anti-Spam (100% Dynamic AI Personalization & High Combinatorics)**:
      - **Primary Outbound Channel Rule (User Direct Mandate)**:
        * All primary email sending, 1-on-1 replies, and outbound communications must be sent **directly from Richard (`rich@navo24.com`)** via Microsoft Graph API / M365.
@@ -143,12 +165,58 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
      * When any prospect replies from the outbound prospecting bases (`CN FF 1-3`), perform dual-layer tracking:
        1. In the Prospecting Base (`CN FF 1-3`), update the record: `Stage` -> `"Pitched"` (or `"Lead"`), `status` -> `"Replied - <key topic>"` (e.g. `Replied - API tariffs offered`).
        2. In the Main **Navo CRM** (`appbxvl9BBaTiLMlf`), create or update the corresponding card in table **`Leads`** (`Lead Title`, `Email`, `Phone/WeChat`, `Status: Open`, `Source: Email Outreach`, `Owner: Richard Marlowe (AI)`, `Comments` with full Russian synthesis of company strengths, contact details, and next steps).
-   - **Primary Navo CRM Base**:
-     * **Navo CRM** = Base ID `appbxvl9BBaTiLMlf` (Main B2B CRM with 5 core tables: `Accounts`, `Contacts`, `Leads`, `Opportunities`, `Timeline Events`). Always target `Navo CRM` for CRM interface creation, distinct from prospecting bases.
-   - **Prospecting Outbound Bases**:
-     * `CN FF 1` = Base ID `appdWYgvtQR2Fgaeq` (Table `CNFF-1`)
-     * `CN FF 2` = Base ID `appa1AH0vV4fl1BVQ` (Table `CNFF-2`)
-     * `CN FF 3` = Base ID `appVItBOee1awOPHh` (Table `CNFF-3`)
+   - **Primary Navo CRM vs Online Outreach Bases**:
+     * **Navo CRM** = Base ID `appbxvl9BBaTiLMlf` (Main B2B CRM with 5 core tables: `Accounts`, `Contacts`, `Leads`, `Opportunities`, `Timeline Events`). Reserved EXCLUSIVELY for qualified inbound responses, active client discussions, and deal pipeline.
+     * **Online Outreach** = Base ID `appdJR8VVczRxcVke` (Table `Outreach Leads`). Dedicated database for multi-source cold outreach (17 sources, DFA, WCA, ImportYeti, Volza, Trademo, etc.). Records initial ingestion, `Source Platform`, sent HTML bodies, Resend IDs, and `Stage: Contacted`.
+     * **Prospecting Outbound Bases**:
+       - `CN FF 1` = Base ID `appdWYgvtQR2Fgaeq` (Table `CNFF-1`)
+       - `CN FF 2` = Base ID `appa1AH0vV4fl1BVQ` (Table `CNFF-2`)
+       - `CN FF 3` = Base ID `appVItBOee1awOPHh` (Table `CNFF-3`)
+     * **Rich Outreach** = Base ID `appEoWQjvhgN8LIX7` (Specialized IT, Logistics, Finance, Trade lists).
+     * **Outreach Component Bullet Hierarchy & Testing Link**:
+       - In component bullet lists, always place **AirCargoMCP at the very bottom** of the list with no URL link.
+       - The self-serve testing link in the CTA MUST point strictly to **`navo24.com`** (`<a href="https://navo24.com" target="_blank">navo24.com</a>`), not `trackingmcp.com/track`.
+     * **Email Layout & Visual Formatting Rules (Natural 1-on-1 vs Marketing Newsletter)**:
+       - **Strict Left Alignment**: Cold outreach and 1-on-1 business emails must look like natural, human emails written from Outlook or Gmail. NEVER wrap email bodies in centered marketing card containers (`max-width: 620px; margin: 0 auto;`). Always use strict left alignment (`text-align: left; max-width: 100%;`).
+       - **No Dividing Horizontal Rule Before Signature**: Before Richard's signature block, NEVER insert horizontal divider lines (`<hr>` or `border-top: 1px solid #...`). Leave exactly 1 standard blank line / paragraph margin before the signature.
+     * **Target Audience Expansion (BCOs, Shippers & Trading Conglomerates)**:
+       - Do NOT restrict outbound prospecting only to logistics and freight forwarder directors.
+       - Priority focus: high-volume **BCOs (Beneficial Cargo Owners), Export/Import Trading Houses, Commodity Traders, and Industrial Manufacturers** shipping hundreds/thousands of containers directly (e.g., agribusiness, chemicals, metals, consumer goods, machinery). Target: `Head of Logistics`, `VP Supply Chain`, `Director of International Trade`, `Import/Export Director`, `Commercial General Manager`.
+     * **Outreach & 1-on-1 Reply-To & CC Routing Rules**:
+       - **Reply-To Mandate**:
+         * **Western / Online Outreach (17 sources)**: `Reply-To: sales@navo24.com`.
+         * **Chinese Outreach & Correspondence (CNFF 1-3 / Chinese partners)**: **`Reply-To: rich@navo24.com`** (ALWAYS routes to Richard's active M365 mailbox).
+       - **1-on-1 CC Mirroring Rule**: In individual thread replies, mirror the exact CC list from the client's incoming email. If the client had CC recipients, keep them in CC; if the incoming message had no CC, keep CC empty.
+       - **Mass Outreach Headers**: `From: Richard Marlowe <rich@e.navo24.com>`, `Reply-To: sales@navo24.com` (or `rich@navo24.com` for CN), `CC: support@navo24.com`.
+     * **Zero Hallucination & Zero-Mock Policy for Lead Sourcing**:
+       - **ABSOLUTE BAN ON SYNTHETIC / MOCKED DATA**: NEVER fabricate, mock, or hallucinate lead names, company domains, email addresses, or scraper results. If a source lacks an active parser or API integration, report its status honestly as pending development — never simulate successful extraction or invent records.
+       - **100% Genuine Verified Sources Only**: Ingest leads strictly from real, verified files (e.g. DFA directory `dfa_members.xlsx`) or live, tested API queries (Apollo, Hunter, Snov, Prospeo).
+       - **Pre-Send DNS & MX Verification**: Before dispatching, verify that recipient domains have active MX mail exchangers (`socket.getaddrinfo(domain, 25)`). Skip dead or unregistered domains.
+     * **Airtable Database Segregation**:
+       - **Online Outreach** (`appdJR8VVczRxcVke`, Table `Outreach Leads`): Dedicated base for cold multi-source outreach (STRICTLY 17 sources, DFA, WCA, ImportYeti, etc.). NEVER mix old SeaRates clients or Chinese FF bases into this table.
+       - **Navo CRM** (`appbxvl9BBaTiLMlf`, Table `Leads`): Reserved strictly for qualified inbound responses, active discussions, and deal pipeline.
+     * **Telegram Multi-User Access & Slash Command Handling**:
+       - Dual-layer authentication: update both `.env` (`TELEGRAM_ALLOWED_USERS`) and `config.yaml` (`platforms.telegram.allow_from`) with numeric Telegram user IDs and wildcard `*`.
+       - Enable non-admin bot activation: explicitly specify `platforms.telegram.user_allowed_commands: ['start', 'help', 'status', 'new', 'clear']` so team members clicking the Telegram Start button do not get access denied errors.
+     * **Timezone Synchronization for Cron Jobs (UTC vs Kyiv Time)**:
+       - The underlying Linux VM operates in **UTC**. Always offset cron expressions to match Kyiv / Ukraine time:
+         - **07:00 AM Kyiv (EEST, UTC+3)** -> `0 4 * * 1-5` (04:00 UTC).
+         - **22:00 (10 PM) Kyiv (EEST, UTC+3)** -> `0 19 * * *` (19:00 UTC).
+   - **Zero Mock Simulation & Live Execution Mandate**:
+     * NEVER print simulated/mock progress logs claiming outreach was sent or records were created when no real HTTP network requests or DB writes occurred.
+     * Every dispatch and CRM operation must be verified by live API execution returning valid transaction IDs (e.g. Resend ID, Airtable record ID `rec...`).
+   - **17-Source Online Outreach Engine & Database Mapping**:
+     * **Daily Cadence & Norms**: 17 sources x 5 verified leads = 85 leads/day sent on weekdays at 07:00 Kyiv time (`0 4 * * 1-5` UTC cron).
+     * **Strict Database Segregation**: Ingest strictly into base **`Online Outreach` (`appdJR8VVczRxcVke`)** in table **`Outreach Leads`**. NEVER mix old SeaRates clients or Chinese FF bases (CN1-3) into this database, and NEVER push cold unverified outreach directly into the main **`Navo CRM` (`appbxvl9BBaTiLMlf`)**.
+     * **Dynamic Variation & Spintax Anti-Spam Mandate**: To prevent spam filter detection, enforce dynamic subject line rotation (4 distinct variations) and source-specific personalized hooks (`{First Name}`, `{Company Name}`, source context).
+     * **Component Hierarchy & Testing Link**:
+       - In component bullet lists, always place **AirCargoMCP at the very bottom** of the list with no URL link.
+       - The self-serve testing link in the CTA MUST point strictly to **`navo24.com`** (`<a href="https://navo24.com" target="_blank">navo24.com</a>`), not `trackingmcp.com/track`.
+     * **Credential & Session Sync from Windows PC via Tailscale**:
+       - When credentials or browser session profiles are configured on Stefan's PC (`100.79.157.46`), use SSH/SCP directly over Tailscale to sync `.env` keys (Apollo, Hunter, Snov, Prospeo, Lusha, Clay) and session profiles (`volza_browser_profile/Default/Network/Cookies`) to the Linux server.
+     * **Source Real-Connection Status**:
+       - *Live Active*: DFA database, WCAworld/JCtrans open directories, Apollo API (`APOLLO_API_KEY`), Hunter API (`HUNTER_API_KEY`), Snov API (`SNOV_USER_ID`/`SNOV_SECRET`), Prospeo API (`PROSPEO_API_KEY`).
+       - *WAF / Browser-Dependent*: ImportYeti (headless Playwright Cloudflare bypass), Volza (Playwright session cookies).
    - **Outreach Audit & Completion Rule**: When auditing prospecting bases (`CN FF 1-3`), any records missing an `email` address cannot receive email outreach and should be marked `Stage: Postponed` / `status: Postponed` with a comment `[Audit] No email address provided in base profile. Marked Postponed.` to cleanly achieve 100% processing of reachable contacts without leaving records stuck as uncontacted `Lead`.
    - **Excel Multi-Recipient Cleaning & Parsing**:
      * In client databases (`Customers.xlsx`), email cells may contain multiple addresses delimited by `;`, `/`, or annotated with non-ASCII text (e.g. `maritimeproductmanagement@...; Vicky.Papaioannou@...` or `email@domain.com - не актуальный`).
@@ -188,9 +256,15 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
    - Decision-Maker Clarification: Clarify whether to continue direct discussion with the respondent or involve their leadership/management.
 - **1-on-1 Direct Client Correspondence (Non-Broadcast)**:
   * **From:** `Richard Marlowe <rich@e.navo24.com>` (via Resend REST API).
-  * **Reply-To:** `rich@navo24.com` (routes client replies directly into Richard's Microsoft 365 inbox).
+  * **Reply-To:** `sales@navo24.com` (routes client replies directly into Navo Sales inbox).
   * **CC List Rule:** Mirror the exact CC list from the incoming email (if the sender included colleagues in CC, preserve those exact addresses in CC; if incoming email had no CC, leave CC empty).
   * **Signature:** Official HTML signature with 1 blank line before and no top border line.
+- **Strict Real Execution & Zero Mock Simulation Mandate**:
+  * In automated outreach engines, cron scripts, and status reports, NEVER use synthetic mock logs or print placeholder progress claiming emails were sent or CRM records were created when no live HTTP POST requests or database mutations actually occurred.
+  * Every outreach run must be backed by genuine API responses (e.g. Resend `200 OK` with returned message IDs, Airtable `200 OK` with returned record IDs).
+- **Telegram Gateway Multi-User & Slash Command Access**:
+  * Dual-layer authentication: update both `.env` (`TELEGRAM_ALLOWED_USERS`) and `config.yaml` (`platforms.telegram.allow_from`) with numeric Telegram user IDs and wildcard `*`.
+  * Enable non-admin bot activation: explicitly specify `platforms.telegram.user_allowed_commands: ['start', 'help', 'status', 'new', 'clear']` so team members clicking the Telegram Start button do not get access denied errors.
 - **Handling In-Depth B2B Replacement / Migration Inquiries (ex-SeaRates Evaluation)**:
   * When prospects actively choosing a replacement for SeaRates submit detailed technical/commercial questionnaires (e.g., coverage of niche lanes, index vs. bookable rates, LCL, free tier, SLAs, lineage):
     1. **Radical Honesty & Factuality**: Never make up coverage claims or promise bookable tariffs where only market indices exist. If a corridor (e.g., Venezuela feeder ports) or mode (LCL per CBM) is not published, state it directly in Point 1.

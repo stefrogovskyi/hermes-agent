@@ -7,19 +7,19 @@ LEADERSHIP & EQUITY:
 - Stefan / Founder B: COO & Co-Founder (49% -> 44.1% diluted, Odessa, ID 330656040).
 - Option Pool: 10% Class B (Non-voting). Dual-class Articles of Association (Class A Voting / Class B Non-voting).
 §
-LEGAL SUITE & HR (GDrive '5. Docs' / 'Statute' / 'Employees'):
-- Corporate: Founders & Shareholders Agreement (SHA), Bespoke Articles, Share Register, PAYG & Enterprise Commercial MSA, Terms v2.0.
-- HR & Contractors: International Contractor Agreement (EN/UA, IP assignment), Sales Schedule Annex (CRM lead registration & commission), Equity Option & Leaver Framework.
+LEGAL & HR (GDrive '5. Docs' / 'Statute' / 'Employees'):
+- Corporate: SHA, Bespoke Articles, Share Register, PAYG & Enterprise MSA, Terms v2.0.
+- HR: International Contractor Agreement (EN/UA, IP assignment), Sales Schedule Annex, Equity Option Framework.
 - Roster: Chernova, Chervinskyi, Holubova, Ihumnov, Kapustian, Karavan, Prokhorova, Kernesh, Malik.
 §
 CLUSTER: Hermes (Orch), Richard (@richnavobot, Sales), Callum (@callumvancebot, Tech), Alistair (@qubicpmbot, Ops), Liz (@lizharperbot, HR), Archie (@archiewrightbot, Content), Ben (@benjettbot, Growth), Harrison (GC/Legal).
 §
-DEALS & COMMS:
-- Daily 21:00 Odessa brief (a8997e4062a3) logs team legal queries.
-- Key deals: Beacon (SLA 99.5%, Net 30, Data licence), LLI (Lloyds - £25k cap, 90d notice, Data embedding).
-- Authorized team: Stefan (330656040), Alexey (1022586369), Oleg (8081511707), Katya K. (149598904), M. Prokhorova, A. Holubova, K. Kapustian, Liliia.
+DEALS & COMPLIANCE:
+- Daily 21:00 Odessa brief (a8997e4062a3) logs legal queries.
+- Deals: Beacon (SLA 99.5%, Net 30, Data licence), LLI (Lloyds - £25k cap, 90d notice, Data embedding), EY (Infosec whitepaper).
+- Team IDs: Stefan (330656040), Alexey (1022586369), Oleg (8081511707), Alona H. (345948971), Katya K. (149598904), Eugene K. (363779334), Chernova/Kernesh (593209837).
+- Recovery notification: always display active LLM model name.
 §
 GRANTS & OUTREACH COMMS:
-- Outbound email: contact@navo24.com (signed by Harrison Croft).
-- Mandatory CC on ALL outbound emails: stefan@navo24.com, lxxmng@navo24.com.
-- Global G20 non-dilutive grant engine (cron 678be6e4b9fc @ 09:00). Auto-filing for open calls, 1-click pack for 2FA/e-sign, immediate submission reports + auto-sync to Google Sheet.
+- Outbound email: contact@navo24.com (signed by Harrison Croft). Mandatory CC: stefan@navo24.com, lxxmng@navo24.com.
+- Global G20 non-dilutive grant engine (cron 678be6e4b9fc @ 09:00). Auto-filing for open calls, 1-click pack for 2FA/e-sign, submission reports + Google Sheet sync.

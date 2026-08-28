@@ -42,6 +42,12 @@ def check_desktop_node():
     return "🟡 В сети (Tailscale OK, SSH в режиме ожидания)"
 
 def run_sync_and_report():
+    # 0. Direct sync of .env secrets via Tailscale SSH (outside of Git!)
+    try:
+        run_cmd(f"/opt/hermes/hermes-agent/venv/bin/python3 {HERMES_DIR}/scripts/tailscale_env_direct_sync.py", timeout=30)
+    except Exception:
+        pass
+
     # 1. Run local git sync to GitHub
     sync_out, sync_err, sync_code = run_cmd(f"/bin/bash {HERMES_DIR}/scripts/git_autosync_hidden.sh", timeout=60)
     

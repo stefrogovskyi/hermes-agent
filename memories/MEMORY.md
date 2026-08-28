@@ -1,4 +1,4 @@
-Richard (richnavobot): privacy OFF; SINGLE bot (token 8846249306). Sub-bots MUST NEVER fall back to Hermes token. Stefan DM(330656040)=client.
+Richard (richnavobot): privacy OFF; SINGLE bot (token 8846249306:AAE7qkGYcY-q3pbPE-Ikuger7MFHylRb9Sc). Sub-bots MUST NEVER fall back to Hermes token. Stefan DM(330656040)=client.
 §
 ПАМЯТЬ V2: memory_v2/ (cases+principles+recall.py+Pinecone+skill memory-recall). ПРАВИЛА Стефана: (1) сначала ФАКТ, потом правка; (2) при обрыве/падении — сам root-cause + доделай, 0 вопросов; (3) перечитывай себя, правь ошибки сразу; (4) в отчётах только реальные данные/URL — выдуманное запрещено.
 §

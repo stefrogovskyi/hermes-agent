@@ -16,6 +16,9 @@ metadata:
 ## When to Use
 Use when configuring or troubleshooting multi-profile Hermes Agent instances running as systemd background services on Linux servers, or setting up Git workspace synchronization.
 
+- `references/llm-fallback-cascades-and-secret-replication.md` — LLM provider fallback cascades, resolving spammy auth error loops from dead `:free` models, direct P2P Tailscale `.env` replication, and Telegram bot token revocation diagnostics.
+- `references/secret-replication-token-revocation-and-failover.md` — Direct Tailscale P2P secret replication (.env git-exclusion), Telegram bot token 401 revocation diagnostics, Desktop Failover Switcher, and Aeon multi-provider auto-fallback.
+- `references/direct-tailscale-secrets-and-failover-architecture.md` — Direct Tailscale/SCP secret replication between PC and VPS (.env files excluded from Git) and Desktop Failover Switcher daemon architecture.
 - `references/gateway-recovery-notifications-and-openclaw-tuning.md` — Automatic post-restart recovery confirmations (`✅ Gateway успешно перезапущен`) after shutdown notices, and OpenClaw 120s timeout tuning.
 - `references/vercel-surge-kanban-sync.md` — Detailed guide for Vercel/Surge CLI deployments, `localStorage` + API dual persistence for Kanban boards, and `notranslate` headers to prevent Japanese auto-translation glitches.
 - `references/telegram-rbac-and-owner-protection.md` — Gating `home_channel`, `allow_admin_from`, preventing "Set Home Chat" hijack, and native YAML list formatting for `allow_from`.
