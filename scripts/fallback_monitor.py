@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Fallback Chain Health-Check & Free Model Discovery Daemon.
+Fallback Chain Health-Check, Auto-Discovery & 3-Tier Dynamic Routing Monitor.
 Runs daily at 03:00 Kyiv time (00:00 UTC).
 """
 
@@ -147,6 +147,27 @@ def ping_model(model_entry):
         latency = round(time.time() - t0, 2)
         return model, provider, "TIMEOUT/EXC", str(e)[:60], latency
 
+def classify_tier(model_name, provider):
+    """Classifies a model entry into Tier 1, 2, or 3."""
+    m = model_name.lower()
+    
+    # Tier 3: Heavy Reasoning & Deep Architecture (R1, Opus, Sonnet, Fable, 405B, 70B+, 72B, 120B, 550B, GPT-4o, 2.5-Pro, DeepSeek-V3)
+    if any(k in m for k in [
+        "r1", "opus", "sonnet", "fable", "405b", "70b", "72b", "120b", "550b", "2.5-pro", "deepseek-v3", "deepseek-chat"
+    ]):
+        return 3
+    if m == "gpt-4o":
+        return 3
+        
+    # Tier 2: Standard Workhorse (Balanced, Gemini 3.7/3.6, Coder, Small-24B, Gonka24, Gemma 4, M3:free, GLM-5.2)
+    if any(k in m for k in [
+        "3.7-flash", "3.6-flash", "coder", "small-24b", "m2.7", "k2.6", "gemma-4", "m3:free", "glm-5.2", "openrouter/free"
+    ]):
+        return 2
+        
+    # Tier 1: Light & Free Tier (Sub-second, Mini, Nano, 8B, Solar, Longcat, Hy3, Laguna, Step 3.7 Flash, Nemo, 2.5-Flash)
+    return 1
+
 def main():
     kyiv_time = datetime.now(timezone(timedelta(hours=3))).strftime("%Y-%m-%d %H:%M:%S (Kyiv)")
     
@@ -231,11 +252,25 @@ def main():
                 with open(p_path, "w") as pf:
                     yaml.dump(pcfg, pf, allow_unicode=True, sort_keys=False)
 
-    # 5. Build user digest
+    # 5. Group active models by 3 Dynamic Tiers
+    tier1_models = []
+    tier2_models = []
+    tier3_models = []
+
+    for entry in active_fallback:
+        t = classify_tier(entry["model"], entry["provider"])
+        if t == 3:
+            tier3_models.append(entry)
+        elif t == 2:
+            tier2_models.append(entry)
+        else:
+            tier1_models.append(entry)
+
+    # 6. Build user digest
     report = []
     report.append(f"📊 **Ежедневный отчет Fallback-цепочки и пула моделей**")
     report.append(f"🕒 Время проверки: `{kyiv_time}`")
-    report.append(f"🔢 Всего активных моделей в цепочке: **{len(active_fallback)}**\n")
+    report.append(f"🔢 Всего активных моделей в пуле: **{len(active_fallback)}**\n")
 
     if new_discovered:
         report.append("✨ **Новые обнаруженные и подключенные модели:**")
@@ -249,7 +284,33 @@ def main():
             report.append(f"- ❌ `{pm}` ({pp}) — {pd}")
         report.append("")
 
-    report.append("📋 **Текущий статус цепочки резервирования:**")
+    report.append("🧠 **Конфигурация 3 Тиров Dynamic Model Routing:**\n")
+    
+    report.append(f"🔴 **Tier 3: Heavy Reasoning & Deep Architecture ({len(tier3_models)} моделей)**")
+    report.append("*Назначение: системная архитектура, сложный кодинг, глубокий аудит, R1 рассуждения.*")
+    for m in tier3_models[:10]:
+        report.append(f"  • `{m['model']}` ({m['provider']})")
+    if len(tier3_models) > 10:
+        report.append(f"  • *...и еще {len(tier3_models) - 10} моделей*")
+    report.append("")
+
+    report.append(f"🟡 **Tier 2: Standard Workhorse ({len(tier2_models)} моделей)**")
+    report.append("*Назначение: стандартная разработка, поиск, документы, сводки (дефолт).*")
+    for m in tier2_models[:10]:
+        report.append(f"  • `{m['model']}` ({m['provider']})")
+    if len(tier2_models) > 10:
+        report.append(f"  • *...и еще {len(tier2_models) - 10} моделей*")
+    report.append("")
+
+    report.append(f"🟢 **Tier 1: Light & Free Tier ({len(tier1_models)} моделей)**")
+    report.append("*Назначение: повседневный диалог, шутки, приветствия, быстрые статусы (<1s).*")
+    for m in tier1_models[:10]:
+        report.append(f"  • `{m['model']}` ({m['provider']})")
+    if len(tier1_models) > 10:
+        report.append(f"  • *...и еще {len(tier1_models) - 10} моделей*")
+    report.append("")
+
+    report.append("📋 **Текущий статус цепочки резервирования (Health-Check):**")
     report.extend(table_rows)
 
     print("\n".join(report))
