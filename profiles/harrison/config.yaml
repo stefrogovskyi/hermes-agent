@@ -1,23 +1,44 @@
 model:
   default: google/gemini-3.7-flash
   provider: google
+  providers:
+    huggingface:
+      api_key_env: HF_TOKEN
+      base_url: https://router.huggingface.co/v1
+      models:
+      - deepseek-ai/DeepSeek-R1
+      - deepseek-ai/DeepSeek-V3
+      - meta-llama/Llama-3.3-70B-Instruct
+      - Qwen/Qwen2.5-72B-Instruct
+      - Qwen/Qwen2.5-Coder-32B-Instruct
+      - meta-llama/Llama-3.1-8B-Instruct
 fallback_providers: &id001
 - model: gpt-4o
   provider: openai
 - model: deepseek/deepseek-chat
   provider: openrouter
+- model: deepseek-ai/DeepSeek-R1
+  provider: huggingface
+- model: deepseek-ai/DeepSeek-V3
+  provider: huggingface
 - model: google/gemini-3.6-flash
   provider: google
 - model: nousresearch/hermes-3-llama-3.1-405b
   provider: openrouter
+- model: meta-llama/Llama-3.3-70B-Instruct
+  provider: huggingface
 - model: google/gemini-2.5-pro
   provider: google
 - model: meta-llama/llama-3.3-70b-instruct
   provider: openrouter
 - model: nousresearch/hermes-3-llama-3.1-70b
   provider: openrouter
+- model: Qwen/Qwen2.5-72B-Instruct
+  provider: huggingface
 - model: qwen/qwen-2.5-72b-instruct
   provider: openrouter
+- model: Qwen/Qwen2.5-Coder-32B-Instruct
+  provider: huggingface
 - model: mistralai/mistral-small-24b-instruct-2501
   provider: openrouter
 - model: minimax-m2.7
@@ -38,6 +59,8 @@ fallback_providers: &id001
   provider: openrouter
 - model: mistralai/mistral-nemo
   provider: openrouter
+- model: meta-llama/Llama-3.1-8B-Instruct
+  provider: huggingface
 - model: google/gemini-2.5-flash
   provider: google
 compression:
