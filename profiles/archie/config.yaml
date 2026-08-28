@@ -76,6 +76,30 @@ fallback_providers: &id001
   provider: huggingface
 - model: google/gemini-2.5-flash
   provider: google
+- model: claude-fable-5
+  provider: anthropic
+- model: claude-sonnet-5
+  provider: anthropic
+- model: claude-opus-5
+  provider: anthropic
+- model: claude-opus-4
+  provider: anthropic
+- model: inclusionai/ling-3.0-flash-fin:free
+  provider: openrouter
+- model: dots-studio/dots-3-note-preview:free
+  provider: openrouter
+- model: liquid/lfm-2.5-2.6b:free
+  provider: openrouter
+- model: cohere/north-mini-code:free
+  provider: openrouter
+- model: z-ai/glm-5.2:free
+  provider: openrouter
+- model: nvidia/nemotron-3-ultra-550b-a55b:free
+  provider: openrouter
+- model: minimax/minimax-m2.7:free
+  provider: openrouter
+- model: openrouter/free
+  provider: openrouter
 model:
   default: claude-sonnet-5
   max_retries: 2
