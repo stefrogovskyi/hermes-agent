@@ -14,4 +14,5 @@
     1) **OS Level:** `systemctl is-active` (статус процесса в systemd);
     2) **Telegram API Level:** Вызовы `getMe` и `getWebhookInfo`/`getUpdates` (валидность токена, размер `pending_update_count`);
     3) **Journalctl Logs Level:** Логи `journalctl` на `ReadTimeout`, `TimedOut`, `Blocked unauthorized user` или зацикливание перезапусков.
+12. **Уведомления о перезапуске и восстановлении шлюзов (Gateway Shutdown & Restoration Notifications):** При отправке сообщения "Gateway Shutdown" (из-за внутренних процессов, системного обслуживания или перезапуска) агенты и боты ОБЯЗАНЫ после успешного восстановления работоспособности отправить пользователю короткое подтверждение ("успешно восстановлены").
 

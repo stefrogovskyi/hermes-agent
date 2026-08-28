@@ -43,6 +43,7 @@ compression:
   threshold: 0.25
   target_ratio: 0.15
 command_allowlist:
+  - command parser limit or malformed executable payload
   - execute_code
   - script execution via -e/-c flag
 onboarding:

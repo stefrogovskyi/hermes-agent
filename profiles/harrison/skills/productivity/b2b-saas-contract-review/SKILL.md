@@ -82,7 +82,17 @@ When enterprise customers (e.g. EY, tier-1 financial or logistics enterprises) r
 * **Access & Audits:** State RBAC, mandatory MFA, least-privilege IAM, 90d online / 365d cold log retention, and independent third-party certifications (underlying ISO 27001 / SOC 2 Type II) with annual PenTests.
 * **Incident Response & Notification SLA:** Commit to statutory UK/EU GDPR 48–72 hour notification SLAs for confirmed breaches.
 
-### 7. Output Checklist
+### 7. EU AI Act (Regulation (EU) 2024/1689) Compliance & Contractual Warranties
+
+When European or multinational enterprise clients request AI governance assurances or compliance with the EU AI Act:
+* **Risk Tier Classification:**
+  - Standard freight intelligence, predictive ETA modeling, and DCSA milestone normalization are **Minimal / Low Risk (Article 95)**.
+  - Cargo stowage optimization (`LoadingMCP`) operates as an advisory **Decision-Support System (Article 6(3) exempt from high-risk classification)**, provided a clear disclaimer states that final stowage plans remain subject to human master/stevedore verification.
+  - Conversational agent touchpoints fall under **Article 50 Specific Transparency Risk** requiring clear disclosure that users are interacting with an AI system.
+* **Standard Contractual Warranty Clause (Clause 13.3):**
+  > *"The Provider warrants that all artificial intelligence systems, predictive algorithms, and automated agents deployed within the Navo24 Platform comply in all material respects with the requirements of Regulation (EU) 2024/1689 (EU AI Act). The Provider maintains appropriate technical and organizational measures, human-in-the-loop safeguards, and transparency disclosures. Client data processed through the Platform shall not be utilized to train public foundation artificial intelligence models without the Client's prior written consent."*
+
+### 8. Output Checklist
 
 - [ ] Clear Risk Rating (Low / Medium / High / Critical) provided for each client point.
 - [ ] Side-by-side comparative diff / audit matrix clearly formatted.
@@ -91,5 +101,6 @@ When enterprise customers (e.g. EY, tier-1 financial or logistics enterprises) r
 - [ ] IP / raw data reselling boundaries explicitly safeguarded.
 - [ ] SLA exclusions for third-party carrier/upstream systems clearly stated.
 - [ ] Security/TPRM baseline answers aligned with Infosec White Paper.
+- [ ] EU AI Act Article 50 transparency and non-training guarantees included for EU enterprise customers.
 - [ ] Constructive Executive / Legal Cover Letter drafted (see `templates/enterprise_redline_cover_letter_template.md`) explaining the commercial rationale to customer procurement without antagonism.
 - [ ] Actionable next steps outlined for sales and executive leadership.
