@@ -74,12 +74,22 @@ When cross-border enterprise customers request tax compliance documentation to a
   3. **No-PE Declaration:** Certified letterhead confirmation that Provider has no fixed place of business, employees, or Permanent Establishment under Article 5.
   4. **Article 7 Qualification:** Software subscriptions and API access qualify as **Business Profits** under Article 7 (not Royalties under Article 12) per the landmark Indian Supreme Court ruling *Engineering Analysis Centre of Excellence (2021)*, entitling Provider to **0% Nil Withholding Tax**.
 
-### 6. Output Checklist
+### 6. Enterprise Vendor Security Questionnaires (TPRM / InfoSec Reviews)
+
+When enterprise customers (e.g. EY, tier-1 financial or logistics enterprises) request completion of standard Security Questionnaires (SIG, CAIQ, bespoke Excel sheets):
+* **Core Architecture & Hosting:** Standardize responses on UK/EU Tier III/IV cloud hosting (AWS London `eu-west-2` / GCP Frankfurt/Ireland), TLS 1.3 in transit, AES-256 at rest with KMS, and zero local credential storage.
+* **AI & Data Training Boundaries:** Formally guarantee zero training on customer data ("No-Train" clause). State clearly that AI/MCP tooling operates in isolated VPCs for deterministic parsing and telemetry extraction, not unconstrained public GenAI.
+* **Access & Audits:** State RBAC, mandatory MFA, least-privilege IAM, 90d online / 365d cold log retention, and independent third-party certifications (underlying ISO 27001 / SOC 2 Type II) with annual PenTests.
+* **Incident Response & Notification SLA:** Commit to statutory UK/EU GDPR 48–72 hour notification SLAs for confirmed breaches.
+
+### 7. Output Checklist
 
 - [ ] Clear Risk Rating (Low / Medium / High / Critical) provided for each client point.
 - [ ] Side-by-side comparative diff / audit matrix clearly formatted.
+- [ ] Visual color-coded comparison memo (Red = Client request, Yellow = Risk, Green = Safe counter-draft) prepared in Word (.docx) when requested for internal team review.
 - [ ] Ready-to-use contractual drafting in clear, legally enforceable English.
 - [ ] IP / raw data reselling boundaries explicitly safeguarded.
 - [ ] SLA exclusions for third-party carrier/upstream systems clearly stated.
+- [ ] Security/TPRM baseline answers aligned with Infosec White Paper.
 - [ ] Constructive Executive / Legal Cover Letter drafted (see `templates/enterprise_redline_cover_letter_template.md`) explaining the commercial rationale to customer procurement without antagonism.
 - [ ] Actionable next steps outlined for sales and executive leadership.

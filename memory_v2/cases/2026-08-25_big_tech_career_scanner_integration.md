@@ -20,3 +20,14 @@ The daily executive career scanner initially covered FreightTech and specific AI
 ## Verification
 - Poller tested against Amazon, Google, Microsoft, and Tesla endpoints.
 - Incorporated into the daily 09:00 UTC Career Scanner cron run delivering updates directly to Stefan's Telegram DM.
+
+## Update (2026-08-26 / 2026-08-27): Playwright SPA Parsers & Bezos Assets
+1. **Google & Microsoft Careers SPA Parsing:**
+   - SPA rendering issues resolved via Playwright headless browser parsing in `/opt/hermes/scripts/executive_careers_poller.py`.
+   - Fixed `extract_tags` helper scoping in the Playwright scraper context to prevent runtime NameError exceptions during extraction.
+2. **Expansion to Bezos Assets & Frontier AI:**
+   - Added **Prometheus** (Ashby API integration).
+   - Added **Altos Labs** (Greenhouse API integration).
+   - Added **Blue Origin** (Workday API integration).
+   - Added **xAI** (Greenhouse API integration).
+3. Verified full end-to-end poller run without errors across all 11+ Sources (including Google Careers & Microsoft Careers).

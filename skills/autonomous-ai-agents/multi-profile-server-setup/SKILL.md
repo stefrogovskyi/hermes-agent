@@ -16,6 +16,7 @@ metadata:
 ## When to Use
 Use when configuring or troubleshooting multi-profile Hermes Agent instances running as systemd background services on Linux servers, or setting up Git workspace synchronization.
 
+- `references/gateway-recovery-notifications-and-openclaw-tuning.md` — Automatic post-restart recovery confirmations (`✅ Gateway успешно перезапущен`) after shutdown notices, and OpenClaw 120s timeout tuning.
 - `references/vercel-surge-kanban-sync.md` — Detailed guide for Vercel/Surge CLI deployments, `localStorage` + API dual persistence for Kanban boards, and `notranslate` headers to prevent Japanese auto-translation glitches.
 - `references/telegram-rbac-and-owner-protection.md` — Gating `home_channel`, `allow_admin_from`, preventing "Set Home Chat" hijack, and native YAML list formatting for `allow_from`.
 - `references/3-level-agent-healthcheck-and-monitoring.md` — 3-Level honest health check for sub-agents: systemd OS level, Telegram API queue check (getWebhookInfo), and journalctl error log inspection.

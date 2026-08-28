@@ -108,16 +108,16 @@
     "archived_at": null,
     "created_at": "2026-08-19T16:26:02.566667+00:00",
     "created_by": "agent",
-    "last_patched_at": "2026-08-25T18:45:11.046790+00:00",
-    "last_reused_patch_generation": 5,
-    "last_used_at": "2026-08-25T18:44:56.979296+00:00",
-    "last_viewed_at": "2026-08-25T18:44:56.976960+00:00",
-    "patch_count": 7,
-    "patch_generation": 7,
+    "last_patched_at": "2026-08-27T08:31:35.222053+00:00",
+    "last_reused_patch_generation": 7,
+    "last_used_at": "2026-08-27T08:31:32.765048+00:00",
+    "last_viewed_at": "2026-08-27T08:31:32.761117+00:00",
+    "patch_count": 8,
+    "patch_generation": 8,
     "pinned": false,
     "state": "active",
-    "use_count": 5,
-    "view_count": 5
+    "use_count": 6,
+    "view_count": 6
   },
   "baoyu-infographic": {
     "archived_at": null,
@@ -770,14 +770,14 @@
     "created_by": "agent",
     "last_patched_at": null,
     "last_reused_patch_generation": 0,
-    "last_used_at": "2026-08-26T06:00:48.023286+00:00",
-    "last_viewed_at": "2026-08-26T06:00:48.021696+00:00",
+    "last_used_at": "2026-08-27T06:00:57.343805+00:00",
+    "last_viewed_at": "2026-08-27T06:00:57.338631+00:00",
     "patch_count": 0,
     "patch_generation": 0,
     "pinned": false,
     "state": "active",
-    "use_count": 4,
-    "view_count": 4
+    "use_count": 5,
+    "view_count": 5
   },
   "notion": {
     "archived_at": null,

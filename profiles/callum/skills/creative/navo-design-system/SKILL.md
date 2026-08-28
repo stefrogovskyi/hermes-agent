@@ -168,5 +168,22 @@ Guidelines, tokens, typography standards, and copy rules for all Navo24 platform
 - **Rendering Workflow (Playwright):**
   - Render HTML template to PNG via headless Chromium using Playwright: launch with `--no-sandbox`, viewport `1200x675`, `device_scale_factor: 2`, wait 2000ms for Fontshare fonts (`Ranade`, `Switzer`) to hydrate before `page.screenshot()`.
 
+## 11. NavoLogix & Product Landing Pages Architecture
+
+- **Header & Title Hierarchy:**
+  - **H1:** Clean, prominent product title (e.g. `<h1>NavoLogix</h1>` or `<h1>Navo<span class="text-signal">Logix</span></h1>`) in Ranade (Light 300 / Bold 700).
+  - **H2:** Punchy value proposition / subtitle immediately below H1 (e.g. `<h2>The End of <strong class="text-signal">15-Tab Logistics.</strong></h2>`).
+  - **Eyebrow Pill:** Monospace badge (`JetBrains Mono`, uppercase) with pulsating Turquoise status dot (`#12C2C2`).
+- **High-Contrast Callout Banners (Deep Navy Surfaces):**
+  - For full-width callout / manifesto banners using `#0C2A5E` Navy background, explicitly declare `!text-white` (`#FFFFFF`) on headings, `!text-turquoise` (`#12C2C2`) on emphasis spans, and `!text-slate-200` (`#E2ECF8`) on paragraph text to guarantee brand visual fidelity against any CSS inheritance overrides.
+- **Comparison Matrix Standard:**
+  - 3-column table: `Feature` (25%, bold Ink) | `Traditional Tools` (37.5%, Muted) | `[Product]` (37.5%, highlighted with `bg-signal/5` and bold Signal text).
+- **Interactive Modals & Private Beta Flows:**
+  - Modal dialogues MUST support backdrop blur (`rgba(11, 12, 14, 0.75)`), closing via `Escape` key (`e.key === 'Escape'`), and clicking outside the card.
+- **Deployment Topography:**
+  - Umbrella Portal integration: Add `src/pages/[product].astro` in `Navo24S/navo24-web` (branch `stefan` auto-deploys to `https://navo24-web-stefan.pages.dev/[product]/` and `https://stefan.staging.navo24.com/[product]/`).
+  - Standalone Package: Deliver in a standalone directory with `index.html` and `vercel.json` (`cleanUrls: true`).
+
+
 
 

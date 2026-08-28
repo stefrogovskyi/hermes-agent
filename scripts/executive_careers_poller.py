@@ -443,6 +443,53 @@ def fetch_microsoft_careers_playwright():
     except Exception as e:
         print("Microsoft Playwright parser error:", e)
     return out
+def fetch_epam_global_playwright():
+    """Headless Playwright: парсинг открытых Director / Lead / Management ролей с глобального портала careers.epam.com."""
+    out = []
+    try:
+        import asyncio
+        from playwright.async_api import async_playwright
+        
+        async def _run():
+            async with async_playwright() as p:
+                browser = await p.chromium.launch(headless=True)
+                context = await browser.new_context(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+                page = await context.new_page()
+                # Global EPAM Careers listing
+                await page.goto("https://www.epam.com/careers/job-listings", timeout=45000)
+                await page.wait_for_timeout(8000)
+                cards = await page.evaluate("""() => {
+                    const res = [];
+                    const links = Array.from(document.querySelectorAll('a[href*="/vacancy/"]'));
+                    for (const a of links) {
+                        const title = a.innerText.trim();
+                        if (title && a.href && !res.some(r => r.link === a.href)) {
+                            res.push({ title: title, link: a.href });
+                        }
+                    }
+                    return res;
+                }""")
+                await browser.close()
+                return cards
+                
+        items = asyncio.run(_run())
+        for it in items:
+            title = it['title']
+            url = it['link']
+            out.append({
+                "uid": "epam:" + re.sub(r'[^a-zA-Z0-9]', '', title)[:30],
+                "company": "EPAM Systems",
+                "title": title,
+                "location": "Global / Remote",
+                "url": url,
+                "category": "IT Enterprise / Consulting",
+                "updated_at": "",
+            })
+    except Exception as e:
+        print("EPAM Playwright parser error:", e)
+    return out
+
+
 def fetch_dou_feed(company, slug):
     """DOU RSS: jobs.dou.ua/vacancies/<slug>/feeds/ (title содержит роль и город)."""
     out = []
@@ -510,6 +557,7 @@ def main():
     all_jobs.extend(fetch_remotive_execs())
     all_jobs.extend(fetch_google_careers_playwright())
     all_jobs.extend(fetch_microsoft_careers_playwright())
+    all_jobs.extend(fetch_epam_global_playwright())
     all_jobs.extend(fetch_remotive_execs())
 
     # ===== Блок IT Ukraine (BizDev/PM/Product/Delivery, senior+) =====

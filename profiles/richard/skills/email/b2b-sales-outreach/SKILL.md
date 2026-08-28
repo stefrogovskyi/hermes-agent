@@ -189,7 +189,7 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
 - **1-on-1 Direct Client Correspondence (Non-Broadcast)**:
   * **From:** `Richard Marlowe <rich@e.navo24.com>` (via Resend REST API).
   * **Reply-To:** `rich@navo24.com` (routes client replies directly into Richard's Microsoft 365 inbox).
-  * **CC List:** **NONE** (nobody in CC for direct 1-on-1 negotiations).
+  * **CC List Rule:** Mirror the exact CC list from the incoming email (if the sender included colleagues in CC, preserve those exact addresses in CC; if incoming email had no CC, leave CC empty).
   * **Signature:** Official HTML signature with 1 blank line before and no top border line.
 - **Handling In-Depth B2B Replacement / Migration Inquiries (ex-SeaRates Evaluation)**:
   * When prospects actively choosing a replacement for SeaRates submit detailed technical/commercial questionnaires (e.g., coverage of niche lanes, index vs. bookable rates, LCL, free tier, SLAs, lineage):
