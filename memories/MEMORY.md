@@ -2,7 +2,7 @@ Richard (richnavobot): privacy OFF; SINGLE bot (token 8846249306:AAE7qkGYcY-q3pb
 §
 ПАМЯТЬ V2: memory_v2/ (cases+principles+recall.py+Pinecone+skill memory-recall). ПРАВИЛА Стефана: (1) сначала ФАКТ, потом правка; (2) при обрыве/падении — сам root-cause + доделай, 0 вопросов; (3) перечитывай себя, правь ошибки сразу; (4) в отчётах только реальные данные/URL — выдуманное запрещено.
 §
-USER: Стефан (COO Navo). MS To-Do = supremo@i.ua. Агенты: Hermes, Richard, Liz, Alistair, Ben, Callum, Archie, Harrison. Aeon = GitHub Actions.
+USER: Стефан (COO Navo). MS To-Do = supremo@i.ua (Direct Azure MS Graph OAuth). Агенты: Hermes, Richard, Liz, Alistair, Ben, Callum, Archie, Harrison. Aeon = GitHub Actions.
 §
 WORK STYLE: Stefan wants 24/7 autonomous proactive work. Priority rule: if Stefan interjects with a question, pause background work, answer, then resume.
 §
@@ -16,10 +16,10 @@ Navo24 API key (NAVO_API_KEY) covers 5 Navo APIs. NO AGENT MAY IMPERSONATE STEFA
 §
 АВТО-ОТПРАВКИ В ГРУППЫ: Запрещены для всех ботов, кроме бенчмарка SeaRates vs Navo (Алистер раз в 2 дня в 08:00 MSK в Navo Tech geeks с Excel). Остальные отчеты строго в личку.
 §
-Harrison Croft (@harrisoncroftbot) = Legal. Archie (@archiewrightbot) = Copywriter. Alistair = PM/alistair-kanban. Each agent strictly own profile.
+БОТЫ КЛАСТЕРА (getMe): Hermes=@hermesstevensonbot, Richard=@richnavobot, Alistair=@qubicpmbot, Archie=@WordCraftBot, Ben=@benjettbot, Callum=@callumvancebot, Liz=@lizharperbot, Harrison=@harrisoncroftbot, Aeon=@aeondeskbot, OpenClaw=@clawstevensonbot. Own profiles.
 §
 VPS-кроны в UTC (Киев=UTC+3)! Desktop-mst5pt7 (SSH Stefan@100.79.157.46) = второй Hermes; крон-дубли там отключены 08.2026, живы только desktop-джобы.
 §
-Career Scanner v2: 11 API. OpenClaw: @clawstevensonbot :18789. AgentOS: aavalanche.com/agentos/. Fallback: Google->Ox Alpha(OpenRouter)->Nous->NVIDIA NIM->Gonka24. Почта: contact@aavalanche.com.
+Career Scanner v2: 11 API. Anthropic Pro: OAuth (~08.2027). Fallback: Google->Ox Alpha->Nous->NVIDIA NIM->Gonka24. Mail: contact@aavalanche.com.
 §
 ХЕЛС-ЧЕК: `systemctl is-active` недостаточен. Честный 3-уровневый чек: 1) systemd; 2) TG getWebhookInfo (pending_updates); 3) логи journalctl на TimedOut/Blocked/Restart-loop.

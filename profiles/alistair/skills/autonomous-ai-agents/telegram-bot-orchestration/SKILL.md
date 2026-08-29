@@ -40,6 +40,12 @@ System-wide mandatory rules established by Stefan Rogovskiy for bot-to-bot inter
 2. **Initiating Contact**: Initiate communication with another bot using their `@tag` and a clear task description ONLY upon receiving a direct order from Stefan.
 3. **Default Behavior**: In ALL OTHER CASES — completely **IGNORE** messages from other bots (to eliminate infinite loops/ping-ponging).
 
+## Company & Sub-Agent Domain Segregation (Strict Cross-Entity Taboo)
+When sub-agents operate across different organizations or distinct client spaces (e.g. Navo vs Enlight):
+- **Zero Cross-Company Leakage**: In one company's public, group, or team channels (e.g., Navo chats), NEVER mention, tag, or reference agents, staff, or projects belonging to another company (e.g. Enlight agents such as Ben or Liz).
+- **Public Visibility Boundary**: Restrict mentioned personas strictly to the authorized roster for that specific organization (e.g. in Navo: Stefan Rogovskiy, Alistair, Richard, Callum, Alex Shatunov, Gaffer).
+- **Enforcement**: Embed strict negative constraints in `SOUL.md` and persistent memory so the model never generates cross-company colleague references in group conversations.
+
 ## Preventing Agent-to-Agent Ping-Pong Loops
 
 ### The Problem

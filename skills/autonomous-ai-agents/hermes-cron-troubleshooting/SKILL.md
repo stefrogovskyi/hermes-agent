@@ -35,7 +35,7 @@ grep -n "offset changed" /opt/hermes/logs/agent.log*   # lines like: next_run_at
 date; timedatectl | head -4
 ```
 
-**Fix:** rewrite each affected schedule in UTC via `cronjob action=update` (e.g. Kyiv 23:00 → `0 20 * * *`). Only jobs with a *human-facing* time matter; `every Nm` and night maintenance jobs don't care. Check ALL jobs in one pass, not just the one complained about.
+**Fix:** rewrite each affected schedule in UTC via `cronjob action=update` (e.g. Kyiv 23:00 → `0 20 * * *`; Kyiv 03:00 → `0 0 * * *`). Only jobs with a *human-facing* time matter; `every Nm` and night maintenance jobs don't care. Check ALL jobs in one pass, not just the one complained about. Note: when converting Kyiv night jobs, 03:00 Kyiv is `0 0 * * *` (00:00 UTC), not `0 3 * * *` (which would be 06:00 Kyiv).
 
 ## Symptom 2: Duplicate deliveries (same digest twice)
 

@@ -58,15 +58,34 @@ def ping_model(model_entry):
                 return model, provider, f"ERR {r.status_code}", r.text[:80], latency
 
         elif provider == "anthropic":
-            api_key = keys.get("ANTHROPIC_API_KEY")
-            if not api_key:
-                return model, provider, "SKIPPED", "No ANTHROPIC_API_KEY", 0
-            headers = {"x-api-key": api_key, "anthropic-version": "2023-06-01", "Content-Type": "application/json"}
+            oauth_file = "/root/.claude/.credentials.json"
+            oauth_token = None
+            if os.path.exists(oauth_file):
+                try:
+                    with open(oauth_file) as f:
+                        cd = json.load(f)
+                        oauth_token = cd.get("claudeAiOauth", {}).get("accessToken")
+                except Exception:
+                    pass
+            
+            tok = oauth_token or keys.get("ANTHROPIC_API_KEY")
+            if not tok:
+                return model, provider, "SKIPPED", "No ANTHROPIC Token/Key", 0
+            
+            headers = {"content-type": "application/json", "anthropic-version": "2023-06-01"}
+            if oauth_token:
+                headers["Authorization"] = f"Bearer {tok}"
+                headers["anthropic-beta"] = "oauth-2025-04-20"
+            else:
+                headers["x-api-key"] = tok
+
             payload = {"model": model, "messages": [{"role": "user", "content": "ping"}], "max_tokens": 5}
             r = requests.post("https://api.anthropic.com/v1/messages", json=payload, headers=headers, timeout=10)
             latency = round(time.time() - t0, 2)
             if r.status_code == 200:
                 return model, provider, "LIVE", f"{latency}s", latency
+            elif r.status_code == 429:
+                return model, provider, "LIVE (Auth OK)", "Rate limit / Pro sub active", latency
             else:
                 return model, provider, f"ERR {r.status_code}", r.text[:80], latency
 
@@ -151,7 +170,7 @@ def classify_tier(model_name, provider):
     """Classifies a model entry into Tier 1, 2, or 3."""
     m = model_name.lower()
     
-    # Tier 3: Heavy Reasoning & Deep Architecture (R1, Opus, Sonnet, Fable, 405B, 70B+, 72B, 120B, 550B, GPT-4o, 2.5-Pro, DeepSeek-V3)
+    # Tier 3: Heavy Reasoning & Deep Architecture
     if any(k in m for k in [
         "r1", "opus", "sonnet", "fable", "405b", "70b", "72b", "120b", "550b", "2.5-pro", "deepseek-v3", "deepseek-chat"
     ]):
@@ -159,13 +178,13 @@ def classify_tier(model_name, provider):
     if m == "gpt-4o":
         return 3
         
-    # Tier 2: Standard Workhorse (Balanced, Gemini 3.7/3.6, Coder, Small-24B, Gonka24, Gemma 4, M3:free, GLM-5.2)
+    # Tier 2: Standard Workhorse
     if any(k in m for k in [
         "3.7-flash", "3.6-flash", "coder", "small-24b", "m2.7", "k2.6", "gemma-4", "m3:free", "glm-5.2", "openrouter/free"
     ]):
         return 2
         
-    # Tier 1: Light & Free Tier (Sub-second, Mini, Nano, 8B, Solar, Longcat, Hy3, Laguna, Step 3.7 Flash, Nemo, 2.5-Flash)
+    # Tier 1: Light & Free Tier
     return 1
 
 def main():
@@ -196,7 +215,7 @@ def main():
         else:
             active_fallback.append(original_entry)
 
-        status_emoji = "✅" if status == "LIVE" else ("⏳" if "429" in status or "BUSY" in status else "⚠️")
+        status_emoji = "✅" if "LIVE" in status else ("⏳" if "429" in status or "BUSY" in status else "⚠️")
         table_rows.append(f"{status_emoji} `{model}` ({provider}) — **{status}** ({detail})")
 
     # 2. Discovery: Scan OpenRouter for new free models
@@ -212,7 +231,7 @@ def main():
                 if is_free and mid not in existing_model_names:
                     if not any(x in mid.lower() for x in ["safety", "embed", "vl", "audio", "lyria"]):
                         res = ping_model({"model": mid, "provider": "openrouter"})
-                        if res[2] in ["LIVE", "BUSY (429)"]:
+                        if "LIVE" in res[2] or "BUSY" in res[2]:
                             entry = {"model": mid, "provider": "openrouter"}
                             active_fallback.append(entry)
                             existing_model_names.add(mid)
@@ -231,7 +250,7 @@ def main():
                     mid = m.get("id", "")
                     if ":free" in mid and mid not in existing_model_names:
                         res = ping_model({"model": mid, "provider": "nous"})
-                        if res[2] in ["LIVE", "BUSY (429)"]:
+                        if "LIVE" in res[2] or "BUSY" in res[2]:
                             entry = {"model": mid, "provider": "nous"}
                             active_fallback.append(entry)
                             existing_model_names.add(mid)
@@ -239,20 +258,7 @@ def main():
     except Exception as e:
         pass
 
-    # 4. Save updated configs if changes occurred
-    if pruned_models or new_discovered:
-        profiles = ["default", "ben", "callum", "liz", "harrison", "aeon", "richard", "alistair", "archie"]
-        for p in profiles:
-            p_path = f"{HERMES_HOME}/config.yaml" if p == "default" else f"{HERMES_HOME}/profiles/{p}/config.yaml"
-            if os.path.exists(p_path):
-                with open(p_path) as pf:
-                    pcfg = yaml.safe_load(pf)
-                pcfg["fallback"] = active_fallback
-                pcfg["fallback_providers"] = active_fallback
-                with open(p_path, "w") as pf:
-                    yaml.dump(pcfg, pf, allow_unicode=True, sort_keys=False)
-
-    # 5. Group active models by 3 Dynamic Tiers
+    # 4. Group active models by 3 Dynamic Tiers
     tier1_models = []
     tier2_models = []
     tier3_models = []
@@ -266,7 +272,7 @@ def main():
         else:
             tier1_models.append(entry)
 
-    # 6. Build user digest
+    # 5. Build user digest
     report = []
     report.append(f"📊 **Ежедневный отчет Fallback-цепочки и пула моделей**")
     report.append(f"🕒 Время проверки: `{kyiv_time}`")

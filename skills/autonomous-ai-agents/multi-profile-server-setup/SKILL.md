@@ -16,6 +16,7 @@ metadata:
 ## When to Use
 Use when configuring or troubleshooting multi-profile Hermes Agent instances running as systemd background services on Linux servers, or setting up Git workspace synchronization.
 
+- `references/web-search-engine-failover-and-open-scrapers.md` — Zero-cost web search engine failover via `ddgs` (DuckDuckGo engine), eliminating Firecrawl token depletion blockers, and local Playwright/PyMuPDF document parsing.
 - `references/llm-fallback-cascades-and-secret-replication.md` — LLM provider fallback cascades, resolving spammy auth error loops from dead `:free` models, direct P2P Tailscale `.env` replication, and Telegram bot token revocation diagnostics.
 - `references/secret-replication-token-revocation-and-failover.md` — Direct Tailscale P2P secret replication (.env git-exclusion), Telegram bot token 401 revocation diagnostics, Desktop Failover Switcher, and Aeon multi-provider auto-fallback.
 - `references/direct-tailscale-secrets-and-failover-architecture.md` — Direct Tailscale/SCP secret replication between PC and VPS (.env files excluded from Git) and Desktop Failover Switcher daemon architecture.
