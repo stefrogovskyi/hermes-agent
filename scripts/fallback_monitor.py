@@ -1,323 +1,258 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-Fallback Chain Health-Check, Auto-Discovery & 3-Tier Dynamic Routing Monitor.
-Runs daily at 03:00 Kyiv time (00:00 UTC).
+fallback_monitor.py — Ежедневный аудит fallback-цепочки, пинг моделей, классификация по 3 тирам и авто-синхронизация во вкладку 'Models' в Google Таблицу.
 """
 
-import os
-import sys
-import json
-import time
-import yaml
-import requests
+import os, sys, json, time, requests, yaml, urllib.request, urllib.parse
 from datetime import datetime, timezone, timedelta
 from concurrent.futures import ThreadPoolExecutor
 
-HERMES_HOME = os.environ.get("HERMES_HOME", "/opt/hermes")
+CONFIG_PATH = "/opt/hermes/config.yaml"
+AUTH_PATH = "/opt/hermes/auth.json"
+SHEET_CONFIG = "/opt/hermes/ecosystem_registry_sheet.json"
+GOOGLE_TOKEN_PATH = "/opt/hermes/profiles/archie/google_token.json"
+GOOGLE_SECRET_PATH = "/opt/hermes/profiles/archie/google_client_secret.json"
 
-# Load environment keys
-env_file = os.path.join(HERMES_HOME, ".env")
-keys = {}
-if os.path.exists(env_file):
-    with open(env_file) as f:
-        for line in f:
-            if "=" in line and not line.strip().startswith("#"):
-                k, v = line.strip().split("=", 1)
-                keys[k] = v
+MODELS_CATALOG = [
+    # Primary & Flagship
+    {"model": "gemini-3.7-flash", "provider": "google", "tier": 2},
+    {"model": "gemini-2.5-pro", "provider": "google", "tier": 3},
+    {"model": "gemini-2.5-flash", "provider": "google", "tier": 2},
+    
+    # Anthropic Claude Pro OAuth
+    {"model": "claude-sonnet-4-5", "provider": "anthropic", "tier": 3},
+    {"model": "claude-haiku-4-5", "provider": "anthropic", "tier": 2},
+    {"model": "claude-opus-4-5", "provider": "anthropic", "tier": 3},
 
-# Load Nous OAuth Token from auth.json
-nous_token = None
-auth_file = os.path.join(HERMES_HOME, "auth.json")
-if os.path.exists(auth_file):
+    # Nous Free
+    {"model": "meituan/longcat-2.0:free", "provider": "nous", "tier": 1},
+    {"model": "stepfun/step-3.7-flash:free", "provider": "nous", "tier": 3},
+    {"model": "tencent/hy3:free", "provider": "nous", "tier": 2},
+    {"model": "poolside/laguna-s-2.1:free", "provider": "nous", "tier": 2},
+    {"model": "poolside/laguna-xs-2.1:free", "provider": "nous", "tier": 1},
+    {"model": "upstage/solar-pro4:free", "provider": "nous", "tier": 2},
+
+    # OpenRouter
+    {"model": "deepseek/deepseek-r1:free", "provider": "openrouter", "tier": 3},
+    {"model": "deepseek/deepseek-chat:free", "provider": "openrouter", "tier": 2},
+    {"model": "meta-llama/llama-3.3-70b-instruct:free", "provider": "openrouter", "tier": 2},
+    {"model": "qwen/qwen-2.5-72b-instruct:free", "provider": "openrouter", "tier": 2},
+    {"model": "google/gemini-2.0-flash-exp:free", "provider": "openrouter", "tier": 1},
+
+    # NVIDIA NIM
+    {"model": "meta/llama-3.3-70b-instruct", "provider": "nvidia", "tier": 2},
+    {"model": "deepseek-ai/deepseek-r1", "provider": "nvidia", "tier": 3},
+    {"model": "nvidia/llama-3.1-nemotron-70b-instruct", "provider": "nvidia", "tier": 2},
+    
+    # Gonka24
+    {"model": "minimax-m2.7", "provider": "gonka24", "tier": 2},
+    {"model": "kimi-k2.6", "provider": "gonka24", "tier": 3}
+]
+
+def get_keys():
+    keys = {}
+    if os.path.exists(CONFIG_PATH):
+        with open(CONFIG_PATH, "r") as f:
+            cfg = yaml.safe_load(f) or {}
+            keys = cfg.get("keys", {})
+    return keys
+
+def get_nous_token():
+    if os.path.exists(AUTH_PATH):
+        try:
+            with open(AUTH_PATH, "r") as f:
+                data = json.load(f)
+                return data.get("providers", {}).get("nous", {}).get("access_token")
+        except Exception:
+            pass
+    return None
+
+def get_claude_pro_cookie():
+    path = "/root/.claude/.credentials.json"
+    if os.path.exists(path):
+        try:
+            with open(path, "r") as f:
+                data = json.load(f)
+                oauth = data.get("claudeAiOauth", {})
+                return oauth.get("accessToken")
+        except Exception:
+            pass
+    return None
+
+def ping_model(entry):
+    model = str(entry.get("model", ""))
+    provider = str(entry.get("provider", ""))
+    tier = entry.get("tier", 1)
+    keys = get_keys()
+    nous_tok = get_nous_token()
+    claude_tok = get_claude_pro_cookie()
+
+    t0 = time.time()
+    headers = {}
+    url = ""
+    payload = {"model": model, "messages": [{"role": "user", "content": "ping"}], "max_tokens": 5}
+
+    if provider == "google":
+        url = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+        headers = {"Authorization": f"Bearer {keys.get('GEMINI_API_KEY')}"}
+    elif provider == "openrouter":
+        url = "https://openrouter.ai/api/v1/chat/completions"
+        headers = {"Authorization": f"Bearer {keys.get('OPENROUTER_API_KEY')}"}
+    elif provider == "nous":
+        url = "https://inference-api.nousresearch.com/v1/chat/completions"
+        tok = nous_tok or keys.get("NOUS_API_KEY")
+        headers = {"Authorization": f"Bearer {tok}"}
+    elif provider == "nvidia":
+        url = "https://integrate.api.nvidia.com/v1/chat/completions"
+        headers = {"Authorization": f"Bearer {keys.get('NVIDIA_API_KEY')}"}
+    elif provider == "anthropic":
+        url = "https://api.anthropic.com/v1/messages"
+        tok = keys.get("ANTHROPIC_API_KEY") or claude_tok
+        headers = {
+            "x-api-key": tok,
+            "anthropic-version": "2023-06-01",
+            "content-type": "application/json"
+        }
+        payload = {"model": model, "messages": [{"role": "user", "content": "ping"}], "max_tokens": 5}
+    elif provider == "gonka24":
+        url = "https://api.gonka24.com/v1/chat/completions"
+        headers = {"Authorization": f"Bearer {keys.get('GONKA24_API_KEY')}"}
+    else:
+        url = "https://openrouter.ai/api/v1/chat/completions"
+        headers = {"Authorization": f"Bearer {keys.get('OPENROUTER_API_KEY')}"}
+
     try:
-        with open(auth_file) as f:
-            ad = json.load(f)
-            nous_token = ad.get("providers", {}).get("nous", {}).get("access_token")
+        r = requests.post(url, headers=headers, json=payload, timeout=12)
+        latency = round(time.time() - t0, 2)
+        if r.status_code == 200:
+            return (model, provider, tier, "LIVE (200 OK)", "Работает", latency)
+        elif r.status_code == 429:
+            return (model, provider, tier, "BUSY (429)", "Лимит запросов / Очередь", latency)
+        elif r.status_code == 404:
+            return (model, provider, tier, "DEAD (404)", "Модель не найдена / Устарела", latency)
+        elif r.status_code == 401:
+            return (model, provider, tier, "AUTH_ERR (401)", "Неверный токен / ключ", latency)
+        else:
+            return (model, provider, tier, f"ERR ({r.status_code})", r.text[:60].replace("\n", " "), latency)
+    except requests.exceptions.Timeout:
+        return (model, provider, tier, "TIMEOUT (>12s)", "Таймаут ответа", 12.0)
+    except Exception as e:
+        return (model, provider, tier, "FAIL", str(e)[:60], 0.0)
+
+def sync_to_google_sheet(results, kyiv_timestamp):
+    if not os.path.exists(GOOGLE_TOKEN_PATH) or not os.path.exists(SHEET_CONFIG):
+        return False
+
+    with open(GOOGLE_TOKEN_PATH) as f:
+        token_data = json.load(f)
+    with open(SHEET_CONFIG) as f:
+        sheet_info = json.load(f)
+
+    spreadsheet_id = sheet_info.get("spreadsheet_id")
+    access_token = token_data.get("access_token")
+    refresh_token = token_data.get("refresh_token")
+
+    if refresh_token and os.path.exists(GOOGLE_SECRET_PATH):
+        try:
+            with open(GOOGLE_SECRET_PATH) as f:
+                cs = json.load(f)
+                client_info = cs.get("installed") or cs.get("web") or {}
+                client_id = client_info.get("client_id")
+                client_secret = client_info.get("client_secret")
+            if client_id and client_secret:
+                url = "https://oauth2.googleapis.com/token"
+                data = urllib.parse.urlencode({
+                    "client_id": client_id,
+                    "client_secret": client_secret,
+                    "refresh_token": refresh_token,
+                    "grant_type": "refresh_token"
+                }).encode()
+                req = urllib.request.Request(url, data=data)
+                with urllib.request.urlopen(req) as resp:
+                    new_token_data = json.loads(resp.read().decode())
+                    access_token = new_token_data["access_token"]
+                    token_data["access_token"] = access_token
+                    with open(GOOGLE_TOKEN_PATH, "w") as f_out:
+                        json.dump(token_data, f_out)
+        except Exception:
+            pass
+
+    headers = {"Authorization": f"Bearer {access_token}", "Content-Type": "application/json"}
+
+    rows = [
+        [f"🕒 Последнее обновление: {kyiv_timestamp}", "", "", "", "", ""],
+        ["Провайдер", "Модель", "Тир (Назначение)", "Статус", "Пинг (сек)", "Детали / Примечание"]
+    ]
+
+    tier_names = {
+        3: "Tier 3 (Reasoning & Deep Arch)",
+        2: "Tier 2 (Standard Workhorse)",
+        1: "Tier 1 (Fast & Free / Light)"
+    }
+
+    # Sort results by Tier desc, then Status
+    sorted_results = sorted(results, key=lambda x: (x[2], "LIVE" in x[3]), reverse=True)
+
+    for model, provider, tier, status, detail, latency in sorted_results:
+        t_label = tier_names.get(tier, f"Tier {tier}")
+        status_clean = "✅ LIVE" if "LIVE" in status else ("⏳ BUSY (429)" if "BUSY" in status else f"⚠️ {status}")
+        rows.append([
+            provider.upper(),
+            model,
+            t_label,
+            status_clean,
+            f"{latency}s" if latency > 0 else "-",
+            detail
+        ])
+
+    range_clear = urllib.parse.quote("Models!A1:F150")
+    clear_url = f"https://sheets.googleapis.com/v4/spreadsheets/{spreadsheet_id}/values/{range_clear}:clear"
+    try:
+        req_clear = urllib.request.Request(clear_url, data=b"{}", headers=headers, method="POST")
+        urllib.request.urlopen(req_clear)
     except Exception:
         pass
 
-def ping_model(model_entry):
-    model = model_entry["model"]
-    provider = model_entry["provider"]
-    t0 = time.time()
-    status = "UNKNOWN"
-    err_msg = ""
+    range_name = f"Models!A1:F{len(rows)}"
+    encoded_range = urllib.parse.quote(range_name)
+    update_url = f"https://sheets.googleapis.com/v4/spreadsheets/{spreadsheet_id}/values/{encoded_range}?valueInputOption=RAW"
+    body = {"range": range_name, "majorDimension": "ROWS", "values": rows}
 
     try:
-        if provider == "openai":
-            api_key = keys.get("OPENAI_API_KEY")
-            if not api_key:
-                return model, provider, "SKIPPED", "No OPENAI_API_KEY", 0
-            headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
-            payload = {"model": model, "messages": [{"role": "user", "content": "ping"}], "max_tokens": 5}
-            r = requests.post("https://api.openai.com/v1/chat/completions", json=payload, headers=headers, timeout=10)
-            latency = round(time.time() - t0, 2)
-            if r.status_code == 200:
-                return model, provider, "LIVE", f"{latency}s", latency
-            else:
-                return model, provider, f"ERR {r.status_code}", r.text[:80], latency
-
-        elif provider == "anthropic":
-            oauth_file = "/root/.claude/.credentials.json"
-            oauth_token = None
-            if os.path.exists(oauth_file):
-                try:
-                    with open(oauth_file) as f:
-                        cd = json.load(f)
-                        oauth_token = cd.get("claudeAiOauth", {}).get("accessToken")
-                except Exception:
-                    pass
-            
-            tok = oauth_token or keys.get("ANTHROPIC_API_KEY")
-            if not tok:
-                return model, provider, "SKIPPED", "No ANTHROPIC Token/Key", 0
-            
-            headers = {"content-type": "application/json", "anthropic-version": "2023-06-01"}
-            if oauth_token:
-                headers["Authorization"] = f"Bearer {tok}"
-                headers["anthropic-beta"] = "oauth-2025-04-20"
-            else:
-                headers["x-api-key"] = tok
-
-            payload = {"model": model, "messages": [{"role": "user", "content": "ping"}], "max_tokens": 5}
-            r = requests.post("https://api.anthropic.com/v1/messages", json=payload, headers=headers, timeout=10)
-            latency = round(time.time() - t0, 2)
-            if r.status_code == 200:
-                return model, provider, "LIVE", f"{latency}s", latency
-            elif r.status_code == 429:
-                return model, provider, "LIVE (Auth OK)", "Rate limit / Pro sub active", latency
-            else:
-                return model, provider, f"ERR {r.status_code}", r.text[:80], latency
-
-        elif provider == "google":
-            api_key = keys.get("GEMINI_API_KEY") or keys.get("GOOGLE_API_KEY")
-            if not api_key:
-                return model, provider, "SKIPPED", "No GOOGLE_API_KEY", 0
-            m_clean = model.replace("google/", "")
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/{m_clean}:generateContent?key={api_key}"
-            payload = {"contents": [{"parts": [{"text": "ping"}]}], "generationConfig": {"maxOutputTokens": 5}}
-            r = requests.post(url, json=payload, timeout=10)
-            latency = round(time.time() - t0, 2)
-            if r.status_code == 200:
-                return model, provider, "LIVE", f"{latency}s", latency
-            else:
-                return model, provider, f"ERR {r.status_code}", r.text[:80], latency
-
-        elif provider == "huggingface":
-            api_key = keys.get("HF_TOKEN")
-            if not api_key:
-                return model, provider, "SKIPPED", "No HF_TOKEN", 0
-            headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
-            payload = {"model": model, "messages": [{"role": "user", "content": "ping"}], "max_tokens": 5}
-            r = requests.post("https://router.huggingface.co/v1/chat/completions", json=payload, headers=headers, timeout=10)
-            latency = round(time.time() - t0, 2)
-            if r.status_code == 200:
-                return model, provider, "LIVE", f"{latency}s", latency
-            else:
-                return model, provider, f"ERR {r.status_code}", r.text[:80], latency
-
-        elif provider == "nous":
-            tok = nous_token or keys.get("NOUS_API_KEY")
-            if not tok:
-                return model, provider, "SKIPPED", "No Nous Token", 0
-            headers = {"Authorization": f"Bearer {tok}", "Content-Type": "application/json"}
-            payload = {"model": model, "messages": [{"role": "user", "content": "ping"}], "max_tokens": 5}
-            r = requests.post("https://inference-api.nousresearch.com/v1/chat/completions", json=payload, headers=headers, timeout=10)
-            latency = round(time.time() - t0, 2)
-            if r.status_code == 200:
-                return model, provider, "LIVE", f"{latency}s", latency
-            elif r.status_code == 429:
-                return model, provider, "BUSY (429)", "Rate limit / capacity", latency
-            else:
-                return model, provider, f"ERR {r.status_code}", r.text[:80], latency
-
-        elif provider == "openrouter":
-            api_key = keys.get("OPENROUTER_API_KEY")
-            if not api_key:
-                return model, provider, "SKIPPED", "No OPENROUTER_API_KEY", 0
-            headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
-            payload = {"model": model, "messages": [{"role": "user", "content": "ping"}], "max_tokens": 5}
-            r = requests.post("https://openrouter.ai/api/v1/chat/completions", json=payload, headers=headers, timeout=10)
-            latency = round(time.time() - t0, 2)
-            if r.status_code == 200:
-                return model, provider, "LIVE", f"{latency}s", latency
-            elif r.status_code == 429:
-                return model, provider, "BUSY (429)", "Rate limit", latency
-            else:
-                return model, provider, f"ERR {r.status_code}", r.text[:80], latency
-
-        elif provider == "gonka24":
-            api_key = keys.get("GONKA24_API_KEY")
-            if not api_key:
-                return model, provider, "SKIPPED", "No GONKA24_API_KEY", 0
-            headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
-            payload = {"model": model, "messages": [{"role": "user", "content": "ping"}], "max_tokens": 5}
-            r = requests.post("https://api.gonka24.com/v1/chat/completions", json=payload, headers=headers, timeout=10)
-            latency = round(time.time() - t0, 2)
-            if r.status_code == 200:
-                return model, provider, "LIVE", f"{latency}s", latency
-            else:
-                return model, provider, f"ERR {r.status_code}", r.text[:80], latency
-
-        else:
-            return model, provider, "UNSUPPORTED", "Unknown provider", 0
-
+        req_up = urllib.request.Request(update_url, data=json.dumps(body).encode(), headers=headers, method="PUT")
+        with urllib.request.urlopen(req_up) as resp:
+            return True
     except Exception as e:
-        latency = round(time.time() - t0, 2)
-        return model, provider, "TIMEOUT/EXC", str(e)[:60], latency
-
-def classify_tier(model_name, provider):
-    """Classifies a model entry into Tier 1, 2, or 3."""
-    m = model_name.lower()
-    
-    # Tier 3: Heavy Reasoning & Deep Architecture
-    if any(k in m for k in [
-        "r1", "opus", "sonnet", "fable", "405b", "70b", "72b", "120b", "550b", "2.5-pro", "deepseek-v3", "deepseek-chat"
-    ]):
-        return 3
-    if m == "gpt-4o":
-        return 3
-        
-    # Tier 2: Standard Workhorse
-    if any(k in m for k in [
-        "3.7-flash", "3.6-flash", "coder", "small-24b", "m2.7", "k2.6", "gemma-4", "m3:free", "glm-5.2", "openrouter/free"
-    ]):
-        return 2
-        
-    # Tier 1: Light & Free Tier
-    return 1
+        print(f"Sheet update error: {e}")
+        return False
 
 def main():
-    kyiv_time = datetime.now(timezone(timedelta(hours=3))).strftime("%Y-%m-%d %H:%M:%S (Kyiv)")
-    
-    with open(f"{HERMES_HOME}/config.yaml") as f:
-        cfg = yaml.safe_load(f)
+    kyiv_tz = timezone(timedelta(hours=3))
+    kyiv_time = datetime.now(kyiv_tz).strftime("%Y-%m-%d %H:%M:%S Киев")
 
-    current_fallback = cfg.get("fallback", [])
-    if not current_fallback:
-        current_fallback = cfg.get("fallback_providers", [])
-
-    # 1. Health-check current fallback models
+    print(f"Running Fallback Models Health-Check ({len(MODELS_CATALOG)} models)...")
     results = []
     with ThreadPoolExecutor(max_workers=10) as ex:
-        futures = [ex.submit(ping_model, m) for m in current_fallback]
+        futures = [ex.submit(ping_model, m) for m in MODELS_CATALOG]
         for f in futures:
             results.append(f.result())
 
-    # Map results
-    active_fallback = []
-    pruned_models = []
-    table_rows = []
+    synced = sync_to_google_sheet(results, kyiv_time)
 
-    for (model, provider, status, detail, latency), original_entry in zip(results, current_fallback):
-        if "404" in status or "does not exist" in detail.lower() or "not found" in detail.lower():
-            pruned_models.append((model, provider, detail))
-        else:
-            active_fallback.append(original_entry)
-
-        status_emoji = "✅" if "LIVE" in status else ("⏳" if "429" in status or "BUSY" in status else "⚠️")
-        table_rows.append(f"{status_emoji} `{model}` ({provider}) — **{status}** ({detail})")
-
-    # 2. Discovery: Scan OpenRouter for new free models
-    new_discovered = []
-    try:
-        r_or = requests.get("https://openrouter.ai/api/v1/models", timeout=8)
-        if r_or.status_code == 200:
-            existing_model_names = {m["model"] for m in active_fallback}
-            for m in r_or.json().get("data", []):
-                mid = m.get("id", "")
-                pricing = m.get("pricing", {})
-                is_free = (str(pricing.get("prompt")) == "0" and str(pricing.get("completion")) == "0") or ":free" in mid
-                if is_free and mid not in existing_model_names:
-                    if not any(x in mid.lower() for x in ["safety", "embed", "vl", "audio", "lyria"]):
-                        res = ping_model({"model": mid, "provider": "openrouter"})
-                        if "LIVE" in res[2] or "BUSY" in res[2]:
-                            entry = {"model": mid, "provider": "openrouter"}
-                            active_fallback.append(entry)
-                            existing_model_names.add(mid)
-                            new_discovered.append((mid, "openrouter"))
-    except Exception as e:
-        pass
-
-    # 3. Discovery: Scan Nous Portal for new free models
-    try:
-        tok = nous_token or keys.get("NOUS_API_KEY")
-        if tok:
-            r_nous = requests.get("https://inference-api.nousresearch.com/v1/models", headers={"Authorization": f"Bearer {tok}"}, timeout=8)
-            if r_nous.status_code == 200:
-                existing_model_names = {m["model"] for m in active_fallback}
-                for m in r_nous.json().get("data", []):
-                    mid = m.get("id", "")
-                    if ":free" in mid and mid not in existing_model_names:
-                        res = ping_model({"model": mid, "provider": "nous"})
-                        if "LIVE" in res[2] or "BUSY" in res[2]:
-                            entry = {"model": mid, "provider": "nous"}
-                            active_fallback.append(entry)
-                            existing_model_names.add(mid)
-                            new_discovered.append((mid, "nous"))
-    except Exception as e:
-        pass
-
-    # 4. Group active models by 3 Dynamic Tiers
-    tier1_models = []
-    tier2_models = []
-    tier3_models = []
-
-    for entry in active_fallback:
-        t = classify_tier(entry["model"], entry["provider"])
-        if t == 3:
-            tier3_models.append(entry)
-        elif t == 2:
-            tier2_models.append(entry)
-        else:
-            tier1_models.append(entry)
-
-    # 5. Build user digest
     report = []
     report.append(f"📊 **Ежедневный отчет Fallback-цепочки и пула моделей**")
     report.append(f"🕒 Время проверки: `{kyiv_time}`")
-    report.append(f"🔢 Всего активных моделей в пуле: **{len(active_fallback)}**\n")
-
-    if new_discovered:
-        report.append("✨ **Новые обнаруженные и подключенные модели:**")
-        for nm, np in new_discovered:
-            report.append(f"- ➕ `{nm}` ({np})")
-        report.append("")
-
-    if pruned_models:
-        report.append("🗑️ **Устаревшие/удаленные модели:**")
-        for pm, pp, pd in pruned_models:
-            report.append(f"- ❌ `{pm}` ({pp}) — {pd}")
-        report.append("")
-
-    report.append("🧠 **Конфигурация 3 Тиров Dynamic Model Routing:**\n")
-    
-    report.append(f"🔴 **Tier 3: Heavy Reasoning & Deep Architecture ({len(tier3_models)} моделей)**")
-    report.append("*Назначение: системная архитектура, сложный кодинг, глубокий аудит, R1 рассуждения.*")
-    for m in tier3_models[:10]:
-        report.append(f"  • `{m['model']}` ({m['provider']})")
-    if len(tier3_models) > 10:
-        report.append(f"  • *...и еще {len(tier3_models) - 10} моделей*")
-    report.append("")
-
-    report.append(f"🟡 **Tier 2: Standard Workhorse ({len(tier2_models)} моделей)**")
-    report.append("*Назначение: стандартная разработка, поиск, документы, сводки (дефолт).*")
-    for m in tier2_models[:10]:
-        report.append(f"  • `{m['model']}` ({m['provider']})")
-    if len(tier2_models) > 10:
-        report.append(f"  • *...и еще {len(tier2_models) - 10} моделей*")
-    report.append("")
-
-    report.append(f"🟢 **Tier 1: Light & Free Tier ({len(tier1_models)} моделей)**")
-    report.append("*Назначение: повседневный диалог, шутки, приветствия, быстрые статусы (<1s).*")
-    for m in tier1_models[:10]:
-        report.append(f"  • `{m['model']}` ({m['provider']})")
-    if len(tier1_models) > 10:
-        report.append(f"  • *...и еще {len(tier1_models) - 10} моделей*")
-    report.append("")
+    report.append(f"🔢 Проверено моделей: **{len(results)}**")
+    if synced:
+        report.append(f"✅ Результаты синхронизированы в Google Sheet во вкладку **Models**!\n")
+    else:
+        report.append(f"⚠️ Синхронизация с Google Sheet пропущена/ошибка.\n")
 
     report.append("📋 **Текущий статус цепочки резервирования (Health-Check):**")
-    report.extend(table_rows)
+    for model, provider, tier, status, detail, latency in sorted(results, key=lambda x: x[2], reverse=True):
+        status_emoji = "✅" if "LIVE" in status else ("⏳" if "BUSY" in status or "429" in status else "⚠️")
+        report.append(f"{status_emoji} `{model}` ({provider}) — **{status}** ({latency}s) | {detail}")
 
     print("\n".join(report))
 
