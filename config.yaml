@@ -97,13 +97,11 @@ fallback_providers:
     provider: huggingface
   - model: google/gemini-2.5-flash
     provider: google
-  - model: claude-fable-5
+  - model: claude-haiku-4-5
     provider: anthropic
-  - model: claude-sonnet-5
+  - model: claude-sonnet-4-5
     provider: anthropic
-  - model: claude-opus-5
-    provider: anthropic
-  - model: claude-opus-4
+  - model: claude-opus-4-5
     provider: anthropic
   - model: inclusionai/ling-3.0-flash-fin:free
     provider: openrouter
@@ -223,13 +221,11 @@ fallback:
     provider: huggingface
   - model: google/gemini-2.5-flash
     provider: google
-  - model: claude-fable-5
+  - model: claude-haiku-4-5
     provider: anthropic
-  - model: claude-sonnet-5
+  - model: claude-sonnet-4-5
     provider: anthropic
-  - model: claude-opus-5
-    provider: anthropic
-  - model: claude-opus-4
+  - model: claude-opus-4-5
     provider: anthropic
   - model: inclusionai/ling-3.0-flash-fin:free
     provider: openrouter

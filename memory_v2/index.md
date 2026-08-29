@@ -11,6 +11,7 @@
 
 ## Cases
 | Дата | Тема | Файл | Ключевой урок |
+| 2026-08-28 | Desktop Failover Daemon & Tailscale Direct .env Sync Protocol | cases/2026-08-28_desktop_failover_and_tailscale_env_sync.md | Скрипт переключения фоновых задач при обслуживании ПК (desktop_failover_daemon.py); синхронизация .env секретов между ПК и VPS строго по прямому каналу Tailscale SSH/SCP (без Git); строгий запрет галлюцинаций вакансий в Career Scanner. |
 | 2026-08-27 | Gateway Shutdown & Restoration Notification Policy | cases/2026-08-27_gateway_shutdown_restoration_notification_policy.md | При отправке сообщения "Gateway Shutdown" из-за внутренних процессов или перезапусков боты и агенты ОБЯЗАНЫ отправлять короткое уведомление пользователю после успешного восстановления ("успешно восстановлены"). |
 | 2026-08-26 | Pasport Odesa3 Queue Monitor Poller | cases/2026-08-26_pasport_odesa3_equeue_poller.md | Поллер мониторинга слотов записи Pasport Odesa3. Запись успешно выполнена Стефаном, поллер остановлен и удален из крона. |
 | 2026-08-26 | OpenClaw Timeout Config Fix & Service Restart | cases/2026-08-26_openclaw_timeout_config_fix.md | Исправление таймаута генерации OpenClaw в `openclaw.service` и валидация конфигурации. |

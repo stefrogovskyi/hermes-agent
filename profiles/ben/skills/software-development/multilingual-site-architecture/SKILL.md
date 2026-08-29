@@ -178,6 +178,72 @@ Use this skill when managing, generating, or updating large-scale multi-language
     - When adding new workspace tabs or navigation items into existing dashboards (e.g. `dashboard.html`), ensure new elements strictly follow the standard styling of neighboring navigation items (`dash-nav-item`) without persistent inline highlights, custom borders, or contrasting backgrounds unless explicitly requested.
     - When deploying static HTML updates behind edge caching proxies (such as Hostinger CDN `hcdn`), the CDN edge may continue serving cached pages if file modification times (`mtime`) appear unchanged to the edge. Run a touch pass over deployed files on the remote server (`find <web_root> -name '*.html' -exec touch {} \;`) to ensure edge caches register updated file timestamps immediately.
 
+21. **Web Form Security, Injection Hardening & Anti-Bot Protection:**
+    - **Block Direct Access to Sensitive Files (`.htaccess`):** Static web servers often inadvertently expose backend databases, configs, and state files. Always enforce strict server-level blocks:
+      ```apache
+      <FilesMatch "\.(sqlite|db|sql|log|bak|env|ini|sh|py|md|git|json)$">
+          Order allow,deny
+          Deny from all
+      </FilesMatch>
+      <DirectoryMatch "^.*/data">
+          Order allow,deny
+          Deny from all
+      </DirectoryMatch>
+      ```
+    - **Honeypot Bot Traps:** Add invisible dummy input fields (`website_hp_check`) styled with `display:none;` and `tabindex="-1"`. Automated bot scripts fill all inputs; on the backend handler, if the honeypot field is non-empty, immediately return a fake `200 OK` without triggering database writes or email dispatches.
+    - **IP Rate Limiting (Anti-Flooding):** Implement a lightweight sliding-window rate limiter in SQLite or memory (e.g. max 5 requests per 60 seconds per client IP). If exceeded, return `HTTP 429 Too Many Requests`.
+    - **Email & Header Injection Defense:** Strip all control and newline characters (`\r`, `\n`, `\t`, `\0`, `%0A`, `%0D`) from `name`, `email`, `subject`, and `action` fields before passing them to `mail()` headers to prevent SMTP header forgery and open-relay abuse.
+    - **Quiet Calculator / Draft Submissions:** For interactive estimation sliders or multi-step wizards, do not dispatch admin email notifications on draft/slider clicks unless valid contact details (`email` or `phone`) are explicitly provided by the visitor. Log draft telemetry to the database quietly.
+    - **Global Security Headers:** Set defensive HTTP response headers:
+      ```apache
+      <IfModule mod_headers.c>
+          Header always set X-Content-Type-Options "nosniff"
+          Header always set X-Frame-Options "SAMEORIGIN"
+          Header always set X-XSS-Protection "1; mode=block"
+          Header always set Referrer-Policy "strict-origin-when-cross-origin"
+      </IfModule>
+      ```
+
+22. **Strict Isolation of Backend Security vs. Frontend Structure & Markup:**
+    - When implementing server security hardenings (rate limiting, honeypot validation, database file blocking, injection scrubbing), apply changes **strictly at the backend level** (`.htaccess`, PHP controllers, PDO queries) without modifying frontend HTML templates, CSS classes, DOM structure, or existing navigation menus.
+    - Never replace approved rich hierarchical navigation drawers (e.g. nested sub-solutions under `Services` or company pages under `Company`) with simplified flat link lists during security passes.
+    - In authentication endpoints (`auth.php`), ensure all status check aliases (`action=me`, `action=check`, `action=get_current_user`) return a unified session payload (`{logged_in: true, user: ...}`) so client-side auth indicators render correctly across both desktop and mobile layouts.
+
+23. **Multi-Environment Mobile Grid Responsiveness & Inline Specificity Overrides:**
+    - **Inline CSS Specificity Trap in Grids:** When HTML templates contain inline styles (e.g. `style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px;"` in hero sections, `1.2fr 0.8fr` in featured agent cards, `280px 1fr` in brand sidebars, or `repeat(auto-fit, minmax(300px, 1fr))` in feature grids), these inline declarations override external stylesheet media queries. On mobile screens (375–390px), this forces multi-column rendering, pushing conversion stats, right-hand cards, and inputs off the right edge and causing horizontal scrolling.
+    - **Global Attribute-Selector Mobile Engine:** Inject a global responsive rule block into all templates that forcefully collapses all multi-column and fixed-width inline grids on mobile viewports:
+      ```css
+      @media (max-width: 900px) {
+        .hero .wrap, .hero-grid, .brand-container, .pillars-grid, .color-grid {
+          grid-template-columns: 1fr !important;
+          display: flex !important;
+          flex-direction: column !important;
+          gap: 24px !important;
+        }
+        div[style*="1.1fr 0.9fr"], div[style*="1.2fr 0.8fr"],
+        div[style*="1fr 1.1fr"], div[style*="1fr 1fr"],
+        div[style*="280px 1fr"], div[style*="repeat(2, 1fr)"],
+        div[style*="repeat(2,1fr)"], div[style*="repeat(3,1fr)"],
+        div[style*="minmax(300px"], div[style*="minmax(260px"],
+        div[style*="minmax(240px"], div[style*="minmax(220px"] {
+          grid-template-columns: 1fr !important;
+          padding-left: 18px !important;
+          padding-right: 18px !important;
+          gap: 20px !important;
+        }
+      }
+      ```
+    - **Mobile Header Auth Avatar vs. Text Expansion:** On desktop, auth buttons display text (`👤 Sign In` or `👤 <Username>`). On mobile screens (<768px), dynamic username injection (`admin`, `Stefan...`) stretches the button into an oversized rectangular pill that displaces the brand logo, language selector, and hamburger button. Always hide `#nav-auth-text` on mobile screens and style the button into a compact 36–38px circular icon avatar (`border-radius: 50%; width: 38px; height: 38px; min-width: 38px; display: inline-flex; align-items: center; justify-content: center;`).
+    - **Tier-Specific Navigation Isolation (PROD vs. DEV vs. STAGING):** When managing parallel environments (Production `/`, Development `/dev/`, Staging `/staging/` across 9 language subtrees):
+      - Ensure brand logo links are strictly isolated to their own tier root (`/` on PROD, `/dev/` on DEV, `/staging/` on STAGING, plus localized paths like `/<tier>/<lang>/`).
+      - Never copy or rsync staging files directly to production without scrubbing environment-specific path prefixes (`/dev/` or `/staging/`).
+      - Run automated verification probes checking HTTP 200, active mobile CSS rules, and tier-specific logo `href` values across all 3 tiers simultaneously.
+
+24. **Universal Header Auth Synchronization & Vector Flag Preservation:**
+    - **Header Auth Script Ubiquity:** On static and hybrid web apps using AJAX-based authentication (`auth.php?action=me`), the dynamic header auth script (`global-header-auth-check`) MUST be injected across EVERY HTML file without exception—including `/dashboard`, `/login`, error pages, and all language subdirectories. If omitted on the dashboard, an already-authenticated user will see a conflicting "Sign In" button in their header.
+    - **Vector SVG Flag Integrity:** Always maintain high-resolution vector SVG flags (`viewBox="0 0 60 40"`) with proper border-radius in the active `#lang-btn` and dropdown list items across all templates. Never replace verified SVG flag markup with plain text emojis or unstyled buttons during rollback or cleanup passes.
+    - **Dynamic Dashboard Pathing:** Ensure the header avatar link resolves to the current tier's dashboard (`/dashboard`, `/dev/dashboard`, or `/staging/dashboard`) based on the active URL path.
+
 ## Synchronization Workflow
 
 1. **Define Dictionaries & Slugs:**

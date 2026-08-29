@@ -6,7 +6,7 @@ USER: Стефан (COO Navo). MS To-Do = supremo@i.ua (Direct Azure MS Graph OA
 §
 WORK STYLE: Stefan wants 24/7 autonomous proactive work. Priority rule: if Stefan interjects with a question, pause background work, answer, then resume.
 §
-КАНБАНЫ: На VERCEL (https://<agent>-kanban.vercel.app). Бэкенд: https://dev.aavalanche.com/kanban_api.php.
+КАНБАНЫ: VERCEL (https://<agent>-kanban.vercel.app). РЕЕСТР КРОНОВ/СКИЛЛОВ: Google Sheet (docs.google.com/spreadsheets/d/1WjOtga9-heqcd2gKdAkCdUZ-Ocg75EDCaSKgAZsP0ew).
 §
 Hostinger: u473746908 (aavalanche.com), SSH 82.29.199.155:65002. Root `/` = English, Sendmail LF.
 §
@@ -18,8 +18,8 @@ Navo24 API key (NAVO_API_KEY) covers 5 Navo APIs. NO AGENT MAY IMPERSONATE STEFA
 §
 БОТЫ КЛАСТЕРА (getMe): Hermes=@hermesstevensonbot, Richard=@richnavobot, Alistair=@qubicpmbot, Archie=@WordCraftBot, Ben=@benjettbot, Callum=@callumvancebot, Liz=@lizharperbot, Harrison=@harrisoncroftbot, Aeon=@aeondeskbot, OpenClaw=@clawstevensonbot. Own profiles.
 §
-VPS-кроны в UTC (Киев=UTC+3)! Desktop-mst5pt7 (SSH Stefan@100.79.157.46) = второй Hermes; крон-дубли там отключены 08.2026, живы только desktop-джобы.
+VPS-кроны в UTC (Киев=UTC+3). Desktop-mst5pt7 (Stefan@100.79.157.46) = второй Hermes.
 §
 Career Scanner v2: 11 API. Anthropic Pro: OAuth (~08.2027). Fallback: Google->Ox Alpha->Nous->NVIDIA NIM->Gonka24. Mail: contact@aavalanche.com.
 §
-ХЕЛС-ЧЕК: `systemctl is-active` недостаточен. Честный 3-уровневый чек: 1) systemd; 2) TG getWebhookInfo (pending_updates); 3) логи journalctl на TimedOut/Blocked/Restart-loop.
+ОТЧЁТЫ КРОНОВ: на русском, визуализированные с эмодзи. Индексатор: показывать примеры файлов/папок/документов. В 22:00 Киев крон-отчёт по реестру Google Sheet.
