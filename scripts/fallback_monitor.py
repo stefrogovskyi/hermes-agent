@@ -1,25 +1,41 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-fallback_monitor.py — Ежедневный аудит fallback-цепочки, пинг моделей, авто-дискавери и синхронизация во вкладку 'Models' в Google Таблицу.
+fallback_monitor.py — Кроссплатформенный (Linux/Windows) аудит fallback-цепочки, пинг моделей и синхронизация во вкладку 'Models' в Google Таблицу.
 """
 
 import os, sys, json, time, requests, yaml, urllib.request, urllib.parse
 from datetime import datetime, timezone, timedelta
 from concurrent.futures import ThreadPoolExecutor
 
-HERMES_HOME = "/opt/hermes"
-CONFIG_PATH = "/opt/hermes/config.yaml"
-AUTH_PATH = "/opt/hermes/auth.json"
-SHEET_CONFIG = "/opt/hermes/ecosystem_registry_sheet.json"
-GOOGLE_TOKEN_PATH = "/opt/hermes/profiles/archie/google_token.json"
-GOOGLE_SECRET_PATH = "/opt/hermes/profiles/archie/google_client_secret.json"
+# Force UTF-8 on Windows console / stdout
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
+# Cross-platform HERMES_HOME detection
+if os.name == "nt":
+    DEFAULT_HOME = os.path.expandvars(r"%LOCALAPPDATA%\hermes")
+    if not os.path.exists(DEFAULT_HOME):
+        DEFAULT_HOME = os.path.join(os.path.expanduser("~"), "AppData", "Local", "hermes")
+else:
+    DEFAULT_HOME = "/opt/hermes"
+
+HERMES_HOME = os.environ.get("HERMES_HOME", DEFAULT_HOME)
+CONFIG_PATH = os.path.join(HERMES_HOME, "config.yaml")
+AUTH_PATH = os.path.join(HERMES_HOME, "auth.json")
+SHEET_CONFIG = os.path.join(HERMES_HOME, "ecosystem_registry_sheet.json")
+GOOGLE_TOKEN_PATH = os.path.join(HERMES_HOME, "profiles", "archie", "google_token.json")
+GOOGLE_SECRET_PATH = os.path.join(HERMES_HOME, "profiles", "archie", "google_client_secret.json")
 
 # Load environment keys from .env
 env_file = os.path.join(HERMES_HOME, ".env")
 keys = {}
 if os.path.exists(env_file):
-    with open(env_file) as f:
+    with open(env_file, "r", encoding="utf-8", errors="ignore") as f:
         for line in f:
             if "=" in line and not line.strip().startswith("#"):
                 k, v = line.strip().split("=", 1)
@@ -28,7 +44,7 @@ if os.path.exists(env_file):
 def get_nous_token():
     if os.path.exists(AUTH_PATH):
         try:
-            with open(AUTH_PATH, "r") as f:
+            with open(AUTH_PATH, "r", encoding="utf-8", errors="ignore") as f:
                 data = json.load(f)
                 return data.get("providers", {}).get("nous", {}).get("access_token")
         except Exception:
@@ -36,10 +52,10 @@ def get_nous_token():
     return None
 
 def get_claude_pro_cookie():
-    path = "/root/.claude/.credentials.json"
+    path = os.path.join(os.path.expanduser("~"), ".claude", ".credentials.json")
     if os.path.exists(path):
         try:
-            with open(path, "r") as f:
+            with open(path, "r", encoding="utf-8", errors="ignore") as f:
                 data = json.load(f)
                 oauth = data.get("claudeAiOauth", {})
                 return oauth.get("accessToken")
@@ -184,9 +200,9 @@ def sync_to_google_sheet(results, kyiv_timestamp):
     if not os.path.exists(GOOGLE_TOKEN_PATH) or not os.path.exists(SHEET_CONFIG):
         return False
 
-    with open(GOOGLE_TOKEN_PATH) as f:
+    with open(GOOGLE_TOKEN_PATH, "r", encoding="utf-8", errors="ignore") as f:
         token_data = json.load(f)
-    with open(SHEET_CONFIG) as f:
+    with open(SHEET_CONFIG, "r", encoding="utf-8", errors="ignore") as f:
         sheet_info = json.load(f)
 
     spreadsheet_id = sheet_info.get("spreadsheet_id")
@@ -195,7 +211,7 @@ def sync_to_google_sheet(results, kyiv_timestamp):
 
     if refresh_token and os.path.exists(GOOGLE_SECRET_PATH):
         try:
-            with open(GOOGLE_SECRET_PATH) as f:
+            with open(GOOGLE_SECRET_PATH, "r", encoding="utf-8", errors="ignore") as f:
                 cs = json.load(f)
                 client_info = cs.get("installed") or cs.get("web") or {}
                 client_id = client_info.get("client_id")
@@ -213,20 +229,13 @@ def sync_to_google_sheet(results, kyiv_timestamp):
                     new_token_data = json.loads(resp.read().decode())
                     access_token = new_token_data["access_token"]
                     token_data["access_token"] = access_token
-                    with open(GOOGLE_TOKEN_PATH, "w") as f_out:
+                    with open(GOOGLE_TOKEN_PATH, "w", encoding="utf-8") as f_out:
                         json.dump(token_data, f_out)
         except Exception:
             pass
 
     headers = {"Authorization": f"Bearer {access_token}", "Content-Type": "application/json"}
 
-    # Structure with Provider column:
-    # A: Провайдер (Provider)
-    # B: Модель (Model)
-    # C: Тир (Tier)
-    # D: Статус (Status)
-    # E: Пинг (Latency)
-    # F: Детали / Примечание (Details)
     rows = [
         [f"🕒 Последнее обновление: {kyiv_timestamp}", "", "", "", "", ""],
         ["Провайдер", "Модель", "Тир (Назначение)", "Статус", "Пинг (сек)", "Детали / Примечание"]
@@ -278,8 +287,12 @@ def sync_to_google_sheet(results, kyiv_timestamp):
 def main():
     kyiv_time = datetime.now(timezone(timedelta(hours=3))).strftime("%Y-%m-%d %H:%M:%S (Киев)")
 
-    with open(f"{HERMES_HOME}/config.yaml") as f:
-        cfg = yaml.safe_load(f)
+    if not os.path.exists(CONFIG_PATH):
+        print(f"Error: Config not found at {CONFIG_PATH}")
+        return
+
+    with open(CONFIG_PATH, "r", encoding="utf-8", errors="ignore") as f:
+        cfg = yaml.safe_load(f) or {}
 
     current_fallback = cfg.get("fallback", [])
     if not current_fallback:
@@ -398,10 +411,9 @@ def main():
     report.append(f"🟡 **Tier 2: Standard Workhorse ({len(tier2_models)} моделей)**")
     report.append("*Назначение: стандартная разработка, поиск, документы, сводки (дефолт).*\n")
     for m in tier2_models[:10]:
-        report.append(f"  • `{m['model']}` ({m['provider']})")
+        report.append(f"  • `{m['model']}` ({m['provider']})\n")
     if len(tier2_models) > 10:
-        report.append(f"  • *...и еще {len(tier2_models) - 10} моделей*")
-    report.append("")
+        report.append(f"  • *...и еще {len(tier2_models) - 10} моделей*\n")
 
     report.append(f"🟢 **Tier 1: Light & Free Tier ({len(tier1_models)} моделей)**")
     report.append("*Назначение: повседневный диалог, шутки, приветствия, быстрые статусы (<1s).*\n")
