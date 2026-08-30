@@ -49,3 +49,34 @@ Checklist, in order:
 ## Reporting rule (Stefan)
 
 When the true cause turns out different/bigger than an earlier explanation you gave, explicitly correct the earlier answer ("my morning explanation was correct but incomplete") — don't silently move on.
+
+## Common Pitfalls & Cross-Platform Quirks
+
+### 1. Windows vs Linux Cron Execution Failures
+- **Hardcoded Linux Paths (`/opt/hermes/...`):** Scripts executing on Windows (e.g. desktop node during failover/sync) will crash with `FileNotFoundError`.
+  - **Fix:** Use dynamic detection:
+    ```python
+    if os.name == "nt":
+        DEFAULT_HOME = os.path.expandvars(r"%LOCALAPPDATA%\hermes")
+    else:
+        DEFAULT_HOME = "/opt/hermes"
+    HERMES_HOME = os.environ.get("HERMES_HOME", DEFAULT_HOME)
+    ```
+- **Windows Console Encoding (`UnicodeEncodeError` on emojis):** Windows PowerShell/cmd defaults to `cp1252`/`cp866`, crashing python scripts when outputting emojis (`📊`, `🕒`, `✅`).
+  - **Fix:** Force UTF-8 reconfigure at script startup:
+    ```python
+    if sys.platform == "win32":
+        try:
+            sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+            sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+        except Exception:
+            pass
+    ```
+
+### 2. Cron Report Formatting & User Legibility
+- Always deliver reports in Russian.
+- Suppress raw logs/traces; format with structured emoji indicators, summary bullet points, and human-readable schedules (converting UTC cron expressions to Kyiv time `UTC+3`).
+- **Silent Background Maintenance vs User Delivery (`deliver: local` vs `deliver: origin`):**
+  - High-frequency or purely synchronization maintenance tasks (e.g. 6-hour Google Sheet registry updates) must use `deliver: "local"` to prevent spamming Telegram chat with technical confirmation strings like `Successfully synced N entries`.
+  - Only dedicated user-facing summary briefings (e.g. evening digest at 22:00 Kyiv) should use `deliver: "origin"`.
+
