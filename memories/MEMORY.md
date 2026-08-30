@@ -2,7 +2,7 @@ Richard (richnavobot): privacy OFF; SINGLE bot (token 8846249306:AAE7qkGYcY-q3pb
 §
 ПАМЯТЬ V2: memory_v2/ (cases+principles+recall.py+Pinecone). ПРАВИЛА: (1) факт->правка; (2) при сбое — root-cause + доделай; (3) перечитывай себя; (4) в отчётах только реальные данные/URL.
 §
-USER: Стефан (COO Navo). MS To-Do = supremo@i.ua (Direct Azure MS Graph OAuth). Агенты: Hermes, Richard, Liz, Alistair, Ben, Callum, Archie, Harrison. Aeon = GitHub Actions.
+USER: Стефан (COO Navo). MS To-Do: supremo@i.ua. ПРАВИЛО: Device Code flow для MSA блокируется MS. Использовать крон-синк с ПК. Агенты: Hermes, Richard, Liz, Alistair, Ben, Callum, Archie, Harrison, Charlie, Aeon.
 §
 WORK STYLE: Stefan wants 24/7 autonomous proactive work. Priority rule: if Stefan interjects with a question, pause background work, answer, then resume.
 §
@@ -16,7 +16,7 @@ Navo24 API key (NAVO_API_KEY) covers 5 Navo APIs. NO AGENT MAY IMPERSONATE STEFA
 §
 АВТО-ОТПРАВКИ В ГРУППЫ: Запрещены для всех ботов, кроме бенчмарка SeaRates vs Navo (Алистер раз в 2 дня в 08:00 MSK в Navo Tech geeks с Excel). Остальные отчеты строго в личку.
 §
-БОТЫ КЛАСТЕРА (getMe): Hermes=@hermesstevensonbot, Richard=@richnavobot, Alistair=@qubicpmbot, Archie=@WordCraftBot, Ben=@benjettbot, Callum=@callumvancebot, Liz=@lizharperbot, Harrison=@harrisoncroftbot, Aeon=@aeondeskbot, OpenClaw=@clawstevensonbot. Own profiles.
+БОТЫ КЛАСТЕРА (getMe): Hermes=@hermesstevensonbot, Richard=@richnavobot, Alistair=@qubicpmbot, Archie=@WordCraftBot, Ben=@benjettbot, Callum=@callumvancebot, Liz=@lizharperbot, Harrison=@harrisoncroftbot, Charlie=@charlierogbot, Aeon=@aeondeskbot, OpenClaw=@clawstevensonbot.
 §
 VPS-кроны в UTC (Киев=UTC+3). Desktop-mst5pt7 (Stefan@100.79.157.46) = второй Hermes.
 §

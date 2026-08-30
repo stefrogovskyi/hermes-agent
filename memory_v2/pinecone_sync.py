@@ -33,8 +33,33 @@ def collect():
 
 def get_embedder():
     """Вернуть функцию embed(text)->list[float] или None.
-    OpenRouter embeddings работают (text-embedding-3-small, dim 1536).
-    Nous embeddings требуют кредитов (404) — только как фолбэк."""
+    Прямой OpenAI API Key — приоритет (text-embedding-3-small).
+    OpenRouter / Nous — фолбэки."""
+    oak = os.environ.get("OPENAI_API_KEY")
+    if not oak:
+        for p in (Path("/opt/hermes/.env"), Path(r"C:\Users\Stefan\AppData\Local\hermes\.env")):
+            try:
+                if p.exists():
+                    for line in p.read_text(encoding="utf-8").splitlines():
+                        if line.strip().startswith("OPENAI_API_KEY="):
+                            oak = line.split("=", 1)[1].strip().strip("\r").strip('"')
+                            break
+            except Exception:
+                pass
+            if oak:
+                break
+
+    if oak:
+        try:
+            from openai import OpenAI
+            client = OpenAI(api_key=oak)
+            def embed_direct_oai(t):
+                r = client.embeddings.create(model="text-embedding-3-small", input=t)
+                return r.data[0].embedding
+            return embed_direct_oai
+        except Exception as e:
+            print("[pinecone_sync] Direct OpenAI embed fail: %s" % e)
+
     # явно подгрузить OPENROUTER_API_KEY из .env Hermes, если нет в env
     ork = os.environ.get("OPENROUTER_API_KEY")
     if ork:

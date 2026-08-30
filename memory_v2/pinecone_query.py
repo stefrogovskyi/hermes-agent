@@ -49,16 +49,39 @@ def main():
         keyword_fallback(query)
         return
 
-    # embedder (тот же, что в pinecone_sync)
+    # 1. Попробовать прямо через OPENAI_API_KEY
+    oak = os.environ.get("OPENAI_API_KEY")
+    if not oak:
+        for p in (Path("/opt/hermes/.env"), Path(r"C:\Users\Stefan\AppData\Local\hermes\.env")):
+            try:
+                if p.exists():
+                    for line in p.read_text(encoding="utf-8").splitlines():
+                        if line.strip().startswith("OPENAI_API_KEY="):
+                            oak = line.split("=", 1)[1].strip().strip("\r").strip('"')
+                            break
+            except Exception:
+                pass
+            if oak:
+                break
+
     embed = None
-    oa = os.environ.get("OPENAI_API_KEY") or os.environ.get("OPENROUTER_API_KEY")
-    if oa:
+    if oak:
         try:
             from openai import OpenAI
-            client = OpenAI(api_key=oa, base_url="https://openrouter.ai/api/v1")
-            embed = lambda t: client.embeddings.create(model="openai/text-embedding-3-small", input=t).data[0].embedding
-        except Exception:
-            pass
+            client = OpenAI(api_key=oak)
+            embed = lambda t: client.embeddings.create(model="text-embedding-3-small", input=t).data[0].embedding
+        except Exception as e:
+            print("[pinecone_query] OpenAI embed fail:", e)
+
+    if not embed:
+        oa = os.environ.get("OPENROUTER_API_KEY")
+        if oa:
+            try:
+                from openai import OpenAI
+                client = OpenAI(api_key=oa, base_url="https://openrouter.ai/api/v1")
+                embed = lambda t: client.embeddings.create(model="openai/text-embedding-3-small", input=t).data[0].embedding
+            except Exception:
+                pass
     if not embed:
         try:
             sys.path.insert(0, r"C:\Users\Stefan\AppData\Local\hermes\hermes-agent")
@@ -78,10 +101,14 @@ def main():
     vec = embed(query)
     res = index.query(vector=vec, top_k=5, include_metadata=True)
     print(f"[pinecone_query] семантический поиск по '{query}':\n")
-    for m in res["matches"]:
-        meta = m["metadata"]
-        print(f"=== {meta.get('file')} (score {m['score']:.2f}) ===")
-        print(meta.get("text", "")[:400])
+    matches = res.matches if hasattr(res, "matches") else res.get("matches", [])
+    for m in matches:
+        meta = m.metadata if hasattr(m, "metadata") else m.get("metadata", {})
+        score = m.score if hasattr(m, "score") else m.get("score", 0.0)
+        file_name = meta.get("file") if isinstance(meta, dict) else getattr(meta, "file", "unknown")
+        text_val = meta.get("text", "") if isinstance(meta, dict) else getattr(meta, "text", "")
+        print(f"=== {file_name} (score {score:.2f}) ===")
+        print(text_val[:400])
         print()
 
 if __name__ == "__main__":

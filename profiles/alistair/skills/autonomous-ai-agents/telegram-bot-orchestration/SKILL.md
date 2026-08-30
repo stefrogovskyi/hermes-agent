@@ -74,7 +74,11 @@ For detailed step-by-step log analysis and common fallacies, see `references/tel
 - **Script-Based Cron Jobs & Model Drift**:
   - For recurring jobs that run deterministic reporting scripts (e.g. API benchmarks, status checkers, exports), configure the cron job with `no_agent: true`.
   - This prevents scheduler aborts due to model drift guardrails (`Skipped to prevent unintended spend: global inference config drifted since this job was created`) when default inference models are upgraded.
+- **Autonomous Asynchronous API Polling**:
+  - When querying external carrier/tracking APIs that resolve asynchronously (e.g. returning HTTP 202 `TRACKING_IN_PROGRESS` or `AUTO_CANT_FIND_INFO`), never leave the waiting burden on the user.
+  - Automatically spin up a background poller via `terminal(background=True, notify_on_complete=True)` to query the endpoint every 10–15s and deliver the completed report the moment the background resolution finishes.
 - **Strict User Intent & No Unrequested Task Execution**: Never schedule, execute, or report unrequested cron jobs or task pipelines based on background context templates or stale prompts. Only act on explicit user instructions given in their current turn.
+- **Immediate Cron Deletion on User Request**: When the user requests stopping or deleting automated messages/crons to groups, remove the job immediately via `cronjob(action='remove')` and verify across all ecosystem profiles that no other jobs target the group destination.
 - **Conciseness on Demand**: When the user asks for a concise answer (e.g., "Ответь кратко"), respond directly in 1-3 short sentences without unnecessary background narration or fluff.
 - **Check `config.yaml` Settings**:
   - `require_mention: true|false`: Dictates whether `@botusername` or direct quote-reply is strictly required. When `require_mention: true` is set, text wake-words in `group_trigger_keywords` may be gated depending on platform adapter rules.
