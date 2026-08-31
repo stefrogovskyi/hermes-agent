@@ -1,0 +1,4 @@
+Symlink-style reference — read the LIVE project file, do not edit here:
+C:\Users\Stefan\My Drive\Equity\My Biz\Partner companies\Navo\6. Departments\Richard Marlowe\Richard Hermes\make_blueprint.json
+
+(Make.com scenario blueprint: Retell webhook -> LLM (OpenRouter/Nous) -> Navo API -> Telegram, plus a Navo-webhook -> Telegram alert branch. Import via Make scenario editor; create connections per make_setup.md.)

@@ -36,7 +36,10 @@ To allow team members to start and interact with the agent without encountering 
 
 - **Session Isolation**: Each Telegram user receives an isolated session key (`agent:main:telegram:dm:<USER_ID>`). Inbound messages from team members never interrupt, flush, or contaminate the active admin session.
 - **Administrator (Stefan - `330656040`)**: `OPERATIONS CONSOLE` mode (infrastructure, builds, deployments, audits, mass outreach controls).
-- **Team Members (Oleg `8081511707`, Alexey `593209837`, Alena, Kate, Liliia)**: `DOMAIN EXPERT / SALES` mode (B2B sales strategy, API capabilities, client handling, lead qualification).
+- **Sales Team Members (Nikita `@nikita51155` / `nikita@navo24.com`, Oleg `8081511707` / `oleg.chervinskyi@navo24.com`, Alona `345948971` / `alyona.holubova@navo24.com`, Kate `149598904` / `ekaterina.kapustian@navo24.com`, Liliia `lilia.k@navo24.com`)**: `SENIOR SALES MENTOR & ASSISTANT` mode.
+  * Dedicated context profiles stored in `/opt/hermes/profiles/richard/team/<username>.md` (e.g. `/opt/hermes/profiles/richard/team/nikita.md`).
+  * Richard assists team members with customized commercial offers (КП), freight rate calculations, ocean carrier tracking / DCSA inquiries, objection handling against competitors (SeaRates, project44, Vizion, Terminal49), and multilingual email drafting.
+  * Guardrails: NEVER expose server `.env` files, API keys, system paths, or administrative configurations to team members. All conversations with colleagues remain strictly isolated from Stefan's admin session.
 
 ## 5. Daily Interactions Cron Report
 

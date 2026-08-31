@@ -108,16 +108,16 @@
     "archived_at": null,
     "created_at": "2026-08-10T14:04:42.492086+00:00",
     "created_by": "agent",
-    "last_patched_at": "2026-08-30T22:47:29.984173+00:00",
-    "last_reused_patch_generation": 104,
-    "last_used_at": "2026-08-30T22:47:26.851887+00:00",
-    "last_viewed_at": "2026-08-30T22:47:26.847743+00:00",
-    "patch_count": 105,
-    "patch_generation": 105,
+    "last_patched_at": "2026-08-31T08:45:20.792505+00:00",
+    "last_reused_patch_generation": 114,
+    "last_used_at": "2026-08-31T17:06:17.317993+00:00",
+    "last_viewed_at": "2026-08-31T17:06:17.314207+00:00",
+    "patch_count": 114,
+    "patch_generation": 114,
     "pinned": false,
     "state": "active",
-    "use_count": 137,
-    "view_count": 137
+    "use_count": 152,
+    "view_count": 152
   },
   "baoyu-infographic": {
     "archived_at": null,
@@ -350,14 +350,14 @@
     "created_by": null,
     "last_patched_at": null,
     "last_reused_patch_generation": 0,
-    "last_used_at": "2026-08-10T14:04:29.864072+00:00",
-    "last_viewed_at": "2026-08-10T14:04:29.862019+00:00",
+    "last_used_at": "2026-08-31T06:56:44.628159+00:00",
+    "last_viewed_at": "2026-08-31T06:56:44.623984+00:00",
     "patch_count": 0,
     "patch_generation": 0,
     "pinned": false,
     "state": "active",
-    "use_count": 1,
-    "view_count": 1
+    "use_count": 2,
+    "view_count": 2
   },
   "email/b2b-sales-outreach": {
     "archived_at": null,

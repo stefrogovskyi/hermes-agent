@@ -1,9 +1,9 @@
 {
-  "last_report_path": "/opt/hermes/profiles/alistair/logs/curator/20260824-104450",
-  "last_run_at": "2026-08-24T10:44:50.346779+00:00",
-  "last_run_duration_seconds": 0.427667,
+  "last_report_path": "/opt/hermes/profiles/alistair/logs/curator/20260831-111736",
+  "last_run_at": "2026-08-31T11:17:36.911656+00:00",
+  "last_run_duration_seconds": 0.334005,
   "last_run_summary": "auto: no changes; llm: skipped (consolidation off)",
   "last_run_summary_shown_at": null,
   "paused": false,
-  "run_count": 2
+  "run_count": 3
 }

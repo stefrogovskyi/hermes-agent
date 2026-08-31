@@ -11,6 +11,8 @@
 
 ## Cases
 | Дата | Тема | Файл | Ключевой урок |
+| 2026-08-30 | MS To-Do Personal MSA Device Code Block & PC PowerShell Sync | cases/2026-08-30_ms_todo_pc_powershell_sync_and_personal_msa_block.md | Личные аккаунты Microsoft (`@i.ua`) блокируют Device Code Flow на VPS; синхронизация MS To-Do производится через PowerShell Graph на ПК с переносом JSON-слепка по Tailscale. |
+| 2026-08-30 | Sub-Bot Gateway Configuration — Open DM & Start Command | cases/2026-08-30_subbot_open_dm_and_start_command.md | Настройка профилей субагентов (Алистер @qubicpmbot) для открытого приема сообщений в ЛС и обработки команды `/start` для всех пользователей. |
 | 2026-08-29 | Ecosystem Crons & Skills Google Sheet Registry & Fallback Monitor Fix | cases/2026-08-29_ecosystem_crons_skills_registry_sheet.md | Создание единого реестра кронов и скиллов в Google Sheet `Hermes Ecosystem` с отдельной вкладкой `Models` (таймстамп по Киеву); поддержка автообновления через daily крон; кроссплатформенный фикс `fallback_monitor.py` (Windows/Linux paths, UTF-8). |
 | 2026-08-28 | Desktop Failover Daemon & Tailscale Direct .env Sync Protocol | cases/2026-08-28_desktop_failover_and_tailscale_env_sync.md | Скрипт переключения фоновых задач при обслуживании ПК (desktop_failover_daemon.py); синхронизация .env секретов между ПК и VPS строго по прямому каналу Tailscale SSH/SCP (без Git); строгий запрет галлюцинаций вакансий в Career Scanner. |
 | 2026-08-27 | Gateway Shutdown & Restoration Notification Policy | cases/2026-08-27_gateway_shutdown_restoration_notification_policy.md | При отправке сообщения "Gateway Shutdown" из-за внутренних процессов или перезапусков боты и агенты ОБЯЗАНЫ отправлять короткое уведомление пользователю после успешного восстановления ("успешно восстановлены"). |

@@ -305,14 +305,14 @@
     "created_by": "agent",
     "last_patched_at": "2026-08-29T21:16:42.899062+00:00",
     "last_reused_patch_generation": 3,
-    "last_used_at": "2026-08-30T17:14:02.836321+00:00",
-    "last_viewed_at": "2026-08-30T17:14:02.832992+00:00",
+    "last_used_at": "2026-08-31T17:38:41.360868+00:00",
+    "last_viewed_at": "2026-08-31T17:38:41.357334+00:00",
     "patch_count": 3,
     "patch_generation": 3,
     "pinned": false,
     "state": "active",
-    "use_count": 8,
-    "view_count": 8
+    "use_count": 10,
+    "view_count": 10
   },
   "defuddle": {
     "archived_at": null,
@@ -815,13 +815,13 @@
     "created_by": null,
     "last_patched_at": null,
     "last_reused_patch_generation": 0,
-    "last_used_at": "2026-08-30T03:00:49.112478+00:00",
+    "last_used_at": "2026-08-31T03:00:01.771191+00:00",
     "last_viewed_at": "2026-08-28T02:00:09.494733+00:00",
     "patch_count": 0,
     "patch_generation": 0,
     "pinned": false,
     "state": "active",
-    "use_count": 42,
+    "use_count": 44,
     "view_count": 4
   },
   "merge-reconciler": {
