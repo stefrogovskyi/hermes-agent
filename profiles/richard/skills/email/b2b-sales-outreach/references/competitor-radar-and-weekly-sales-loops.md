@@ -1,4 +1,4 @@
-# Competitor Intelligence Radar, Weekly Sales Loops & Telephony Voice AI
+# Competitor Intelligence Radar, Weekly Sales Loops, Telephony Voice AI & WhatsApp Gateway
 
 ## 1. Weekly Sales Team Testimonial & Customer Win Loop
 
@@ -72,3 +72,22 @@ Every competitor breakdown MUST follow this 3-part concrete structure:
 - **Telephony TTS:** Twilio built-in Amazon Polly Neural voices (**`Polly.Brian-Neural`** or **`Polly.Arthur-Neural`**) provide natural British Business English without external ElevenLabs API subscription overhead.
 - **Telegram Voice Bubbles:** Hermes Edge TTS configured with **`en-GB-RyanNeural`** (English) and **`ru-RU-DmitryNeural`** (Russian) to maintain an identical vocal timbre across phone calls and chat voice notes.
 - **Ultra-Low Latency (<400ms):** Twilio Media Streams (8kHz μ-law WebSockets) + Deepgram Nova-2 (STT) + Fast LLM + Streaming TTS with natural barge-in interruption support.
+
+---
+
+## 4. WhatsApp Multi-Device Gateway & Inbound Triage (+44 7360 065904)
+
+### Service Architecture
+- **Dedicated Port:** Port `3060` (`/opt/hermes/profiles/richard/services/whatsapp-gateway/`).
+- **Auth & Session Directory:** `auth_info_richard/`.
+- **Pairing Methods:** 
+  * 8-digit Pairing Code (`POST /request-pairing-code` with `phone: "447360065904"`).
+  * Direct QR Code scan (`GET /status` -> base64 PNG).
+
+### Inbound Message Triage & Draft Approval Flow
+1. **Message Interception:** Gateway receives inbound client messages via `sock.ev.on('messages.upsert')`.
+2. **Telegram Notification to Stefan (`chat_id: 330656040`):**
+   * Sender identity, company name, and phone number.
+   * Full client message text + complete Russian translation.
+   * Prepared AI draft reply from Richard Marlowe (English/Chinese/Russian as appropriate).
+3. **Approval Mandate:** On Stefan's confirmation ("Да", "Отправляй", "OK"), dispatch reply via `POST http://localhost:3060/send-message`.

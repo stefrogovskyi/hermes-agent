@@ -167,7 +167,9 @@ system_prompt_append: 'In Telegram group chats: respond ONLY if (1) @mentioned (
   ways, or if the question is directed to someone else (e.g. @lxxmngu, @PixelProphet),
   you MUST REMAIN COMPLETELY SILENT and output NO text.'
 telegram:
-  bot_token: 8738625022:AAG1ijTON2GaWu9stugzR45n-tx4ziwu3qQ
+  allow_from: '*'
+  bot_token: 8738625022:***
+  dm_policy: open
   enabled: true
   group_allow_from: '*'
   group_response_mode: mention

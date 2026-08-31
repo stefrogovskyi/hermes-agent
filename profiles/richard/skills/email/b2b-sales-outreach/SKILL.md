@@ -41,8 +41,9 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
      * Thank them warmly for presenting their routes and service capabilities.
      * State that as a digital logistics platform, Navo is very interested in offering their freight services to our global client base.
      * Proactively propose integrating and sharing their freight tariffs, routes, and schedules via **API or digital data interface (Data Feed)** to broadcast them directly to end customers.
-5. **Direct Execution on Feedback & No Hanging Queues**:
+5. **Direct Execution on Feedback, Verbatim Approval & No Hanging Queues**:
    - When the user approves draft direction (e.g., "Billy text is good - translate to Chinese and send") or confirms sending ("Да", "Отправляй", "OK"), execute the send **IMMEDIATELY in that turn**.
+   - **VERBATIM DRAFT DISPATCH MANDATE**: Upon receiving approval confirmation ("Да", "Отправляй", "OK"), ALWAYS dispatch **strictly and verbatim the exact draft text** displayed in the approval card word for word. NEVER unilaterally rewrite, translate, or swap language unless explicitly instructed.
    - **NO ARTIFICIAL CRON QUEUES**: NEVER defer approved responses into a lingering 1-hour cron job or background batch when immediate dispatch is expected. Lingering queues cause loss of conversation sequence, duplicate approvals, and stale context.
    - When Stefan says "Стоп", stop immediately without exploratory searches.
 3. **Inbound Replies vs. Mass Cold Outreach**:
@@ -97,7 +98,7 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
    - **EXACTLY 1 EXTRA BLANK LINE** before the signature block.
    - **NO HORIZONTAL LINE (`border-top`) BEFORE THE SIGNATURE**.
    - Use ONLY the official HTML signature block (`Richard Marlowe / Connections Manager`, logo `https://bit.ly/4hLg86T`, +44 203 440 9800, 30 St Mary Axe London, `rich@navo24.com`, `www.navo24.com`).
-   *(See `references/4-touch-sequence-pattern.md` for full sequence details, `references/competitor-radar-and-weekly-sales-loops.md` for weekly testimonial loops, competitor radar 3-tier rules & Twilio voice pipeline, `references/25-sources-audit-and-scrapers.md` for the complete 25-source technical audit and scrapers, `references/b2b-contract-and-kanban-rules.md` for contract drafting and Vercel Kanban UI rules, and `references/technical-api-inquiries-and-schedules.md` for Tracking & Schedules REST API inquiry patterns, SeaRates comparison, and billing rules.)*
+   *(See `references/4-touch-sequence-pattern.md` for full sequence details, `references/whatsapp-and-voice-telephony-pipeline.md` for WhatsApp gateway, voice PTT & Twilio setup, `references/competitor-radar-and-weekly-sales-loops.md` for weekly testimonial loops, competitor radar 3-tier rules & Twilio voice pipeline, `references/25-sources-audit-and-scrapers.md` for the complete 25-source technical audit and scrapers, `references/b2b-contract-and-kanban-rules.md` for contract drafting and Vercel Kanban UI rules, and `references/technical-api-inquiries-and-schedules.md` for Tracking & Schedules REST API inquiry patterns, SeaRates comparison, and billing rules.)*
    - **RFC 5322 Recipient Header Formatting Rule**:
      * In all outbound cold emails and responses, ALWAYS format the `To` field as `f"{person_name} <{email}>"` (e.g. `Colin Charnock <c.charnock@tglobal.com>`). Passing bare email strings causes mail user agents (Outlook, Apple Mail) in CC copies to suppress the recipient display name or collapse the field.
    - **Multi-Source Diversity & Strict Regional Filtering Mandate**:
