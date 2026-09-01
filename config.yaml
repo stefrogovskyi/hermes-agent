@@ -139,19 +139,20 @@ telegram:
   require_mention: true
   stream_update_interval_ms: 2500
 command_allowlist:
-  - copy/move file into system config path
-  - PowerShell encoded command execution
-  - execute_code
-  - recursive delete
+  - access to Hermes secrets (Windows path)
   - script execution via -e/-c flag
+  - stop/restart system service
+  - recursive delete
+  - delete in root path
   - overwrite system config
-  - git force push (rewrites remote history)
-  - in-place edit of Hermes config/env
+  - PowerShell destructive delete (Remove-Item)
+  - execute_code
   - script execution via heredoc
   - pipe remote content to shell
-  - stop/restart system service
-  - access to Hermes secrets (Windows path)
-  - delete in root path
+  - in-place edit of Hermes config/env
+  - copy/move file into system config path
+  - PowerShell encoded command execution
+  - git force push (rewrites remote history)
 streaming:
   enabled: true
 onboarding:

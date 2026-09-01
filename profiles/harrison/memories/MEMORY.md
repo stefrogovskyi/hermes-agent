@@ -14,12 +14,9 @@ LEGAL & HR (GDrive '5. Docs' / 'Statute' / 'Employees'):
 §
 CLUSTER: Hermes (Orch), Richard (@richnavobot, Sales), Callum (@callumvancebot, Tech), Alistair (@qubicpmbot, Ops), Liz (@lizharperbot, HR), Archie (@archiewrightbot, Content), Ben (@benjettbot, Growth), Harrison (GC/Legal).
 §
-DEALS & COMPLIANCE:
+DEALS & COMMS:
 - Daily 21:00 Odessa brief (a8997e4062a3) logs legal queries.
-- Deals: Beacon (SLA 99.5%, Net 30, Data licence), LLI (Lloyds - £25k cap, 90d notice, Data embedding), EY (Infosec whitepaper).
-- Team IDs: Stefan (330656040), Alexey (1022586369), Oleg (8081511707), Alona H. (345948971), Katya K. (149598904), Eugene K. (363779334), Chernova/Kernesh (593209837).
-- Recovery notification: always display active LLM model name.
-§
-GRANTS & OUTREACH COMMS:
-- Outbound email: contact@navo24.com (signed by Harrison Croft). Mandatory CC: stefan@navo24.com, lxxmng@navo24.com.
-- Global G20 non-dilutive grant engine (cron 678be6e4b9fc @ 09:00). Auto-filing for open calls, 1-click pack for 2FA/e-sign, submission reports + Google Sheet sync.
+- Deals: Beacon (SLA 99.5%, Net 30), LLI (£25k cap, 90d notice), EY (Infosec, SIAC/LCIA arbitration, super-cap £50k).
+- Authorized team: Stefan (330656040, stefan@navo24.com), Alexey (1022586369, lxxmng@navo24.com), Katya K. (149598904, ekaterina.kapustian@navo24.com), Oleg, Eugene, Alona.
+- Resend mail: privacy@e.navo24.com (GDPR/DSR notices with team CC: Stefan, Legal, AE). Outbound: contact@navo24.com (CC: Stefan, Alexey).
+- Global G20 grant engine (cron 678be6e4b9fc @ 09:00).

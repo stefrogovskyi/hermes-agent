@@ -11,6 +11,7 @@
 
 ## Cases
 | Дата | Тема | Файл | Ключевой урок |
+| 2026-08-31 | Windows Desktop File Indexing Integration into Daily Full Reality Indexer | cases/2026-08-31_desktop_windows_indexing_full_reality.md | Индексация локальных файлов ПК Стефана (Desktop, Documents, Downloads, AppData/Local/hermes) через Tailscale SSH подключена к единой FTS5 базе знаний (>26,400 записей). |
 | 2026-08-30 | MS To-Do Personal MSA Device Code Block & PC PowerShell Sync | cases/2026-08-30_ms_todo_pc_powershell_sync_and_personal_msa_block.md | Личные аккаунты Microsoft (`@i.ua`) блокируют Device Code Flow на VPS; синхронизация MS To-Do производится через PowerShell Graph на ПК с переносом JSON-слепка по Tailscale. |
 | 2026-08-30 | Sub-Bot Gateway Configuration — Open DM & Start Command | cases/2026-08-30_subbot_open_dm_and_start_command.md | Настройка профилей субагентов (Алистер @qubicpmbot) для открытого приема сообщений в ЛС и обработки команды `/start` для всех пользователей. |
 | 2026-08-29 | Ecosystem Crons & Skills Google Sheet Registry & Fallback Monitor Fix | cases/2026-08-29_ecosystem_crons_skills_registry_sheet.md | Создание единого реестра кронов и скиллов в Google Sheet `Hermes Ecosystem` с отдельной вкладкой `Models` (таймстамп по Киеву); поддержка автообновления через daily крон; кроссплатформенный фикс `fallback_monitor.py` (Windows/Linux paths, UTF-8). |

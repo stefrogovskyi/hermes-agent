@@ -81,11 +81,48 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
           * Calculation Window: Calculated from the Subscription Activation Date through the end of that relevant calendar month (e.g. 1 Sep – 30 Sep, or 15 Sep – 30 Sep for mid-month activation).
           * Invoicing & Payment: Issued monthly in arrears, payment due Net 14 days from invoice date. Client pays net amounts + applicable VAT and intermediary bank transfer/wire fees.
         - **Format**: Always generate as a formatted Word document (`.docx`) with signature blocks for Oleksii Shatunov (Director, Wemelogistics Ltd) and the Client.
-   33. **Interactive Agent Kanban Board Rules (Vercel Deployments)**:
-        - **Single Vercel URL**: Each agent's Kanban board is hosted EXCLUSIVELY on Vercel (`https://<agent>-kanban.vercel.app`, e.g. `https://richard-kanban.vercel.app`).
-        - **No Floating Bottom Buttons**: DO NOT render a floating "Add Task" / "Добавить задачу" button at the bottom right. Task creation is triggered via the top header button (`+ Новая Задача`).
-        - **Interactive Detail Modals**: Every card MUST be clickable (`onclick="openCardDetailModal(cardId)"`) to open a rich modal containing card title, tag, assignee, status, description, comments section, and full activity timeline log.
-        - **Escape Key Modal Dismissal**: Include a global keyboard listener (`window.addEventListener('keydown', e => if (e.key === 'Escape') closeModal())`) to immediately close all active modals on Esc keypress.
+   - **Interactive Agent Kanban Board Rules (Vercel Deployments)**:
+           - **Single Vercel URL**: Each agent's Kanban board is hosted EXCLUSIVELY on Vercel (`https://<agent>-kanban.vercel.app`, e.g. `https://richard-kanban.vercel.app`).
+           - **No Floating Bottom Buttons**: DO NOT render a floating "Add Task" / "Добавить задачу" button at the bottom right. Task creation is triggered via the top header button (`+ Новая Задача`).
+           - **Interactive Detail Modals**: Every card MUST be clickable (`onclick="openCardDetailModal(cardId)"`) to open a rich modal containing card title, tag, assignee, status, description, comments section, and full activity timeline log.
+           - **Escape Key Modal Dismissal**: Include a global keyboard listener (`window.addEventListener('keydown', e => if (e.key === 'Escape') closeModal())`) to immediately close all active modals on Esc keypress.
+      34. **Sales Rep Google Sheets Tracker & Multi-Channel Sequence Integration**:
+           - **Google Sheets API & gspread Integration**: Connect via Google Service Account (`richard-bot@navo-sales-sheets.iam.gserviceaccount.com`, `/opt/hermes/profiles/richard/google_service_account.json`).
+           - **Single-Page Unified Master Workspace Mandate**: Do NOT isolate email drafts into separate tabs or disjointed files. Users require seeing each lead and all 4 complete email drafts (`Touch #1 Initial Pitch`, `Touch #2 Follow-up 1`, `Touch #3 Follow-up 2`, `Touch #4 Breakup`) directly on **one unified row on a single master page**. Freeze header rows and lead identity columns (A:D: №, Status, Priority, Company) for smooth horizontal reading.
+           - **2026 Anti-AI & Humanized B2B Copywriting Standards**:
+             * **STRICT BAN on Em-Dashes (— / –)**: NEVER use em-dashes anywhere in sales emails, LinkedIn messages, or Google Sheets. Use commas, colons, parentheses, or direct sentence phrasing.
+             * **STRICT BAN on Filler Openers**: Never use "quick question", "quick note", "quick thought", or "quick follow-up". Start immediately with the core substance and specific inquiry.
+             * **Brevity Mandate (40–65 words)**: Keep cold emails under 65 words (3-4 short punchy paragraphs max). Strip out bullet lists, bold feature dumps, and corporate fluff.
+             * **Internal Lowercase Subject Lines (2–3 words)**: Use casual, internal-style subject lines (e.g. `acme / container tracking`, `kemetyl / tracking usage`). Never use robotic, capitalized, promotional subject lines with recipient first names (`John, direct ocean tracking... — Navo24`).
+             * **Absolute Ban on AI-Slop**: Zero tolerance for "I hope this email finds you well", "I am reaching out regarding", "streamline your workflows", "game-changer", "unifying seamless experience", or "at its core".
+             * **Zero-Friction Interest-Based CTA**: Never ask for 15-30 minute calls in cold touch #1. Use low-friction interest questions: "Worth exploring if our free tier helps your ops team?", "Open to running 2-3 containers through a quick check?".
+             * **LinkedIn 2026 Peer Networking Standards**: Connect Notes MUST be under 20 words without pitch or links (58-68% acceptance rate). 1st LinkedIn DMs MUST be in pure messenger/chat style (under 45 words, question-first, ZERO email signatures like 'Best, Nikita', and addressing real human DMs strictly by first name in Proper Title Case 'Hi {FirstName}', never all-caps 'Hi EMAD' and never 'Hi Company' or 'Hi Decision Maker').
+             * **Name Normalization & Proper Title Case**: Always normalize recipient names to Title Case (`Emad`, `Marc`, `Ferdinand`) stripping all-caps raw logs and non-name strings before generating greetings.
+             * **Carrier Count & Multimodal Precision**: Navo24 TrackingMCP covers **239 ocean carriers** (with 121 direct connectors and 186 SCACs) and **97 global airlines / air cargo carriers** in AirCargo AWB tracking. SchedulesMCP covers 60+ ocean carriers with 72,000+ live sailings. Always cite these exact figures.
+             * **Sales Rep / Account Executive Email Signature & Pre-Flight Test Workflow**:
+               - Use the standardized HTML signature for sales representatives:
+                 ```html
+                 <div style="margin-top: 24px; font-family: Tahoma, Arial, sans-serif; font-size: 13px; color: #334155; line-height: 1.4; text-align: left;">
+                   <b>Nikita Kurudzhy</b><br>
+                   <b>Account Executive</b><br>
+                   <div style="margin: 8px 0 10px 0;">
+                     <img src="https://bit.ly/4hLg86T" alt="navo" style="height: 35px; width: auto; display: block;" border="0">
+                   </div>
+                   API-MCP for Logistics & Trade<br>
+                   +380932285150<br>
+                   <a href="mailto:nikita@navo24.com" style="color: #2563eb; text-decoration: underline;">nikita@navo24.com</a><br>
+                   30 St Mary Axe, London, EC3A 8BF<br>
+                   <a href="https://www.navo24.com" style="color: #2563eb; text-decoration: underline;">www.navo24.com</a>
+                 </div>
+                 ```
+               - **Mandatory Pre-Launch Verification**: Never launch bulk campaign dispatches from new sender identities or Google Sheets without first dispatching a real test email to Stefan (`stefan@navo24.com`) and verifying delivery ID.
+             * **Automated Website Metric Extraction & Memory Sync**: Website scanners (`scan_navo24_website.py`) must dynamically parse live numerical metrics (carriers, connectors, ports, sailings) from `navo24.com` and related MCP domains and synchronize them into working memory (`MEMORY.md`) to prevent factual drift.
+             * **Telegram Output Chunking & File Delivery**: Large multi-asset audits, OCR transcriptions, or reports over 3,000 characters must be summarized concisely in the Telegram chat with full exhaustive details packaged into a native `.docx` or `.md` file to prevent 10+ message delivery queues.
+             * **Lifecycle Notification Hygiene**: Set `gateway_restart_notification: false` in `config.yaml` to avoid sending redundant "♻️ Gateway online" pings during config reloads.
+             * **Sales Rep UTM Attribution Mandate**: Always append personal rep UTM tags to `navo24.com` links (`?utm_source=outreach&utm_medium=email&utm_campaign=...` and `?utm_source=linkedin&utm_medium=dm&utm_campaign=...`) to ensure full attribution.
+             * **Internal Team Communication Style**: When drafting internal team updates or messages to Stefan/colleagues, use an ultra-concise, conversational, relaxed peer-to-peer tone (e.g. 'Такс, собрал...', short bullets, zero corporate fluff).
+           - **Deep Inbound Request Hyper-Personalization**: Never send generic templates to inbound/re-activation leads. Parse the client's original pain/inquiry and tailor the Subject line, opening value hook (PAYG vs DCSA API vs DFA vs Rates), and CTA accordingly.
+           - **Multi-Channel LinkedIn Playbook**: Target 1–2 decision-makers per account (Operations vs CTO/Supply Chain), craft human Connect Notes (<= 300 chars), conversational 1st DMs, and embed direct LinkedIn search query URLs.
    - **4-Touch Sequence Strategy (Exact Text)**:
      1. **Емейл 1 (Зацепка)**:
         `Здравствуйте, [Имя/Компания]!`
@@ -105,7 +142,7 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
    - **EXACTLY 1 EXTRA BLANK LINE** before the signature block.
    - **NO HORIZONTAL LINE (`border-top`) BEFORE THE SIGNATURE**.
    - Use ONLY the official HTML signature block (`Richard Marlowe / Connections Manager`, logo `https://bit.ly/4hLg86T`, +44 203 440 9800, 30 St Mary Axe London, `rich@navo24.com`, `www.navo24.com`).
-   *(See `references/4-touch-sequence-pattern.md` for full sequence details, `references/19-sources-daily-outreach-engine.md` for the complete 19-source lead ingestion pipeline, `references/inbound-triage-and-testimonials-workflow.md` for verbatim draft approval, silent watchdog semantics, full untruncated triage & team testimonials loop, `references/whatsapp-and-voice-telephony-pipeline.md` for WhatsApp gateway, voice PTT & Twilio setup, `references/competitor-radar-and-weekly-sales-loops.md` for weekly testimonial loops, competitor radar 3-tier rules & Twilio voice pipeline, `references/telegram-team-access-and-isolation.md` for sales team colleague onboarding and session isolation, `references/25-sources-audit-and-scrapers.md` for the complete 25-source technical audit and scrapers, `references/b2b-contract-and-kanban-rules.md` for contract drafting and Vercel Kanban UI rules, and `references/technical-api-inquiries-and-schedules.md` for Tracking & Schedules REST API inquiry patterns, SeaRates comparison, and billing rules.)*
+   *(See `references/4-touch-sequence-pattern.md` for full sequence details, `references/cross-border-tax-residency-and-hmrc-cor.md` for UK HMRC CoR and Form DGT tax workflows, `references/19-sources-daily-outreach-engine.md` for the complete 19-source lead ingestion pipeline, `references/inbound-triage-and-testimonials-workflow.md` for verbatim draft approval, silent watchdog semantics, full untruncated triage & team testimonials loop, `references/whatsapp-and-voice-telephony-pipeline.md` for WhatsApp gateway, voice PTT & Twilio setup, `references/competitor-radar-and-weekly-sales-loops.md` for weekly testimonial loops, competitor radar 3-tier rules & Twilio voice pipeline, `references/telegram-team-access-and-isolation.md` for sales team colleague onboarding and session isolation, `references/25-sources-audit-and-scrapers.md` for the complete 25-source technical audit and scrapers, `references/b2b-contract-and-kanban-rules.md` for contract drafting and Vercel Kanban UI rules, `references/google-sheets-sales-tracker-and-crm.md` for sales representative Google Sheets tracker setup and gspread sync, and `references/technical-api-inquiries-and-schedules.md` for Tracking & Schedules REST API inquiry patterns, SeaRates comparison, and billing rules.)*
    - **RFC 5322 Recipient Header Formatting Rule**:
      * In all outbound cold emails and responses, ALWAYS format the `To` field as `f"{person_name} <{email}>"` (e.g. `Colin Charnock <c.charnock@tglobal.com>`). Passing bare email strings causes mail user agents (Outlook, Apple Mail) in CC copies to suppress the recipient display name or collapse the field.
    - **Multi-Source Diversity & Strict Regional Filtering Mandate**:
@@ -115,13 +152,19 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
      * **Cross-CRM Deduplication Mandate**: Before dispatching, cross-check candidate emails across ALL active CRM bases (`Online Outreach` `appdJR8VVczRxcVke`, `Navo CRM` `appbxvl9BBaTiLMlf` Leads & Contacts, and `Rich Outreach` `appEoWQjvhgN8LIX7`) to ensure ZERO duplicate outreach.
      * **Strict Regional & Geographic Tagging (No Generic "Global")**: When targeting specific regions (e.g., Western Hemisphere / North & South America), enforce strict country-level filtering (`country_iso in ['US', 'CA', 'MX', 'BR', 'AR', 'CL', 'CO', 'PE']`) and tag each lead with its exact country name (United States, Canada, Mexico, Brazil, Argentina, Chile). NEVER assign a lazy "Global" label when regional targeting is requested.
      * **Full 5-Product Suite Inclusion**: Every cold outreach email body MUST list the full 5-component portfolio:
-       1. `Tracking API (Ocean & Air)` (234 ocean carriers, DCSA events, observed ETAs, D&D free-time)
+       1. `Tracking API (Ocean & Air)` (239 ocean carriers, DCSA events, observed ETAs, D&D free-time)
        2. `Schedules API` (72,000+ sailings, reliability benchmarks, 255 ports)
        3. `FreightRates API` (Live ex-Asia spot rates benchmarking, container indices)
        4. `AirTracking API` (Real-time AWB status across global airlines)
        5. `Loading 3D` (Container load optimization, CTU Code / IMDG compliance)
      * **Weekday-Only B2B Scheduling**: All recurring cold outreach cron jobs MUST run strictly on business weekdays (`0 4 * * 1-5` / Monday through Friday), leaving weekends completely silent to maintain professional B2B delivery standards.
    - **Commercial Quotation & Negotiation Guidelines**:
+     * **Cross-Border Tax Residency & Withholding Tax (HMRC CoR vs Form DGT/Local Treaty Blanks)**:
+       - When international clients (e.g. Indonesia, ASEAN) request a Certificate of Residence (CoR) / DTA treaty benefit to waive local withholding tax (e.g. 20% WHT), NEVER guess between "Yes, I have a document" / "No, I am requesting a certificate" in the UK HMRC online portal.
+       - Always clarify in the draft reply: (1) Does their local tax office require their official country blank (e.g. Indonesian Form DGT / DGT-1) stamped by HMRC (requesting they send the template), or do they accept the standard UK HMRC CoR certificate?
+       - Proactively offer to issue the invoice and activate API production keys immediately so technical onboarding proceeds without waiting for the 2–4 week HMRC processing window.
+     * **Telegram Output Formatting & Batch Splitting Prevention**:
+       - For large analytical audits, OCR digests, or multi-asset reviews (>3,000 chars), deliver an executive summary card in Telegram and package the exhaustive details into a clean `.docx` or `.md` file to prevent 10+ chunk message queues.
      * **Volume Quota Interpretation**: Always confirm whether shipment volumes represent a total contract pool or a monthly recurring allowance (e.g., 300 shipments/mo on a 12-month contract = 3,600 total shipments; unit rate = Total Price / 3,600).
      * **Concise Price Presentation**: When presenting updated pricing to prospects (e.g., short-term 3-month contracts in local currency like IDR), keep the email clean, direct, and focused on the bottom-line price and deliverables rather than displaying long multi-step arithmetic.
      * **Dynamic Currency & Tax Inquiries**: When quoting foreign currencies (e.g., IDR, EUR, AED), specify that billing is issued from the international legal entity for client convenience and recommend local tax advisor review for cross-border withholding tax implications.

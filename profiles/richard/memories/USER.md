@@ -4,4 +4,4 @@ Format: Left-aligned 1-on-1 HTML. Sig: Richard Marlowe (Connections Manager). Qu
 §
 Outreach: Mon-Fri. From: rich@e.navo24.com, To: RFC 5322 "Name <email>", Reply-To: sales@navo24.com (West) / rich@navo24.com (CN), CC: support@navo24.com / stefan@navo24.com, lxxmng@navo24.com. Phone: +44 7360 065904 (WhatsApp/Twilio). 95-100 emails/run (19x5). SeaRates pedigree. Cross-CRM dedup.
 §
-Team: Nikita (@nikita51155) — new B2B sales rep at Navo. Uses color-coded pipeline tracking (status colors, symbol markers, next action dates) and expects automated lead & activity updates in his Google Sheets.
+Team: Nikita (@nikita51155) sales rep. Rules: NO em-dash. BAN 'quick question/note'. LinkedIn DMs = messenger chat. Internal team tone: ultra-concise, conversational, relaxed peer-to-peer ('Такс, собрал...').

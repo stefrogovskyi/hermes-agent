@@ -108,16 +108,16 @@
     "archived_at": null,
     "created_at": "2026-08-10T14:04:42.492086+00:00",
     "created_by": "agent",
-    "last_patched_at": "2026-08-31T08:45:20.792505+00:00",
-    "last_reused_patch_generation": 114,
-    "last_used_at": "2026-08-31T17:06:17.317993+00:00",
-    "last_viewed_at": "2026-08-31T17:06:17.314207+00:00",
-    "patch_count": 114,
-    "patch_generation": 114,
+    "last_patched_at": "2026-09-01T13:43:49.276616+00:00",
+    "last_reused_patch_generation": 136,
+    "last_used_at": "2026-09-01T13:43:51.088097+00:00",
+    "last_viewed_at": "2026-09-01T13:43:51.084775+00:00",
+    "patch_count": 136,
+    "patch_generation": 136,
     "pinned": false,
     "state": "active",
-    "use_count": 152,
-    "view_count": 152
+    "use_count": 170,
+    "view_count": 170
   },
   "baoyu-infographic": {
     "archived_at": null,
@@ -223,6 +223,21 @@
     "state": "active",
     "use_count": 0,
     "view_count": 0
+  },
+  "cold-email": {
+    "archived_at": null,
+    "created_at": "2026-09-01T09:32:22.885879+00:00",
+    "created_by": null,
+    "last_patched_at": null,
+    "last_reused_patch_generation": 0,
+    "last_used_at": "2026-09-01T09:32:22.889357+00:00",
+    "last_viewed_at": "2026-09-01T09:32:22.885897+00:00",
+    "patch_count": 0,
+    "patch_generation": 0,
+    "pinned": false,
+    "state": "active",
+    "use_count": 1,
+    "view_count": 1
   },
   "comfyui": {
     "archived_at": null,
@@ -380,14 +395,14 @@
     "created_by": null,
     "last_patched_at": null,
     "last_reused_patch_generation": 0,
-    "last_used_at": "2026-08-11T09:53:34.391076+00:00",
-    "last_viewed_at": "2026-08-11T09:53:34.389025+00:00",
+    "last_used_at": "2026-09-01T13:37:47.338660+00:00",
+    "last_viewed_at": "2026-09-01T13:37:47.334800+00:00",
     "patch_count": 0,
     "patch_generation": 0,
     "pinned": false,
     "state": "active",
-    "use_count": 1,
-    "view_count": 1
+    "use_count": 3,
+    "view_count": 3
   },
   "evaluating-llms-harness": {
     "archived_at": null,
@@ -635,14 +650,14 @@
     "created_by": null,
     "last_patched_at": null,
     "last_reused_patch_generation": 0,
-    "last_used_at": null,
-    "last_viewed_at": null,
+    "last_used_at": "2026-09-01T09:32:01.953758+00:00",
+    "last_viewed_at": "2026-09-01T09:32:01.950644+00:00",
     "patch_count": 0,
     "patch_generation": 0,
     "pinned": false,
     "state": "active",
-    "use_count": 0,
-    "view_count": 0
+    "use_count": 1,
+    "view_count": 1
   },
   "imessage": {
     "archived_at": null,
@@ -734,6 +749,21 @@
     "use_count": 0,
     "view_count": 0
   },
+  "marketing:cold-email": {
+    "archived_at": null,
+    "created_at": "2026-09-01T09:32:33.637100+00:00",
+    "created_by": null,
+    "last_patched_at": null,
+    "last_reused_patch_generation": 0,
+    "last_used_at": "2026-09-01T09:32:37.383724+00:00",
+    "last_viewed_at": "2026-09-01T09:32:37.380652+00:00",
+    "patch_count": 0,
+    "patch_generation": 0,
+    "pinned": false,
+    "state": "active",
+    "use_count": 2,
+    "view_count": 2
+  },
   "meeting-action-items": {
     "archived_at": null,
     "created_at": "2026-08-17T10:27:09.971567+00:00",
@@ -752,6 +782,21 @@
   "merge-reconciler": {
     "archived_at": null,
     "created_at": "2026-08-17T10:27:09.974601+00:00",
+    "created_by": null,
+    "last_patched_at": null,
+    "last_reused_patch_generation": 0,
+    "last_used_at": null,
+    "last_viewed_at": null,
+    "patch_count": 0,
+    "patch_generation": 0,
+    "pinned": false,
+    "state": "active",
+    "use_count": 0,
+    "view_count": 0
+  },
+  "multimanager-outreach-engine": {
+    "archived_at": null,
+    "created_at": "2026-09-01T13:55:31.552483+00:00",
     "created_by": null,
     "last_patched_at": null,
     "last_reused_patch_generation": 0,

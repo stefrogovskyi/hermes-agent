@@ -84,11 +84,18 @@ To achieve continuous background synchronization without user friction:
        $all | ConvertTo-Json -Depth 4 | Set-Content "C:\Users\Stefan\AppData\Local\hermes\todo_live.json" -Encoding UTF8
    }
    ```
-2. **Scheduled Task Registration**:
+2. **Scheduled Task Registration & Invisible Execution**:
+   > ⚠️ **WINDOWS TERMINAL POPUP BUG**: On Windows 11 where Windows Terminal is default terminal handler, triggering `powershell.exe -WindowStyle Hidden` via Task Scheduler still briefly spawns an interactive Windows Terminal window that can hang or steal user focus.
+   > **Fix**: Always launch through `wscript.exe` running a `.vbs` wrapper (`WindowStyle = 0`) or set console delegation to ConHost (`HKCU:\Console\%%Startup\DelegationConsole = {00000000-0000-0000-0000-000000000000}`).
+   ```vbs
+   ' run_todo_silent.vbs
+   Set WshShell = CreateObject("WScript.Shell")
+   WshShell.Run "powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File ""C:\Users\Stefan\AppData\Local\hermes\auto_dump_todo.ps1""", 0, False
+   ```
    ```powershell
-   $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-WindowStyle Hidden -ExecutionPolicy Bypass -File C:\Users\Stefan\AppData\Local\hermes\auto_dump_todo.ps1"
+   $action = New-ScheduledTaskAction -Execute "wscript.exe" -Argument '"C:\Users\Stefan\AppData\Local\hermes\scripts\run_todo_silent.vbs"'
    $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 30)
-   $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -Hidden
+   $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -Hidden -Priority 7
    Register-ScheduledTask -TaskName "HermesTodoDumper" -Action $action -Trigger $trigger -Settings $settings -Force
    ```
 3. **Linux Cron Poller (`every 30m`)**:
