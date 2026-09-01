@@ -1,20 +1,10 @@
-ПРАВИЛА БОТОВ: Отвечать боту ТОЛЬКО при @tag (@qubicpmbot). Инициировать связь с ботом ТОЛЬКО по приказу Стефана. В остальных случаях — игнор. ИЗОЛЯЦИЯ ПРОФИЛЕЙ: менять файлы/Канбан только своего профиля.
+ПРАВИЛА БОТОВ И ГРУПП:
+1. require_mention: true, mention_patterns (\bалистер[а-я]*\b, \balistair\b, \bалик\b).
+2. Отвечать ТОЛЬКО при @qubicpmbot, имени или Reply. Диалоги других (@lxxmngu, @PixelProphet) строго игнорировать. Сообщения только от @qubicpmbot.
+3. Авто-отправки в группы ЗАПРЕЩЕНЫ. Все отчеты — только Стефану в личку.
+4. Изоляция профилей: менять файлы/Канбан только в /opt/hermes/profiles/alistair/.
+5. Асинхронный трекинг: поллить автономно (notify_on_complete). Крон со скриптами — no_agent: true.
 §
-АВТО-ОТПРАВКИ В ГРУППЫ: ПОЛНОСТЬЮ ЗАПРЕЩЕНЫ для всех ботов без исключений. Крон бенчмарка в группу Navo Tech geeks удален. В группы не отправляется никаких авто-отчетов. Все задачи/отчеты идут строго в личный чат Стефана (origin).
-§
-ФАЙЛЫ И ПРИОРИТЕТЫ: С ПК (Stefan 100.79.157.46 / Annetto 100.119.27.60) — выкачивать по Tailscale SMB/SSH (быстрый P2P без лимитов). С Google Диска — через Google Drive API (только для файлов Google Docs/Sheets). Отправлять файлом в Telegram.
-§
-Tailscale machines: desktop-mst5pt7 (100.79.157.46), anetta12 (100.119.27.60). SSH user: hermes.
-§
-КОНТАКТЫ КОМАНДЫ: Алексей Шатунов (@lxxmngu) — Кофаундер Navo. Гафер (Gaffer) — @thegaffermcp_bot (тегать в группе Navo Tech geeks).
-§
-ПРАВИЛА ОБЩЕНИЯ В ГРУППАХ:
-1. На уровне шлюза: require_mention: true и mention_patterns (\bалистер[а-я]*\b, \balistair\b, \bалик\b).
-2. Отвечать ТОЛЬКО при: @qubicpmbot, обращении по имени или Reply на сообщение бота.
-3. Чужие диалоги (@lxxmngu, @PixelProphet) строго игнорировать. Сообщения только от @qubicpmbot (запрет userbot).
-4. Задачи со скриптами в кроне создавать с no_agent: true.
-5. При асинхронном трекинге контейнеров не перекладывать опрос на пользователя, а запускать автономный поллинг (notify_on_complete).
-§
-ИНФРАСТРУКТУРА & SLA: Флот из 150 машин на разных задачах парсинга. Алистер замеряет response time. Норматив: ответ Navo строго до 60 сек по вебхукам.
+БЕНЧМАРК ТРЕКИНГА (5 вкладок Excel, база 20k /opt/hermes/data/daily_statistics_tracking.xlsx): Navo, SeaRates, Project44, Terminal49, OpenTrack, ShipsGo, GoComet, Track-Trace, VesselFinder, 17TRACK, Ship24, ParcelsApp. Ежедневный крон 070be38d89a4 в 08:00 MSK (05:00 UTC) в группу Navo Tech geeks (-1004328290471) с 5-вкладочным Excel и PM GAP-анализом.
 §
 СТРОГОЕ ТАБУ НА ENLIGHT (Ben, Liz): В группах Navo и любых чатах Navo КАТЕГОРИЧЕСКИ ЗАПРЕЩЕНО упоминать Бена (@benjettbot), Лиз (@lizharperbot), компанию Enlight или их сотрудников/агентов. Никто в Navo не должен знать о них, их существовании или работе с ними. В Navo существуют ТОЛЬКО: Stefan Rogovskiy, Alistair (@qubicpmbot), Richard (@richnavobot), Callum (@callumvancebot), Алексей Шатунов (@lxxmngu), Гафер (@thegaffermcp_bot).

@@ -59,7 +59,11 @@ Use when generating comparative benchmark reports, API performance comparisons, 
      7. **Checkpoint 3 (Client DB Write)**: Saving the finalized payload for client access.
      8. **Client Delivery (SLA Verification)**: Response delivery evaluated against the strict **≤ 60 seconds** SLA (operating across reserved fleet of 20 dedicated machines).
    - Reports must explicitly separate Line Parse Latency ($T_{parse}$), AIS Latency ($T_{ais}$), and Database Persistence Overhead ($T_{db}$) rather than reporting a single black-box response time.
-   - Always reference live telemetry from the administrative dashboard for accurate stage timings.
+9. **Multi-Provider Benchmark Architecture (12-Provider Standard):**
+   - Involve both Enterprise visibility suites (Project44, Terminal49, OpenTrack, SeaRates) and Web aggregators (ShipsGo, GoComet, Track-Trace, VesselFinder, 17TRACK, Ship24, ParcelsApp).
+   - Exclude direct clients (e.g., Portcast, MarineTraffic) from public benchmark evaluations.
+   - Include PM GAP analysis identifying areas of improvement (US drayage/terminal gate status, Class-1 inland rail integration, AIS ping frequency in choke points).
+
 
 ## Reference Documentation
 - For exact SeaRates v3 endpoint parameters, query structures, and response error codes, see `references/searates_container_tracking_api.md`.
