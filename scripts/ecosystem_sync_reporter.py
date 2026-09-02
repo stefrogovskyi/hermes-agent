@@ -4,14 +4,13 @@
 ecosystem_sync_reporter.py — Ежедневный аудит и отчёт о синхронизации экосистемы
 (Десктоп Stefan@100.79.157.46, VPS Servarica 38.49.219.217, GitHub stefrogovskyi/hermes-agent).
 Запуск ежедневно в 23:00 (Киев / 20:00 UTC).
+Формат вывода: чистый Markdown (без HTML-тегов).
 """
 
 import subprocess
 import os
 import json
 import time
-import urllib.request
-import urllib.parse
 
 HERMES_DIR = "/opt/hermes"
 DESKTOP_SSH = "Stefan@100.79.157.46"
@@ -32,7 +31,7 @@ def get_git_info():
 
 def check_desktop_node():
     # Check Tailscale & SSH to Stefan's PC
-    ping_out, _, code = run_cmd(f"tailscale ping -c 1 100.79.157.46", timeout=5)
+    ping_out, _, code = run_cmd("tailscale ping -c 1 100.79.157.46", timeout=5)
     if code != 0:
         return "🔴 Офлайн (Tailscale не отвечает)"
     
@@ -55,20 +54,20 @@ def run_sync_and_report():
     branch, last_commit, uncommitted = get_git_info()
     desktop_status = check_desktop_node()
     
-    # 3. Format Telegram brief
+    # 3. Format pure Markdown brief (no HTML tags)
     now_str = time.strftime("%H:%M")
     
     report = (
-        f"🔄 <b>Синхронизация экосистемы Hermes</b> ({now_str})\n\n"
-        f"🌐 <b>VPS Servarica (stefan1):</b>\n"
-        f"• Ветка: <code>{branch}</code>\n"
-        f"• Крайний коммит: <code>{last_commit}</code>\n"
-        f"• Несохранённые правки: <b>{uncommitted}</b>\n\n"
-        f"🐙 <b>GitHub (stefrogovskyi/hermes-agent):</b>\n"
+        f"🔄 **Синхронизация экосистемы Hermes** ({now_str})\n\n"
+        f"🌐 **VPS Servarica (stefan1):**\n"
+        f"• Ветка: `{branch}`\n"
+        f"• Крайний коммит: `{last_commit}`\n"
+        f"• Несохранённые правки: **{uncommitted}**\n\n"
+        f"🐙 **GitHub (stefrogovskyi/hermes-agent):**\n"
         f"• Статус пуша: {'✅ Успешно синхронизирован' if sync_code == 0 else '⚠️ Требует внимания'}\n\n"
-        f"💻 <b>ПК / Десктоп Стефана (Tailscale):</b>\n"
+        f"💻 **ПК / Десктоп Стефана (Tailscale):**\n"
         f"• Состояние узла: {desktop_status}\n\n"
-        f"<i>Память, навыки, конфиги и скрипты актуализированы в едином контуре.</i>"
+        f"*Память, навыки, конфиги и скрипты актуализированы в едином контуре.*"
     )
     
     print(report)
