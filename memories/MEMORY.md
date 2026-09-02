@@ -6,9 +6,9 @@ USER: Стефан (COO Navo). MS To-Do: supremo@i.ua. ПРАВИЛО: Device Co
 §
 WORK STYLE: Stefan wants 24/7 autonomous proactive work. Priority rule: if Stefan interjects with a question, pause background work, answer, then resume.
 §
-КАНБАНЫ: VERCEL (https://<agent>-kanban.vercel.app). РЕЕСТР КРОНОВ/СКИЛЛОВ: Google Sheet (docs.google.com/spreadsheets/d/1WjOtga9-heqcd2gKdAkCdUZ-Ocg75EDCaSKgAZsP0ew).
+КАНБАНЫ: VERCEL. РЕЕСТР КРОНОВ/СКИЛЛОВ: Google Sheet (1WjOtga9-heqcd2gKdAkCdUZ-Ocg75EDCaSKgAZsP0ew).
 §
-Hostinger: u473746908 (aavalanche.com), SSH 82.29.199.155:65002. Mail: contact@aavalanche.com.
+Hostinger: u473746908 (aavalanche.com), SSH 82.29.199.155:65002.
 §
 Navo24 API key (NAVO_API_KEY) covers 5 Navo APIs. NO AGENT MAY IMPERSONATE STEFAN. B2B CRM/отчёты: строго Ричард (@richnavobot).
 §
@@ -20,6 +20,6 @@ Navo24 API key (NAVO_API_KEY) covers 5 Navo APIs. NO AGENT MAY IMPERSONATE STEFA
 §
 VPS-кроны в UTC (Киев=UTC+3). Desktop-mst5pt7 (Stefan@100.79.157.46) = второй Hermes.
 §
-Career Scanner: 11 API. Anthropic Pro: OAuth (~08.2027). Fallback: Google->Ox Alpha->Nous->NVIDIA NIM->Gonka24.
+Career Scanner: 11 API. Fallback: Gemini 3.8 Flash->3.7->2.5->Nous->NVIDIA->Gonka24. Archie: claude-sonnet-5 (блоги строго на Sonnet). OpenClaw: Gemini 3.8 Flash.
 §
 ОТЧЁТЫ КРОНОВ: на русском, с эмодзи. Индексатор: примеры файлов/папок. Google Sheet: 6 колонок (Агент, Тип, Название, ID, Когда на понятном языке, Описание) + вкладка Models с таймстепом. Fallback: 03:00 Киев (00:00 UTC) с Servarica, на ПК off. Failover: Servarica ⟷ ПК.

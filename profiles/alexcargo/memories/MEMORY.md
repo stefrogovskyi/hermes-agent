@@ -17,3 +17,5 @@ YouTube WL 23:00 daily; DP World 09:00, Careers Poller 10:00, Kanban Brief 08:00
 Hostinger (u473746908, 82.29.199.155:65002). VPS stefan1 (38.49.219.217, Tailscale 100.99.146.42). CargoSavior: dev=dev.cargosavior.com (public_html/dev); prod=cargosavior.com. Rule: work on dev ONLY until Stefan orders prod. Brand=#F09133. Mail: contact@cargosavior.com (imap/smtp.hostinger.com).
 §
 Navo24 unified API key (NAVO_API_KEY tmcp_live_...) covers all 5 Navo APIs. NO AGENT MAY IMPERSONATE STEFAN OR SEND MESSAGES FROM USER ACCOUNT. ALL BOTS WRITE ONLY FROM THEIR OWN BOT ACCOUNTS.
+§
+Outreach: Stefan expects immediate Telegram alerts on inbound prospect replies. Bounced/invalid emails must be immediately deleted from lead trackers/sheets, not just flagged.

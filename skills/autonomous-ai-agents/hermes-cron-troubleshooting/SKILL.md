@@ -63,11 +63,54 @@ Pitfalls:
 
 Fires when the global model/provider changed since an **unpinned** agent job was created (e.g. gemini-flash → claude). No inference ran.
 
-**Fix:** pin the job to its original cheap model: `cronjob action=update` with provider/model, or edit `/opt/hermes/cron/jobs.json` directly — note the top-level key there is **`id`**, not `job_id`. Then **audit all other enabled agent jobs** for missing `provider` and pin them preemptively; otherwise the next weekly job hits the same wall:
+**Under the Hood (Hermes v0.20+ Drift Guard):**
+Hermes records hidden fields `model_snapshot` and `provider_snapshot` on job creation. When the global or profile inference model changes, Hermes compares the active profile model against `model_snapshot`. If `model` is unpinned (`None`) or unaligned with `model_snapshot`, Hermes triggers the drift guard:
+`Skipped to prevent unintended spend: global inference config drifted since this job was created (model 'X' -> 'Y'), and this job is unpinned.`
+
+**Complete Fix Across Entire Cluster:**
+To upgrade or switch cluster models cleanly without triggering drift guard on any cron job across any subagent profile:
 ```python
-[j for j in jobs if not j.get('no_agent') and j.get('enabled') and not j.get('provider')]
+import json, glob
+
+configs_models = {
+    "/opt/hermes/cron/jobs.json": ("google/gemini-3.8-flash", "gemini"),
+    "/opt/hermes/profiles/ben/cron/jobs.json": ("google/gemini-3.8-flash", "gemini"),
+    "/opt/hermes/profiles/harrison/cron/jobs.json": ("google/gemini-3.8-flash", "gemini"),
+    "/opt/hermes/profiles/richard/cron/jobs.json": ("google/gemini-3.8-flash", "gemini"),
+    "/opt/hermes/profiles/alexcargo/cron/jobs.json": ("google/gemini-3.8-flash", "gemini"),
+    "/opt/hermes/profiles/alistair/cron/jobs.json": ("google/gemini-3.8-flash", "gemini"),
+    "/opt/hermes/profiles/archie/cron/jobs.json": ("claude-sonnet-5", "anthropic")
+}
+
+for jf, (target_model, target_prov) in configs_models.items():
+    with open(jf, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    jobs = data.get("jobs", []) if isinstance(data, dict) else data
+    for j in jobs:
+        # Align snapshot 1:1 with target active model so (active_model != model_snapshot) never triggers
+        j["model_snapshot"] = target_model
+        j["provider_snapshot"] = target_prov
+    with open(jf, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
 ```
-After pinning, fire a manual `cronjob action=run` to deliver the missed occurrence.
+After updating snapshots, run `cronjob action=run job_id=<failed_id>` to deliver the missed run immediately.
+
+## Symptom 5: Model Drift or Deprecation Across Subagent Profiles
+
+**Root cause seen live:** Changing the default model globally (e.g. upgrading to `gemini-3.8-flash`) can leave stale model overrides (`model_override` or `model` fields in `jobs.json`) across subagent profiles (`/opt/hermes/profiles/*/cron/jobs.json`) pointing to deprecated or slower models (e.g. `gemini-3.6-flash`, `gemini-2.5-flash`). Furthermore, specialized subagents like Archie (`profiles/archie`) have specific requirements: while the profile default or technical jobs might follow the cluster fleet, creative/literary tasks (like `avalanche-copywriting` blogwriting) must remain pinned to high-grade models (`claude-sonnet-5`) with the cluster default only serving as the first fallback layer.
+
+**Diagnose & Fix Across All Profiles:**
+```python
+import json, glob
+for jf in ["/opt/hermes/cron/jobs.json"] + glob.glob("/opt/hermes/profiles/*/cron/jobs.json"):
+    with open(jf, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    jobs = data.get("jobs", []) if isinstance(data, dict) else data
+    for j in jobs:
+        m = j.get("model")
+        # Audit deprecated model overrides and ensure specialized jobs (e.g. Archie's blogwriting) retain their dedicated model (claude-sonnet-5)
+```
+Always verify each profile's `config.yaml` fallback list has the new primary model at the top, followed by proven backups (`gemini-3.7-flash`, `gemini-2.5-flash`), so a temporary vendor outage never stalls scheduled pipelines.
 
 ## Symptom 4: Prompt says "run script X" but its output is missing from reports
 

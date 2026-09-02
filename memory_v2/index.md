@@ -11,6 +11,7 @@
 
 ## Cases
 | Дата | Тема | Файл | Ключевой урок |
+| 2026-09-02 | OpenClaw 2.0 Multi-Tier Fallback Chain & Daily Config Sync | cases/2026-09-02_openclaw_2_0_fallback_chain_and_autosync.md | Апгрейд Клоу Стивенсона (@clawstevensonbot) до OpenClaw 2.0; мульти-уровневая цепочка фолбэков (Gemini 3.7 Flash -> Google/Ox/Nous/NVIDIA -> OpenRouter Free); интеграция авто-синка конфигурации в ночной крон (03:00 Киев). |
 | 2026-08-31 | Windows Desktop File Indexing Integration into Daily Full Reality Indexer | cases/2026-08-31_desktop_windows_indexing_full_reality.md | Индексация локальных файлов ПК Стефана (Desktop, Documents, Downloads, AppData/Local/hermes) через Tailscale SSH подключена к единой FTS5 базе знаний (>26,400 записей). |
 | 2026-08-30 | MS To-Do Personal MSA Device Code Block & PC PowerShell Sync | cases/2026-08-30_ms_todo_pc_powershell_sync_and_personal_msa_block.md | Личные аккаунты Microsoft (`@i.ua`) блокируют Device Code Flow на VPS; синхронизация MS To-Do производится через PowerShell Graph на ПК с переносом JSON-слепка по Tailscale. |
 | 2026-08-30 | Sub-Bot Gateway Configuration — Open DM & Start Command | cases/2026-08-30_subbot_open_dm_and_start_command.md | Настройка профилей субагентов (Алистер @qubicpmbot) для открытого приема сообщений в ЛС и обработки команды `/start` для всех пользователей. |

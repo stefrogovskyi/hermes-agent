@@ -88,17 +88,69 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
            - **Escape Key Modal Dismissal**: Include a global keyboard listener (`window.addEventListener('keydown', e => if (e.key === 'Escape') closeModal())`) to immediately close all active modals on Esc keypress.
       34. **Sales Rep Google Sheets Tracker & Multi-Channel Sequence Integration**:
            - **Google Sheets API & gspread Integration**: Connect via Google Service Account (`richard-bot@navo-sales-sheets.iam.gserviceaccount.com`, `/opt/hermes/profiles/richard/google_service_account.json`).
-           - **Single-Page Unified Master Workspace Mandate**: Do NOT isolate email drafts into separate tabs or disjointed files. Users require seeing each lead and all 4 complete email drafts (`Touch #1 Initial Pitch`, `Touch #2 Follow-up 1`, `Touch #3 Follow-up 2`, `Touch #4 Breakup`) directly on **one unified row on a single master page**. Freeze header rows and lead identity columns (A:D: №, Status, Priority, Company) for smooth horizontal reading.
-           - **2026 Anti-AI & Humanized B2B Copywriting Standards**:
+           - **Single-Page Unified Master Workspace Mandate**: Do NOT isolate email drafts into separate tabs or disjointed files. Users require seeing each lead and all 4 complete email drafts (`Touch #1 Initial Pitch`, `Touch #2 Follow-up 1`, `Touch #3 Follow-up 2`, `Touch #4 Breakup`) directly on **one unified row on a single master page**. When adding new batches (Batch 2: #101–200, Batch 3: #201–300), append them directly to the bottom of the main worksheet (`🎯 Forwarders & NVOCC`) so the rep scrolls through one continuous table.
+           - **Pipeline Segregation Mandate**: Strictly separate personal sales rep outbound activity (`Personal Email Base` -> `Personal Sent` -> `Personal Replied`) from company-routed broadcast inbounds on both Google Sheets Dashboards and CRM tables (`🏢 Company Routed` vs `🎯 Personal Cold Email`).
+           - **Mandatory SeaRates Pedigree Hook**: In cold Touch #1 to freight forwarders, always cite that Navo24 was founded by the original core engineering team behind SeaRates to establish instant credibility.
+           - **2026 Anti-AI & Humanized B2B Copywriting Standards (Natural Founder-Led Tone)**:
              * **STRICT BAN on Em-Dashes (— / –)**: NEVER use em-dashes anywhere in sales emails, LinkedIn messages, or Google Sheets. Use commas, colons, parentheses, or direct sentence phrasing.
-             * **STRICT BAN on Filler Openers**: Never use "quick question", "quick note", "quick thought", or "quick follow-up". Start immediately with the core substance and specific inquiry.
-             * **Brevity Mandate (40–65 words)**: Keep cold emails under 65 words (3-4 short punchy paragraphs max). Strip out bullet lists, bold feature dumps, and corporate fluff.
-             * **Internal Lowercase Subject Lines (2–3 words)**: Use casual, internal-style subject lines (e.g. `acme / container tracking`, `kemetyl / tracking usage`). Never use robotic, capitalized, promotional subject lines with recipient first names (`John, direct ocean tracking... — Navo24`).
-             * **Absolute Ban on AI-Slop**: Zero tolerance for "I hope this email finds you well", "I am reaching out regarding", "streamline your workflows", "game-changer", "unifying seamless experience", or "at its core".
-             * **Zero-Friction Interest-Based CTA**: Never ask for 15-30 minute calls in cold touch #1. Use low-friction interest questions: "Worth exploring if our free tier helps your ops team?", "Open to running 2-3 containers through a quick check?".
-             * **LinkedIn 2026 Peer Networking Standards**: Connect Notes MUST be under 20 words without pitch or links (58-68% acceptance rate). 1st LinkedIn DMs MUST be in pure messenger/chat style (under 45 words, question-first, ZERO email signatures like 'Best, Nikita', and addressing real human DMs strictly by first name in Proper Title Case 'Hi {FirstName}', never all-caps 'Hi EMAD' and never 'Hi Company' or 'Hi Decision Maker').
+             * **Natural First-Person Opening (No AI Slop / No Rhetorical Agitation)**: Do NOT open cold emails with rhetorical pain agitation ("Do your operations teams struggle with..." or "When carrier schedules are off..."). Open directly, calmly, and naturally from first person: *"We built Navo24 to give forwarders direct tracking across 239 ocean lines, live satellite AIS positions, and predictive ETAs that account for actual port congestion (founded by the original team behind SeaRates)."*
+             * **Mandatory SeaRates Pedigree**: In cold Touch #1 to freight forwarders, always cite that Navo24 was founded by the original core engineering team behind SeaRates to establish instant authority and social proof.
+             * **Internal Lowercase Subject Lines (2–3 words)**: Use casual, internal-style subject lines (e.g. `acme / container tracking`, `alfalahparts / container tracking`). Never use robotic, capitalized, promotional subject lines.
+             * **Brevity Mandate (40–55 words)**: Keep cold emails strictly under 55 words (3 short punchy paragraphs max). Strip out bullet lists, bold feature dumps, and corporate fluff.
+             * **Zero-Friction Interest-Based CTA**: Never ask for 15-30 minute calls in cold touch #1. Offer testing a couple of active shipments on the free tier (`https://trackingmcp.com/auth/signup`) and close with a low-friction question: *"Worth taking a look?"*.
+             * **STRICT ZERO FABRICATION POLICY (Anti-Hallucination on Technical Inquiries)**:
+               - When prospective clients or trial users submit in-depth technical questions (error codes like 502/504, vessel rollovers, DCSA mapping anomalies, API endpoints, undocumented features, or backend sources):
+               - **NEVER invent or fabricate technical explanations, backend architecture details, or error root causes** to produce a plausible-looking answer.
+               - **STOP and Escalate**: If the exact facts are not verified by the engineering team or official API documentation, STOP immediately, clearly state that verified data is needed from dev/Stefan, and escalate to the internal team.
+             * **Internal Team Communication Standard (Telegram Groups)**:
+               - When escalating technical feedback or trial bugs to the internal team/group chat, use a natural, relaxed, peer-to-peer tone without corporate fluff or spammy emojis.
+               - Pattern: *"Всем привет еще раз, у меня фидбек по триалу от клиента... [краткие буллеты с номерами контейнеров, сутью бага и конкретным вопросом клиента]"*.
+             * **Absolute Ban on AI-Slop & Fluff Openers**: Zero tolerance for "I hope this email finds you well", "I am reaching out regarding", "streamline your workflows", "game-changer", "quick question/note/thought".
+             * **LinkedIn 2026 Peer Networking & Messenger Format**: Connect Notes MUST be under 20 words without pitch or links (58-68% acceptance rate). 1st LinkedIn DMs MUST be in pure messenger/chat style (under 45 words, question-first, ZERO email signatures like 'Best, Nikita', and addressing real human DMs strictly by first name in Proper Title Case 'Hi {FirstName}', never all-caps 'Hi EMAD' and never 'Hi Company' or 'Hi Decision Maker').
+             * **Clean Copy-Paste Ready Email Text Output**:
+               - When the user asks for a ready-to-send draft or clean email text ("дай готовый текст письма", "clean text for sending"), NEVER insert markdown bullet dashes (`-`), asterisks (`*`), or decorative markdown formatting inside the email body lines that break formatting when pasted into Outlook or Gmail. Deliver clean, naturally flowing text with regular numbered points (`1.`, `2.`) and standard paragraph spacing.
+             * **Sales Peer Review & Inbound Inquiry Structuring**:
+               - When team members (e.g. Nikita) prepare to review draft responses with senior colleagues, format the evaluation in the exact standard pattern:
+                 ```text
+                 Могу ли я еще тебя помучать вопросами, пожалуйста? Хочу ответить лиду на запрос и хочу быть уверен что не отвечаю ерунду.
+
+                 Запрос лида:
+                 [Exact client inquiry text]
+
+                 Мой предполагаемый ответ:
+                 [Clean, point-by-point, professional response with no markdown artifacts]
+                 ```
+             * **Honest Pricing & Volume Quoting Standards (No Unit-Rate Hallucinations)**:
+               - When prospects ask for commercial rates on custom volumes (e.g. 150 containers + Air shipments), NEVER invent arbitrary cents-per-container rates (e.g. `$0.45/container`) unless officially approved. Always qualify mixed volumes first (e.g. ask for approximate number of Air AWBs/month).
+               - **Official Navo24 Starter Pricing Grid (up to 25 shipments/mo)**:
+                 * **Service**: Container Tracking (API connection)
+                 * **Limitation**: from 1 up to 25 unique shipments per calendar month (by Container No, Master B/L, or Booking No).
+                 * **API-Call Allowance**: 750 calls per calendar month.
+                 * **Cost**: **USD 50 per month or USD 500 per year**. No separate API license fee on top of the tracking plan.
+                 * **Shipment Counting Logic**: A unique shipment is counted once per calendar month. Repeated update requests consume API calls from the 750 allowance but do NOT create another unique shipment charge.
+                 * **Webhooks**: Included in the subscription without separate charges.
+               - **Official Onboarding & Documentation Links**:
+                 * **Trial Signup**: `https://trackingmcp.com/auth/signup` (Workflow: "Please register here -> send me the email address used -> I will arrange the trial credentials").
+                 * **Tracking API Docs**: `https://navo24.com/developers/reference/tracking/`
+                 * **Schedules API Docs**: `https://navo24.com/developers/reference/schedules/`
+               - **Free Tier**: €0 / 5 active containers + 100 API calls/month (no credit card, never expires).
+               - **Enterprise / Higher Volume Pricing**: Scalable volume pricing with automatic progressive discounts, zero annual lock-in (month-to-month billing), and full Ocean + Air (239 lines + 97 airlines) unified coverage. Direct detailed rate finalization to a brief demo call or desk approval with Stefan (`stefan@navo24.com`).
+             * **LinkedIn Direct URL Generation & Anti-404 Mandate (B2B Enrichment APIs First)**:
+               - **NEVER generate blind speculative `/in/` profile slugs** (e.g. `https://www.linkedin.com/in/john-smith` or `in/atlas-trading`): LinkedIn redirects unverified slugs to `404 This page does not exist` for logged-in users.
+               - **B2B Enrichment API Sourcing (Hunter.io / Snov.io / Apollo)**: Always query official B2B enrichment APIs (`HUNTER_API_KEY` via `GET /v2/domain-search?domain=...`, `SNOV_USER_ID`/`SNOV_SECRET` via OAuth2, `APOLLO_API_KEY` via `X-Api-Key` header) to pull 100% verified personal LinkedIn profile URLs (`https://www.linkedin.com/in/...`) containing exact, valid alphanumeric hashes.
+               - **Zero-Tolerance for Alternative Fallbacks when Direct URL is Demanded**: When the user requests direct personal LinkedIn profile URLs for outreach, deliver ONLY strictly verified personal profile URLs (`https://www.linkedin.com/in/...`), never substituting them with company search queries or employee tab search links.
+               - *(See `references/playwright-linkedin-verification.md` and `references/2026-anti-ai-and-linkedin-outreach-rules.md` for details).*
+             * **Strict Non-RU Policy (Zero .ru Policy)**: Strictly exclude any leads, domains, or contacts associated with `.ru`, `.su`, `.by`, `.рф`, mail services `mail.ru`/`yandex.ru`, or entities in the Russian Federation.
+             * **Lead Clearance & Dedup Protocol (`101 Customer • Navo`)**: Cross-check candidate inbound leads across the `101 Customer • Navo` channel, active CRM pipelines, and the 90-day (3+ months) inactivity rule before assigning to a sales rep to avoid duplicate engagement.
              * **Name Normalization & Proper Title Case**: Always normalize recipient names to Title Case (`Emad`, `Marc`, `Ferdinand`) stripping all-caps raw logs and non-name strings before generating greetings.
-             * **Carrier Count & Multimodal Precision**: Navo24 TrackingMCP covers **239 ocean carriers** (with 121 direct connectors and 186 SCACs) and **97 global airlines / air cargo carriers** in AirCargo AWB tracking. SchedulesMCP covers 60+ ocean carriers with 72,000+ live sailings. Always cite these exact figures.
+             - **Carrier Count & Multimodal Precision**: Navo24 TrackingMCP covers **239 ocean carriers** (with 121 direct connectors and 186 SCACs) and **97 global airlines / air cargo carriers** in AirCargo AWB tracking. SchedulesMCP covers 60+ ocean carriers with 72,000+ live sailings. Always cite these exact figures.
+             - **Core Pitch & Problem Container Hook (Field Sales Practice)**:
+               * Focus cold outreach and Touch #1 on **Real Map Location & Predictive ETA** (Satellite AIS + Port Congestion vs static Line Schedule ETA).
+               * Offer prospects an immediate free test of **1-2 delayed or troubled containers** on `navo24.com` (Self-serve Free Tier: 5 containers / 100 calls/mo).
+               * DO NOT cross-sell (3D loading, rates, schedules) in cold emails.
+               * Target Logistics IT/TMS/SaaS platforms and Product Owners/CTOs alongside forwarders. Functional mailboxes (`info@`, `pricing@`, `ops@`) are valid.
+               * In LinkedIn DMs: target CTOs/Product, ban "Are you guys", ban "scraping" (use direct official line APIs + AIS), and keep pure chat format with zero email signatures.
+               * *(See `references/navo24-field-sales-and-predictive-eta-playbook.md` for full field sales framework).*
              * **Sales Rep / Account Executive Email Signature & Pre-Flight Test Workflow**:
                - Use the standardized HTML signature for sales representatives:
                  ```html
@@ -115,7 +167,18 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
                    <a href="https://www.navo24.com" style="color: #2563eb; text-decoration: underline;">www.navo24.com</a>
                  </div>
                  ```
-               - **Mandatory Pre-Launch Verification**: Never launch bulk campaign dispatches from new sender identities or Google Sheets without first dispatching a real test email to Stefan (`stefan@navo24.com`) and verifying delivery ID.
+               - **Mandatory Pre-Launch Verification Protocol**:
+                 1. Clarify sheet URL/tab, sender profile, reply-to, CC, and signature details.
+                 2. ALWAYS send a real test email to Stefan (`stefan@navo24.com`) with the exact template and signature.
+                 3. Launch only after Stefan's explicit confirmation.
+               - **Multi-Manager Protocol**: Refer to `multimanager-outreach-engine` for executing campaigns on behalf of other executives with dynamic sender, Reply-To, CC, and signature. Nikita (`@nikita51155`) is authorized to trigger his own campaigns directly via `@richnavobot`.
+             * **Global Opt-Out & Suppression List Mandate**:
+               - Centralized suppression list located at `/opt/hermes/profiles/richard/cache/optout_suppression_list.json`.
+               - All outreach scripts and engines (`daily_online_outreach_engine.py`, `nikita_forwarders_outreach_engine.py`) MUST check this list before dispatching. Any opted-out or unsubscribed contacts must be skipped unconditionally.
+             * **Inbound Triage & LLM Cron Notifications**:
+               - Inbound email/WhatsApp cron poller jobs must run with `no_agent: true` with direct model calls in the script (or `no_agent: false` with pinned models) to ensure every incoming email is delivered with: (1) Parsed contact card & phone/WeChat, (2) Clean message text, (3) Full Russian translation, (4) Ready-to-send draft response in client's language, (5) Full Russian translation of draft. Silent on empty.
+             * **Markdown Output Standard for Reports**:
+               - All analytical digests, competitor intelligence reports, and cron summaries must use clean standard Markdown (`**bold**`, `*italic*`, `` `code` ``, headers, bullet points) without raw HTML tags (`<b>`, `<i>`, `<code>`).
              * **Automated Website Metric Extraction & Memory Sync**: Website scanners (`scan_navo24_website.py`) must dynamically parse live numerical metrics (carriers, connectors, ports, sailings) from `navo24.com` and related MCP domains and synchronize them into working memory (`MEMORY.md`) to prevent factual drift.
              * **Telegram Output Chunking & File Delivery**: Large multi-asset audits, OCR transcriptions, or reports over 3,000 characters must be summarized concisely in the Telegram chat with full exhaustive details packaged into a native `.docx` or `.md` file to prevent 10+ message delivery queues.
              * **Lifecycle Notification Hygiene**: Set `gateway_restart_notification: false` in `config.yaml` to avoid sending redundant "♻️ Gateway online" pings during config reloads.
@@ -142,7 +205,7 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
    - **EXACTLY 1 EXTRA BLANK LINE** before the signature block.
    - **NO HORIZONTAL LINE (`border-top`) BEFORE THE SIGNATURE**.
    - Use ONLY the official HTML signature block (`Richard Marlowe / Connections Manager`, logo `https://bit.ly/4hLg86T`, +44 203 440 9800, 30 St Mary Axe London, `rich@navo24.com`, `www.navo24.com`).
-   *(See `references/4-touch-sequence-pattern.md` for full sequence details, `references/cross-border-tax-residency-and-hmrc-cor.md` for UK HMRC CoR and Form DGT tax workflows, `references/19-sources-daily-outreach-engine.md` for the complete 19-source lead ingestion pipeline, `references/inbound-triage-and-testimonials-workflow.md` for verbatim draft approval, silent watchdog semantics, full untruncated triage & team testimonials loop, `references/whatsapp-and-voice-telephony-pipeline.md` for WhatsApp gateway, voice PTT & Twilio setup, `references/competitor-radar-and-weekly-sales-loops.md` for weekly testimonial loops, competitor radar 3-tier rules & Twilio voice pipeline, `references/telegram-team-access-and-isolation.md` for sales team colleague onboarding and session isolation, `references/25-sources-audit-and-scrapers.md` for the complete 25-source technical audit and scrapers, `references/b2b-contract-and-kanban-rules.md` for contract drafting and Vercel Kanban UI rules, `references/google-sheets-sales-tracker-and-crm.md` for sales representative Google Sheets tracker setup and gspread sync, and `references/technical-api-inquiries-and-schedules.md` for Tracking & Schedules REST API inquiry patterns, SeaRates comparison, and billing rules.)*
+   *(See `references/4-touch-sequence-pattern.md` for full sequence details, `references/pipeline-segregation-and-batch-outreach-rules.md` for CRM pipeline segregation and multi-batch campaign standards, `references/cross-border-tax-residency-and-hmrc-cor.md` for UK HMRC CoR and Form DGT tax workflows, `references/19-sources-daily-outreach-engine.md` for the complete 19-source lead ingestion pipeline, `references/inbound-triage-and-testimonials-workflow.md` for verbatim draft approval, silent watchdog semantics, full untruncated triage & team testimonials loop, `references/whatsapp-and-voice-telephony-pipeline.md` for WhatsApp gateway, voice PTT & Twilio setup, `references/competitor-radar-and-weekly-sales-loops.md` for weekly testimonial loops, competitor radar 3-tier rules & Twilio voice pipeline, `references/telegram-team-access-and-isolation.md` for sales team colleague onboarding and session isolation, `references/25-sources-audit-and-scrapers.md` for the complete 25-source technical audit and scrapers, `references/b2b-contract-and-kanban-rules.md` for contract drafting and Vercel Kanban UI rules, `references/google-sheets-sales-tracker-and-crm.md` for sales representative Google Sheets tracker setup and gspread sync, and `references/technical-api-inquiries-and-schedules.md` for Tracking & Schedules REST API inquiry patterns, SeaRates comparison, and billing rules, and `references/technical-trial-feedback-and-escalation-playbook.md` for zero-fabrication escalation, gateway error diagnostics, and product pricing separation.)*
    - **RFC 5322 Recipient Header Formatting Rule**:
      * In all outbound cold emails and responses, ALWAYS format the `To` field as `f"{person_name} <{email}>"` (e.g. `Colin Charnock <c.charnock@tglobal.com>`). Passing bare email strings causes mail user agents (Outlook, Apple Mail) in CC copies to suppress the recipient display name or collapse the field.
    - **Multi-Source Diversity & Strict Regional Filtering Mandate**:

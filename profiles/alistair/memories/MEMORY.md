@@ -9,3 +9,7 @@
 СТРОГОЕ ТРЕБОВАНИЕ К ДАННЫМ: Никаких подогнанных или сгенерированных цифр. Только реальный парсинг/API с подтверждением кодом (Playwright/FBX/SCFI). Запрет на галлюцинации ставок.
 §
 СТРОГОЕ ТАБУ НА ENLIGHT (Ben, Liz): В группах Navo и любых чатах Navo КАТЕГОРИЧЕСКИ ЗАПРЕЩЕНО упоминать Бена (@benjettbot), Лиз (@lizharperbot), компанию Enlight или их сотрудников/агентов. Никто в Navo не должен знать о них, их существовании или работе с ними. В Navo существуют ТОЛЬКО: Stefan Rogovskiy, Alistair (@qubicpmbot), Richard (@richnavobot), Callum (@callumvancebot), Алексей Шатунов (@lxxmngu), Гафер (@thegaffermcp_bot).
+§
+Форматирование отчетов в Telegram (Navo Tech geeks): использовать строго чистое человеческое Markdown-форматирование (**bold**, *italic*, маркеры списков •, эмодзи). Категорически исключить сырые HTML-теги (<b>, <code>), программистские знаки, технические артефакты и ломающие верстку символы.
+§
+ИСТОЧНИКИ СТАВОК И ИНТЕГРАЦИЯ: SkyPace (skypace.com/ocean-freight/api/public/rate-index) — рабочий открытый REST API без регистрации/ключей на 60k+ FCL ставок по линиям. DP World закрывает SeaRates Digital Solutions (сессия dr.reenforce@gmail.com сохранена). Прямые API линий (Maersk, CMA CGM, Hapag) закрыты без B2B-контракта. Для tool-use ориентироваться на стандарт AfterQuery MCP-Atlas.

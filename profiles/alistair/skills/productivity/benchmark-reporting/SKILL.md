@@ -32,9 +32,9 @@ Use when generating comparative benchmark reports, API performance comparisons, 
    - **`Structure & Metadata`**: Payload structure validation (Master status, `is_status_from_sealine`, Vessel IMO/MMSI, Voyage, AIS status, quota reporting).
    - **`Route & Geometry`**: POL/POD coordinates accuracy, port centroid distance deltas, rail/sea path resolution, and maritime geometry points.
 
-4. **Telegram Delivery & Group Orchestration:**
-   - Format chat captions with HTML (`<b>`, `<code>`).
-   - Explicitly tag designated team members/bots in captions (e.g., `@thegaffermcp_bot` for Gaffer in Navo Tech geeks).
+4. **Telegram Delivery & Group Formatting (Strict Clean Markdown Standard):**
+   - Format chat captions strictly with clean, human-friendly Telegram Markdown (`**bold**`, `*italic*`, `•` bullet markers, emoji).
+   - **Strictly eliminate raw HTML tags** (`<b>`, `<code>`, `<i>`, `<pre>`), unescaped programming symbols, raw markdown pipe tables (`|---|`), and technical artifacts that break rendering or look like raw code dumps.
    - Deliver the `.xlsx` report as an active `MEDIA:` attachment path.
 
 5. **Dynamic Sampling for Recurring Cron Benchmarks:**
@@ -70,8 +70,11 @@ Use when generating comparative benchmark reports, API performance comparisons, 
    - For instant rate queries (FCL, LCL, Road, Rail, Air), use asynchronous multi-source polling (<5s target).
    - Standardize outputs to SeaRates Logistics Explorer v3 format (`transportType`, `carrier`, `routing`, `pricing`, `breakdown`, `validity`, `terms`) enriched with Navo's `reliability_score`, `freeDays`, and `co2_emissions_kg` (GLEC v3).
    - **Market Sanity & Live Grounding:** Never output outdated pre-crisis baseline freight figures (e.g. $2k-$2.5k for Asia-Europe) without accounting for active geopolitical surcharges (Cape of Good Hope rerouting, PSS, EOS, ETS/EU carbon surcharges pushing spot rates to $6k-$8.5k). Verify real live quotes via headless browser / live API before returning rates.
-   - **SeaRates Web Architecture Quirks:** SeaRates Logistics Explorer renders rates inside a Shadow DOM (`#shadow-wrapper-le`), enforces guest session rate limits (`API_KEY_LIMIT_REACHED` on `/access/check`), and requires platform tokens (`s-token`) or live UI search clicks (`button.ux0rsv`).
+   - **SkyPace Public API (Zero-Key NVOCC Rates):** `https://skypace.com/ocean-freight/api/public/rate-index?page=1&pageSize=1000` provides 61,600+ live bookable FCL rates across 1,750+ lanes with carrier breakdown (Yang Ming, Hapag, Evergreen, OOCL), transit times, and ETD dates with no authentication, registration, or captchas required.
+   - **SeaRates Web & Session Architecture:** SeaRates Logistics Explorer renders rates inside a Shadow DOM (`#shadow-wrapper-le`), enforces guest session rate limits (`API_KEY_LIMIT_REACHED`), and requires platform session cookies (`s-token`). Login requires Playwright Stealth (`--disable-blink-features=AutomationControlled`) to pass reCAPTCHA v3. Note that DP World is sunsetting SeaRates Digital Solutions.
+   - **Direct Carrier Spot APIs (Maersk Spot, CMA CGM SpotOn, Hapag Quick Quotes):** No open public keys exist. All top ocean carriers require corporate CID customer contracts, DCSA compliance verification, enterprise agreements, and OAuth2/mTLS credentials; they cannot be connected out-of-the-box without formal B2B agreements.
 
 
 ## Reference Documentation
 - For exact SeaRates v3 endpoint parameters, query structures, and response error codes, see `references/searates_container_tracking_api.md`.
+- For live spot rate feeds (SkyPace public REST endpoints, FBX extraction, carrier API access reality, and Telegram delivery standards), see `references/ocean_freight_rates_sources_and_carrier_apis.md`.

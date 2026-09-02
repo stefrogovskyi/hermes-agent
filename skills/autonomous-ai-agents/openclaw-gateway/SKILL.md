@@ -22,59 +22,51 @@ openclaw pairing approve telegram <PAIRING_CODE>
 ```
 This registers the sender ID in `commands.ownerAllowFrom` in `openclaw.json`.
 
-## 3. Model Fallback Pipeline & Low-Latency Tuning
+## 3. Model Fallback Pipeline, Auto-Update & Low-Latency Tuning
 To avoid rate limits (429) or token authentication errors (401) without hanging:
 1. **Primary & Fallbacks Schema:**
+   - For highest performance and direct quota utilization, configure Google provider directly (`api: "google-generative-ai"`) with `google/gemini-3.8-flash` as primary.
+   - Avoid volatile `:free` tags as `primary` (which hit frequent 429s or disappear); use solid, high-availability models.
+   - Guard against HTTP 402 ("Payment Required / depleted monthly credits") from Hugging Face or empty balance OpenRouter keys by filtering them out of the automated fallback ladder.
+   - When configuring Google models, ensure `models.providers.google` explicitly includes `"api": "google-generative-ai"` and `"baseUrl": "https://generativelanguage.googleapis.com/v1beta"`, otherwise OpenClaw skips the primary model during background routines (heartbeat / dream diary) and cascades through all fallbacks, throwing billing / rate limit errors into Telegram.
    In `~/.openclaw/openclaw.json`:
    ```json
    {
      "agents": {
        "defaults": {
          "model": {
-           "primary": "openrouter/nvidia/nemotron-3.5-lightning:free",
+           "primary": "google/gemini-3.8-flash",
            "fallbacks": [
-             "openrouter/nvidia/nemotron-3-nano-30b-a3b:free",
-             "openrouter/google/gemma-4-26b-a4b-it:free",
-             "openrouter/google/gemma-4-31b-it:free",
-             "openrouter/poolside/laguna-s-2.1:free",
-             "openrouter/openai/gpt-oss-20b:free",
-             "huggingface/meta-llama/Llama-3.3-70B-Instruct",
-             "huggingface/Qwen/Qwen2.5-72B-Instruct",
-             "nvidia/nvidia/nemotron-3.5-lightning-30b-a3b",
-             "nvidia/nvidia/llama-3.3-nemotron-super-49b-v1.5",
-             "nvidia/nvidia/nemotron-3-super-120b-a12b",
-             "nvidia/nvidia/nemotron-mini-4b-instruct",
-             "nvidia/meta/llama-3.1-8b-instruct",
+             "google/gemini-3.8-flash",
+             "google/gemini-3.7-flash",
+             "google/gemini-2.5-flash",
              "gonka24/deepseek-v4-flash-0731",
              "gonka24/kimi-k2.6",
              "gonka24/minimax-m2.7"
            ]
          },
          "models": {
-           "openrouter/nvidia/nemotron-3.5-lightning:free": {},
-           "huggingface/meta-llama/Llama-3.3-70B-Instruct": {},
-           "nvidia/nvidia/nemotron-3.5-lightning-30b-a3b": {},
-           "gonka24/deepseek-v4-flash-0731": {}
+           "google/gemini-3.8-flash": {},
+           "google/gemini-3.7-flash": {},
+           "google/gemini-2.5-flash": {},
+           "gonka24/deepseek-v4-flash-0731": {},
+           "gonka24/kimi-k2.6": {},
+           "gonka24/minimax-m2.7": {}
          },
-         "timeoutSeconds": 10
+         "timeoutSeconds": 15
        }
      },
      "models": {
        "providers": {
-         "openrouter": {
-           "timeoutSeconds": 6
-         },
-         "huggingface": {
-           "baseUrl": "https://router.huggingface.co/v1",
-           "timeoutSeconds": 8
-         },
-         "nvidia": {
-           "baseUrl": "https://integrate.api.nvidia.com/v1",
-           "timeoutSeconds": 8
+         "google": {
+           "apiKey": "GEMINI_API_KEY",
+           "baseUrl": "https://generativelanguage.googleapis.com/v1beta",
+           "api": "google-generative-ai",
+           "timeoutSeconds": 15
          },
          "gonka24": {
            "baseUrl": "https://api.gonka24.com/v1",
-           "timeoutSeconds": 8,
+           "timeoutSeconds": 10,
            "models": [
              {"id": "deepseek-v4-flash-0731", "name": "DeepSeek V4 Flash"},
              {"id": "kimi-k2.6", "name": "Kimi K2.6"},
@@ -85,8 +77,20 @@ To avoid rate limits (429) or token authentication errors (401) without hanging:
      }
    }
    ```
-2. **Provider Key Ingestion & Auth Profiles:**
-   Ensure environment variables (`OPENROUTER_API_KEY`, `HF_TOKEN`/`HUGGINGFACE_API_KEY`, `NVIDIA_API_KEY`, `GONKA24_API_KEY`) are injected into systemd unit `openclaw.service`, `/opt/hermes/.env`, and `~/.openclaw/auth/auth-profiles.json`.
+2. **Automated Daily Fallback & Upstream Sync:**
+   - **Nightly Fallback Sync (03:00 Kyiv):** `/opt/hermes/scripts/fallback_monitor.py` verifies 43 models across Google, OpenAI, Anthropic, Nous, OpenRouter, HF, Gonka24, tests latency and automatically syncs verified LIVE models directly into `~/.openclaw/openclaw.json` and restarts `openclaw.service`.
+   - **Upstream Auto-Updater (every 6h):** `/opt/hermes/scripts/openclaw_auto_updater.py` checks `github.com/openclaw/openclaw` main branch, runs `git pull --ff-only`, builds with `npm run build`, and cleanly restarts the systemd unit.
+2. **Provider Key Ingestion & OpenClaw 2.0 Auth Storage (Preventing HTTP 401):**
+   In OpenClaw 2.0+, provider keys must NOT only exist in `openclaw.json` or systemd environment variables, but MUST be registered in OpenClaw's internal agent auth SQLite database (`~/.openclaw/agents/main/agent/openclaw-agent.sqlite`).
+   If a fallback model (e.g., `gonka24`, `openrouter`, `openai`) is triggered during background routines without an entry in this auth database, OpenClaw halts with:
+   `Couldn't sign in. No API key found for provider ... (HTTP 401 Unauthorized)`.
+   Always register keys via the CLI:
+   ```bash
+   # Register API keys into OpenClaw 2.0 auth database non-interactively
+   echo -n "$KEY" | openclaw models auth paste-api-key --provider <provider_name>
+   # Verify saved profiles
+   openclaw models auth list
+   ```
    Note: OpenClaw CLI strictly requires custom OpenAI-compatible providers (like `gonka24`) to explicitly declare a `models: [{id, name}]` array inside `models.providers.<name>`, otherwise schema validation fails. Custom top-level keys like `env: {}` or misplaced `fallbacks` are rejected — always structure them within `model: { primary, fallbacks: [] }` and `models: { ... }`.
 
 ## 4. Diagnostics & Verification
