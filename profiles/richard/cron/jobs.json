@@ -1,0 +1,365 @@
+{
+  "jobs": [
+    {
+      "id": "3bc4af76626f",
+      "name": "richard-inbound-email-poller",
+      "prompt": "Ты — Richard Marlowe (Senior B2B Sales Manager Navo24).\nКаждые 3 минуты выполняется сбор новых входящих писем на rich@navo24.com.\nВ контекст передан вывод скрипта poll_and_report_inbound.py.\n\nЕсли новых входящих писем нет (вывод пуст) — НИЧЕГО не выводи и не отправляй в чат (полная тишина).\n\nЕсли есть новое входящее письмо — сформируй для Стефана структурированный отчет:\n1. 📩 **НОВОЕ ВХОДЯЩЕЕ ПИСЬМО** (Отправитель, Email, Компания, Телефон/WeChat, Тема).\n2. 💬 **Оригинал сообщения** (очищенный от цитат).\n3. 🇷🇺 **Полный и точный перевод на русский язык**.\n4. ✍️ **Готовый персонализированный черновик ответа** от Richard Marlowe на языке клиента (с фокусом на продукты Navo24: Tracking API 239 линий, Schedules API, FreightRates API, Free Tier) и его перевод на русский.\n5. ❓ Вопрос к Стефану для согласования отправки («Отправляем?»).",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": null,
+      "model_snapshot": null,
+      "base_url": null,
+      "script": "poll_and_report_inbound.py",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 3,
+        "display": "every 3m"
+      },
+      "schedule_display": "every 3m",
+      "repeat": {
+        "times": null,
+        "completed": 3521
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-08-06T01:50:50.302578+03:00",
+      "next_run_at": "2026-09-02T16:47:40.453666+00:00",
+      "last_run_at": "2026-09-02T16:44:40.453666+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "330656040",
+        "chat_name": "Stefan Rogovskiy",
+        "thread_id": null,
+        "user_id": "330656040"
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file"
+      ],
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "cfbaf96f9e89",
+      "name": "richard-daily-email-report",
+      "prompt": "Сформируй и пришли Стефану подробный ежедневный сводный отчёт за день:\n1. Статистика Online Outreach: количество собранных и отправленных лидов за сегодня (85 лидов по 17 источникам), разбивка по платформам (DFA, ImportYeti, Volza, Trademo, Apollo и др.) и текущие стадии в Airtable (Lead -> Contacted -> Pitched).\n2. Входящие ответы от клиентов за день: точное время получения, имя, компания, оригинальный текст ответа + русский перевод, статус черновика ответа.\n3. Общий статус баз Navo CRM и Online Outreach.\nОтчёт отправляется ежедневно в 19:00 прямо в этот чат Telegram.",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": null,
+      "model_snapshot": null,
+      "base_url": null,
+      "script": "generate_daily_email_report.py",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 19 * * *",
+        "display": "0 19 * * *"
+      },
+      "schedule_display": "0 19 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 13
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-08-06T19:32:06.287083+03:00",
+      "next_run_at": "2026-09-02T19:00:00+00:00",
+      "last_run_at": "2026-09-01T19:00:15.976099+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "330656040",
+        "chat_name": "Stefan Rogovskiy",
+        "thread_id": null,
+        "user_id": "330656040"
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file"
+      ],
+      "workdir": null,
+      "fire_claim": null,
+      "drift_alerted": true
+    },
+    {
+      "id": "c7664663f54c",
+      "name": "richard-daily-online-outreach",
+      "prompt": "Запусти ежедневный движок Online Outreach по 19 источникам:\npython /opt/hermes/profiles/richard/scripts/daily_online_outreach_engine.py\n\nВыведи полный итоговый отчет с количеством отправленных писем, статусами в CRM и метриками доставки.",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": null,
+      "model_snapshot": null,
+      "base_url": null,
+      "script": "daily_online_outreach_engine.py",
+      "no_agent": true,
+      "monitor_script": null,
+      "monitor_url": null,
+      "monitor_state": null,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 4 * * 1-5",
+        "display": "0 4 * * 1-5"
+      },
+      "schedule_display": "0 4 * * 1-5",
+      "repeat": {
+        "times": null,
+        "completed": 3
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-08-27T17:22:14.905798+03:00",
+      "next_run_at": "2026-09-03T04:00:00+00:00",
+      "last_run_at": "2026-09-02T04:02:27.087589+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "330656040",
+        "chat_name": "Stefan Rogovskiy",
+        "thread_id": null,
+        "user_id": "330656040"
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file"
+      ],
+      "workdir": null,
+      "drift_alerted": false,
+      "fire_claim": null
+    },
+    {
+      "id": "b9de8ddd189a",
+      "name": "richard-scan-navo24-website",
+      "prompt": "Запусти ежедневный мониторинг и сканирование сайта navo24.com и продуктовых страниц MCP для обновления контекста:\npython /opt/hermes/profiles/richard/scripts/scan_navo24_website.py",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": null,
+      "model_snapshot": null,
+      "base_url": null,
+      "script": "scan_navo24_website.py",
+      "no_agent": true,
+      "monitor_script": null,
+      "monitor_url": null,
+      "monitor_state": null,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "30 3 * * *",
+        "display": "30 3 * * *"
+      },
+      "schedule_display": "30 3 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 4
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-08-29T08:50:55.948262+00:00",
+      "next_run_at": "2026-09-03T03:30:00+00:00",
+      "last_run_at": "2026-09-02T03:30:35.260721+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "330656040",
+        "chat_name": "Stefan Rogovskiy",
+        "thread_id": null,
+        "user_id": "330656040"
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file"
+      ],
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "00862f83db11",
+      "name": "richard-competitor-intelligence",
+      "prompt": "Запусти ежедневную поэтапную разведку конкурентов SeaRates / Navo24:\npython /opt/hermes/profiles/richard/scripts/competitor_intelligence_engine.py",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": null,
+      "model_snapshot": null,
+      "base_url": null,
+      "script": "competitor_intelligence_engine.py",
+      "no_agent": true,
+      "monitor_script": null,
+      "monitor_url": null,
+      "monitor_state": null,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 8 * * *",
+        "display": "0 8 * * *"
+      },
+      "schedule_display": "0 8 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 4
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-08-29T09:02:39.688566+00:00",
+      "next_run_at": "2026-09-03T08:00:00+00:00",
+      "last_run_at": "2026-09-02T08:00:57.691142+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "330656040",
+        "chat_name": "Stefan Rogovskiy",
+        "thread_id": null,
+        "user_id": "330656040"
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file"
+      ],
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "93e86d496c3b",
+      "name": "richard-weekly-sales-testimonials-reminder",
+      "prompt": "Отправь еженедельное письмо-напоминание сейлз-команде о сборе отзывов клиентов:\npython /opt/hermes/profiles/richard/scripts/send_weekly_sales_testimonial_reminder.py",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": null,
+      "model_snapshot": null,
+      "base_url": null,
+      "script": "send_weekly_sales_testimonial_reminder.py",
+      "no_agent": true,
+      "monitor_script": null,
+      "monitor_url": null,
+      "monitor_state": null,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 5 * * 1",
+        "display": "0 5 * * 1"
+      },
+      "schedule_display": "0 5 * * 1",
+      "repeat": {
+        "times": null,
+        "completed": 1
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-08-30T06:36:05.796089+00:00",
+      "next_run_at": "2026-09-07T05:00:00+00:00",
+      "last_run_at": "2026-08-31T05:00:03.543570+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "330656040",
+        "chat_name": "Stefan Rogovskiy",
+        "thread_id": null,
+        "user_id": "330656040"
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file"
+      ],
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "1051250fb57e",
+      "name": "richard-whatsapp-inbound-watchdog",
+      "prompt": "Проверь входящие сообщения WhatsApp:\npython /opt/hermes/profiles/richard/scripts/whatsapp_inbound_triage.py",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": null,
+      "model_snapshot": null,
+      "base_url": null,
+      "script": "whatsapp_inbound_triage.py",
+      "no_agent": true,
+      "monitor_script": null,
+      "monitor_url": null,
+      "monitor_state": null,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "* * * * *",
+        "display": "* * * * *"
+      },
+      "schedule_display": "* * * * *",
+      "repeat": {
+        "times": null,
+        "completed": 3976
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-08-30T22:16:49.594045+00:00",
+      "next_run_at": "2026-09-02T16:46:00+00:00",
+      "last_run_at": "2026-09-02T16:45:05.335387+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "330656040",
+        "chat_name": "Stefan Rogovskiy",
+        "thread_id": null,
+        "user_id": "330656040"
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file"
+      ],
+      "workdir": null,
+      "fire_claim": null
+    }
+  ],
+  "updated_at": "2026-09-02T16:45:05.335930+00:00"
+}

@@ -1,5 +1,195 @@
+_config_version: 33
+command_allowlist:
+- delete in root path
+- script execution via -e/-c flag
+compression:
+  enabled: true
+  target_ratio: 0.1
+  threshold: 0.2
+display:
+  busy_input_mode: steer
+  interim_assistant_messages: true
+  streaming: true
+  streaming_throttle_ms: 1000
+  tool_progress: all
+fallback:
+- gemini-3.8-flash
+- &id001
+  model: gpt-4o
+  provider: openai
+- &id002
+  model: deepseek/deepseek-chat
+  provider: openrouter
+- &id003
+  model: deepseek-ai/DeepSeek-R1
+  provider: huggingface
+- &id004
+  model: deepseek-ai/DeepSeek-V3
+  provider: huggingface
+- &id005
+  model: google/gemini-3.6-flash
+  provider: google
+- &id006
+  model: nousresearch/hermes-3-llama-3.1-405b
+  provider: openrouter
+- &id007
+  model: meta-llama/Llama-3.3-70B-Instruct
+  provider: huggingface
+- &id008
+  model: google/gemini-2.5-pro
+  provider: google
+- &id009
+  model: meta-llama/llama-3.3-70b-instruct
+  provider: openrouter
+- &id010
+  model: nousresearch/hermes-3-llama-3.1-70b
+  provider: openrouter
+- &id011
+  model: Qwen/Qwen2.5-72B-Instruct
+  provider: huggingface
+- &id012
+  model: qwen/qwen-2.5-72b-instruct
+  provider: openrouter
+- &id013
+  model: Qwen/Qwen2.5-Coder-32B-Instruct
+  provider: huggingface
+- &id014
+  model: mistralai/mistral-small-24b-instruct-2501
+  provider: openrouter
+- &id015
+  model: minimax-m2.7
+  provider: gonka24
+- &id016
+  model: kimi-k2.6
+  provider: gonka24
+- &id017
+  model: gpt-4o-mini
+  provider: openai
+- &id018
+  model: stepfun/step-3.7-flash:free
+  provider: nous
+- &id019
+  model: upstage/solar-pro4:free
+  provider: nous
+- &id020
+  model: tencent/hy3:free
+  provider: nous
+- &id021
+  model: meituan/longcat-2.0:free
+  provider: nous
+- &id022
+  model: poolside/laguna-s-2.1:free
+  provider: nous
+- &id023
+  model: poolside/laguna-xs-2.1:free
+  provider: nous
+- &id024
+  model: nvidia/nemotron-3-super-120b-a12b:free
+  provider: openrouter
+- &id025
+  model: google/gemma-4-31b-it:free
+  provider: openrouter
+- &id026
+  model: google/gemma-4-26b-a4b-it:free
+  provider: openrouter
+- &id027
+  model: minimax/minimax-m3:free
+  provider: openrouter
+- &id028
+  model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
+  provider: openrouter
+- &id029
+  model: mistralai/mistral-nemo
+  provider: openrouter
+- &id030
+  model: meta-llama/Llama-3.1-8B-Instruct
+  provider: huggingface
+- &id031
+  model: google/gemini-2.5-flash
+  provider: google
+- &id032
+  model: claude-fable-5
+  provider: anthropic
+- &id033
+  model: claude-sonnet-5
+  provider: anthropic
+- &id034
+  model: claude-opus-5
+  provider: anthropic
+- &id035
+  model: claude-opus-4
+  provider: anthropic
+- &id036
+  model: inclusionai/ling-3.0-flash-fin:free
+  provider: openrouter
+- &id037
+  model: dots-studio/dots-3-note-preview:free
+  provider: openrouter
+- &id038
+  model: liquid/lfm-2.5-2.6b:free
+  provider: openrouter
+- &id039
+  model: cohere/north-mini-code:free
+  provider: openrouter
+- &id040
+  model: z-ai/glm-5.2:free
+  provider: openrouter
+- &id041
+  model: nvidia/nemotron-3-ultra-550b-a55b:free
+  provider: openrouter
+- &id042
+  model: minimax/minimax-m2.7:free
+  provider: openrouter
+- &id043
+  model: openrouter/free
+  provider: openrouter
+fallback_providers:
+- *id001
+- *id002
+- *id003
+- *id004
+- *id005
+- *id006
+- *id007
+- *id008
+- *id009
+- *id010
+- *id011
+- *id012
+- *id013
+- *id014
+- *id015
+- *id016
+- *id017
+- *id018
+- *id019
+- *id020
+- *id021
+- *id022
+- *id023
+- *id024
+- *id025
+- *id026
+- *id027
+- *id028
+- *id029
+- *id030
+- *id031
+- *id032
+- *id033
+- *id034
+- *id035
+- *id036
+- *id037
+- *id038
+- *id039
+- *id040
+- *id041
+- *id042
+- *id043
+group_sessions_per_user: true
 model:
-  default: google/gemini-3.7-flash
+  default: google/gemini-3.8-flash
   max_retries: 2
   provider: google
   providers:
@@ -21,144 +211,9 @@ model:
       - meta-llama/Llama-3.1-8B-Instruct
   request_timeout_seconds: 30
   retry_delay_seconds: 1
-providers:
-  gonka24:
-    request_timeout_seconds: 25
-  google:
-    request_timeout_seconds: 30
-  nous:
-    request_timeout_seconds: 30
-  nvidia:
-    request_timeout_seconds: 20
-  openai:
-    request_timeout_seconds: 30
-  openrouter:
-    request_timeout_seconds: 25
-fallback_providers: &id001
-- model: gpt-4o
-  provider: openai
-- model: deepseek/deepseek-chat
-  provider: openrouter
-- model: deepseek-ai/DeepSeek-R1
-  provider: huggingface
-- model: deepseek-ai/DeepSeek-V3
-  provider: huggingface
-- model: google/gemini-3.6-flash
-  provider: google
-- model: nousresearch/hermes-3-llama-3.1-405b
-  provider: openrouter
-- model: meta-llama/Llama-3.3-70B-Instruct
-  provider: huggingface
-- model: google/gemini-2.5-pro
-  provider: google
-- model: meta-llama/llama-3.3-70b-instruct
-  provider: openrouter
-- model: nousresearch/hermes-3-llama-3.1-70b
-  provider: openrouter
-- model: Qwen/Qwen2.5-72B-Instruct
-  provider: huggingface
-- model: qwen/qwen-2.5-72b-instruct
-  provider: openrouter
-- model: Qwen/Qwen2.5-Coder-32B-Instruct
-  provider: huggingface
-- model: mistralai/mistral-small-24b-instruct-2501
-  provider: openrouter
-- model: minimax-m2.7
-  provider: gonka24
-- model: kimi-k2.6
-  provider: gonka24
-- model: gpt-4o-mini
-  provider: openai
-- model: stepfun/step-3.7-flash:free
-  provider: nous
-- model: upstage/solar-pro4:free
-  provider: nous
-- model: tencent/hy3:free
-  provider: nous
-- model: meituan/longcat-2.0:free
-  provider: nous
-- model: poolside/laguna-s-2.1:free
-  provider: nous
-- model: poolside/laguna-xs-2.1:free
-  provider: nous
-- model: nvidia/nemotron-3-super-120b-a12b:free
-  provider: openrouter
-- model: google/gemma-4-31b-it:free
-  provider: openrouter
-- model: google/gemma-4-26b-a4b-it:free
-  provider: openrouter
-- model: minimax/minimax-m3:free
-  provider: openrouter
-- model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
-  provider: openrouter
-- model: mistralai/mistral-nemo
-  provider: openrouter
-- model: meta-llama/Llama-3.1-8B-Instruct
-  provider: huggingface
-- model: google/gemini-2.5-flash
-  provider: google
-- model: claude-fable-5
-  provider: anthropic
-- model: claude-sonnet-5
-  provider: anthropic
-- model: claude-opus-5
-  provider: anthropic
-- model: claude-opus-4
-  provider: anthropic
-- model: inclusionai/ling-3.0-flash-fin:free
-  provider: openrouter
-- model: dots-studio/dots-3-note-preview:free
-  provider: openrouter
-- model: liquid/lfm-2.5-2.6b:free
-  provider: openrouter
-- model: cohere/north-mini-code:free
-  provider: openrouter
-- model: z-ai/glm-5.2:free
-  provider: openrouter
-- model: nvidia/nemotron-3-ultra-550b-a55b:free
-  provider: openrouter
-- model: minimax/minimax-m2.7:free
-  provider: openrouter
-- model: openrouter/free
-  provider: openrouter
-compression:
-  enabled: true
-  threshold: 0.2
-  target_ratio: 0.1
-display:
-  busy_input_mode: steer
-  streaming: true
-  interim_assistant_messages: true
-  streaming_throttle_ms: 1000
-  tool_progress: all
-telegram:
-  allow_from:
-  - 330656040
-  - 1022586369
-  - 593209837
-  allowed_users:
-  - 330656040
-  - 1022586369
-  - 593209837
-  enabled: true
-  group_trigger_keywords: '[''Каллум'', ''Каллума'', ''Каллуму'', ''Callum'']'
-  require_mention: true
-  stream_update_interval_ms: 2500
-command_allowlist:
-- delete in root path
-- script execution via -e/-c flag
-tools:
-  disabled:
-  - cronjob
-  - skill_manage
-streaming:
-  enabled: true
 onboarding:
   seen:
     busy_input_prompt: true
-_config_version: 33
-fallback: *id001
-group_sessions_per_user: true
 platforms:
   telegram:
     aliases:
@@ -172,4 +227,36 @@ platforms:
     - callum vance
     - '@callumvancebot'
     group_response_mode: mention
+providers:
+  gonka24:
+    request_timeout_seconds: 25
+  google:
+    request_timeout_seconds: 30
+  nous:
+    request_timeout_seconds: 30
+  nvidia:
+    request_timeout_seconds: 20
+  openai:
+    request_timeout_seconds: 30
+  openrouter:
+    request_timeout_seconds: 25
 request_timeout_seconds: 15
+streaming:
+  enabled: true
+telegram:
+  allow_from:
+  - 330656040
+  - 1022586369
+  - 593209837
+  allowed_users:
+  - 330656040
+  - 1022586369
+  - 593209837
+  enabled: true
+  group_trigger_keywords: '[''Каллум'', ''Каллума'', ''Каллуму'', ''Callum'']'
+  require_mention: true
+  stream_update_interval_ms: 2500
+tools:
+  disabled:
+  - cronjob
+  - skill_manage

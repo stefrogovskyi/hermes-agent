@@ -6,7 +6,7 @@
       "prompt": "You are the memory steward for Richard Marlowe, Navo's AI sales agent. His live working memory is at:\nC:\\Users\\Stefan\\My Drive\\Equity\\My Biz\\Partner companies\\Navo\\6. Departments\\Richard Marlowe\\Richard Hermes\\memory.md\n\nSteps:\n1. Read memory.md (read_file).\n2. Also read soul.md and Agents.md from the same folder if you need product/competitive context to judge what is still accurate.\n3. Prune memory.md: KEEP only high-signal, currently-relevant facts — active/growing client relationships, competitive intel that has changed, product facts Richard cites daily, recurring gotchas, and the pruning rules themselves. DROP stale one-off items, outdated rates/numbers, facts that will never recur, and verbose duplicates.\n4. Goal: keep the file light (target under ~150 lines) while preserving everything Richard needs to sell well tomorrow. Forgetting dead facts is GOOD.\n5. Rewrite memory.md with write_file (full replacement), preserving its header comment block and the \"Pruning rules\" section.\n6. Output a short report: lines kept, lines dropped, and any fact you were unsure whether to keep. Be decisive.",
       "skills": [],
       "skill": null,
-      "model": "gemini-3.6-flash",
+      "model": "gemini-3.8-flash",
       "provider": "gemini",
       "provider_snapshot": "gemini",
       "model_snapshot": "gemini-3.6-flash",
@@ -22,15 +22,15 @@
       "schedule_display": "0 3 * * 0",
       "repeat": {
         "times": null,
-        "completed": 5
+        "completed": 6
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-22T21:53:28.333001+03:00",
-      "next_run_at": "2026-08-30T03:00:00+00:00",
-      "last_run_at": "2026-08-23T03:01:01.800719+00:00",
+      "next_run_at": "2026-09-06T03:00:00+00:00",
+      "last_run_at": "2026-08-30T03:05:45.894805+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -46,7 +46,7 @@
       "prompt": "Ты — Richard Marlowe (Navo24), AI Senior Sales Manager. Запуск раз в час как фоновый sweep групп Telegram.\n\nШаг 1. Собери НОВЫЕ сообщения из всех чатов, куда добавлен бот (diff-only, не повторяй прочитанное):\n```\ncd \"C:/Users/Stefan/My Drive/Equity/My Biz/My companies/Enlight Group/Stefan Rogovskyi/Hermes Stevenson/groups\"\npython \"richard_group_sweep.py\" fetch\n```\n(python = venv: C:/Users/Stefan/AppData/Local/hermes/hermes-agent/venv/Scripts/python.exe)\nРезультат — JSON {\"max_id\": N, \"messages\": [...]}. Если messages пуст — заверши молча (ничего не пиши Стефану).\n\nШаг 2. Для каждого нового сообщения реши (как Richard, по своему system_prompt/role):\n- если тебя упомянули (@richnavobot / @richard) ИЛИ сообщение on-domain (логистика, фрахт, navo, трекинг, ставки, груз, контейнер, морской, букинг, freight, shipping, tracking, rate, shipment, port, customs, charter, TrackingMCP, SchedulesMCP, LoadingMCP, FreightRatesMCP) и твой совет реально полезен → ОТВЕТИ в тот же чат от своего имени:\n  python richard_group_sweep.py send --chat <chat_id> --text \"<твой ответ голосом Richard>\"\n- если это цена вне прайса / крупный контракт / любая финансовая просьба → НЕ отвечай в чат, отправь digest Стефану:\n  python richard_group_sweep.py digest --text \"⚠️ Эскалация из группы <title>: <суть>\"\n- иначе → МОЛЧИ (не отвечай, не эскалируй).\n\nRichard отвечает ВСЕМ участникам (фильтра \"только админ\" нет). Тон — concise_bullets, как в agent.config.json. Никогда не выдумывай ставки/ETA/статусы груза — \"нет данных\" как есть.\n\nШаг 3. Зафиксируй прочтение (обязательно, иначе повторим те же сообщения в следующий час):\n```\npython richard_group_sweep.py commit --max-id <N из fetch>\n```\n\nШаг 4. Если были реальные действия (ответы/эскалации) — кратко доложи Стефану в этом же сообщении что сделал. Если только молчал — ничего не отправляй (тишина).\n\nВАЖНО: это НЕ realtime-режим. Ты читаешь накопленное за час раз в час. Не дублируй ответы.",
       "skills": [],
       "skill": null,
-      "model": "gemini-3.6-flash",
+      "model": "gemini-3.8-flash",
       "provider": "gemini",
       "provider_snapshot": "gemini",
       "model_snapshot": "gemini-3.6-flash",
@@ -95,7 +95,7 @@
       "prompt": "",
       "skills": [],
       "skill": null,
-      "model": "gemini-3.6-flash",
+      "model": "gemini-3.8-flash",
       "provider": "gemini",
       "provider_snapshot": "gemini",
       "model_snapshot": "gemini-3.6-flash",
@@ -111,15 +111,15 @@
       "schedule_display": "0 4 * * *",
       "repeat": {
         "times": null,
-        "completed": 34
+        "completed": 39
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-24T09:32:33.630454+03:00",
-      "next_run_at": "2026-08-29T04:00:00+00:00",
-      "last_run_at": "2026-08-28T04:00:04.584753+00:00",
+      "next_run_at": "2026-09-03T04:00:00+00:00",
+      "last_run_at": "2026-09-02T04:00:10.308473+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -141,7 +141,7 @@
       "prompt": "unused (no_agent script job)",
       "skills": [],
       "skill": null,
-      "model": "gemini-3.6-flash",
+      "model": "gemini-3.8-flash",
       "provider": "gemini",
       "provider_snapshot": "gemini",
       "model_snapshot": "gemini-3.6-flash",
@@ -157,15 +157,15 @@
       "schedule_display": "0 4 * * *",
       "repeat": {
         "times": null,
-        "completed": 35
+        "completed": 40
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-25T02:44:50.786339+03:00",
-      "next_run_at": "2026-08-29T04:00:00+00:00",
-      "last_run_at": "2026-08-28T04:00:04.620515+00:00",
+      "next_run_at": "2026-09-03T04:00:00+00:00",
+      "last_run_at": "2026-09-02T04:00:10.347564+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -187,7 +187,7 @@
       "prompt": "Keep NOUS_API_KEY fresh so the Hermes gateway never crashes on an expired token. Run: cd /opt/hermes && /opt/hermes/hermes-agent/venv/bin/python3 scripts/refresh_nous_key.py.",
       "skills": [],
       "skill": null,
-      "model": "gemini-3.6-flash",
+      "model": "gemini-3.8-flash",
       "provider": "gemini",
       "provider_snapshot": "gemini",
       "model_snapshot": "gemini-3.6-flash",
@@ -203,15 +203,15 @@
       "schedule_display": "every 30m",
       "repeat": {
         "times": null,
-        "completed": 1372
+        "completed": 1603
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T12:10:31.215147+03:00",
-      "next_run_at": "2026-08-28T17:43:56.940179+00:00",
-      "last_run_at": "2026-08-28T17:13:56.940179+00:00",
+      "next_run_at": "2026-09-02T17:05:25.208578+00:00",
+      "last_run_at": "2026-09-02T16:35:25.208578+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -233,7 +233,7 @@
       "prompt": "Keep the Hermes gateway watchdog alive. Run: python3 /opt/hermes/scripts/ecosystem_self_heal_audit.py. Checks all 6 gateway services and restarts any with 409 or polling deadlocks.",
       "skills": [],
       "skill": null,
-      "model": "gemini-3.6-flash",
+      "model": "gemini-3.8-flash",
       "provider": "gemini",
       "provider_snapshot": "gemini",
       "model_snapshot": "gemini-3.6-flash",
@@ -249,15 +249,15 @@
       "schedule_display": "every 5m",
       "repeat": {
         "times": null,
-        "completed": 7072
+        "completed": 8264
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T14:00:47.463720+03:00",
-      "next_run_at": "2026-08-28T17:31:55.332330+00:00",
-      "last_run_at": "2026-08-28T17:26:55.332330+00:00",
+      "next_run_at": "2026-09-02T16:45:25.630286+00:00",
+      "last_run_at": "2026-09-02T16:40:25.630286+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -279,7 +279,7 @@
       "prompt": "Еженедельный заказ продуктов в Silpo.ua для Стефана. Отвечай по-русски.\n\nШАГ 0 — прочитай файл предпочтений: C:/Users/Stefan/AppData/Local/hermes/scripts/silpo_prefs.md — там актуальные требования, список проверенных товаров и техническая процедура. Следуй ему строго.\n\nКратко: собрать корзину еды на неделю в silpo.ua через Chrome Стефана (CDP 127.0.0.1:9223, залогиненный профиль). Требования: сумма >1700 грн; кулинария со скидкой >20%; БЕЗ рыбы; обязательно молоко, яйца, сыр, глазированные сырочки (+балык); Піца Франческо — 2 шт; слот доставки — на завтра.\n\nТехника: browser.cdp_url должен быть http://127.0.0.1:9223 и engine=chrome (проверь `hermes config get browser.cdp_url`, при необходимости `hermes config set`). Если порт 9223 не слушается — НЕ убивай Chrome, напиши Стефану, что нужно запустить Chrome с --remote-debugging-port=9223. Кнопки «Додати у кошик» в лентах глючат — добавляй товары JS-кликом через browser_console (найти article с названием товара, кликнуть кнопку aria-label «Додати у кошик»; количество — кнопкой «Збільшити»).\n\nЖЁСТКОЕ ПРАВИЛО: корзину собрать, слот на завтра выбрать, но финальное оформление/оплату НЕ подтверждать. В финальном ответе — состав корзины, сумма, и вопрос Стефану, подтверждает ли он заказ.\n\nПри любом блокере (Cloudflare, разлогин, нет CDP) — не молчать, сразу сообщить в ответе, что именно нужно от Стефана (например, пройти капчу или залогиниться).",
       "skills": [],
       "skill": null,
-      "model": "gemini-3.6-flash",
+      "model": "gemini-3.8-flash",
       "provider": "gemini",
       "provider_snapshot": "gemini",
       "model_snapshot": "gemini-3.6-flash",
@@ -295,15 +295,15 @@
       "schedule_display": "0 16 * * 0",
       "repeat": {
         "times": null,
-        "completed": 4
+        "completed": 5
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-27T01:39:08.005110+03:00",
-      "next_run_at": "2026-08-30T16:00:00+00:00",
-      "last_run_at": "2026-08-23T16:01:24.295580+00:00",
+      "next_run_at": "2026-09-06T16:00:00+00:00",
+      "last_run_at": "2026-08-30T16:04:38.686733+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -332,7 +332,7 @@
         "memory-recall"
       ],
       "skill": "memory-recall",
-      "model": "gemini-3.6-flash",
+      "model": "gemini-3.8-flash",
       "provider": "gemini",
       "provider_snapshot": "gemini",
       "model_snapshot": "gemini-3.6-flash",
@@ -348,15 +348,15 @@
       "schedule_display": "0 3 * * *",
       "repeat": {
         "times": null,
-        "completed": 31
+        "completed": 36
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-28T08:57:56.515725+03:00",
-      "next_run_at": "2026-08-29T03:00:00+00:00",
-      "last_run_at": "2026-08-28T03:01:55.498075+00:00",
+      "next_run_at": "2026-09-03T03:00:00+00:00",
+      "last_run_at": "2026-09-02T03:01:06.675325+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -380,7 +380,7 @@
         "memory-recall"
       ],
       "skill": "memory-recall",
-      "model": "gemini-3.6-flash",
+      "model": "gemini-3.8-flash",
       "provider": "gemini",
       "provider_snapshot": "gemini",
       "model_snapshot": "gemini-3.6-flash",
@@ -396,15 +396,15 @@
       "schedule_display": "0 2 * * *",
       "repeat": {
         "times": null,
-        "completed": 31
+        "completed": 36
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-28T09:17:54.493677+03:00",
-      "next_run_at": "2026-08-29T02:00:00+00:00",
-      "last_run_at": "2026-08-28T02:02:21.287277+00:00",
+      "next_run_at": "2026-09-03T02:00:00+00:00",
+      "last_run_at": "2026-09-02T02:02:43.107253+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -442,15 +442,15 @@
       "schedule_display": "0 4 * * *",
       "repeat": {
         "times": null,
-        "completed": 31
+        "completed": 36
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-30T20:46:48.439443+03:00",
-      "next_run_at": "2026-08-29T04:00:00+00:00",
-      "last_run_at": "2026-08-28T04:00:25.105494+00:00",
+      "next_run_at": "2026-09-03T04:00:00+00:00",
+      "last_run_at": "2026-09-02T04:00:27.159909+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -488,15 +488,15 @@
       "schedule_display": "0 3 * * 0",
       "repeat": {
         "times": null,
-        "completed": 4
+        "completed": 5
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-08-01T10:18:13.371333+03:00",
-      "next_run_at": "2026-08-30T03:00:00+00:00",
-      "last_run_at": "2026-08-23T03:00:01.403985+00:00",
+      "next_run_at": "2026-09-06T03:00:00+00:00",
+      "last_run_at": "2026-08-30T03:00:49.065232+00:00",
       "last_status": "error",
       "last_error": "Script not found: /opt/hermes/scripts/weekly_full_reconcile.py",
       "last_delivery_error": null,
@@ -534,15 +534,15 @@
       "schedule_display": "0 1 * * *",
       "repeat": {
         "times": null,
-        "completed": 25
+        "completed": 30
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-08-03T23:48:24.008367+03:00",
-      "next_run_at": "2026-08-29T01:00:00+00:00",
-      "last_run_at": "2026-08-28T01:00:03.680987+00:00",
+      "next_run_at": "2026-09-03T01:00:00+00:00",
+      "last_run_at": "2026-09-02T01:00:09.376596+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -564,7 +564,7 @@
       "prompt": "Ежедневная сводка вакансий для Стефана (COO Navo, профиль: linkedin.com/in/stefrogovskiy). Отвечай по-русски.\n\nСкрипт-преран уже собрал ТРИ блока данных из официальных API (Greenhouse/Ashby/Workday/SmartRecruiters/Comeet/WP-REST/Oracle HCM/DOU RSS):\n1) EXECUTIVE CAREERS POLLER — C-Level/VP/Head of/Director в Big Tech, AI и FreightTech (Anthropic, OpenAI, SpaceX, Flexport, project44, FourKites, Maersk, Manhattan Associates, WiseTech, Windward, Descartes).\n2) IT UKRAINE — BizDev/PM/Product/Delivery senior+ уровня ($5000+) в EPAM, GlobalLogic, SoftServe, Luxoft, DataArt, Ciklum, Wix, Genesis, SKELAR, Grammarly/Superhuman, GitLab.\n3) DP World (Oracle HCM).\n\nЖЕЛЕЗНЫЕ ПРАВИЛА:\n- Используй ТОЛЬКО вакансии из вывода скрипта. ЗАПРЕЩЕНО выдумывать вакансии, компании, ссылки или менять URL хоть на символ. Каждый URL копируй байт-в-байт.\n- ЗАПРЕЩЕНЫ выдуманные метрики («99% Match»), несуществующие функции («авто-подача»).\n- Если в блоке новых вакансий нет — так и пиши одной строкой, не раздувай.\n- Если источник упал (⚠️ в выводе скрипта) — честно перечисли в конце.\n\nФОРМАТ сводки (Telegram Markdown):\n- Заголовок с датой.\n- Секция «🎯 Executive (Big Tech / AI / FreightTech)»: новые вакансии из блока 1 + DP World. Для каждой: компания, роль, локация, ссылка. Отметь топ-3 наиболее близких к профилю COO/логистика/AI — кратко почему (1 строка, на основе названия роли).\n- Секция «💻 IT Ukraine (BizDev/PM/Product, senior+)»: новые вакансии из блока 2. Компания, роль, локация, ссылка.\n- Краткий итог: сколько всего новых/открытых.\nСводку доставь одним сообщением.",
       "skills": [],
       "skill": null,
-      "model": "google/gemini-3.6-flash",
+      "model": "google/gemini-3.8-flash",
       "provider": "gemini",
       "provider_snapshot": "gemini",
       "model_snapshot": "google/gemini-3.6-flash",
@@ -580,15 +580,15 @@
       "schedule_display": "0 6 * * *",
       "repeat": {
         "times": null,
-        "completed": 23
+        "completed": 28
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-08-05T16:41:59.885403+03:00",
-      "next_run_at": "2026-08-29T06:00:00+00:00",
-      "last_run_at": "2026-08-28T06:02:35.104608+00:00",
+      "next_run_at": "2026-09-03T06:00:00+00:00",
+      "last_run_at": "2026-09-02T06:02:27.058287+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -610,7 +610,7 @@
       "prompt": "Продиагностируй сейчас всю архитектуру Гермес-стека в экосистеме Стефана: на серварике Servarica (stefan1) и на компьютерах в сети Tailscale.\nПроверь всё: правила, кроны, файлы, память, души (souls/personas) и конфиги на предмет конфликтов, 409 ошибок, уязвимостей и рассинхрона.\nПроверь токеновую изоляцию (чтобы под-боты не использовали токен Hermes 8682188433 и не имперсонировали Стефана), статус systemd сервисов, здоровье memory_v2 и отсутствие замусоривания путей.\nПосле завершения выдай подробный отчет с находками и рекомендациями по улучшению и оптимизации. Помни: ты — Гермес Стивенсон, Главный Оркестратор.",
       "skills": [],
       "skill": null,
-      "model": "google/gemini-3.6-flash",
+      "model": "google/gemini-3.8-flash",
       "provider": "gemini",
       "provider_snapshot": "gemini",
       "model_snapshot": "google/gemini-3.6-flash",
@@ -626,15 +626,15 @@
       "schedule_display": "0 7 * * 0",
       "repeat": {
         "times": null,
-        "completed": 2
+        "completed": 3
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-08-13T20:08:32.495780+03:00",
-      "next_run_at": "2026-08-30T07:00:00+00:00",
-      "last_run_at": "2026-08-23T07:02:35.095468+00:00",
+      "next_run_at": "2026-09-06T07:00:00+00:00",
+      "last_run_at": "2026-08-30T07:04:58.292661+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -669,15 +669,15 @@
       "schedule_display": "0 */6 * * *",
       "repeat": {
         "times": null,
-        "completed": 47
+        "completed": 67
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-08-16T14:58:17.997958+00:00",
-      "next_run_at": "2026-08-28T18:00:00+00:00",
-      "last_run_at": "2026-08-28T12:00:09.559872+00:00",
+      "next_run_at": "2026-09-02T18:00:00+00:00",
+      "last_run_at": "2026-09-02T12:00:15.759106+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -718,15 +718,15 @@
       "schedule_display": "0 0 * * *",
       "repeat": {
         "times": null,
-        "completed": 11
+        "completed": 16
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-08-18T07:21:14.466229+00:00",
-      "next_run_at": "2026-08-29T00:00:00+00:00",
-      "last_run_at": "2026-08-28T00:00:05.201072+00:00",
+      "next_run_at": "2026-09-03T00:00:00+00:00",
+      "last_run_at": "2026-09-02T00:00:10.570417+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -767,16 +767,16 @@
       "schedule_display": "0 20 * * *",
       "repeat": {
         "times": null,
-        "completed": 0
+        "completed": 5
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-08-28T05:51:43.245778+00:00",
-      "next_run_at": "2026-08-28T20:00:00+00:00",
-      "last_run_at": null,
-      "last_status": null,
+      "next_run_at": "2026-09-02T20:00:00+00:00",
+      "last_run_at": "2026-09-01T20:00:11.985339+00:00",
+      "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
       "deliver": "origin",
@@ -788,11 +788,12 @@
         "user_id": "330656040"
       },
       "enabled_toolsets": null,
-      "workdir": null
+      "workdir": null,
+      "fire_claim": null
     },
     {
       "id": "655a38c17ec8",
-      "name": "Daily Fallback Models Health-Check & Auto-Discovery (03:00 Kyiv)",
+      "name": "Daily Fallback Models Health-Check (03:00 Kyiv / 00:00 UTC)",
       "schedule": {
         "kind": "cron",
         "expr": "0 0 * * *",
@@ -805,8 +806,210 @@
       "enabled": true,
       "repeat": "forever",
       "created_at": "2026-08-28T17:30:00.000000+00:00",
-      "next_run_at": "2026-08-29T00:00:00+00:00"
+      "next_run_at": "2026-09-03T00:00:00+00:00",
+      "schedule_display": "0 0 * * *"
+    },
+    {
+      "id": "08f6e5c6d5cf",
+      "name": "Sync Ecosystem Crons & Skills Registry to Google Sheet",
+      "prompt": "Sync ecosystem registry table to Google Sheet",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": null,
+      "model_snapshot": null,
+      "base_url": null,
+      "script": "sync_ecosystem_sheet_registry.py",
+      "no_agent": true,
+      "monitor_script": null,
+      "monitor_url": null,
+      "monitor_state": null,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 360,
+        "display": "every 360m"
+      },
+      "schedule_display": "every 360m",
+      "repeat": {
+        "times": null,
+        "completed": 17
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-08-29T09:10:44.151325+00:00",
+      "next_run_at": "2026-09-02T21:13:18.315278+00:00",
+      "last_run_at": "2026-09-02T15:13:18.315278+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "330656040",
+        "chat_name": "Stefan Rogovskiy",
+        "thread_id": null,
+        "user_id": "330656040"
+      },
+      "enabled_toolsets": null,
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "853cf3c5ef02",
+      "name": "Daily Ecosystem Registry Sync & Evening Report (22:00 Kiev)",
+      "prompt": "Запусти скрипт синхронизации реестра кронов и скиллов в Google Таблицу:\npython3 /opt/hermes/scripts/sync_ecosystem_sheet_registry.py\n\nПосле успешного выполнения пришли Стефану короткий, структурированный вечерний отчет на русском языке (22:00 Киев):\n1. Статус актуализации Google Таблицы реестра (https://docs.google.com/spreadsheets/d/1WjOtga9-heqcd2gKdAkCdUZ-Ocg75EDCaSKgAZsP0ew/edit).\n2. Общее количество активных кронов и скиллов по всем 9 агентам кластера.\n3. Были ли за сегодня добавлены новые или изменены существующие скиллы/кроны.\n4. Готовность экосистемы.\n\nФормат: лаконичный, аккуратный список с эмодзи.",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": "gemini",
+      "model_snapshot": "google/gemini-3.7-flash",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "monitor_script": null,
+      "monitor_url": null,
+      "monitor_state": null,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 19 * * *",
+        "display": "0 19 * * *"
+      },
+      "schedule_display": "0 19 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 4
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-08-29T09:11:46.816641+00:00",
+      "next_run_at": "2026-09-02T19:00:00+00:00",
+      "last_run_at": "2026-09-01T19:00:50.734864+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "330656040",
+        "chat_name": "Stefan Rogovskiy",
+        "thread_id": null,
+        "user_id": "330656040"
+      },
+      "enabled_toolsets": null,
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "9d5228d9e04f",
+      "name": "MS To-Do Live Snapshot Poller",
+      "prompt": "Синхронизируй слепок задач Microsoft To-Do с десктопа Stefan (100.79.157.46) в локальный кэш /opt/hermes/state/ms_todo_live_snapshot.json. Если десктоп онлайн — обнови слепок, если оффлайн — сохрани текущий. Без отправки сообщений в чат.",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": "gemini",
+      "model_snapshot": "google/gemini-3.7-flash",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "monitor_script": null,
+      "monitor_url": null,
+      "monitor_state": null,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 30,
+        "display": "every 30m"
+      },
+      "schedule_display": "every 30m",
+      "repeat": {
+        "times": 1,
+        "completed": 1
+      },
+      "enabled": false,
+      "state": "completed",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-08-30T15:36:40.623434+00:00",
+      "next_run_at": null,
+      "last_run_at": "2026-08-30T16:11:14.571253+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "330656040",
+        "chat_name": "Stefan Rogovskiy",
+        "thread_id": null,
+        "user_id": "330656040"
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file"
+      ],
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "015bd8eafeb1",
+      "name": "OpenClaw 2.0 Auto-Updater & Watchdog",
+      "prompt": "Выполни тихую проверку обновлений OpenClaw 2.0: запусти /opt/hermes/scripts/openclaw_auto_updater.py. Если есть новый релиз/коммит — собери билд и перезапусти openclaw.service. Отчет только в локальный лог.",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": "gemini",
+      "model_snapshot": "google/gemini-3.7-flash",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "monitor_script": null,
+      "monitor_url": null,
+      "monitor_state": null,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 360,
+        "display": "every 360m"
+      },
+      "schedule_display": "every 360m",
+      "repeat": {
+        "times": null,
+        "completed": 2
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-09-01T23:39:07.712030+00:00",
+      "next_run_at": "2026-09-02T18:16:10.921305+00:00",
+      "last_run_at": "2026-09-02T12:16:10.921305+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "330656040",
+        "chat_name": "Stefan Rogovskiy",
+        "thread_id": null,
+        "user_id": "330656040"
+      },
+      "enabled_toolsets": [
+        "terminal"
+      ],
+      "workdir": null,
+      "fire_claim": null
     }
   ],
-  "updated_at": "2026-08-28T17:28:51.320954+00:00"
+  "updated_at": "2026-09-02T16:40:25.630595+00:00"
 }
