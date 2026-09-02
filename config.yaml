@@ -146,6 +146,7 @@ command_allowlist:
   - delete in root path
   - overwrite system config
   - PowerShell destructive delete (Remove-Item)
+  - force kill processes (Stop-Process -Force)
   - execute_code
   - script execution via heredoc
   - pipe remote content to shell

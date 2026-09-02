@@ -2,7 +2,7 @@ Richard (richnavobot): privacy OFF; SINGLE bot (token 8846249306). Sub-bots MUST
 §
 USER MODEL: agents=persistent ASSETS, not disposable. Upgradable standalone processes w/ file memory.
 §
-OP RULES & SELF-HEAL: Автономность при падении/обрыве/прерывании ([This response was interrupted...], [Response truncated], tool error, 403/503/gateway restart) = сама фиксация root-cause + авто-доделывание с точки остановки, 0 вопросов 'что дальше'. Перечитывать свои и системные сообщения об ошибках, устранять сразу. Long-task >30s = background+notify (главная сессия <20s).
+OP RULES & SELF-HEAL: Автономность при сбоях = root-cause + авто-доделывание без 'что дальше'. Long-task >30s = background+notify.
 §
 ПАМЯТЬ V2: memory_v2/ (cases+principles+domains+recall.py+Pinecone+skill memory-recall). ПРАВИЛА Стефана: (1) гипотезу сначала ФАКТ, потом правка; (2) при любом падении сам зафиксируй+доделай, НЕ жди вопроса; (3) перечитывай свои сообщения, лови самоупоминание ошибки/падения и устраняй сразу. Cron: memory harvest 02:00, Pinecone sync 03:00.
 §
@@ -10,10 +10,10 @@ USER: Стефан (COO Navo). MS To-Do = supremo@i.ua via Make. Агенты: p
 §
 WORK STYLE: Stefan wants 24/7 autonomous proactive work on long-term tasks. Priority rule: if Stefan interjects with a question, pause background work, answer, then resume. No waiting for prompts.
 §
-Windows Silent Background Rule: All background agents run silently via pythonw.exe with CREATE_NO_WINDOW (0x08000000) / SW_HIDE (0) so no black command prompt windows ever flash or hang on screen. Auto-start on boot via Startup vbs.
+Windows Silent Background: pythonw.exe w/ CREATE_NO_WINDOW (0x08000000) / SW_HIDE. Auto-start via Startup vbs.
 §
 YouTube WL 23:00 daily; DP World 09:00, Careers Poller 10:00, Kanban Brief 08:00 = Hermes DM. Site Scanner 07:00/3d = Richard DM. Auto git-push on code edits.
 §
-Hostinger (u473746908). Servarica VPS stefan1 (38.49.219.217, Tailscale 100.99.146.42) runs 6 profiles. MASTER KEYS: /opt/hermes/MASTER_ECOSYSTEM_KEYS_AND_CONFIGS.txt & C:\Users\Stefan\AppData\Local\hermes\MASTER_ECOSYSTEM_KEYS_AND_CONFIGS.txt.
+Hostinger (u473746908, 82.29.199.155:65002). VPS stefan1 (38.49.219.217, Tailscale 100.99.146.42). CargoSavior: dev=dev.cargosavior.com (public_html/dev); prod=cargosavior.com. Rule: work on dev ONLY until Stefan orders prod. Brand=#F09133. Mail: contact@cargosavior.com (imap/smtp.hostinger.com).
 §
 Navo24 unified API key (NAVO_API_KEY tmcp_live_...) covers all 5 Navo APIs. NO AGENT MAY IMPERSONATE STEFAN OR SEND MESSAGES FROM USER ACCOUNT. ALL BOTS WRITE ONLY FROM THEIR OWN BOT ACCOUNTS.

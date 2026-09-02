@@ -63,6 +63,14 @@ Use when generating comparative benchmark reports, API performance comparisons, 
    - Involve both Enterprise visibility suites (Project44, Terminal49, OpenTrack, SeaRates) and Web aggregators (ShipsGo, GoComet, Track-Trace, VesselFinder, 17TRACK, Ship24, ParcelsApp).
    - Exclude direct clients (e.g., Portcast, MarineTraffic) from public benchmark evaluations.
    - Include PM GAP analysis identifying areas of improvement (US drayage/terminal gate status, Class-1 inland rail integration, AIS ping frequency in choke points).
+10. **Authoritative Portal Verification vs Staging Endpoints:**
+   - When evaluating carrier coverage or competitor parity, always inspect the live authoritative public portal (e.g. `navo24.com/developers/coverage/tracking/`) rather than internal/staging slices or incomplete sub-endpoints.
+   - Account for naming aliases and SCAC variations (e.g., `11DX` vs `CNC`, `HALU` vs `11QU`, forwarder entries without 4-letter SCACs) before determining missing lines.
+11. **Freight Rates Aggregation & Multi-Modal Standardization (SeaRates v3 + Navo):**
+   - For instant rate queries (FCL, LCL, Road, Rail, Air), use asynchronous multi-source polling (<5s target).
+   - Standardize outputs to SeaRates Logistics Explorer v3 format (`transportType`, `carrier`, `routing`, `pricing`, `breakdown`, `validity`, `terms`) enriched with Navo's `reliability_score`, `freeDays`, and `co2_emissions_kg` (GLEC v3).
+   - **Market Sanity & Live Grounding:** Never output outdated pre-crisis baseline freight figures (e.g. $2k-$2.5k for Asia-Europe) without accounting for active geopolitical surcharges (Cape of Good Hope rerouting, PSS, EOS, ETS/EU carbon surcharges pushing spot rates to $6k-$8.5k). Verify real live quotes via headless browser / live API before returning rates.
+   - **SeaRates Web Architecture Quirks:** SeaRates Logistics Explorer renders rates inside a Shadow DOM (`#shadow-wrapper-le`), enforces guest session rate limits (`API_KEY_LIMIT_REACHED` on `/access/check`), and requires platform tokens (`s-token`) or live UI search clicks (`button.ux0rsv`).
 
 
 ## Reference Documentation

@@ -6,7 +6,7 @@ Callum Vance (`@callumvancebot`) = Full-Stack Engineer domain agent. Tech Lead: 
 §
 User preference: Always include exact publication timestamps (HH:MM) when listing scanned Telegram channel signals, checkpoints, or alerts.
 §
-Navo Vision: $1B Valuation / $200k/day Rev ($6M+/mo). 100 deals/day @ $2k check. Synergy: 10 Humans + 10 Digital Agents. Freedom for creativity & love.
+Navo: 10 Humans+10 Agents. No \n or code calque in user texts/emails. Auto git-push edits. Confirm deletions.
 §
 Agent Voices: Hermes=onyx, Alistair=fable, Richard=echo, Callum=ash, Liz=nova. Single msg w/ HTML/Excel/audio. YT API sorting (49 playlists). No 10-limit on WL. auto_tts=false.
 §

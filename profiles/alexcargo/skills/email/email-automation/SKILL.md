@@ -15,3 +15,4 @@ Class-level skill for integrating email capabilities into AI agents, handling Mi
 
 ## Key Workflows & References
 - `references/microsoft_365_graph_mail_integration.md` — Complete reference for Microsoft 365 Graph API setup, Azure Portal App Registrations, Secret ID vs Value pitfalls, 403 consent fixes, full HTML body thread accumulation, In-Reply-To/References RFC headers, deterministic Telegram approval interceptor, and OpenAI tool-call null content normalization recipes.
+- `references/corporate_email_signature_standards.md` — Standard clean `<div>`-based email signatures (Tahoma 10pt, width 200px, `#0000FF` blue links, multi-line addresses) and IMAP draft lifecycle management.

@@ -86,7 +86,7 @@ To achieve continuous background synchronization without user friction:
    ```
 2. **Scheduled Task Registration & Invisible Execution**:
    > ⚠️ **WINDOWS TERMINAL POPUP BUG**: On Windows 11 where Windows Terminal is default terminal handler, triggering `powershell.exe -WindowStyle Hidden` via Task Scheduler still briefly spawns an interactive Windows Terminal window that can hang or steal user focus.
-   > **Fix**: Always launch through `wscript.exe` running a `.vbs` wrapper (`WindowStyle = 0`) or set console delegation to ConHost (`HKCU:\Console\%%Startup\DelegationConsole = {00000000-0000-0000-0000-000000000000}`).
+   > **Fix**: Always launch through `wscript.exe` running a `.vbs` wrapper (`WindowStyle = 0`). See `references/windows_touchpad_and_terminal_troubleshooting.md` for full Windows 11 gesture freeze and terminal overlay prevention guides.
    ```vbs
    ' run_todo_silent.vbs
    Set WshShell = CreateObject("WScript.Shell")
