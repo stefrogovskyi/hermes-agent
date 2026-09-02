@@ -9,7 +9,7 @@
       "model": null,
       "provider": null,
       "provider_snapshot": "gemini",
-      "model_snapshot": "google/gemini-3.7-flash",
+      "model_snapshot": "google/gemini-3.8-flash",
       "base_url": null,
       "script": null,
       "no_agent": false,
