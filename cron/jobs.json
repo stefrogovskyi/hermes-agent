@@ -203,15 +203,15 @@
       "schedule_display": "every 30m",
       "repeat": {
         "times": null,
-        "completed": 1607
+        "completed": 1608
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T12:10:31.215147+03:00",
-      "next_run_at": "2026-09-02T19:09:25.697883+00:00",
-      "last_run_at": "2026-09-02T18:39:25.697883+00:00",
+      "next_run_at": "2026-09-02T19:40:25.245413+00:00",
+      "last_run_at": "2026-09-02T19:10:25.245413+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -249,15 +249,15 @@
       "schedule_display": "every 5m",
       "repeat": {
         "times": null,
-        "completed": 8287
+        "completed": 8288
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T14:00:47.463720+03:00",
-      "next_run_at": "2026-09-02T19:04:26.851047+00:00",
-      "last_run_at": "2026-09-02T18:59:26.851047+00:00",
+      "next_run_at": "2026-09-02T19:10:30.042698+00:00",
+      "last_run_at": "2026-09-02T19:05:30.042698+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -428,8 +428,8 @@
       "skill": null,
       "model": null,
       "provider": null,
-      "provider_snapshot": null,
-      "model_snapshot": null,
+      "provider_snapshot": "gemini",
+      "model_snapshot": "google/gemini-3.8-flash",
       "base_url": null,
       "script": "daily_full_indexer.py",
       "no_agent": true,
@@ -474,8 +474,8 @@
       "skill": null,
       "model": null,
       "provider": null,
-      "provider_snapshot": null,
-      "model_snapshot": null,
+      "provider_snapshot": "gemini",
+      "model_snapshot": "google/gemini-3.8-flash",
       "base_url": null,
       "script": "weekly_full_reconcile.py",
       "no_agent": true,
@@ -520,8 +520,8 @@
       "skill": null,
       "model": null,
       "provider": null,
-      "provider_snapshot": null,
-      "model_snapshot": null,
+      "provider_snapshot": "gemini",
+      "model_snapshot": "google/gemini-3.8-flash",
       "base_url": null,
       "script": "ecosystem_self_heal_audit.py",
       "no_agent": true,
@@ -652,8 +652,8 @@
       "skill": null,
       "model": null,
       "provider": null,
-      "provider_snapshot": null,
-      "model_snapshot": null,
+      "provider_snapshot": "gemini",
+      "model_snapshot": "google/gemini-3.8-flash",
       "base_url": null,
       "script": "odessa_session_watchdog.sh",
       "no_agent": true,
@@ -701,8 +701,8 @@
       "skill": null,
       "model": null,
       "provider": null,
-      "provider_snapshot": null,
-      "model_snapshot": null,
+      "provider_snapshot": "gemini",
+      "model_snapshot": "google/gemini-3.8-flash",
       "base_url": null,
       "script": "git_autosync_hidden.sh",
       "no_agent": true,
@@ -750,8 +750,8 @@
       "skill": null,
       "model": null,
       "provider": null,
-      "provider_snapshot": null,
-      "model_snapshot": null,
+      "provider_snapshot": "gemini",
+      "model_snapshot": "google/gemini-3.8-flash",
       "base_url": null,
       "script": "ecosystem_sync_reporter.py",
       "no_agent": true,
@@ -807,7 +807,9 @@
       "repeat": "forever",
       "created_at": "2026-08-28T17:30:00.000000+00:00",
       "next_run_at": "2026-09-03T00:00:00+00:00",
-      "schedule_display": "0 0 * * *"
+      "schedule_display": "0 0 * * *",
+      "model_snapshot": "google/gemini-3.8-flash",
+      "provider_snapshot": "gemini"
     },
     {
       "id": "08f6e5c6d5cf",
@@ -817,8 +819,8 @@
       "skill": null,
       "model": null,
       "provider": null,
-      "provider_snapshot": null,
-      "model_snapshot": null,
+      "provider_snapshot": "gemini",
+      "model_snapshot": "google/gemini-3.8-flash",
       "base_url": null,
       "script": "sync_ecosystem_sheet_registry.py",
       "no_agent": true,
@@ -883,7 +885,7 @@
       "schedule_display": "0 19 * * *",
       "repeat": {
         "times": null,
-        "completed": 5
+        "completed": 6
       },
       "enabled": true,
       "state": "scheduled",
@@ -891,9 +893,9 @@
       "paused_reason": null,
       "created_at": "2026-08-29T09:11:46.816641+00:00",
       "next_run_at": "2026-09-03T19:00:00+00:00",
-      "last_run_at": "2026-09-02T19:00:20.468279+00:00",
-      "last_status": "error",
-      "last_error": "RuntimeError: Skipped to prevent unintended spend: global inference config drifted since this job was created (model 'google/gemini-3.7-flash' -> 'google/gemini-3.8-flash'), and this job is unpinned. No inference call was made. To run on the new config, pin it explicitly: `cronjob action=update job_id=853cf3c5ef02 provider=<provider> model=<model>` (or pin the original values to keep them). See #44585.",
+      "last_run_at": "2026-09-02T19:03:27.622339+00:00",
+      "last_status": "ok",
+      "last_error": null,
       "last_delivery_error": null,
       "deliver": "origin",
       "origin": {
@@ -905,10 +907,7 @@
       },
       "enabled_toolsets": null,
       "workdir": null,
-      "fire_claim": {
-        "at": "2026-09-02T19:03:01.886923+00:00",
-        "by": "stefan1:3884811"
-      }
+      "fire_claim": null
     },
     {
       "id": "9d5228d9e04f",
@@ -1014,5 +1013,5 @@
       "fire_claim": null
     }
   ],
-  "updated_at": "2026-09-02T19:03:01.887409+00:00"
+  "updated_at": "2026-09-02T19:10:25.245683+00:00"
 }
