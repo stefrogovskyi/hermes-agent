@@ -11,6 +11,8 @@
 
 ## Cases
 | Дата | Тема | Файл | Ключевой урок |
+| 2026-09-02 | Gemini 3.8 Flash Ecosystem Migration & Cron Inference Drift Guard | cases/2026-09-02_gemini_3_8_flash_migration_and_cron_drift_guard.md | Активация Gemini 3.8 Flash как основной модели кластера; преодоление ошибки Drift Guard во всех 36 крон-задачах; разграничение моделей Archie (чат и блоги строго на Claude Sonnet 5). |
+| 2026-09-02 | Telegram Cron Notification Formatting — HTML Ban & Strict Markdown Standard | cases/2026-09-02_telegram_cron_notification_formatting_html_ban.md | Запрет HTML-тегов (`<b>`, `<code>`, `<i>`) в отчетах кронов и сообщениях ботов Telegram; обязательный стандарт чистого Markdown с эмодзи во избежание сбоев Telegram Bot API. |
 | 2026-09-02 | OpenClaw 2.0 Multi-Tier Fallback Chain & Daily Config Sync | cases/2026-09-02_openclaw_2_0_fallback_chain_and_autosync.md | Апгрейд Клоу Стивенсона (@clawstevensonbot) до OpenClaw 2.0; мульти-уровневая цепочка фолбэков (Gemini 3.7 Flash -> Google/Ox/Nous/NVIDIA -> OpenRouter Free); интеграция авто-синка конфигурации в ночной крон (03:00 Киев). |
 | 2026-08-31 | Windows Desktop File Indexing Integration into Daily Full Reality Indexer | cases/2026-08-31_desktop_windows_indexing_full_reality.md | Индексация локальных файлов ПК Стефана (Desktop, Documents, Downloads, AppData/Local/hermes) через Tailscale SSH подключена к единой FTS5 базе знаний (>26,400 записей). |
 | 2026-08-30 | MS To-Do Personal MSA Device Code Block & PC PowerShell Sync | cases/2026-08-30_ms_todo_pc_powershell_sync_and_personal_msa_block.md | Личные аккаунты Microsoft (`@i.ua`) блокируют Device Code Flow на VPS; синхронизация MS To-Do производится через PowerShell Graph на ПК с переносом JSON-слепка по Tailscale. |
