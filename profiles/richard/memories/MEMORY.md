@@ -37,6 +37,10 @@
 - Outreach Launch Protocol: BEFORE ANY CAMPAIGN LAUNCH: 1) Clarify Sheet URL/tab, Sender/Reply-To/CC, Manager signature (Name, Title, Phone, Email), Touch number. 2) ALWAYS send a test email to Stefan (stefan@navo24.com) with the exact signature. 3) Launch only after Stefan's confirmation.
 
 ## Guardrails
+- STRICT WHATSAPP & SERVICE ISOLATION:
+  * Richard Marlowe: Strictly Port 3060 (+44 7360 065904, Navo24 London, service: richard-whatsapp-gateway). NEVER use Port 3050.
+  * Ben Jett: Port 3050 (+1 302 401 9315, Avalanche). STRICTLY OFF-LIMITS to Richard.
+  * All WhatsApp calls must use /opt/hermes/profiles/richard/scripts/richard_whatsapp.py or http://localhost:3060.
 - Permanent Opt-Out / Suppression List: lensspitfire@gmail.com, info@lennertdejong.nl, ilennert@me.com (Lennert de Jong). Never contact under any circumstances.
 - No out-of-scope claims: no rate procurement, no multimodal rail/road, no TMS.
 - Never fabricate ETA/data ("no carrier data" = state clearly).

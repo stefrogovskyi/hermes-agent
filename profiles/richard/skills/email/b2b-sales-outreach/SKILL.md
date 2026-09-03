@@ -144,6 +144,23 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
              * **Lead Clearance & Dedup Protocol (`101 Customer • Navo`)**: Cross-check candidate inbound leads across the `101 Customer • Navo` channel, active CRM pipelines, and the 90-day (3+ months) inactivity rule before assigning to a sales rep to avoid duplicate engagement.
              * **Name Normalization & Proper Title Case**: Always normalize recipient names to Title Case (`Emad`, `Marc`, `Ferdinand`) stripping all-caps raw logs and non-name strings before generating greetings.
              - **Carrier Count & Multimodal Precision**: Navo24 TrackingMCP covers **239 ocean carriers** (with 121 direct connectors and 186 SCACs) and **97 global airlines / air cargo carriers** in AirCargo AWB tracking. SchedulesMCP covers 60+ ocean carriers with 72,000+ live sailings. Always cite these exact figures.
+             - **Multi-Agent WhatsApp Gateway Isolation**:
+               * Port 3050 belongs to Ben Jett (`+1 302 401 9315` / Avalanche LeadGen).
+               * Port 3060 belongs to Richard Marlowe (`+44 7360 065904` / Navo24 London, managed via `richard-whatsapp-gateway.service`).
+               * NEVER send WhatsApp messages from port 3050 in Richard's session. Always use `http://localhost:3060/send-message`.
+             - **Mandatory Pre-Launch Outreach Protocol & Test to Stefan**:
+               * Clarify Sheet URL/tab, sender profile, reply-to, CC, signature, and touch number before launch.
+               * Send a real test email to Stefan (`stefan@navo24.com`) with the exact HTML template & signature.
+               * Launch only after Stefan's confirmation.
+             - **Centralized Opt-Out & Suppression List Mandate**:
+               * Global blacklist file: `/opt/hermes/profiles/richard/cache/optout_suppression_list.json`.
+               * On opt-out request: purge from all CRM bases (Navo CRM, Online Outreach, Rich Outreach), Google Sheets, and local archives (`parsed_leads.json`).
+               * Every outreach script MUST check this list before dispatching and skip suppressed emails unconditionally.
+             - **Clean Markdown Output Mandate for Telegram**:
+               * All analytical digests, competitor intelligence summaries, and cron delivery messages to Telegram must use clean standard Markdown (`**bold**`, `*italic*`, `` `code` ``), never raw HTML tags (`<b>`, `<i>`, `<code>`).
+             - **Inbound Poller Zero-Spend Watchdog Pattern**:
+               * Inbound pollers running on short intervals (e.g. every 3m) must use `no_agent: true` with internal Python LLM calls on new messages, keeping stdout silent when no new emails arrive. This prevents token waste on idle intervals and avoids `drift check` execution skips.
+             *(See `references/suppression-and-agent-gateways.md` for full suppression mechanics, WhatsApp gateway isolation, and Markdown standards).*
              - **Core Pitch & Problem Container Hook (Field Sales Practice)**:
                * Focus cold outreach and Touch #1 on **Real Map Location & Predictive ETA** (Satellite AIS + Port Congestion vs static Line Schedule ETA).
                * Offer prospects an immediate free test of **1-2 delayed or troubled containers** on `navo24.com` (Self-serve Free Tier: 5 containers / 100 calls/mo).
@@ -151,7 +168,7 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
                * Target Logistics IT/TMS/SaaS platforms and Product Owners/CTOs alongside forwarders. Functional mailboxes (`info@`, `pricing@`, `ops@`) are valid.
                * In LinkedIn DMs: target CTOs/Product, ban "Are you guys", ban "scraping" (use direct official line APIs + AIS), and keep pure chat format with zero email signatures.
                * *(See `references/navo24-field-sales-and-predictive-eta-playbook.md` for full field sales framework).*
-             * **Sales Rep / Account Executive Email Signature & Pre-Flight Test Workflow**:
+             - **Sales Rep / Account Executive Email Signature & Pre-Flight Test Workflow**:
                - Use the standardized HTML signature for sales representatives:
                  ```html
                  <div style="margin-top: 24px; font-family: Tahoma, Arial, sans-serif; font-size: 13px; color: #334155; line-height: 1.4; text-align: left;">
@@ -171,15 +188,19 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
                  1. Clarify sheet URL/tab, sender profile, reply-to, CC, and signature details.
                  2. ALWAYS send a real test email to Stefan (`stefan@navo24.com`) with the exact template and signature.
                  3. Launch only after Stefan's explicit confirmation.
-               - **Multi-Manager Protocol**: Refer to `multimanager-outreach-engine` for executing campaigns on behalf of other executives with dynamic sender, Reply-To, CC, and signature. Nikita (`@nikita51155`) is authorized to trigger his own campaigns directly via `@richnavobot`.
-             * **Global Opt-Out & Suppression List Mandate**:
-               - Centralized suppression list located at `/opt/hermes/profiles/richard/cache/optout_suppression_list.json`.
-               - All outreach scripts and engines (`daily_online_outreach_engine.py`, `nikita_forwarders_outreach_engine.py`) MUST check this list before dispatching. Any opted-out or unsubscribed contacts must be skipped unconditionally.
-             * **Inbound Triage & LLM Cron Notifications**:
-               - Inbound email/WhatsApp cron poller jobs must run with `no_agent: true` with direct model calls in the script (or `no_agent: false` with pinned models) to ensure every incoming email is delivered with: (1) Parsed contact card & phone/WeChat, (2) Clean message text, (3) Full Russian translation, (4) Ready-to-send draft response in client's language, (5) Full Russian translation of draft. Silent on empty.
-             * **Markdown Output Standard for Reports**:
-               - All analytical digests, competitor intelligence reports, and cron summaries must use clean standard Markdown (`**bold**`, `*italic*`, `` `code` ``, headers, bullet points) without raw HTML tags (`<b>`, `<i>`, `<code>`).
-             * **Automated Website Metric Extraction & Memory Sync**: Website scanners (`scan_navo24_website.py`) must dynamically parse live numerical metrics (carriers, connectors, ports, sailings) from `navo24.com` and related MCP domains and synchronize them into working memory (`MEMORY.md`) to prevent factual drift.
+               - **Autonomous Team Outreach Authorization**:
+                 * Nikita Kurudzhy (`@nikita51155`, ID `288669722`) has direct authorization to command outreach runs for his pipeline (`Navo24 Sales Pipeline & Activity Tracker - Nikita`) using his preset.
+                 * Pre-flight test is sent to Stefan and Nikita before bulk dispatch.
+               - **Global Opt-Out & Suppression List Mandate**:
+                 * Centralized blacklist file: `/opt/hermes/profiles/richard/cache/optout_suppression_list.json`.
+                 * When a contact requests opt-out: (1) Add to suppression list, (2) Remove from all CRM bases (Navo CRM, Online Outreach, Rich Outreach) and Google Sheets, (3) Purge from local parsed archives (`parsed_leads.json`).
+                 * Every outreach script MUST check this list before dispatching and skip suppressed emails unconditionally.
+               - **Markdown Output Standard for Telegram Reports**:
+                 * All analytical digests, competitor intelligence summaries, and cron delivery messages to Telegram must use clean standard Markdown (`**bold**`, `*italic*`, `` `code` ``, headers, bullet points) without raw HTML tags (`<b>`, `<i>`, `<code>`).
+               - **Inbound Email Triage & Watchdog Configuration**:
+                 * Inbound email/WhatsApp pollers running on tight schedules (every 3m) must use `no_agent: true` with internal script-level LLM calls on new messages (avoiding token waste when silent and preventing `drift check` execution skips).
+                 * Every incoming email alert MUST include: (1) Parsed contact card (Company, Phone/WeChat), (2) Clean original message, (3) Full Russian translation, (4) Tailored response draft in client's language, (5) Full Russian translation of the draft.
+               - **Automated Website Metric Extraction & Memory Sync**: Website scanners (`scan_navo24_website.py`) must dynamically parse live numerical metrics (carriers, connectors, ports, sailings) from `navo24.com` and related MCP domains and synchronize them into working memory (`MEMORY.md`) to prevent factual drift.
              * **Telegram Output Chunking & File Delivery**: Large multi-asset audits, OCR transcriptions, or reports over 3,000 characters must be summarized concisely in the Telegram chat with full exhaustive details packaged into a native `.docx` or `.md` file to prevent 10+ message delivery queues.
              * **Lifecycle Notification Hygiene**: Set `gateway_restart_notification: false` in `config.yaml` to avoid sending redundant "♻️ Gateway online" pings during config reloads.
              * **Sales Rep UTM Attribution Mandate**: Always append personal rep UTM tags to `navo24.com` links (`?utm_source=outreach&utm_medium=email&utm_campaign=...` and `?utm_source=linkedin&utm_medium=dm&utm_campaign=...`) to ensure full attribution.

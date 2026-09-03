@@ -76,7 +76,19 @@ When the true cause turns out different/bigger than an earlier explanation you g
 ### 2. Cron Report Formatting & User Legibility
 - Always deliver reports in Russian.
 - Suppress raw logs/traces; format with structured emoji indicators, summary bullet points, and human-readable schedules (converting UTC cron expressions to Kyiv time `UTC+3`).
+- **NO HTML TAGS IN NOTIFICATIONS (STRICT):**
+  - Never use HTML formatting tags (`<b>`, `<code>`, `<i>`, `<pre>`, `<a>`) in cron prompts, notifications, or output scripts.
+  - Always use pure Telegram-compatible Markdown (`**bold**`, `` `code` ``, `*italic*`, `[links](url)`) and emojis.
 - **Silent Background Maintenance vs User Delivery (`deliver: local` vs `deliver: origin`):**
   - High-frequency or purely synchronization maintenance tasks (e.g. 6-hour Google Sheet registry updates) must use `deliver: "local"` to prevent spamming Telegram chat with technical confirmation strings like `Successfully synced N entries`.
   - Only dedicated user-facing summary briefings (e.g. evening digest at 22:00 Kyiv) should use `deliver: "origin"`.
+
+### 3. Model Drift Guard (`RuntimeError: global inference config drifted`)
+- In Hermes Agent v0.20+, scheduled jobs carry an internal `model_snapshot` and `provider_snapshot`.
+- When the global default model in `config.yaml` is changed (e.g. `gemini-3.7-flash` -> `gemini-3.8-flash`), unpinned jobs that lack explicit model overrides will be skipped at execution time with:
+  `RuntimeError: Skipped to prevent unintended spend: global inference config drifted since this job was created...`
+- **Resolution Checklist on Model Tier Changes:**
+  1. Inspect all `jobs.json` files across `/opt/hermes/cron/jobs.json` and all profiles in `/opt/hermes/profiles/*/cron/jobs.json`.
+  2. For every job inheriting the default model (`model: null`), synchronize `model_snapshot` and `provider_snapshot` to match the exact new active model string (e.g. `google/gemini-3.8-flash`, provider `gemini`).
+  3. Jobs explicitly pinned to a specific engine (e.g. Archie blogwriting on `claude-sonnet-5`) must have their `model_snapshot` pinned to that same engine.
 

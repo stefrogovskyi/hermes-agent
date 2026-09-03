@@ -108,16 +108,16 @@
     "archived_at": null,
     "created_at": "2026-08-10T14:04:42.492086+00:00",
     "created_by": "agent",
-    "last_patched_at": "2026-09-02T18:13:51.016364+00:00",
-    "last_reused_patch_generation": 164,
-    "last_used_at": "2026-09-02T18:13:45.794910+00:00",
-    "last_viewed_at": "2026-09-02T18:13:45.791481+00:00",
-    "patch_count": 165,
-    "patch_generation": 165,
+    "last_patched_at": "2026-09-02T20:49:33.624322+00:00",
+    "last_reused_patch_generation": 166,
+    "last_used_at": "2026-09-02T20:49:19.180120+00:00",
+    "last_viewed_at": "2026-09-02T20:49:19.176845+00:00",
+    "patch_count": 169,
+    "patch_generation": 169,
     "pinned": false,
     "state": "active",
-    "use_count": 196,
-    "view_count": 196
+    "use_count": 198,
+    "view_count": 198
   },
   "baoyu-infographic": {
     "archived_at": null,
@@ -800,14 +800,14 @@
     "created_by": null,
     "last_patched_at": null,
     "last_reused_patch_generation": 0,
-    "last_used_at": "2026-09-02T18:13:38.403994+00:00",
-    "last_viewed_at": "2026-09-02T18:13:38.400914+00:00",
+    "last_used_at": "2026-09-02T20:49:11.645154+00:00",
+    "last_viewed_at": "2026-09-02T20:49:11.641384+00:00",
     "patch_count": 0,
     "patch_generation": 0,
     "pinned": false,
     "state": "active",
-    "use_count": 3,
-    "view_count": 3
+    "use_count": 5,
+    "view_count": 5
   },
   "nano-pdf": {
     "archived_at": null,

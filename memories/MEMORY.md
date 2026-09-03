@@ -22,4 +22,4 @@ VPS-кроны в UTC (Киев=UTC+3). Desktop-mst5pt7 (Stefan@100.79.157.46) =
 §
 Career Scanner: 11 API. Fallback: Gemini 3.8 Flash->3.7->2.5->Nous->NVIDIA->Gonka24. Archie: claude-sonnet-5 (блоги строго на Sonnet). OpenClaw: Gemini 3.8 Flash.
 §
-ОТЧЁТЫ КРОНОВ: на русском, с эмодзи. Индексатор: примеры файлов/папок. Google Sheet: 6 колонок (Агент, Тип, Название, ID, Когда на понятном языке, Описание) + вкладка Models с таймстепом. Fallback: 03:00 Киев (00:00 UTC) с Servarica, на ПК off. Failover: Servarica ⟷ ПК.
+ОТЧЁТЫ/УВЕДОМЛЕНИЯ КРОНОВ: на русском, с эмодзи, СТРОГО Markdown. Никаких HTML-тегов (<b>, <code>). Индексатор: примеры файлов/папок. Google Sheet: 6 колонок + Models с таймстепом. Fallback: 03:00 Киев с Servarica, на ПК off. Failover: Servarica ⟷ ПК.
