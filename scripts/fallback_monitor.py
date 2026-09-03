@@ -295,24 +295,25 @@ def main():
     claude_tok = load_claude_token()
 
     tier3_models = [
+        ("google/gemini-3.8-flash", "google"),
+        ("google/gemini-2.5-flash", "google"),
         ("stepfun/step-3.7-flash:free", "nous"),
         ("upstage/solar-pro4:free", "nous"),
-        ("tencent/hy3:free", "nous"),
         ("meituan/longcat-2.0:free", "nous"),
         ("poolside/laguna-s-2.1:free", "nous"),
         ("poolside/laguna-xs-2.1:free", "nous"),
-        ("nvidia/nemotron-3-super-120b-a12b:free", "openrouter"),
+        ("minimax/minimax-m3:free", "openrouter"),
+        ("minimax/minimax-m2.7:free", "openrouter"),
+        ("inclusionai/ling-3.0-flash-fin:free", "openrouter"),
+        ("cohere/north-mini-code:free", "openrouter"),
+        ("nvidia/nemotron-3.5-lightning:free", "openrouter"),
         ("google/gemma-4-31b-it:free", "openrouter"),
         ("google/gemma-4-26b-a4b-it:free", "openrouter"),
-        ("minimax/minimax-m3:free", "openrouter"),
-        ("nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free", "openrouter"),
-        ("mistralai/mistral-nemo", "openrouter"),
-        ("meta-llama/Llama-3.1-8B-Instruct", "huggingface"),
-        ("google/gemini-2.5-flash", "google"),
         ("gpt-4o-mini", "openai")
     ]
 
     tier2_models = [
+        ("google/gemini-3.7-flash", "google"),
         ("google/gemini-3.6-flash", "google"),
         ("meta-llama/Llama-3.3-70B-Instruct", "huggingface"),
         ("meta-llama/llama-3.3-70b-instruct", "openrouter"),
@@ -321,28 +322,24 @@ def main():
         ("Qwen/Qwen2.5-Coder-32B-Instruct", "huggingface"),
         ("deepseek-ai/DeepSeek-V3", "huggingface"),
         ("deepseek/deepseek-chat", "openrouter"),
-        ("mistralai/mistral-small-24b-instruct-2501", "openrouter"),
         ("nousresearch/hermes-3-llama-3.1-70b", "openrouter"),
         ("minimax-m2.7", "gonka24"),
-        ("kimi-k2.6", "gonka24")
+        ("kimi-k2.6", "gonka24"),
+        ("deepseek-v4-flash-0731", "gonka24")
     ]
 
     tier1_models = [
-        ("google/gemini-3.7-flash", "google"),
-        ("google/gemini-2.5-pro", "google"),
+        ("claude-sonnet-5", "anthropic"),
         ("claude-haiku-4-5", "anthropic"),
         ("claude-sonnet-4-5", "anthropic"),
         ("claude-opus-4-5", "anthropic"),
+        ("google/gemini-2.5-pro", "google"),
         ("gpt-4o", "openai"),
         ("deepseek-ai/DeepSeek-R1", "huggingface"),
         ("nousresearch/hermes-3-llama-3.1-405b", "openrouter"),
-        ("inclusionai/ling-3.0-flash-fin:free", "openrouter"),
         ("dots-studio/dots-3-note-preview:free", "openrouter"),
         ("liquid/lfm-2.5-2.6b:free", "openrouter"),
-        ("cohere/north-mini-code:free", "openrouter"),
-        ("z-ai/glm-5.2:free", "openrouter"),
         ("nvidia/nemotron-3-ultra-550b-a55b:free", "openrouter"),
-        ("minimax/minimax-m2.7:free", "openrouter"),
         ("openrouter/free", "openrouter")
     ]
 
