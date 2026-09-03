@@ -1,0 +1,6 @@
+with open('/opt/hermes/profiles/archie/cache/terminal-output/out-1788160440-3216452-28a0.log') as f:
+    text = f.read()
+
+idx = text.find("You MUST follow all 11 rules verbatim:")
+if idx != -1:
+    print(text[idx:idx+2500])

@@ -1,0 +1,49 @@
+import json
+import os
+
+data = {
+    "title": "Heavy Lift vs Project Cargo: Key Logistics Differences",
+    "meta_title": "Heavy Lift vs Project Cargo Shipping Guide | SeaRates",
+    "meta_description": "Understand the difference between heavy lift and project cargo, key equipment needs, route checks, and how to sequence complex industrial shipments.",
+    "body_markdown": """When a piece of machinery spills past the edges of a flatbed or pushes past axle limits, normal shipping rules stop working. Cargo moving beyond 30 or 50 tons sits in a different operational category entirely. Freight handlers face two distinct frameworks for managing non-standard freight: heavy lift and project cargo. They sound similar, but they address completely different operational problems.
+
+## What Defines Heavy Lift Shipping?
+
+Heavy lift covers single items whose sheer mass or awkward geometry exceeds standard transport equipment. A 40-foot container or standard box trailer cannot take an asymmetrical 60-ton industrial reactor. Transporting these loads demands specialized heavy lift vessel chartering for ocean segments, along with heavy-duty cranes, hydraulic jacks, and multi-axle trailers.
+
+Moving super-heavy units requires far more than loading capacity. Thorough oversized cargo planning must account for weight distribution, point loads, and securing methods. Because these items cannot sit inside standard container frames, carriers use flat racks, open platforms, or dedicated vessels. On land, modular trailer logistics spread heavy loads across dozens of wheel sets to protect highway surfaces and bridge structures.
+
+Before any wheels turn on land or water, planners perform a multimodal route survey. They measure tunnel clearances, verify road widths, and test bridge load tolerances along the entire transit path. Each nation imposes specific regulatory thresholds, escort requirements, and permits for super-heavy movements. High unit value and non-standard handling mean additional cargo protection and specialized insurance coverage remain necessary throughout the journey.
+
+Typical heavy lift items include:
+- Power generation units like transformers, generators, and wind turbine components
+- Industrial processing machinery, including boilers, industrial furnaces, and chemical reactors
+- Large structural elements used in shipbuilding, construction, and oil and gas infrastructure
+
+## How Project Cargo Operates
+
+Project cargo handles the entire delivery campaign for a single infrastructure or industrial facility. Rather than moving one standalone object, project cargo coordinates hundreds of varied shipments under one master schedule. A new metallurgical plant or power station requires standard 20-foot containers, flat racks, and super-heavy units arriving in a specific order.
+
+The main challenge in project logistics is project freight sequencing. Construction sites cannot accept turbines before civil foundations are poured, nor can installation crews wait for missing components. Freight forwarders, ocean carriers, and site managers must synchronize staged deliveries across sea, land, and air legs.
+
+Common project cargo applications include building power stations, expanding metallurgical plants, and setting up industrial parks.
+
+## Shared Requirements and Critical Differences
+
+Both shipping methods share common operational needs. Both handle non-standard cargo that standard container shipping cannot accommodate. Each relies on specialized cranes, trailers, and vessels. Both require customized route mapping, local authority permits, high-value insurance, and strict security protocols.
+
+Where they diverge is scope and focus. Heavy lift centers on moving one discrete piece safely from origin to destination. Project cargo manages an entire supply chain matrix where heavy lift pieces serve as individual components within a broader delivery plan. Heavy lift units often move via a single mode, such as a specialized vessel, while project cargo almost always relies on multimodal transportation across multiple stages.
+
+## Executing Complex Freight Movements
+
+Planning non-standard logistics demands detailed oversight from initial booking to final offloading. Shippers need transparent freight rates, clear route visibility, and real-time cargo tracking to catch delays before they disrupt site operations. Synchronized cooperation between all participants keeps complex moves on schedule.
+
+SeaRates provides digital shipping solutions and specialized logistics support for both heavy lift units and multi-stage project freight. For tailored advice on non-standard transport, contact the team at support@searates.com or submit a request through the platform contact form."""
+}
+
+output_path = "/opt/hermes/profiles/archie/rewrite_draft_185.json"
+with open(output_path, "w", encoding="utf-8") as f:
+    json.dump(data, f, indent=2, ensure_ascii=False)
+
+print(f"Successfully saved to {output_path}")
+print("File size:", os.path.getsize(output_path), "bytes")

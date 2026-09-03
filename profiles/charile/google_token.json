@@ -1,0 +1,19 @@
+{
+  "token": "ya29.a0AdMD6EjL8BxizSl5GCpk1i9ySuOwGFTR-mAVMaX8Svgxvj4df9eGxBdYc9IeZ7ALmomLFfTuHarQPckP46atMqqcvRL3hDAgw1XL_9tjlkCyhkGQQ-vH7vlnIGHytnSNrCiZQyytM19MJBj2HpmLcqg7BTHYL6OyB1Ehu3-ufm8VKJc_D5g7ObmE1NqSh9-ULZz9tJFRaCgYKAfQSARASFQHGX2MizxcXUVRo5CCW3O-iUnIkkQ0207",
+  "refresh_token": "1//0cW67mOhynJToCgYIARAAGAwSNwF-L9IrtosoOScCGkd_pLRJaW_-ubEEbVDNQuAA3547uuV1YedkMItbMegvXePFUZ6oVi3E1MA",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "client_id": "189968777502-s15a9vtm4onve46jpe7tr98uacrqcq5e.apps.googleusercontent.com",
+  "client_secret": "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",
+  "scopes": [
+    "https://www.googleapis.com/auth/contacts.readonly",
+    "https://www.googleapis.com/auth/contacts",
+    "https://www.googleapis.com/auth/drive",
+    "https://www.googleapis.com/auth/gmail.readonly",
+    "https://www.googleapis.com/auth/youtube",
+    "https://www.googleapis.com/auth/youtube.force-ssl"
+  ],
+  "universe_domain": "googleapis.com",
+  "account": "",
+  "expiry": "2026-08-30T22:26:26.289016Z",
+  "type": "authorized_user"
+}

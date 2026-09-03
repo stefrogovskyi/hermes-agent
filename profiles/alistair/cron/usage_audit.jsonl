@@ -1,0 +1,1 @@
+{"ts": "2026-08-15T19:48:10.197Z", "job_id": "8a64758c4172", "fire_id": "df566fd519bf4c8bb6f897bebe5a12e1", "prompt_tokens": 210882, "completion_tokens": 599, "total_tokens": 211481, "response_silent": false, "deliver_target": "telegram:-1004328290471", "model": "google/gemini-3.6-flash", "duration_ms": 23368, "error": null}

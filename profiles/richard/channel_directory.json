@@ -1,0 +1,43 @@
+{
+  "updated_at": "2026-09-03T05:47:24.179431",
+  "platforms": {
+    "telegram": [
+      {
+        "id": "330656040",
+        "name": "Stefan Rogovskiy",
+        "type": "dm",
+        "thread_id": null
+      },
+      {
+        "id": "149598904",
+        "name": "Kate K.",
+        "type": "dm",
+        "thread_id": null
+      },
+      {
+        "id": "288669722",
+        "name": "Никита",
+        "type": "dm",
+        "thread_id": null
+      },
+      {
+        "id": "345948971",
+        "name": "Alona Holubova",
+        "type": "dm",
+        "thread_id": null
+      },
+      {
+        "id": "8081511707",
+        "name": "Олег Червинский",
+        "type": "dm",
+        "thread_id": null
+      },
+      {
+        "id": "-5305384342",
+        "name": "Navo Agents",
+        "type": "group",
+        "thread_id": null
+      }
+    ]
+  }
+}

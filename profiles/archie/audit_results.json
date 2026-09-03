@@ -1,0 +1,95 @@
+{
+  "audit_metadata": {
+    "standard": "Avalanche Copywriting Standard",
+    "audit_type": "Independent 4-Layer Rewrite Audit",
+    "overall_verdict": "FAIL",
+    "overall_score": "58/100",
+    "primary_failure_reason": "Rule 11 Violation (Layer d) — Fabrication/Extrapolation of technical terms and operational mechanisms not supported by the original source text."
+  },
+  "layer_scores": {
+    "layer_a_plagiarism_and_ngram_similarity": {
+      "status": "PASS",
+      "score": "100/100",
+      "exact_6plus_word_contiguous_overlaps": 0,
+      "max_contiguous_overlap_length": 4,
+      "max_contiguous_overlap_phrase": "of lost or misplaced",
+      "analysis": "The proposed rewrite contains zero 6+ word contiguous sequence matches against the original source text. Paraphrasing is deep and phrasing is distinct throughout."
+    },
+    "layer_b_word_level_ai_tells": {
+      "status": "NEEDS IMPROVEMENT",
+      "score": "75/100",
+      "em_dashes_count": 0,
+      "ai_cliches_count": 0,
+      "ai_cliches_found": [],
+      "empty_intro_outro_filler_status": "PASS",
+      "tailing_participle_phrases_count": 2,
+      "tailing_participle_phrases": [
+        "Visual tools convert these heavy datasets into clear graphic formats, giving managers direct control over network operations and operating costs.",
+        "Real-time freight analytics prevent overstocking and costly inventory shortages, creating predictable freight schedules that match client ordering habits."
+      ],
+      "analysis": "Successfully stripped out obvious AI clichés (e.g., 'game-changer', 'crucial', 'vivid', 'empower') and em-dashes. However, retains 2 weak trailing participle phrases at sentence ends (', giving managers...', ', creating predictable...')."
+    },
+    "layer_c_structural_and_rhetorical_ai_tells": {
+      "status": "NEEDS IMPROVEMENT",
+      "score": "70/100",
+      "explicit_connectors_count": 0,
+      "contrastive_negation_count": 0,
+      "antithesis_markers_count": 2,
+      "antithesis_markers": [
+        "while",
+        "Conversely"
+      ],
+      "aphoristic_paragraph_endings_count": 5,
+      "aphoristic_paragraph_endings": [
+        "Clear visual status updates build long-term trust and establish strong customer relationships across competitive markets.",
+        "...creating predictable freight schedules that match client ordering habits.",
+        "Once managers spot where and why bottlenecks happen, they can deploy targeted fixes to keep transit running smoothly.",
+        "Conversely, clear performance data makes it simple to identify and replace underperforming carriers.",
+        "...highlights emerging risks before regulatory penalties or fines occur."
+      ],
+      "section_length_distribution": {
+        "Intro": "85 words",
+        "Tracking Cargo with Live Telemetry": "98 words",
+        "Space Optimization and Inventory Control": "102 words",
+        "Delay Mitigation, Routes, and Carrier Performance": "151 words",
+        "Risk Management and Customer Transparency": "76 words"
+      },
+      "analysis": "Consolidated the original 8-point structure into 4 subheadings, eliminating the rigid 1-8 numbering. However, section lengths exhibit moderate uniformity (~80-100 words in 3 out of 4 sections), and 5 body paragraphs close with aphoristic, generalized summary claims."
+    },
+    "layer_d_factual_integrity_and_fabrication": {
+      "status": "FAIL",
+      "score": "40/100",
+      "unsupported_claims_count": 4,
+      "violations": [
+        {
+          "claim_in_rewrite": "inside a supply chain control tower",
+          "source_basis": "visualized data dashboards",
+          "rule_violation": "Rule 11 - Introduced specific technical enterprise software term ('supply chain control tower') nowhere mentioned or supported in the original text."
+        },
+        {
+          "claim_in_rewrite": "increase holding expenses",
+          "source_basis": "lead to financial losses and dissatisfied customers",
+          "rule_violation": "Rule 11 - Speculated a specific accounting mechanism ('holding expenses') where the source text only cited broad 'financial losses'."
+        },
+        {
+          "claim_in_rewrite": "Predictive route optimization offers forecast models that help dispatchers adjust schedules before severe weather or congestion strikes.",
+          "source_basis": "These tools also provide predictive insights that help logistics teams prepare for future conditions, leading to consistently better decision-making.",
+          "rule_violation": "Rule 11 - Fabricated specific mechanism details ('forecast models', 'adjust schedules before severe weather or congestion strikes'). The original source text only discusses general predictive insights for preparing for future conditions."
+        },
+        {
+          "claim_in_rewrite": "reduce instances of lost or misplaced containers / hidden physical wastage inside trailers and containers",
+          "source_basis": "lost or misplaced shipments / underutilized areas and space wastage",
+          "rule_violation": "Rule 11 - Narrowed general concepts ('shipments', 'underutilized areas') to specific equipment types ('containers', 'trailers')."
+        }
+      ],
+      "analysis": "Fails Rule 11 standard. The rewrite adds specific ungrounded technical terminology, speculative cost mechanisms, and extrapolated features not explicitly present in the source material."
+    }
+  },
+  "actionable_recommendations": [
+    "Layer (d) Fix: Remove 'supply chain control tower' and restore 'data dashboards' or 'centralized visual dashboards'.",
+    "Layer (d) Fix: Change 'increase holding expenses' back to 'cause financial losses'.",
+    "Layer (d) Fix: Revert 'forecast models that help dispatchers adjust schedules before severe weather or congestion strikes' to grounded language reflecting 'predictive insights for preparing for future conditions'.",
+    "Layer (b) Fix: Eliminate trailing participle phrases at sentence ends by rewriting into direct active verbs (e.g., change ', giving managers direct control...' to '. This gives managers direct control...').",
+    "Layer (c) Fix: Vary paragraph structures and replace aphoristic closing statements with specific operational examples."
+  ]
+}

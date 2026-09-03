@@ -1,0 +1,13 @@
+{
+  "updated_at": "2026-09-03T05:51:54.279453",
+  "platforms": {
+    "telegram": [
+      {
+        "id": "330656040",
+        "name": "Stefan Rogovskiy",
+        "type": "dm",
+        "thread_id": null
+      }
+    ]
+  }
+}

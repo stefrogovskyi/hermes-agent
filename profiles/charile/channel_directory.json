@@ -1,0 +1,31 @@
+{
+  "updated_at": "2026-09-03T05:48:03.453689",
+  "platforms": {
+    "telegram": [
+      {
+        "id": "330656040",
+        "name": "Stefan Rogovskiy",
+        "type": "dm",
+        "thread_id": null
+      },
+      {
+        "id": "726516571",
+        "name": "Anna",
+        "type": "dm",
+        "thread_id": null
+      },
+      {
+        "id": "1896131307",
+        "name": "Elena R",
+        "type": "dm",
+        "thread_id": null
+      },
+      {
+        "id": "-726941595",
+        "name": "Роговские",
+        "type": "group",
+        "thread_id": null
+      }
+    ]
+  }
+}

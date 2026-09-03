@@ -1,0 +1,13 @@
+{
+  "title": "SeaRates Week 20 Updates: API, Tracking & Schedules",
+  "meta_title": "SeaRates Updates Week 20 2025: New APIs & Tools",
+  "meta_description": "Explore SeaRates Week 20 2025 updates: Terminal Tracking API docs, pricing plans, Thai Vietair support, and container tracking exceptions.",
+  "em_dash_count": 0,
+  "title_length": 51,
+  "meta_title_length": 47,
+  "meta_description_length": 138,
+  "total_6gram_matches": 58,
+  "non_exempt_6gram_matches": 11,
+  "factual_check": "PASS (All 3 auditor flags addressed, 0 invented facts)",
+  "body": "Week 20 of 2025 brings software revisions and data updates across our multi-modal logistics software platform.\n\n### Schedules and Tracking Subscriptions\nDedicated pricing plans are now live for our Ship Schedules and Air Tracking tools. Users can choose subscription options to address their specific logistics needs.\n\n### Terminal Tracking Documentation\nDocumentation for the terminal tracking API is now published on the Developer Portal. Developers can explore our database of global terminals to expand tracking coverage.\n\n### Container Tracking Exceptions and ETAs\nWe updated the container tracking exceptions tab and refined our predictive ETA logic.\n\nCarrier integration data was updated for thirteen ocean lines:\n* Turkon\n* Pacific International Lines (PIL)\n* Gold Star Line\n* Yang Ming\n* COSCO\n* Evergreen\n* Heung-A Shipping\n* W.E.C. (West European Container) Lines\n* Kawasaki Kisen Kaisha (K Line)\n* Sinokor\n* Wan Hai\n* Emirates Shipping Line\n* DHL Global Forwarding\n\nSchedule queries now handle Gold Star Line and Turkon by Points, while Evergreen lookups operate by Port.\n\n### Air Freight Tracking\nThai Vietair joins our air freight tracking network. That brings total supported airlines to 446.\n\nTracking support was also upgraded for six existing carriers: Air India, FedEx Express, China Southern Airlines, My Indo Airlines, Air Canada, and ASL Airlines Belgium.\n\n### Location Data and Page Redesigns\nOur geocoding autocomplete service now includes secondary names across 217 global capitals and 100 major ports. The tool now handles lookups across 8 major languages.\n\nWe also updated content and design layouts for three core product pages: Bulk/Break Bulk, LCL (Less Container Load), and FCL (Full Container Load).\n\n### Announcements\n* Unified Tracking System\n* Vessel Tracking API v1\n* Logistics Map 'Warehouse' tab\n* SeaRates AI 1.0\n* Parcel Tracking Web\n* Load Calculator Web 3.0 (updated design and feature set)\n* Map Platform"
+}

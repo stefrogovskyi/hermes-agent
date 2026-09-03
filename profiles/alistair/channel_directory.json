@@ -1,0 +1,25 @@
+{
+  "updated_at": "2026-09-03T05:48:37.058448",
+  "platforms": {
+    "telegram": [
+      {
+        "id": "330656040",
+        "name": "Stefan Rogovskiy",
+        "type": "dm",
+        "thread_id": null
+      },
+      {
+        "id": "-1004328290471",
+        "name": "Navo Tech geeks",
+        "type": "group",
+        "thread_id": null
+      },
+      {
+        "id": "-5305384342",
+        "name": "Navo Agents",
+        "type": "group",
+        "thread_id": null
+      }
+    ]
+  }
+}

@@ -1,0 +1,90 @@
+import json
+
+audit_data = {
+    "audit_results": {
+        "layer1_plagiarism": {
+            "verdict": "PASS",
+            "count_of_overlaps": 0,
+            "details": "No 6+ consecutive word non-proper-noun overlaps found between source and rewrite. All 6+ word overlaps are proper noun lists (carrier names: 15 shipping lines, 4 airlines, schedule carriers) or feature name listings from announcements."
+        },
+        "layer2_word_phrase_ai_tells": {
+            "verdict": "NEEDS-WORK",
+            "count_of_em_dashes": 0,
+            "count_of_cliches": 0,
+            "count_of_banned_filler": 1,
+            "banned_filler_matches": [
+                "Here is a breakdown of"
+            ],
+            "details": "0 em-dashes found, 0 AI clichés found. Found 1 instance of banned meta-filler phrase 'Here is a breakdown of' in the introduction paragraph."
+        },
+        "layer3_structural_rhetorical_ai_tells": {
+            "verdict": "NEEDS-WORK",
+            "contrastive_negation_count": 0,
+            "aphorism_density_count": 0,
+            "symmetric_antithesis_count": 1,
+            "symmetric_antithesis_matches": [
+                "what moved into production and what is in development"
+            ],
+            "explicit_connectors_found": [
+                "Here is a breakdown of",
+                "For multi-carrier container tracking",
+                "We also expanded",
+                "Developers will find",
+                "alongside"
+            ],
+            "details": "The rewrite exhibits formulaic textbook architecture (Intro -> 3 thematic H3 sections -> bulleted list section). Includes explicit transition connectors and 1 symmetric antithesis ('what moved into production and what is in development'). Zero contrastive negations found."
+        },
+        "layer4_factual_accuracy_fabrication": {
+            "verdict": "NEEDS-WORK",
+            "invented_mechanics_or_claims_count": 5,
+            "findings": [
+                {
+                    "location": "Title, Meta Title, Meta Description",
+                    "rewrite_claim": "SeaRates Week 44, 2025 Platform Updates / 2025",
+                    "source_reference": "What’s new for week 44:",
+                    "issue": "Unverified year addition: Added '2025' to Title and Meta fields; year is not specified in the source text."
+                },
+                {
+                    "location": "Intro Paragraph & Product Announcements",
+                    "rewrite_claim": "what moved into production and what is in development / Upcoming platform capabilities currently in development include:",
+                    "source_reference": "What’s new for week 44: ... Announcements:",
+                    "issue": "Assumed product development status: Source lists items under 'Announcements:', whereas rewrite explicitly asserts they are 'currently in development' vs 'moved into production'."
+                },
+                {
+                    "location": "Air, Courier, and Schedule Integrations (Para 1)",
+                    "rewrite_claim": "Updates to our air cargo tracking API support expanded integrations for Swiss International Air Lines, LATAM Cargo, Air India, and Lufthansa Cargo.",
+                    "source_reference": "Air Tracking improvements: We have updated our support of airlines, including Swiss International Air Lines, LATAM Cargo, Air India, and Lufthansa Cargo.",
+                    "issue": "Invented API mechanic: Source states airline support was updated for Air Tracking, but does NOT mention 'API' or 'air cargo tracking API'. API documentation updates in source were specifically for Container Tracking and Geocoding."
+                },
+                {
+                    "location": "Load Calculation and Developer Documentation (Para 1)",
+                    "rewrite_claim": "Selecting one or multiple container types triggers automated container space calculation to determine container requirements.",
+                    "source_reference": "Our team has added an Auto count checkbox to the tool for selecting one or more container types for automatic calculation of the number of containers.",
+                    "issue": "Inaccurate mechanic rephrasing: Source states the feature is for 'automatic calculation of the number of containers' (unit count). Rewrite changes this to 'container space calculation' (volume/space allocation)."
+                },
+                {
+                    "location": "Product Announcements (Bullet 3)",
+                    "rewrite_claim": "* Load Calculator Web 3.0 with new design and tools",
+                    "source_reference": "- Load Calculator Web 3.0 (new design and features)",
+                    "issue": "Term substitution: Changed 'new design and features' to 'new design and tools'."
+                }
+            ],
+            "details": "Verified factual alignment for 15 shipping lines, 4 airlines, schedule carriers by Points/Vessel, UPS parcel tracking, Road Tracking live updates on LandRates.com, and Container/Geocoding API documentation. Flagged 5 factual discrepancies / invented mechanics, including claiming an API update for Air Tracking, shifting container count calculation to 'container space calculation', adding unverified year '2025', asserting 'in development' status for announcements, and altering announcement wording."
+        }
+    },
+    "summary": {
+        "overall_status": "NEEDS-WORK",
+        "layer_verdicts": {
+            "layer1_plagiarism": "PASS",
+            "layer2_word_phrase_ai_tells": "NEEDS-WORK",
+            "layer3_structural_rhetorical_ai_tells": "NEEDS-WORK",
+            "layer4_factual_accuracy_fabrication": "NEEDS-WORK"
+        }
+    }
+}
+
+file_path = "/opt/hermes/profiles/archie/audit_results_step5.json"
+with open(file_path, "w", encoding="utf-8") as f:
+    json.dump(audit_data, f, indent=2)
+
+print(f"Successfully saved audit results JSON to {file_path}")

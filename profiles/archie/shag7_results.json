@@ -1,0 +1,10 @@
+{
+  "em_dash_count": 0,
+  "title_len": 51,
+  "meta_title_len": 45,
+  "meta_description_len": 126,
+  "banned_words_found": [],
+  "ngram_6gram_overlaps_total": 16,
+  "ngram_6gram_overlaps_filtered": 13,
+  "fact_check_status": "PASS - 100% verified against original text"
+}

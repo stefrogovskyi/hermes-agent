@@ -1,0 +1,22 @@
+{
+  "layer_a_plagiarism": {
+    "summary": "No non-standard 6+ consecutive word matches found. Minor 6-word matches consist strictly of brand terms ('the SeaRates marketplace and digital community') or standard domain lists ('across material handling, packaging, warehousing, and', 'Global business leaders and product developers').",
+    "count": 0
+  },
+  "layer_b_ai_markers": {
+    "em_dash_count": 0,
+    "clichés_found": [],
+    "details": "Zero em-dashes (—, –, --) present. None of the listed AI clichés ('delve', 'testament', 'crucial', 'seamless', 'landscape', 'tapestry') or related fluff terms were detected."
+  },
+  "layer_c_structure": {
+    "connectors_found": [],
+    "contrastive_negation_count": 0,
+    "details": "Clean journalistic layout with natural subheadings. Contains zero formulaic transition connectors ('Furthermore', 'Moreover', 'In addition'), zero contrastive negations ('not X, but Y'), and no artificial aphorisms or symmetric antitheses."
+  },
+  "layer_d_facts": {
+    "hallucinated_facts_count": 0,
+    "fact_check_status": "VERIFIED",
+    "details": "All figures (August 15–17, 2024; 415 brands; 25 countries; 9,000+ attendees; 1M+ users), names and titles (Kate Borkut, Account Manager), locations (BITEC, Bangkok), and contact info (sales@searates.com) strictly match the original text with zero hallucinated details."
+  },
+  "overall_verdict": "PASS"
+}

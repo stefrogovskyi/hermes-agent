@@ -1,0 +1,104 @@
+import re
+
+rewrite_text = """Title:
+SeaRates May 2025 Release: New Features & Tools
+
+Meta Title:
+SeaRates May 2025 Product & API Updates
+
+Meta Description:
+Explore SeaRates May 2025 release: Facilities management, 446 supported airlines, new API docs, and AI tools for logistics.
+
+# SeaRates May 2025 Release: New Features & Tools
+
+Logistics software works best when it stays out of your way.
+
+Our May 2025 release delivers practical updates across Virtual Office, tracking APIs, rates, and search tools. If you missed April's release, you can check out those recent updates alongside our latest features. Subscribe to the SeaRates newsletter to receive future updates straight to your inbox.
+
+## Warehouse Facilities in Virtual Office
+
+You can now manage warehouse assets directly inside your Virtual Office profile. The Facilities panel lets you add, edit, import, and track facilities alongside offered services.
+
+You can also share access with customers and partners so they can book warehouse services directly.
+
+## Expanded Tracking and API Documentation
+
+We updated several tracking modules this month.
+
+* **Terminal API:** Terminal Tracking API documentation is live on our Developer Portal. It connects you to our database of worldwide terminals.
+* **Air Tracking:** We added support for My Indo Airlines and Thai Vietair. That brings our total supported airline count to 446.
+* **Road Tracking:** We added support for Kuehne + Nagel (KN). Check our API documentation to view the full list of supported road carriers.
+* **Container Tracking:** The Exceptions tab now uses optimized logic for processing all 25 exception types. A dedicated field displays color markers for new dates: green marks positive changes for earlier arrival, while orange marks negative changes for delays. For API users, container type and size detection from shipping line descriptions is more accurate. We updated Predictive ETA logic too.
+
+## AI Engine, Rates, and Location Data
+
+SeaRates AI now runs on our own language model. Freight rate requests deliver improved results processing with a direct link to Logistics Explorer.
+
+The Rate Management System includes five specific updates:
+* Add tariffs for FCL and FTL by three options: 'Flat' (full cost), 'per km', or 'flat + per km'.
+* Choose between ft³ and m³ for LCL type.
+* Add air tariffs for D2D, D2P, and P2D types.
+* Make groups of container types simultaneously (for example, grouping size 20 into 20ST, 20HC, 20REF, and others).
+* Check added tooltips for columns in the tariff table.
+
+For Geocoding & Autocomplete, we translated 217 capitals and 35,000 seaports into 8 major worldwide languages, including the top 100 world seaports. Data search also improved for the top 200+ world seaports.
+
+## Pricing and Subscriptions
+
+We added dedicated Pricing pages for five key products:
+* Air Tracking
+* Freight Index
+* CO2 Calculator
+* Ship Schedules
+* DFA Membership
+
+In the Ship Schedules tool, we updated the credit display and added a Pricing link to quickly continue your subscription. The Carbon Emissions Calculator features a subscription button to check credit limits and upgrade your plan. For API integrations, the CO2 Calculator supports calculation by Coordinates as an alternative option if there are no results by Carrier.
+
+Need customized digital solutions for logistics? Reach out to us via the Request an IT Quote form or contact sales@searates.com anytime."""
+
+print("=== LAYER B: WORD-LEVEL AI MARKERS ===")
+em_dashes = re.findall(r'—|–|--\b', rewrite_text)
+print(f"Em-dash / En-dash count: {len(em_dashes)} -> {em_dashes}")
+
+# Common AI clichés list
+cliches_list = [
+    "delve", "delves", "delving", "tapestry", "testament", "realm", "beacon",
+    "fast-paced", "game-changer", "seamless", "effortless", "unlock", "elevate",
+    "cutting-edge", "fostering", "empowering", "pivotal", "harness", "vital",
+    "landscape", "navigating", "robust", "transformative", "game changer",
+    "look no further", "in conclusion", "furthermore", "moreover", "spearhead",
+    "supercharge", "unleash", "boasts", "revolutionize", "comprehensive"
+]
+
+found_cliches = []
+for word in cliches_list:
+    matches = re.findall(r'\b' + re.escape(word) + r'\b', rewrite_text, re.IGNORECASE)
+    if matches:
+        found_cliches.extend(matches)
+
+print(f"Clichés count: {len(found_cliches)}")
+print(f"Found clichés: {found_cliches}")
+
+
+print("\n=== LAYER C: STRUCTURAL & RHETORICAL AI TELLS ===")
+# 1. Contrastive negation count ("X, not Y" or "not X, but Y")
+# Let's search for patterns like "..., not ..." or "not ..., but ..."
+contrastive_negations = re.findall(r'\b\w+[^.!?]*,\s*not\s+[^.!?]*|\bnot\s+[^.!?]*,\s*but\s+[^.!?]*', rewrite_text, re.IGNORECASE)
+print(f"Contrastive negation candidates: {len(contrastive_negations)}")
+for cn in contrastive_negations:
+    print(f"  - '{cn}'")
+
+# 2. Aphorisms (e.g. "Logistics software works best when it stays out of your way.")
+# Look for general philosophical or declarative truisms, especially in opening/closing
+print("Aphorism check:")
+lines = [l.strip() for l in rewrite_text.split("\n") if l.strip()]
+for line in lines:
+    if "stays out of your way" in line or "works best when" in line or line.startswith("Logistics"):
+        print(f"  Found aphorism / opening thesis: '{line}'")
+
+# 3. Textbook staircase architecture / structural layout
+# Paragraph length, section symmetry, predictable intro-body-conclusion format
+# 4. Over-explaining connectors (e.g. "In order to", "Additionally", "Furthermore", "Moreover", "That brings", "as well as")
+# 5. Twin-sentence conclusions
+# 6. Symmetric antithesis
+

@@ -1,0 +1,31 @@
+{
+  "updated_at": "2026-09-03T05:48:46.031897",
+  "platforms": {
+    "telegram": [
+      {
+        "id": "149598904",
+        "name": "Kate K.",
+        "type": "dm",
+        "thread_id": null
+      },
+      {
+        "id": "330656040",
+        "name": "Stefan Rogovskiy",
+        "type": "dm",
+        "thread_id": null
+      },
+      {
+        "id": "345948971",
+        "name": "Alona Holubova",
+        "type": "dm",
+        "thread_id": null
+      },
+      {
+        "id": "8081511707",
+        "name": "Олег Червинский",
+        "type": "dm",
+        "thread_id": null
+      }
+    ]
+  }
+}

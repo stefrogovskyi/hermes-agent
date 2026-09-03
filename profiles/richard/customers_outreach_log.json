@@ -1,0 +1,92 @@
+[
+  {
+    "index": 1,
+    "name": "Younus",
+    "email": "younus@oaspakistan.com",
+    "status_code": 200,
+    "resend_id": "56cf84e4-1925-42e9-ba0a-6af543189564",
+    "success": true,
+    "timestamp": 1787581445.3500447
+  },
+  {
+    "index": 2,
+    "name": "Eduardo",
+    "email": "ebencomo@magaya.com",
+    "status_code": 200,
+    "resend_id": "3cf17fe6-dfe7-4308-9345-83318d17e701",
+    "success": true,
+    "timestamp": 1787581446.9893575
+  },
+  {
+    "index": 3,
+    "name": "Kristijan",
+    "email": "klillemets@magaya.com",
+    "status_code": 200,
+    "resend_id": "8f9a3138-f6e7-40c2-9d1a-13472cdd9338",
+    "success": true,
+    "timestamp": 1787581448.63233
+  },
+  {
+    "index": 4,
+    "name": "Su Veng",
+    "email": "soquendo@magaya.com",
+    "status_code": 200,
+    "resend_id": "e5e020da-1514-4fe2-bce9-fcaca00022d5",
+    "success": true,
+    "timestamp": 1787581450.2814684
+  },
+  {
+    "index": 5,
+    "name": "Shaizad",
+    "email": "sshroff@sea-link.com",
+    "status_code": 200,
+    "resend_id": "73bb57af-0c9b-4dde-973e-45b627172f27",
+    "success": true,
+    "timestamp": 1787581451.9299214
+  },
+  {
+    "index": 6,
+    "name": "Srinivasan Subramanian",
+    "email": "accounts@freightify.com",
+    "status_code": 200,
+    "resend_id": "01ce4864-fa96-4498-93e4-1599e67226b4",
+    "success": true,
+    "timestamp": 1787581453.5810275
+  },
+  {
+    "index": 7,
+    "name": "Emmanuel Efunwoye",
+    "email": "adeola@atrace.africa",
+    "status_code": 200,
+    "resend_id": "7142280e-f93e-4c85-a870-75d73b104964",
+    "success": true,
+    "timestamp": 1787581455.2685475
+  },
+  {
+    "index": 8,
+    "name": "Alex Falatoun",
+    "email": "alex@vizionapi.com",
+    "status_code": 200,
+    "resend_id": "8e97b6f4-d9a2-4503-a994-678122c67271",
+    "success": true,
+    "timestamp": 1787581456.9397051
+  },
+  {
+    "index": 9,
+    "name": "Amin Mansouri",
+    "email": "aminmansouri@carbmee.com",
+    "status_code": 200,
+    "resend_id": "55d8c952-3e07-404b-940c-b270b117038d",
+    "success": true,
+    "timestamp": 1787581458.594605
+  },
+  {
+    "index": 10,
+    "name": "Giovanni Bendotti",
+    "email": "b.bendotti@tecnoware.com",
+    "status_code": 200,
+    "resend_id": "164d93f9-0fc9-43ad-b5a9-0d27acb2bd65",
+    "success": true,
+    "timestamp": 1787581460.2676592
+  }
+]

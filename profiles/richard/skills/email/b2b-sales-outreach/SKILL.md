@@ -145,21 +145,17 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
              * **Name Normalization & Proper Title Case**: Always normalize recipient names to Title Case (`Emad`, `Marc`, `Ferdinand`) stripping all-caps raw logs and non-name strings before generating greetings.
              - **Carrier Count & Multimodal Precision**: Navo24 TrackingMCP covers **239 ocean carriers** (with 121 direct connectors and 186 SCACs) and **97 global airlines / air cargo carriers** in AirCargo AWB tracking. SchedulesMCP covers 60+ ocean carriers with 72,000+ live sailings. Always cite these exact figures.
              - **Multi-Agent WhatsApp Gateway Isolation**:
-               * Port 3050 belongs to Ben Jett (`+1 302 401 9315` / Avalanche LeadGen).
-               * Port 3060 belongs to Richard Marlowe (`+44 7360 065904` / Navo24 London, managed via `richard-whatsapp-gateway.service`).
-               * NEVER send WhatsApp messages from port 3050 in Richard's session. Always use `http://localhost:3060/send-message`.
-             - **Mandatory Pre-Launch Outreach Protocol & Test to Stefan**:
-               * Clarify Sheet URL/tab, sender profile, reply-to, CC, signature, and touch number before launch.
-               * Send a real test email to Stefan (`stefan@navo24.com`) with the exact HTML template & signature.
-               * Launch only after Stefan's confirmation.
+               * Port 3050 belongs strictly to Ben Jett (`+1 302 401 9315` / Avalanche LeadGen). STRICTLY OFF-LIMITS to Richard.
+               * Port 3060 belongs strictly to Richard Marlowe (`+44 7360 065904` / Navo24 London, managed via `richard-whatsapp-gateway.service`).
+               * NEVER send WhatsApp messages from port 3050 in Richard's session. Always use `/opt/hermes/profiles/richard/scripts/richard_whatsapp.py` or `http://localhost:3060/send-message`.
              - **Centralized Opt-Out & Suppression List Mandate**:
-               * Global blacklist file: `/opt/hermes/profiles/richard/cache/optout_suppression_list.json`.
-               * On opt-out request: purge from all CRM bases (Navo CRM, Online Outreach, Rich Outreach), Google Sheets, and local archives (`parsed_leads.json`).
+               * Centralized blacklist file: `/opt/hermes/profiles/richard/cache/optout_suppression_list.json`.
+               * When a contact requests opt-out: (1) Add to suppression list, (2) Remove from all CRM bases (Navo CRM, Online Outreach, Rich Outreach) and Google Sheets, (3) Purge from local parsed archives (`parsed_leads.json`).
                * Every outreach script MUST check this list before dispatching and skip suppressed emails unconditionally.
-             - **Clean Markdown Output Mandate for Telegram**:
-               * All analytical digests, competitor intelligence summaries, and cron delivery messages to Telegram must use clean standard Markdown (`**bold**`, `*italic*`, `` `code` ``), never raw HTML tags (`<b>`, `<i>`, `<code>`).
-             - **Inbound Poller Zero-Spend Watchdog Pattern**:
-               * Inbound pollers running on short intervals (e.g. every 3m) must use `no_agent: true` with internal Python LLM calls on new messages, keeping stdout silent when no new emails arrive. This prevents token waste on idle intervals and avoids `drift check` execution skips.
+             - **Clean Markdown & Emoji Output Mandate for Telegram**:
+               * All analytical digests, competitor intelligence summaries, website sync alerts, and cron delivery messages to Telegram must use clean standard Markdown (`**bold**`, `*italic*`, `` `code` ``) and contextual emojis, NEVER raw HTML tags (`<b>`, `<i>`, `<code>`, `<a>`).
+             - **Inbound Poller Zero-Spend Watchdog Pattern & Drift Immunity**:
+               * Inbound pollers running on short intervals (e.g. every 3m) must use `no_agent: true` with internal Python LLM calls on new messages, keeping stdout silent when no new emails arrive. This prevents token waste on idle intervals and eliminates `drift check` execution skips.
              *(See `references/suppression-and-agent-gateways.md` for full suppression mechanics, WhatsApp gateway isolation, and Markdown standards).*
              - **Core Pitch & Problem Container Hook (Field Sales Practice)**:
                * Focus cold outreach and Touch #1 on **Real Map Location & Predictive ETA** (Satellite AIS + Port Congestion vs static Line Schedule ETA).
@@ -230,7 +226,20 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
    - **RFC 5322 Recipient Header Formatting Rule**:
      * In all outbound cold emails and responses, ALWAYS format the `To` field as `f"{person_name} <{email}>"` (e.g. `Colin Charnock <c.charnock@tglobal.com>`). Passing bare email strings causes mail user agents (Outlook, Apple Mail) in CC copies to suppress the recipient display name or collapse the field.
    - **Multi-Source Diversity & Strict Regional Filtering Mandate**:
-     * **Strict Multi-Source Distribution & Single-Pass Full Run**: Distribute daily outreach across all 19 active sources evenly (19 sources x 5 leads = 95 verified emails per morning run). Run in a full single pass rather than small fragmented batches of 20-30.
+     * **Strict Multi-Source Distribution & 5-Email Per Source Cap (Zero-Dominance Mandate)**:
+       - Distribute daily outreach across all active sources evenly: **strictly up to 5 verified emails per source** (`MAX_PER_SOURCE = 5`).
+       - **ABSOLUTE BAN on Cross-Filling / Monopolization**: NEVER backfill or dump missing leads from one dominant source (such as DFA `dfa_members.xlsx`) to reach an overall batch quota (e.g. 95) when other source scrapers/APIs return zero. If a source yields fewer than 5, dispatch only what is verified — NEVER inflate DFA or any single source to 25 or 95.
+       - Enforce an in-memory safety gate before dispatch:
+         ```python
+         enforced_pool = []
+         source_tallies = {}
+         for l in leads_pool:
+             src = l.get("source", "Unknown")
+             if source_tallies.get(src, 0) < 5:
+                 source_tallies[src] = source_tallies.get(src, 0) + 1
+                 enforced_pool.append(l)
+         leads_pool = enforced_pool
+         ```
      * **SeaRates Founding Team Pedigree Value Prop**: In cold outreach intros, ALWAYS cite that Navo24 was founded by the key founding and engineering team behind SeaRates to immediately establish credibility with forwarders and BCOs.
      * **STRICT Anti-Generic Mailbox Policy**: NEVER send outreach to departmental or generic mailboxes (`info@`, `sales@`, `pricing@`, `export@`, `import@`, `ocean@`, `procurement@`, `dispatch@`, `overseas@`, `operations@`, `customs@`, `quotes@`, `help@`, `desk@`). Filter via `is_personal_decision_maker_email()` to target ONLY named personal executive emails (`first.last@`, `flast@`, `name@` for VP Supply Chain, Ocean Freight Director, Head of Logistics, C-Level).
      * **Cross-CRM Deduplication Mandate**: Before dispatching, cross-check candidate emails across ALL active CRM bases (`Online Outreach` `appdJR8VVczRxcVke`, `Navo CRM` `appbxvl9BBaTiLMlf` Leads & Contacts, and `Rich Outreach` `appEoWQjvhgN8LIX7`) to ensure ZERO duplicate outreach.
@@ -363,6 +372,12 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
 
 ## Pitfalls & Common Mistakes
 
+- **Outreach Monopoly Backfill Trap & Chronic Source Starvation**:
+  * **The Trap**: When automating a multi-source outreach campaign (e.g. 19 sources x 5 emails = 95/day), NEVER include an emergency fallback that fills the remaining batch quota from a single pre-loaded directory (e.g., `extra_dfa = collect_dfa_leads(limit=extra_needed)`). If external scrapers hit rate limits, CAPTCHAs, or lack direct personal emails, this toxic fallback causes the entire daily campaign to silently degrade over consecutive days into a 100% single-source monopoly (e.g. DFA 80 -> 82 -> 83 -> 95).
+  * **Strict Hard Cap & Zero Backfilling**:
+    1. Enforce `MAX_PER_SOURCE = 5` at the collector level AND in a final in-memory gate right before sending.
+    2. Zero single-source backfilling: if a source yields 0 or 2 valid leads, dispatch only what is verified. Never inflate any source beyond 5.
+    3. Two-Step Directory Enrichment: Member directories (WCA, JCtrans, CIFFA, FIATA, Freightnet, ThomasNet) rarely publish direct personal executive emails on open pages. To prevent zero-yield runs, pair directory scraping (Company Name + Domain) with B2B email enrichment APIs (Prospeo, Hunter.io, Snov.io) targeting specific job titles (`VP Supply Chain`, `Director Ocean Freight`, `Head of Logistics`), validated by MX checks.
 - **M365 NDR 550 5.7.708 (Tenant Outbound IP Restriction) & Instant Failover**:
   * `550 5.7.708 Service unavailable. Access denied, traffic not accepted from this IP` is an Exchange Online Protection tenant outbound IP block that **does not resolve automatically overnight**.
   * **Remediation**:
