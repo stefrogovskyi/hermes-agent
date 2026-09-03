@@ -50,11 +50,17 @@ upwork find_jobs --json '{"action":"get","params":{"id":"<JOB_ID_STRING>"}}'
 upwork list_contracts search
 upwork list_milestones -p contract_id="<CONTRACT_ID>"
 
-# Create draft proposal
-upwork manage_proposals create -p job_id="<JOB_ID>" -p cover_letter="<TEXT>" -p rate=75
+# Create draft proposal (pass JSON to prevent float64 string conversion error)
+upwork manage_proposals --json '{"action":"create","params":{"job_reference":"<JOB_ID>","charged_amount":40.0,"cover_letter":"<TEXT>"}}'
 
-# Confirm draft proposal (consumes connects)
+# One-time policy acknowledgment if first attempt is gated:
+upwork manage_proposals acknowledge_policy
+
+# Confirm draft proposal (submits to client & consumes connects)
 upwork confirm proposal <DRAFT_ID>
+
+# Verify active submitted proposals
+upwork list_freelancer_proposals list
 
 # Real-time messages
 upwork messages list_rooms

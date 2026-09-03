@@ -22,14 +22,15 @@ openclaw pairing approve telegram <PAIRING_CODE>
 ```
 This registers the sender ID in `commands.ownerAllowFrom` in `openclaw.json`.
 
-## 3. Model Fallback Pipeline, Auto-Update & Low-Latency Tuning
-To avoid rate limits (429) or token authentication errors (401) without hanging:
+3. **Model Fallback Pipeline, Auto-Update & Low-Latency Tuning**
+To avoid rate limits (429), token authentication errors (401), or unsupported context window errors (400) without hanging:
 1. **Primary & Fallbacks Schema:**
-   - For highest performance and direct quota utilization, configure Google provider directly (`api: "google-generative-ai"`) with `google/gemini-3.8-flash` as primary.
+   - For highest performance and direct quota utilization, configure Google provider directly (`google/gemini-3.8-flash` as primary) or connect Nous Research subscription models (`nous/...`).
    - Avoid volatile `:free` tags as `primary` (which hit frequent 429s or disappear); use solid, high-availability models.
-   - Guard against HTTP 402 ("Payment Required / depleted monthly credits") from Hugging Face or empty balance OpenRouter keys by filtering them out of the automated fallback ladder.
-   - When configuring Google models, ensure `models.providers.google` explicitly includes `"api": "google-generative-ai"` and `"baseUrl": "https://generativelanguage.googleapis.com/v1beta"`, otherwise OpenClaw skips the primary model during background routines (heartbeat / dream diary) and cascades through all fallbacks, throwing billing / rate limit errors into Telegram.
-   In `~/.openclaw/openclaw.json`:
+   - **Context Window Traps (HTTP 400):** Avoid free models with small context limits (like `openrouter/minimax/minimax-m3:free` which rejects context >512k tokens and times out). Filter out models that cannot absorb session history.
+   - **Nous Subscription Integration in OpenClaw 2.0:**
+     In `openclaw.json`, declare `models.providers.nous` with `baseUrl: "https://inference-api.nousresearch.com/v1"`, `apiKey: "<nous_access_token>"` (from `/opt/hermes/auth.json`), and explicit `models: [...]`. Do NOT include unsupported fields like `"apiType"` in `providers.nous` (causes OpenClaw config validation error 78/CONFIG).
+   - In `~/.openclaw/openclaw.json`:
    ```json
    {
      "agents": {
@@ -40,18 +41,24 @@ To avoid rate limits (429) or token authentication errors (401) without hanging:
              "google/gemini-3.8-flash",
              "google/gemini-3.7-flash",
              "google/gemini-2.5-flash",
+             "nous/stepfun/step-3.7-flash:free",
+             "nous/upstage/solar-pro4:free",
+             "nous/meituan/longcat-2.0:free",
+             "nous/poolside/laguna-s-2.1:free",
              "gonka24/deepseek-v4-flash-0731",
-             "gonka24/kimi-k2.6",
-             "gonka24/minimax-m2.7"
+             "gonka24/kimi-k2.6"
            ]
          },
          "models": {
            "google/gemini-3.8-flash": {},
            "google/gemini-3.7-flash": {},
            "google/gemini-2.5-flash": {},
+           "nous/stepfun/step-3.7-flash:free": {},
+           "nous/upstage/solar-pro4:free": {},
+           "nous/meituan/longcat-2.0:free": {},
+           "nous/poolside/laguna-s-2.1:free": {},
            "gonka24/deepseek-v4-flash-0731": {},
-           "gonka24/kimi-k2.6": {},
-           "gonka24/minimax-m2.7": {}
+           "gonka24/kimi-k2.6": {}
          },
          "timeoutSeconds": 15
        }
@@ -61,8 +68,18 @@ To avoid rate limits (429) or token authentication errors (401) without hanging:
          "google": {
            "apiKey": "GEMINI_API_KEY",
            "baseUrl": "https://generativelanguage.googleapis.com/v1beta",
-           "api": "google-generative-ai",
            "timeoutSeconds": 15
+         },
+         "nous": {
+           "baseUrl": "https://inference-api.nousresearch.com/v1",
+           "apiKey": "NOUS_ACCESS_TOKEN",
+           "timeoutSeconds": 30,
+           "models": [
+             {"id": "stepfun/step-3.7-flash:free", "name": "Step 3.7 Flash"},
+             {"id": "upstage/solar-pro4:free", "name": "Solar Pro 4"},
+             {"id": "meituan/longcat-2.0:free", "name": "LongCat 2.0"},
+             {"id": "poolside/laguna-s-2.1:free", "name": "Laguna S 2.1"}
+           ]
          },
          "gonka24": {
            "baseUrl": "https://api.gonka24.com/v1",

@@ -45,21 +45,110 @@ Comprehensive guide for operating Richard Marlowe's British phone number `+44 73
 
 - **Caller ID**: `+44 7360 065904` (SID: `PN637a106ac9f7c9b55afe339b111a430e`).
 - **Voice Engine**: Polly Neural British Voice (`Polly.Brian-Neural` / `Polly.Arthur-Neural`).
-- **Interactive TwiML Flow**:
-  ```xml
-  <Response>
-      <Gather input="speech" timeout="3" speechTimeout="auto" action="/handle-response">
-          <Say voice="Polly.Brian-Neural" language="en-GB">
-              Hello. This is Richard Marlowe, Senior Sales Manager calling from Navo24 in London...
-          </Say>
-      </Gather>
-  </Response>
-  ```
-- **Compliance Requirement**: Outbound PSTN calling requires an active/approved Customer Profile in Twilio Trust Hub.
+- **Compliance & Trust Hub**: Outbound PSTN calling requires an active/approved Customer Profile in Twilio Trust Hub (`BU37e8e804822f5918634848e30241c4ab` approved).
+- **International Dialing Permissions (Geo-Permissions)**:
+  * Twilio blocks international calls to many country codes (including Ukraine `UA` / `+380`) by default.
+  * To enable dialing, update via Twilio Voice API:
+    ```python
+    client.voice.v1.dialing_permissions.bulk_country_updates.create(
+        update_request=json.dumps([{
+            "iso_code": "UA",
+            "low_risk_numbers_enabled": True,
+            "high_risk_special_numbers_enabled": False,
+            "high_risk_tollfraud_numbers_enabled": False
+        }])
+    )
+    ```
 
 ---
 
-## 5. Weekly Sales Testimonials Email Loop
+## 5. Full-Duplex Conversational Voice AI Architecture (Twilio Media Streams + OpenAI Realtime)
+
+For live, natural phone conversations with instant interruptions (<100ms barge-in), zero robotic monologues, and human pacing:
+
+### A. End-to-End Audio Pipeline
+```
+[User Phone] 
+     ▲
+     │ (8kHz G.711 mu-law / PCMU over PSTN)
+     ▼
+[Twilio Media Streams]
+     ▲
+     │ WebSocket (base64 audio chunks)
+     ▼
+[Cloudflare Tunnel / WSS Gateway] (cloudflared tunnel --url http://127.0.0.1:8000)
+     ▲
+     │ FastAPI WebSocket (/media-stream)
+     ▼
+[realtime_voice_bridge.py]
+     ▲
+     │ Native WebSocket (wss://api.openai.com/v1/realtime?model=gpt-realtime)
+     ▼
+[OpenAI Realtime GA Engine (gpt-realtime)]
+```
+
+### B. Critical Protocol Specifications (OpenAI Realtime GA)
+1. **Model & Endpoint**:
+   - Model name: `gpt-realtime` or `gpt-realtime-mini`.
+   - URL: `wss://api.openai.com/v1/realtime?model=gpt-realtime`.
+   - **DO NOT SEND `OpenAI-Beta: realtime=v1`**: The GA endpoint rejects this beta header with `beta_api_shape_disabled`. Use standard `Authorization: Bearer <KEY>`.
+2. **Native PCMU Format (Zero Transcoding)**:
+   - Twilio sends 8kHz G.711 mu-law audio chunks in `event: media`, payload `base64`.
+   - Configure OpenAI Realtime to use `audio/pcmu` for both input and output:
+     ```json
+     {
+       "type": "session.update",
+       "session": {
+         "type": "realtime",
+         "instructions": "<Persona prompt>",
+         "audio": {
+           "input": {
+             "format": {"type": "audio/pcmu"},
+             "turn_detection": {
+               "type": "server_vad",
+               "threshold": 0.5,
+               "prefix_padding_ms": 300,
+               "silence_duration_ms": 250,
+               "create_response": true,
+               "interrupt_response": true
+             }
+           },
+           "output": {
+             "format": {"type": "audio/pcmu"},
+             "voice": "ash"
+           }
+         }
+       }
+     }
+     ```
+   - Input audio append: `{"type": "input_audio_buffer.append", "audio": payload}`.
+   - Output audio delta: OpenAI sends `response.output_audio.delta` (not `response.audio.delta`). Stream directly to Twilio:
+     ```json
+     {
+       "event": "media",
+       "streamSid": stream_sid,
+       "media": {"payload": data["delta"]}
+     }
+     ```
+
+### C. Barge-in & Interruption Handling (<100ms Latency)
+When the user speaks while the AI is talking:
+1. OpenAI emits event: `input_audio_buffer.speech_started`.
+2. The bridge immediately sends a `clear` command to Twilio:
+   ```json
+   {"event": "clear", "streamSid": stream_sid}
+   ```
+   This flushes Twilio's audio playback queue instantly so the caller hears silence on their phone within 50–100ms.
+3. Send `{"type": "response.cancel"}` to OpenAI to stop token and audio generation.
+
+### D. Conversational Prompt Rules for Phone Calls
+- **Brevity Mandate**: 1–2 short sentences per turn. Never speak in long paragraphs or monologue.
+- **Natural conversational pacing**: Listen first, acknowledge briefly, ask a targeted question.
+- **Bilingual flexibility**: Default to Russian with Stefan, switch seamlessly to English if the user switches.
+
+---
+
+## 6. Weekly Sales Testimonials Email Loop
 
 - **Schedule**: Every Monday at 08:00 AM Kyiv (`0 5 * * 1` UTC).
 - **Recipients**: `To: sales@navo24.com`, `CC: stefan@navo24.com, lxxmng@navo24.com`.

@@ -127,3 +127,30 @@ NEVER send generic boilerplate emails to inbound or re-activation prospects who 
    - *Example:* `Hi {FirstName}, saw your logistics focus at {Company}. We build MCP-native ocean tracking & schedules API (ex-SeaRates team). Would love to connect here!`
 3. **1st LinkedIn DM (Post-Acceptance, 3–4 sentences, Conversational)**:
    - Thank for connecting ➡️ Reference SeaRates engineering heritage ➡️ Highlight killer feature (234 carriers + automated D&D calculation + free tier) ➡️ Ask open question about their multi-carrier milestone workflows.
+
+## 10. Ad-Hoc Team Lead Scoring & Google Sheets Review Workflow
+
+When sales team members (Elena `@OlenaT1`, Nikita `@nikita51155`) provide arbitrary Google Sheets for lead review and scoring:
+
+1. **Permission Check & Gspread Access**:
+   ```python
+   import gspread
+   gc = gspread.service_account(filename='/opt/hermes/profiles/richard/google_service_account.json')
+   sh = gc.open_by_key(spreadsheet_id)
+   ws = sh.get_worksheet(0)
+   rows = ws.get_all_values()
+   ```
+   If `gspread.exceptions.APIError: [403]` occurs, immediately instruct the rep to share the document with `richard-bot@navo-sales-sheets.iam.gserviceaccount.com` as Editor.
+
+2. **Lead Qualification Matrix (BCO / Retail Importers - ICP 2)**:
+   - **Volume Check**: Ocean container volume (>50 TEU/mo or >500 TEU/yr).
+   - **Pain Check**: Multiple carrier portals, Demurrage & Detention (D&D) penalties, inaccurate carrier ETAs.
+   - **Multi-Threading Persona Scoring**:
+     * **Tier A+ (10/10)**: VP / Director of Supply Chain, Director of Logistics / Transportation (Core DM).
+     * **Tier A (8.5–9.5/10)**: Logistics / Import / Ocean Freight Manager (Internal Champion).
+     * **Tier B+ (7.5–8.0/10)**: Logistics Coordinator, Analyst, or C-Level (CEO/President) to hold in reserve.
+
+3. **Hook Audit & Cadence Guidance**:
+   - Verify carrier count metrics (241 ocean lines, 132 direct connectors).
+   - Stagger outreach across personas (Day 1 operational lead, Day 3–4 VP, Day 7 cross-check).
+

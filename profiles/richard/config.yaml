@@ -4,14 +4,14 @@ approvals:
   mode: manual
 auto_tts: false
 command_allowlist:
-- python3 /root/cn_ff_1_outreach.py
-- execute_code
-- in-place edit of Hermes config/env
-- access to Hermes secrets (Windows path)
-- cat << 'EOF' > /root/cn_ff_1_outreach.py
-- write_file
-- script execution via -e/-c flag
-- delete in root path
+  - python3 /root/cn_ff_1_outreach.py
+  - execute_code
+  - in-place edit of Hermes config/env
+  - access to Hermes secrets (Windows path)
+  - cat << 'EOF' > /root/cn_ff_1_outreach.py
+  - write_file
+  - script execution via -e/-c flag
+  - delete in root path
 compression:
   enabled: true
   target_ratio: 0.15
@@ -23,180 +23,180 @@ display:
   streaming_throttle_ms: 1000
   tool_progress: none
 fallback:
-- gemini-3.8-flash
-- model: gpt-4o
-  provider: openai
-- model: deepseek/deepseek-chat
-  provider: openrouter
-- model: deepseek-ai/DeepSeek-R1
-  provider: huggingface
-- model: deepseek-ai/DeepSeek-V3
-  provider: huggingface
-- model: google/gemini-3.6-flash
-  provider: google
-- model: nousresearch/hermes-3-llama-3.1-405b
-  provider: openrouter
-- model: meta-llama/Llama-3.3-70B-Instruct
-  provider: huggingface
-- model: google/gemini-2.5-pro
-  provider: google
-- model: meta-llama/llama-3.3-70b-instruct
-  provider: openrouter
-- model: nousresearch/hermes-3-llama-3.1-70b
-  provider: openrouter
-- model: Qwen/Qwen2.5-72B-Instruct
-  provider: huggingface
-- model: qwen/qwen-2.5-72b-instruct
-  provider: openrouter
-- model: Qwen/Qwen2.5-Coder-32B-Instruct
-  provider: huggingface
-- model: mistralai/mistral-small-24b-instruct-2501
-  provider: openrouter
-- model: minimax-m2.7
-  provider: gonka24
-- model: kimi-k2.6
-  provider: gonka24
-- model: gpt-4o-mini
-  provider: openai
-- model: stepfun/step-3.7-flash:free
-  provider: nous
-- model: upstage/solar-pro4:free
-  provider: nous
-- model: tencent/hy3:free
-  provider: nous
-- model: meituan/longcat-2.0:free
-  provider: nous
-- model: poolside/laguna-s-2.1:free
-  provider: nous
-- model: poolside/laguna-xs-2.1:free
-  provider: nous
-- model: nvidia/nemotron-3-super-120b-a12b:free
-  provider: openrouter
-- model: google/gemma-4-31b-it:free
-  provider: openrouter
-- model: google/gemma-4-26b-a4b-it:free
-  provider: openrouter
-- model: minimax/minimax-m3:free
-  provider: openrouter
-- model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
-  provider: openrouter
-- model: mistralai/mistral-nemo
-  provider: openrouter
-- model: meta-llama/Llama-3.1-8B-Instruct
-  provider: huggingface
-- model: google/gemini-2.5-flash
-  provider: google
-- model: claude-fable-5
-  provider: anthropic
-- model: claude-sonnet-5
-  provider: anthropic
-- model: claude-opus-5
-  provider: anthropic
-- model: claude-opus-4
-  provider: anthropic
-- model: inclusionai/ling-3.0-flash-fin:free
-  provider: openrouter
-- model: dots-studio/dots-3-note-preview:free
-  provider: openrouter
-- model: liquid/lfm-2.5-2.6b:free
-  provider: openrouter
-- model: cohere/north-mini-code:free
-  provider: openrouter
-- model: z-ai/glm-5.2:free
-  provider: openrouter
-- model: nvidia/nemotron-3-ultra-550b-a55b:free
-  provider: openrouter
-- model: minimax/minimax-m2.7:free
-  provider: openrouter
-- model: openrouter/free
-  provider: openrouter
+  - gemini-3.8-flash
+  - model: gpt-4o
+    provider: openai
+  - model: deepseek/deepseek-chat
+    provider: openrouter
+  - model: deepseek-ai/DeepSeek-R1
+    provider: huggingface
+  - model: deepseek-ai/DeepSeek-V3
+    provider: huggingface
+  - model: google/gemini-3.6-flash
+    provider: google
+  - model: nousresearch/hermes-3-llama-3.1-405b
+    provider: openrouter
+  - model: meta-llama/Llama-3.3-70B-Instruct
+    provider: huggingface
+  - model: google/gemini-2.5-pro
+    provider: google
+  - model: meta-llama/llama-3.3-70b-instruct
+    provider: openrouter
+  - model: nousresearch/hermes-3-llama-3.1-70b
+    provider: openrouter
+  - model: Qwen/Qwen2.5-72B-Instruct
+    provider: huggingface
+  - model: qwen/qwen-2.5-72b-instruct
+    provider: openrouter
+  - model: Qwen/Qwen2.5-Coder-32B-Instruct
+    provider: huggingface
+  - model: mistralai/mistral-small-24b-instruct-2501
+    provider: openrouter
+  - model: minimax-m2.7
+    provider: gonka24
+  - model: kimi-k2.6
+    provider: gonka24
+  - model: gpt-4o-mini
+    provider: openai
+  - model: stepfun/step-3.7-flash:free
+    provider: nous
+  - model: upstage/solar-pro4:free
+    provider: nous
+  - model: tencent/hy3:free
+    provider: nous
+  - model: meituan/longcat-2.0:free
+    provider: nous
+  - model: poolside/laguna-s-2.1:free
+    provider: nous
+  - model: poolside/laguna-xs-2.1:free
+    provider: nous
+  - model: nvidia/nemotron-3-super-120b-a12b:free
+    provider: openrouter
+  - model: google/gemma-4-31b-it:free
+    provider: openrouter
+  - model: google/gemma-4-26b-a4b-it:free
+    provider: openrouter
+  - model: minimax/minimax-m3:free
+    provider: openrouter
+  - model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
+    provider: openrouter
+  - model: mistralai/mistral-nemo
+    provider: openrouter
+  - model: meta-llama/Llama-3.1-8B-Instruct
+    provider: huggingface
+  - model: google/gemini-2.5-flash
+    provider: google
+  - model: claude-fable-5
+    provider: anthropic
+  - model: claude-sonnet-5
+    provider: anthropic
+  - model: claude-opus-5
+    provider: anthropic
+  - model: claude-opus-4
+    provider: anthropic
+  - model: inclusionai/ling-3.0-flash-fin:free
+    provider: openrouter
+  - model: dots-studio/dots-3-note-preview:free
+    provider: openrouter
+  - model: liquid/lfm-2.5-2.6b:free
+    provider: openrouter
+  - model: cohere/north-mini-code:free
+    provider: openrouter
+  - model: z-ai/glm-5.2:free
+    provider: openrouter
+  - model: nvidia/nemotron-3-ultra-550b-a55b:free
+    provider: openrouter
+  - model: minimax/minimax-m2.7:free
+    provider: openrouter
+  - model: openrouter/free
+    provider: openrouter
 fallback_providers:
-- model: gpt-4o
-  provider: openai
-- model: deepseek/deepseek-chat
-  provider: openrouter
-- model: deepseek-ai/DeepSeek-R1
-  provider: huggingface
-- model: deepseek-ai/DeepSeek-V3
-  provider: huggingface
-- model: google/gemini-3.6-flash
-  provider: google
-- model: nousresearch/hermes-3-llama-3.1-405b
-  provider: openrouter
-- model: meta-llama/Llama-3.3-70B-Instruct
-  provider: huggingface
-- model: google/gemini-2.5-pro
-  provider: google
-- model: meta-llama/llama-3.3-70b-instruct
-  provider: openrouter
-- model: nousresearch/hermes-3-llama-3.1-70b
-  provider: openrouter
-- model: Qwen/Qwen2.5-72B-Instruct
-  provider: huggingface
-- model: qwen/qwen-2.5-72b-instruct
-  provider: openrouter
-- model: Qwen/Qwen2.5-Coder-32B-Instruct
-  provider: huggingface
-- model: mistralai/mistral-small-24b-instruct-2501
-  provider: openrouter
-- model: minimax-m2.7
-  provider: gonka24
-- model: kimi-k2.6
-  provider: gonka24
-- model: gpt-4o-mini
-  provider: openai
-- model: stepfun/step-3.7-flash:free
-  provider: nous
-- model: upstage/solar-pro4:free
-  provider: nous
-- model: tencent/hy3:free
-  provider: nous
-- model: meituan/longcat-2.0:free
-  provider: nous
-- model: poolside/laguna-s-2.1:free
-  provider: nous
-- model: poolside/laguna-xs-2.1:free
-  provider: nous
-- model: nvidia/nemotron-3-super-120b-a12b:free
-  provider: openrouter
-- model: google/gemma-4-31b-it:free
-  provider: openrouter
-- model: google/gemma-4-26b-a4b-it:free
-  provider: openrouter
-- model: minimax/minimax-m3:free
-  provider: openrouter
-- model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
-  provider: openrouter
-- model: mistralai/mistral-nemo
-  provider: openrouter
-- model: meta-llama/Llama-3.1-8B-Instruct
-  provider: huggingface
-- model: google/gemini-2.5-flash
-  provider: google
-- model: claude-fable-5
-  provider: anthropic
-- model: claude-sonnet-5
-  provider: anthropic
-- model: claude-opus-5
-  provider: anthropic
-- model: claude-opus-4
-  provider: anthropic
-- model: inclusionai/ling-3.0-flash-fin:free
-  provider: openrouter
-- model: dots-studio/dots-3-note-preview:free
-  provider: openrouter
-- model: liquid/lfm-2.5-2.6b:free
-  provider: openrouter
-- model: cohere/north-mini-code:free
-  provider: openrouter
-- model: z-ai/glm-5.2:free
-  provider: openrouter
-- model: nvidia/nemotron-3-ultra-550b-a55b:free
-  provider: openrouter
-- model: minimax/minimax-m2.7:free
-  provider: openrouter
-- model: openrouter/free
-  provider: openrouter
+  - model: gpt-4o
+    provider: openai
+  - model: deepseek/deepseek-chat
+    provider: openrouter
+  - model: deepseek-ai/DeepSeek-R1
+    provider: huggingface
+  - model: deepseek-ai/DeepSeek-V3
+    provider: huggingface
+  - model: google/gemini-3.6-flash
+    provider: google
+  - model: nousresearch/hermes-3-llama-3.1-405b
+    provider: openrouter
+  - model: meta-llama/Llama-3.3-70B-Instruct
+    provider: huggingface
+  - model: google/gemini-2.5-pro
+    provider: google
+  - model: meta-llama/llama-3.3-70b-instruct
+    provider: openrouter
+  - model: nousresearch/hermes-3-llama-3.1-70b
+    provider: openrouter
+  - model: Qwen/Qwen2.5-72B-Instruct
+    provider: huggingface
+  - model: qwen/qwen-2.5-72b-instruct
+    provider: openrouter
+  - model: Qwen/Qwen2.5-Coder-32B-Instruct
+    provider: huggingface
+  - model: mistralai/mistral-small-24b-instruct-2501
+    provider: openrouter
+  - model: minimax-m2.7
+    provider: gonka24
+  - model: kimi-k2.6
+    provider: gonka24
+  - model: gpt-4o-mini
+    provider: openai
+  - model: stepfun/step-3.7-flash:free
+    provider: nous
+  - model: upstage/solar-pro4:free
+    provider: nous
+  - model: tencent/hy3:free
+    provider: nous
+  - model: meituan/longcat-2.0:free
+    provider: nous
+  - model: poolside/laguna-s-2.1:free
+    provider: nous
+  - model: poolside/laguna-xs-2.1:free
+    provider: nous
+  - model: nvidia/nemotron-3-super-120b-a12b:free
+    provider: openrouter
+  - model: google/gemma-4-31b-it:free
+    provider: openrouter
+  - model: google/gemma-4-26b-a4b-it:free
+    provider: openrouter
+  - model: minimax/minimax-m3:free
+    provider: openrouter
+  - model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
+    provider: openrouter
+  - model: mistralai/mistral-nemo
+    provider: openrouter
+  - model: meta-llama/Llama-3.1-8B-Instruct
+    provider: huggingface
+  - model: google/gemini-2.5-flash
+    provider: google
+  - model: claude-fable-5
+    provider: anthropic
+  - model: claude-sonnet-5
+    provider: anthropic
+  - model: claude-opus-5
+    provider: anthropic
+  - model: claude-opus-4
+    provider: anthropic
+  - model: inclusionai/ling-3.0-flash-fin:free
+    provider: openrouter
+  - model: dots-studio/dots-3-note-preview:free
+    provider: openrouter
+  - model: liquid/lfm-2.5-2.6b:free
+    provider: openrouter
+  - model: cohere/north-mini-code:free
+    provider: openrouter
+  - model: z-ai/glm-5.2:free
+    provider: openrouter
+  - model: nvidia/nemotron-3-ultra-550b-a55b:free
+    provider: openrouter
+  - model: minimax/minimax-m2.7:free
+    provider: openrouter
+  - model: openrouter/free
+    provider: openrouter
 model:
   default: google/gemini-3.8-flash
   max_retries: 2
@@ -206,12 +206,12 @@ model:
       api_key_env: HF_TOKEN
       base_url: https://router.huggingface.co/v1
       models:
-      - deepseek-ai/DeepSeek-R1
-      - deepseek-ai/DeepSeek-V3
-      - meta-llama/Llama-3.3-70B-Instruct
-      - Qwen/Qwen2.5-72B-Instruct
-      - Qwen/Qwen2.5-Coder-32B-Instruct
-      - meta-llama/Llama-3.1-8B-Instruct
+        - deepseek-ai/DeepSeek-R1
+        - deepseek-ai/DeepSeek-V3
+        - meta-llama/Llama-3.3-70B-Instruct
+        - Qwen/Qwen2.5-72B-Instruct
+        - Qwen/Qwen2.5-Coder-32B-Instruct
+        - meta-llama/Llama-3.1-8B-Instruct
   request_timeout_seconds: 30
 onboarding:
   seen:
@@ -219,31 +219,24 @@ onboarding:
 platforms:
   telegram:
     allow_admin_from:
-    - '330656040'
-    allow_from:
-    - '*'
-    - '330656040'
-    - '288669722'
-    - '8081511707'
-    - '149598904'
-    - '593209837'
-    - '1022586369'
-    - '386283612'
-    - '345948971'
+      - '330656040'
+    allow_from: '[''*'', ''330656040'', ''288669722'', ''8081511707'', ''149598904'',
+      ''593209837'', ''1022586369'', ''386283612'', ''345948971'', ''476876665'']'
     enabled: true
     group_allow_from:
-    - '*'
+      - '*'
     home_channel:
       chat_id: '330656040'
       platform: telegram
     require_mention: true
     user_allowed_commands:
-    - start
-    - help
-    - status
-    - clear
-    - new
-    - info
+      - start
+      - help
+      - status
+      - clear
+      - new
+      - info
+    gateway_restart_notification: false
 request_timeout_seconds: 30
 tts:
   edge:

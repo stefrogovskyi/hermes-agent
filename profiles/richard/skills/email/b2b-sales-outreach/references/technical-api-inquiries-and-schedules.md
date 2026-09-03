@@ -76,7 +76,7 @@ When carrier website and API differ, both are exposed:
 
 ---
 
-## 6. Commercial Negotiation: Budget Matching & Unit Price Defense
+## 6. Commercial Negotiation: Budget Matching, Levers & Objection Handling
 
 ### A. Proportional Volume Adjustment Rule
 - When a prospect requests a lower annual budget (e.g. $1,200/yr vs proposed $2,400/yr for 1,000 req/mo), **do not discount the unit rate ($0.20/req)**.
@@ -89,9 +89,57 @@ When carrier website and API differ, both are exposed:
 ### B. Offer Cleanliness
 - Avoid bundling unrequested free products (e.g. free tracking) if it risks devaluing that product line or complicating contract terms. Focus strictly on closing the requested component.
 
+### C. Startup Flexibility Bluff (Competitor Leverage & Non-Expiring Top-Up Wallet)
+- **The Bluff**: Early-stage startups claim a regional competitor (e.g. Shipsgo in Turkey) offers "flexible per-shipment terms without commitment" and ask for post-paid per-shipment billing without deposits.
+- **Tactical Response**:
+  1. **Call the Competitor Calmly**: Acknowledge the regional competitor by name without fear ("Shipsgo is well known, but our enterprise data infrastructure and direct carrier connectors are built for production reliability").
+  2. **Refuse Uncommitted Post-Paid Billing**: Protect engineering and infrastructure margins.
+  3. **Present a Decisive 2-Option Fork**:
+     - *Option A (Starter Subscription)*: 3-month commitment (e.g. 300 shipments/mo at $1.30 = $390/mo).
+     - *Option B (Prepaid Flex / Top-Up Wallet)*: Upfront deposit of **$500** with **zero monthly expiration**. Deduct at a higher unit rate (**$1.40/shipment**). Next payment is required ONLY when the $500 balance is exhausted.
+
+### D. Stepped Growth Incentive Model (Legacy SeaRates $0.80 Anchoring)
+- **Scenario**: Mid-volume clients (e.g. 380 shipments/mo) demand legacy SeaRates pricing of **$0.80/container**, which normally opens at 1,000+ monthly shipments.
+- **Counter-Strategy**:
+  - Do NOT collapse the baseline contract to $0.80.
+  - Offer a **Two-Tier Growth Structure**:
+    1. *Baseline Package (up to 380/mo)*: Preferential base rate of **$1.10/shipment** ($5,000/year instead of $6,800).
+    2. *Expansion Tier (all volume > 380/mo)*: Exactly **$0.80/shipment** for all growth volume.
+  - Protects baseline ARR while unlocking the client's target unit economics for their expansion.
+
+### E. Enterprise Capital-Efficiency Positioning (e.g. VesselFinder, MarineTraffic)
+- **Scenario**: High-volume maritime data platforms previously paid large multi-year lump sums on SeaRates (e.g. $20,000 prepaid for 25,000 containers over 18 months at $0.80/container).
+- **Counter-Strategy**:
+  - Match their historical **$0.80/container** rate.
+  - Frame Navo24 as **significantly more agile and capital-efficient**: offer a 12-month contract with a fraction of the upfront capital lock (e.g. **$4,000 for 5,000 shipments** or **$2,000 for 2,500 shipments** at $0.80 with fixed $0.80 overage).
+
 ---
 
-## 7. Bilingual Communication Protocol for Team Review
+## 7. Advanced Technical API Resolution & Milestone Precedence
+
+### A. Same-Day Event Chronology & `order_id` (Date Only, No Time)
+- When carriers report milestone dates without timestamps (`YYYY-MM-DD 00:00:00`), Navo24 enforces deterministic DCSA lifecycle precedence in the sequencing engine:
+  - **Origin / POL**: `Gate In / Vanning` -> `Loaded on Vessel (LOAD)` -> `Vessel Departure (DEPT)`.
+  - **Destination / POD**: `Vessel Arrival (ARRV)` -> `Discharged (DISC)` -> `Gate Out` -> `Empty Container Returned`.
+- Guarantee to client: `order_id` strictly sorts Arrival before Discharge, and Loading before Departure, provided the carrier did not misreport the calendar dates.
+
+### B. Leased Equipment Prefix Auto-Resolution (`RFSU`, `BEAU`, `SEGU`)
+- Leased boxes belong to leasing companies (e.g. Beacon Intermodal, Triton), where equipment owner != operating ocean line.
+- In multi-carrier cascade routing, ensure leased prefix resolvers probe dedicated line connectors (e.g. OOCL `OOLU`, Emirates `ESPU`) rather than timing out at parent alliance holding groups (e.g. COSCO).
+
+### C. Carrier Parameter Parity in Compatibility Endpoint
+- Legacy SeaRates query parameter was `sealine` (e.g. `&sealine=WHLC`), whereas some documentation examples show `carrier`.
+- Ensure query resolvers accept both `sealine` and `carrier` as exact aliases and confirm to clients that both parameters resolve properly.
+
+### D. ERP Gap Bridging & Web Access Positioning (e.g. Conexos, CargoWise)
+- When a prospect lacks direct native integration with their local ERP (e.g. Conexos in Brazil):
+  1. Confirm active ongoing negotiations/discussions with the ERP provider for native integration.
+  2. Detail practical Web Access workflow (individual/batch CSV upload, unified status dashboard, interactive satellite AIS map, exportable reports).
+  3. Close with a 15–20 minute live walkthrough demo invitation.
+
+---
+
+## 8. Bilingual Communication Protocol for Team Review
 When formulating technical replies for colleagues or team members (e.g. Stefan, Ekaterina):
 1. Provide the **ready-to-send English email draft** (structured with subject, clear headings, JSON examples, and documentation links).
 2. Always attach the complete **Russian translation** (`🇷🇺 Русский перевод черновика`) underneath to facilitate rapid internal review.

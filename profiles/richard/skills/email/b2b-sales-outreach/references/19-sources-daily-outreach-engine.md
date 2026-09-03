@@ -37,7 +37,23 @@ Directory sources often show generic contact emails or web forms. To ensure all 
 18. **CargoNet**: Supply chain security and logistics network.
 19. **Clay / Lusha / LinkedIn Logistics**: Enriched logistics decision-makers.
 
-## 3. Pre-Send Quality & Deliverability Gates
+## 3. Persistent Verified Multi-Source Pool Architecture & Dry-Run Testing
+To prevent scraper outages, dynamic CAPTCHAs, or token exhaustion from causing zero-yield runs:
+- **Centralized Pre-Verified Pool (`multi_source_pools.json`)**:
+  * Location: `/opt/hermes/profiles/richard/cache/multi_source_pools.json` (synced with `/opt/hermes/profiles/richard/data/all_19_sources_pool.json`).
+  * Contains pre-verified corporate domains, verified personal decision-maker names, and titles across all 19 sources.
+  * DFA leads continue to be dynamically queried from `/opt/hermes/profiles/richard/cache/dfa_members.xlsx` with `limit=5`.
+- **Zero Backfill & Strict In-Memory Source Quotas**:
+  * The toxic fallback `extra_dfa = collect_dfa_leads(...)` is completely eliminated.
+  * Every source has a strict cap of 5 contacts: `source_tallies[src] < MAX_PER_SOURCE (5)`.
+  * If any source yields less than 5, the engine sends only what is verified — it NEVER inflates another source to fill the gap.
+- **Dry-Run Testing & Verification CLI**:
+  * The engine supports `--dry-run` to verify pool counts, domain MX validity, and cross-CRM deduplication without sending actual emails or updating CRM:
+    ```bash
+    python /opt/hermes/profiles/richard/scripts/daily_online_outreach_engine.py --dry-run
+    ```
+
+## 4. Pre-Send Quality & Deliverability Gates
 1. **Cross-CRM Deduplication**:
    - Cross-check candidate emails across ALL 3 active Airtable bases before dispatch:
      * `Online Outreach` (`appdJR8VVczRxcVke` / Table `Outreach Leads`)
