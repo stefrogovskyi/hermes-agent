@@ -110,6 +110,19 @@ Initiate outbound calls with TwiML pointing to the WebSocket stream:
 </Response>
 ```
 
+### 7. Inbound Call Forwarding Architecture (SIM-to-Twilio Bridge)
+When the sales team operates a physical SIM card or mobile handset (e.g. UK mobile `+44 7...`) where WhatsApp, SMS, or mobile service must remain active on the device, but AI needs to answer all inbound voice calls:
+1. **Low-Cost Virtual Twilio Number**: Purchase a low-cost virtual number in Twilio (e.g. US Local for ~$1.15/mo with zero regulatory bundle overhead, or UK Local).
+2. **SIM Call Forwarding**: On the mobile phone holding the primary SIM card, enable unconditional call forwarding to the Twilio virtual number:
+   - *Via GSM USSD code*: Dial `**21*<Twilio_Virtual_Number>#` and press Call.
+   - *Via smartphone settings*: iOS (`Settings -> Phone -> Call Forwarding`) or Android (`Phone app -> Settings -> Calls -> Call Forwarding -> Always Forward`).
+3. **Twilio Inbound Routing**:
+   - In Twilio Console: **Phone Numbers -> Active numbers -> [Twilio Virtual Number]**.
+   - Under **Voice Configuration**, set **A Call Comes In** to `Webhook` (pointing to `https://<domain>/incoming-call`) or `TwiML Bin` containing the `<Connect><Stream url="wss://.../media-stream" /></Connect>`.
+4. **Outbound Caller ID Preservation**:
+   - Add the primary mobile number to **Phone Numbers -> Verified Caller IDs**.
+   - Outbound calls initiated by the AI use the verified mobile number as `From`, ensuring clients see the recognized business mobile on caller ID and call back into the forwarded route.
+
 ---
 
 ## Pitfalls & Verification Checklist

@@ -1,3 +1,3 @@
-Stefan Rogovskiy (Telegram ID: 330656040, dr.reenforce@gmail.com). Family: Wife Anna (Telegram ID: 726516571), Mother Elena (Telegram ID: 1896131307), Children Mark, Emma, Aviella.
+Stefan Rogovskiy (Telegram ID: 330656040, dr.reenforce@gmail.com). Family: Wife Anna (Telegram ID: 726516571), Mother Elena (Telegram ID: 1896131307), Children Mark, Emma, Aviella. Appreciates playful banter. When analyzing Odessa checkpoint reports, he strictly expects Europe/Kyiv local time (never UTC), exact timestamps, and thorough corridor checks across all streets/slang (no blind top-N truncation).
 §
 Stefan appreciates playful banter and pop-culture humor (e.g., referencing "Charlie's Angels" when speaking of the family). When analyzing Odessa checkpoint reports, he expects meticulous street-by-street checks with exact timestamps.

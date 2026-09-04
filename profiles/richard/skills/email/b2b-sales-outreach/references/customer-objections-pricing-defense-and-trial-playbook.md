@@ -78,3 +78,34 @@ When clients ask how Navo24 handles multi-layer data fusion:
 * **Carrier EDI/DCSA Layer**: Authoritative for landside and terminal operations (`Gate-in`, `Loaded on vessel`, `Discharged`, `Gate-out`, `Empty Return`, and customs release).
 * **AIS Telemetry Layer (Satellite + Terrestrial)**: Authoritative for open-ocean transit. Overrides carrier latency when carriers don't update for days; detects real-time berth and anchorage arrivals.
 * **Truthful ETA Engine**: When a carrier's nominal schedule is physically broken (vessel delayed at intermediate port or reduced knots), predictive ETA calculates observed arrival based on live AIS kinematics and destination port congestion.
+
+---
+
+## 6. Real-World Objection Handling: ETA Accuracy & Transshipment Inconsistencies
+
+### A. Answering "What is your percentage of ETA accuracy?"
+* **The Pitfall**: Never claim a blind "99% accuracy" — ocean carriers themselves only achieve ~55–65% schedule reliability globally.
+* **The Two-Tier Architecture Answer**:
+  1. **Carrier Raw Schedule**: 100% faithful replication of carrier published milestones.
+  2. **Navo Predictive ETA**: Achieves **88%–92% accuracy** within a 3–7 day arrival window by fusing 4 AIS feeds (110k+ vessels) with live port congestion statistics and vessel kinematics.
+  3. **Truthful ETA Standard**: We suppress intermediate transshipment hub arrivals rather than falsely reporting them as destination arrival dates in the client's CRM.
+
+### B. The "Vessel Departed but Container Discharged" Payload Anomaly
+* **The Scenario**: The JSON response shows a map pin out at sea following a departed vessel, while the container was discharged days ago at an intermediate port (e.g. Rodman, Panama).
+* **Root Cause**: The carrying vessel continued its rotation southward, while the container is dwelling at the terminal awaiting a feeder connection (`NOT_ON_BOARD`).
+* **Sales Explanation**: Be transparent that the container is physically grounded in port waiting for on-carriage allocation, while map pin reconciliation pins the grounded container to the terminal rather than tracking the departed vessel.
+
+---
+
+## 7. Migration In-Flight Shipments & Quarterly Soft-Cap Billing
+
+### A. Absorbing In-Flight Shipments from SeaRates
+* When clients switch from SeaRates with 300+ active containers mid-transit and fear double billing:
+  - Offer an immediate one-time **Migration Allowance / Bonus credits** (e.g. +350 free container slots) upon activating their plan so ongoing voyages are tracked at zero extra charge.
+  - Temporarily grant 1,000 test credits for 48–72 hours so their legacy polling scripts can query the entire fleet uninterrupted during testing.
+
+### B. Communicating Quarterly Billing without Hard Caps
+* When splitting an annual volume (e.g. 5,000 shipments/yr) into quarterly invoices (1,250 shipments/quarter):
+  - State clearly that the **entire 5,000 volume is available upfront with zero technical hard caps** to avoid operational disruptions during volume spikes.
+  - The 1,250 number is strictly a **notional accounting milestone** aligned with quarterly invoicing.
+  - Pacing: Next invoice is issued 2 weeks before quarter-end, or triggered early only if the notional milestone is consumed ahead of schedule.

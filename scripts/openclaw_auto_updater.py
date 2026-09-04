@@ -27,7 +27,7 @@ def check_and_update():
     # 1. Fetch remote updates
     try:
         log("Checking for OpenClaw upstream updates...")
-        res_fetch = subprocess.run(["git", "-C", APP_DIR, "fetch", "origin"], capture_output=True, text=True, timeout=60)
+        res_fetch = subprocess.run(["git", "-C", APP_DIR, "fetch", "origin"], capture_output=True, text=True, timeout=300)
         if res_fetch.returncode != 0:
             log(f"Git fetch error: {res_fetch.stderr.strip()}")
             return

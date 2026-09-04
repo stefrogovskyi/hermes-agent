@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{PRODUCT_NAME}} · Presentation | Navo24</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=ranade@200,300,500,700&f[]=switzer@200,300,400,500,600,700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-canvas: #070B14;
+      --bg-paper: #0E1626;
+      --bg-card: #131E34;
+      --bg-card-hover: #192744;
+      --text-ink: #FFFFFF;
+      --text-muted: #94A3B8;
+      --line: rgba(255, 255, 255, 0.10);
+      --signal: {{ACCENT_COLOR}}; /* e.g. #E22319 for FreightRates, #1F4FE6 for Tracking */
+      --signal-bright: {{ACCENT_BRIGHT}};
+      --font-display: 'Ranade', -apple-system, sans-serif;
+      --font-body: 'Switzer', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    [data-theme="light"] {
+      --bg-canvas: #FCFCFB;
+      --bg-paper: #FFFFFF;
+      --bg-card: #F6F8FA;
+      --text-ink: #0B0C0E;
+      --text-muted: #59616B;
+      --line: #E2E8F0;
+    }
+    /* Controls: ← / →, Space, Home, End, Touch swipe */
+    /* Header: Clean Logo Mark ONLY (No words next to logo) */
+    /* Slides 2+: White product logo in .slide-header-row */
+  </style>
+</head>
+<body>
+  <!-- Header with clean icon-only logo and controls -->
+  <header class="deck-header">
+    <div class="brand-mark-only">
+      <!-- 32x32 circle masked logo -->
+    </div>
+    <div class="deck-controls">
+      <span class="slide-counter"><span id="currentSlideNum">01</span> / 10</span>
+      <button id="prevBtn">←</button>
+      <button id="nextBtn">→</button>
+      <button id="themeToggleBtn">☀️</button>
+    </div>
+  </header>
+  <!-- Main Slides Stage -->
+</body>
+</html>

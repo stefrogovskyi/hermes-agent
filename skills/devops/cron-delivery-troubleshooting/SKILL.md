@@ -92,3 +92,15 @@ When the true cause turns out different/bigger than an earlier explanation you g
   2. For every job inheriting the default model (`model: null`), synchronize `model_snapshot` and `provider_snapshot` to match the exact new active model string (e.g. `google/gemini-3.8-flash`, provider `gemini`).
   3. Jobs explicitly pinned to a specific engine (e.g. Archie blogwriting on `claude-sonnet-5`) must have their `model_snapshot` pinned to that same engine.
 
+### 4. Spurious Burst Deliveries via `catch_up_occurrences`
+- **Root Cause:** When heavy file system or git operations occur (e.g. `git-filter-repo`, large branch resets, time drift), Hermes schedulers across profiles may perceive the timestamps as a reboot/lag.
+- Hermes creates a temporary file `catch_up_occurrences` in `/opt/hermes/cron/` and profile cron directories, causing a rapid-fire "burst" execution of all jobs at once.
+- **Prevention & Fix:**
+  1. In all `jobs.json` definitions, explicitly declare `"catch_up": false` for recurring jobs unless historical replay is strictly intended.
+  2. If burst triggers occur, immediately purge all `catch_up_occurrences` files:
+     ```bash
+     find /opt/hermes -name "catch_up_occurrences" -delete
+     ```
+  3. Ensure jobs have `"catch_up": false` written across all cluster profiles.
+
+

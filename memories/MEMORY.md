@@ -8,9 +8,7 @@ WORK STYLE: Stefan wants 24/7 autonomous proactive work. Priority rule: if Stefa
 §
 КАНБАНЫ: VERCEL. РЕЕСТР КРОНОВ/СКИЛЛОВ: Google Sheet (1WjOtga9-heqcd2gKdAkCdUZ-Ocg75EDCaSKgAZsP0ew).
 §
-Hostinger: u473746908 (aavalanche.com), SSH 82.29.199.155:65002.
-§
-Navo24 API key (NAVO_API_KEY) covers 5 Navo APIs. NO AGENT MAY IMPERSONATE STEFAN. B2B CRM/отчёты: строго Ричард (@richnavobot).
+Hostinger: u473746908 (aavalanche.com), SSH 82.29.199.155:65002. Navo24 API (NAVO_API_KEY) covers 5 APIs. NO AGENT MAY IMPERSONATE STEFAN. B2B CRM: Ричард.
 §
 ГРУППЫ TG: агенты отвечают любому участнику при @теге/имени/reply; ответы бот-боту блокируются.
 §
@@ -22,4 +20,4 @@ VPS-кроны в UTC (Киев=UTC+3). Desktop-mst5pt7 (Stefan@100.79.157.46) =
 §
 Career Scanner: 11 API. Fallback: Gemini 3.8 Flash->3.7->2.5->Nous->NVIDIA->Gonka24. Archie: claude-sonnet-5 (блоги строго на Sonnet). OpenClaw: Gemini 3.8 Flash.
 §
-ОТЧЁТЫ/УВЕДОМЛЕНИЯ КРОНОВ: на русском, с эмодзи, СТРОГО Markdown. Никаких HTML-тегов (<b>, <code>). Индексатор: примеры файлов/папок. Google Sheet: 6 колонок + Models с таймстепом. Fallback: 03:00 Киев с Servarica, на ПК off. Failover: Servarica ⟷ ПК.
+ОТЧЁТЫ/УВЕДОМЛЕНИЯ КРОНОВ: на русском, с эмодзи, СТРОГО Markdown (без HTML-тегов <b>, <code>). Индексатор: примеры файлов/папок. Google Sheet: 6 колонок + Models с таймстепом. Git: жесткий .gitignore (*.env, *token*.json, *secret*.json, backups/, cache/, sessions/). Утечки чистятся через git-filter-repo + force push.

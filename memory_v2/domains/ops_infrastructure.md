@@ -33,3 +33,20 @@
 - Focus regions: EU, Qatar, USA, Australia, China, Japan, Canada, G20 countries.
 - Email / Identity: `contact@navo24.com`, signed as Harrison Croft.
 - Artifacts: Submission reports, Google Sheet tracking link, direct submission reports to Stefan.
+
+## Git Repository Hygiene & History Scrubbing Protocol
+- **Prohibited Tracked Patterns:** `*.env`, `*.env.*`, `*token*.json`, `*secret*.json`, `*service_account*.json`, `*credentials*.json`, `*.session`, `*.tar.gz`, `backups/`, `cache/`, `sessions/`, `logs/`, `node_modules/`.
+- **Pre-flight Safety Backup:** Before running any destructive Git history rewrites, create an all-inclusive bundle backup:
+  ```bash
+  git bundle create /root/hermes_pre_filter_backup.bundle --all
+  ```
+- **Index Cleanup:** Remove untracked files already in index while preserving files on disk:
+  ```bash
+  git rm -r --cached <path>
+  ```
+- **Deep History Purge:** Use `git-filter-repo` (inside venv `/opt/hermes/hermes-agent/venv/bin/git-filter-repo`):
+  ```bash
+  /opt/hermes/hermes-agent/venv/bin/git-filter-repo --invert-paths --paths-from-file /tmp/paths_to_strip.txt --force
+  ```
+- **GitHub Secret Scanning Response:** If an API key or token was committed, immediately rotate the credential (GitHub Secret Scanning notifies provider APIs within seconds). Merely deleting the file in a new commit does NOT remove it from commit history or stop automated scanners.
+

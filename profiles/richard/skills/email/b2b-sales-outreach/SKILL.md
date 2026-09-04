@@ -50,7 +50,21 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
      * Extract the complete body (avoid Microsoft Graph `bodyPreview` 255-character truncation).
      * ALWAYS provide a complete Russian translation of the incoming message, a business breakdown of lines/quotas, AND a complete Russian translation of Richard's proposed draft response.
      * **Individual Sales Team Testimonials Loop**: Weekly Monday reminders (`send_weekly_sales_testimonial_reminder.py` / `0 5 * * 1` UTC) must send separate, individual personalized emails addressed by first name (`Алёна`, `Екатерина`, `Лилия`, `Никита`, `Олег`) with `CC: stefan@navo24.com, lxxmng@navo24.com`.
-     * **Sales Team Onboarding & Context Files**: When granting Telegram access to sales colleagues (e.g. Nikita `@nikita51155` ID `288669722`), add their numeric ID to `TELEGRAM_ALLOWED_USERS` in `.env` and `platforms.telegram.allow_from` in `config.yaml`, maintain `platforms.telegram.user_allowed_commands: ['start', 'help', 'status', 'new', 'clear', 'info']`, create a dedicated profile under `/opt/hermes/profiles/richard/team/<username>.md`, and operate strictly in `SENIOR SALES MENTOR` mode without leaking server secrets.
+     * **Sales Team Onboarding & Context Files**: When granting Telegram access to sales colleagues (e.g. Nikita `@nikita51155` ID `288669722`, Lena `@OlenaT1` ID `476876665`), add their numeric ID to `TELEGRAM_ALLOWED_USERS` in `.env` and `platforms.telegram.allow_from` in `config.yaml`, maintain `platforms.telegram.user_allowed_commands: ['start', 'help', 'status', 'new', 'clear', 'info']`, create a dedicated profile under `/opt/hermes/profiles/richard/team/<username>.md`, and operate strictly in `SENIOR SALES MENTOR` mode without leaking server secrets.
+     * **Sales Campaign Launch Authority Guardrail**:
+       - Sales team members (e.g. Lena, Nikita) are strictly prohibited from launching or triggering bulk outreach campaigns directly. Only Stefan Rogovskiy can authorize campaign execution.
+       - If a manager asks to launch a campaign, decline politely: *"Запуск и управление массовыми рассылками координируются напрямую через Стефана. Я с радостью помогу разобрать лидов, проверить базу, подготовить тексты или рассчитать тарифы для клиентов"*.
+     * **Team Manager Inbound Polling & Direct Telegram Routing**:
+       - When monitoring outreach responses for team members (e.g. Lena `olena.h@navo24.com`, Nikita `nikita@navo24.com`):
+       - Access mailbox via MS Graph API Application permissions (`https://graph.microsoft.com/v1.0/users/{manager_email}/mailFolders/inbox/messages?$top=10&$orderby=receivedDateTime desc`).
+       - Triage inbound: filter out internal echoes, parse sender contact details, clean message body, and generate full Russian translation and tailored draft reply.
+       - Direct Notification Isolation: Deliver formatted alert strictly to the assigned manager's personal Telegram chat ID (`476876665` for Lena, `288669722` for Nikita) via Telegram Bot API `sendMessage`. DO NOT flood Stefan's personal Telegram with individual manager outreach alerts unless explicitly requested.
+       - Two-Way Google Sheets CRM Sync: Match the sender email against the campaign spreadsheet (e.g. `SeaRates B2B Requests`, ID `1rfmzmlDLNv3l2O1g2fYjw0PL40IGbsT-sdq6pA2eFZA`), update status to `Replied / Warm`, record response date and inquiry essence.
+       - Google Sheets Auth Safety: Private user sheets reject Service Accounts without explicit sharing (`Invalid JWT Signature` / 403); always use OAuth2 user credentials (`google_token.json` via `Credentials.from_authorized_user_info`) for seamless read/write access.
+       - *(See `references/team-manager-inbound-polling-and-crm-sync.md` and `references/team-daily-summary-and-campaign-guardrails.md` for full implementation code, MS Graph multi-mailbox polling, direct Telegram alert dispatch, daily team digest, and Google Sheets CRM sync).*
+     * **Daily Executive Team Activity Digest (21:00 / 19:00 UTC Cron)**:
+       - Nightly cron job (`richard-daily-team-summary` / `0 19 * * *`) executes `/opt/hermes/profiles/richard/scripts/generate_daily_team_summary.py`.
+       - Queries `state.db` for all messages across team members (`user_id != '330656040'`), groups conversations by manager, and uses `gemini-2.5-flash-lite` with generous output tokens (4096) to generate an executive brief detailing: (1) Active managers & query counts, (2) Specific client negotiations, deals, and volume quotes, (3) Key resolutions, approved copy, and technical bug fixes, (4) Blockers and items requiring Stefan's attention.
    - **NO ARTIFICIAL CRON QUEUES**: NEVER defer approved responses into a lingering 1-hour cron job or background batch when immediate dispatch is expected. Lingering queues cause loss of conversation sequence, duplicate approvals, and stale context.
    - When Stefan says "Стоп", stop immediately without exploratory searches.
 3. **Inbound Replies vs. Mass Cold Outreach**:
@@ -109,6 +123,18 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
                1. Multi-carrier dispersal: Importers moving freight across 3-5+ ocean carriers (MSC, Maersk, CMA CGM, ONE, Evergreen) suffer from manual portal-checking chaos — primary fit for Tracking unified feed.
                2. Port congestion & D&D exposure: Target importers with discharge ports at LA/Long Beach, NY/NJ, or Savannah where free-time expiration creates urgent D&D risk.
                3. High-volume enterprise sizing: Annual volumes of 500–5,000+ shipments qualify for enterprise contracts ($15k–$50k/yr) or upper-tier PAYG rates ($3.00–$4.00/container).
+             * *Early-Stage Software Platforms & Design-In Strategy*: When dealing with founders/CTOs developing proprietary freight/logistics software who currently move low volume (0–5 containers/mo):
+               - Anchor on the Free Tier ($0 for up to 5 active containers, 100 calls/mo) as a risk-free development runway to achieve code design-in before public launch.
+               - Alleviate language/call anxiety: never force a voice call if they express discomfort with English; offer written chat/email and native language (e.g. Spanish) to eliminate friction.
+               - Bundle FreightRates & Schedules API sandbox calls at zero cost during dev phase for quote digitization.
+               - Maintain a 24–48h follow-up check-in to verify registration and offer direct engineer-to-engineer API assistance.
+             * *Agentic AI & Supply Chain LLMs Positioning (MCP-Native)*: For AI workflow platforms and supply chain thought leaders (e.g. Dr. Muddassir Ahmed / SCM Sensei AI):
+               - Position Navo24 as the premier Model Context Protocol (MCP) data spine for autonomous agents (Claude, LangChain, CrewAI, AutoGen, OpenAI tool-calling).
+               - Pitch the 3 core agentic workflows: (1) Autonomous Demurrage & Exception Agent, (2) Multi-Carrier Procurement & Reliability Copilot, (3) Natural Language Visibility Copilot.
+               - Propose a dedicated PoC Sandbox API key and developer exchange.
+               - *Overcoming Anti-AI Slop Skepticism*: When technical prospects challenge drafts as generic ChatGPT output, disarm with transparency, cite real platform integrations with live links (e.g. `[Shipzy](https://shipzy.com)`), open developer docs (`https://navo24.com/developers/`), the open MCP spec (`https://modelcontextprotocol.io`), and radical honesty: admit that full autonomous freight-rebooking agents do not exist in production anywhere yet.
+               - *Disguised Vendor / Reverse Pitch Trap*: When an influencer or competitor-partner uses "evaluating your AI" as a pretext to pitch their own consulting or wrapper API ("Alternatively, we could provide our API to Navo24... I would be happy to discuss with your CEO"), disqualify immediately. Decline politely without escalating to founders and exit cleanly in 3 sentences.
+               - *(See `references/agentic-ai-and-early-stage-platform-deals.md` for full playbooks and scripts).*
            - **Google Sheets API & gspread Integration**: Connect via Google Service Account (`richard-bot@navo-sales-sheets.iam.gserviceaccount.com`, `/opt/hermes/profiles/richard/google_service_account.json`).
            - **Single-Page Unified Master Workspace Mandate**: Do NOT isolate email drafts into separate tabs or disjointed files. Users require seeing each lead and all 4 complete email drafts (`Touch #1 Initial Pitch`, `Touch #2 Follow-up 1`, `Touch #3 Follow-up 2`, `Touch #4 Breakup`) directly on **one unified row on a single master page**. When adding new batches (Batch 2: #101–200, Batch 3: #201–300), append them directly to the bottom of the main worksheet (`🎯 Forwarders & NVOCC`) so the rep scrolls through one continuous table.
            - **Pipeline Segregation Mandate**: Strictly separate personal sales rep outbound activity (`Personal Email Base` -> `Personal Sent` -> `Personal Replied`) from company-routed broadcast inbounds on both Google Sheets Dashboards and CRM tables (`🏢 Company Routed` vs `🎯 Personal Cold Email`).
@@ -250,6 +276,19 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
      4. **Емейл 4 (Полноценный оффер Early Bird)**:
         `Отлично`
         `Мы работаем с экспедиторскими компаниями через принципиально новую экосистему для цифровой логистики... [3 месяца бесплатного тестового периода, бесплатное обновление сайта, калькулятор фрахта, автотрекинг, объединённая сеть тарифов].`
+
+   - **4-Step Conditional Reconnection Sequences (Day 0, 4, 9, 16 Pattern)**:
+     * When re-engaging past customer bases or inbound archives (e.g. SeaRates Inbound B2B Requests):
+       - **Touch 1 (Day 0):** `quick question, {company}` — Reconnection via SeaRates tracking engineering pedigree, asking if needs are solved or still manual.
+       - **Touch 2 (Day 4):** `what changed` — Product suite expansion (TrackingMCP, AirCargoMCP, SchedulesMCP, LoadingMCP, FreightRatesMCP).
+       - **Touch 3 (Day 9):** `worth a quick look?` — Pragmatic 15-minute qualification or live testing of a specific use case.
+       - **Touch 4 (Day 16):** `closing the loop` — Respectful breakup, leaving the permanent Free Tier (5 containers, no card, no expiry) open.
+     * **Automation & Pacing Rules**:
+       - Sequences advance **strictly if the recipient has NOT replied and email has NOT bounced**.
+       - Automated inbox polling via MS Graph API (`olena.h@navo24.com` or manager mailbox) monitors client responses: halts sequence immediately, marks Google Sheet as `Replied / Warm`, and triggers instant Telegram briefing to the assigned sales rep (`@OlenaT1`).
+       - Mail Delivery Subsystem / NDR monitoring extracts failed recipient addresses, updates Google Sheet status to `Bounced`, and halts future touches.
+       - Pacing: Cap new Touch 1 sends at 100–150/day to preserve domain reputation on large bases (9,000+ leads).
+       - RFC 5322 In-Reply-To / References headers must be preserved across Touches 2–4 to maintain a single email thread in the client's inbox.
    - **Google Drive API File Retrieval**: When files (such as statutory/incorporation documents in `Navo / Statute`) are not synced locally on the server filesystem, use the stored Google OAuth token at `/opt/hermes/google_token.json`. Refresh the access token via `https://oauth2.googleapis.com/token` with `refresh_token`, `client_id`, and `client_secret`, and query `https://www.googleapis.com/drive/v3/files` directly to list and download files from Google Drive.
    - Signature Rule:
    - **NO EXTRA PARAGRAPHS OR BLANK LINES** at the very top of the email body text.
@@ -314,7 +353,8 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
        * **Cadence**: Enforce a **5-minute (300s) delay** between sends for all multi-recipient batches.
        * **M365 Policy Replication**: After modifying Exchange Online policies via PowerShell (`Set-HostedOutboundSpamFilterPolicy`), allow **30–60 minutes for edge cluster replication** before retrying rejected recipients.
      - **Mass Cold Outreach via Resend (`e.navo24.com`) [On Explicit User Direction Only]**:
-       * Outbound bulk cold emails MUST be sent from `sales@e.navo24.com` via Resend REST API (`https://api.resend.com/emails`), with `Reply-To: rich@navo24.com` (routes directly to Richard's active M365 inbox) and RFC 8058 `List-Unsubscribe` headers.
+       * Outbound bulk cold emails MUST be sent from `sales@e.navo24.com` (or `rich@e.navo24.com` for executive outbound) via Resend REST API (`https://api.resend.com/emails`), with `Reply-To: rich@navo24.com` (routes directly to Richard's active M365 inbox) and RFC 8058 `List-Unsubscribe` headers.
+       * **API Key Rotation & Environment Precedence Trap**: When rotating `RESEND_API_KEY` in `.env`, standard `load_dotenv()` does NOT overwrite variables already exported in the shell environment. Always use `load_dotenv('/opt/hermes/profiles/richard/.env', override=True)` in Python scripts and sync the active shell environment (`export RESEND_API_KEY="..."`) to avoid persistent 401 Unauthorized errors from stale cached keys.
        * Strictly adhere to the warm-up ramp (Day 1-2: 50, Day 3-4: 150, Day 5-7: 500, Day 8-10: 1,000/day).
        *(See `references/resend-outreach-and-warmup.md` for full implementation and sending code).*
      - **NO STATIC REPETITIVE TEMPLATES**: Cold outreach MUST use 100% dynamic AI personalization with high combinatorial variety (25+ unique subject lines, 12+ greetings, 10+ intros, 12+ contexts, 12+ CTAs -> 500,000+ unique email variations). Static templates cause Microsoft Exchange Online Protection (EOP) to flag outbound spam and block sending (`550 5.1.8 Access denied, bad outbound sender AS(42004)`).
@@ -485,4 +525,6 @@ Guidelines for drafting, translating, and confirming B2B sales email replies for
      * Recommends active paid subscribers contact respective SeaRates refund team as noted in their SeaRates login banner.
      * Introduces Navo24 founded by core SeaRates leadership team with AI logistics technology and developer portal link (`https://navo24.com/developers/`).
      * Directs demo inquiries and replies to `sales@navo24.com` with Richard Marlowe's official signature.
+   - **Technical Inquiries, ETA Integrity & In-Flight Migration Strategy**:
+     * *(See `references/technical-inquiries-in-flight-shipments-and-eta-integrity.md` for full lifecycle pricing math vs monthly credit decay, grandfathering in-flight shipments, Truthful ETA transshipment suppression, bulk upload report composition rules, and transient `AUTO_CANT_FIND_INFO` diagnostics).*
    - **HTML Layout**: Clean, responsive, readable typography (15px `#1e293b`, 1.6 line height), callout box for critical refund/action items, and standard Richard Marlowe HTML signature with 1 blank line before signature and no top horizontal rule.

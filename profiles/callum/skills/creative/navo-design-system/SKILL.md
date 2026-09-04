@@ -1,189 +1,135 @@
 ---
 name: navo-design-system
-description: Use when designing Navo pages or emails. Navo Brand Book.
-version: 1.0.0
+description: Navo24 Design System v6.0 (Official Master Brand Guidelines).
+version: 6.0.0
 author: Callum Vance
 license: MIT
-tags: [navo, design, brandbook, css, html, email, UI]
-platforms: [linux, macos, windows]
-triggers:
-  - design for navo
-  - navo brand
-  - navo24 email
-  - navo24 style
-  - navo html template
-  - navo brandbook
-  - trackingmcp design
+tags: [design-system, navo, branding, tokens, ui, colors, typography]
 ---
 
-# Navo24 Design System & Brand Book (v5.52)
+# Navo24 Design System (v6.0 Master Brand Guidelines)
 
-Guidelines, tokens, typography standards, and copy rules for all Navo24 platforms (`navo24.com`, `trackingmcp.com`, `schedulesmcp.com`, `loadingmcp.com`, `freightratesmcp.com`).
+Authoritative specification for all Navo24 digital interfaces, product apps, landing pages, slide decks, and marketing visuals.
 
-## 1. Brand Palette & Color Tokens
+---
 
-### Core Palette
-- **Navy (`#0C2A5E`):** Navy-ink ground, primary header background on marketing surfaces.
-- **Cobalt (`#1F4FE6`):** Primary signal color for buttons, key links, and CTAs (`#4A86FF` on dark grounds).
-- **Signal Strong (`#1733B5`):** Button border and active state.
-- **Signal Soft (`#EEF1FE`):** Light accent background for callout boxes and feature highlights.
-- **Turquoise (`#12C2C2`):** Instrument accent for tracking and in-transit status.
-- **Instrument Amber (`#E8A33D` / Soft `#FDF3E3`):** Functional accent for money, demurrage clocks, and attention (never used in the identity mark).
-- **Canvas (`#FCFCFB`):** Light theme main background.
-- **Paper (`#FFFFFF`):** Card / surface background.
-- **Ink (`#0B0C0E`):** Primary text color.
-- **Ink-500 (`#59616B`):** Secondary text and muted labels.
-- **Line (`#E9E8E3`):** Border lines and dividers.
+## 1. Brand Philosophy & Ecosystem Identity
+- **Master Brand Rule:** NAVO operates as one master brand. Individual products are NOT independent visual brands — the NAVO identity remains consistent while product accent colors help users recognize different capabilities.
+- **Core Purpose:** Move global logistics from coordination to orchestration.
+- **The Target Motif:** The "O" in NAVO is built from concentric rings representing a destination, signal, and convergence of multiple systems around one objective.
 
-## 2. Typography Hierarchy
+---
 
-- **Display / Hero Titles:** Ranade (Fontshare: `https://api.fontshare.com/v2/css?f[]=ranade@200,300,500,700&display=swap`). Light 300 / Ultralight 210, tracking `-0.03em`.
-- **Body Text:** Switzer (Fontshare: `https://api.fontshare.com/v2/css?f[]=switzer@200,300,400,500,600,700&display=swap`). Extralight 200 to Regular 400, line-height 1.5.
-- **Figures, Badges, & Eyebrows:** JetBrains Mono (uppercase, tracked `+0.10em` to `+0.14em`).
-- **Font Stack Fallbacks:**
-  - Display Titles: `'Ranade', 'Switzer', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`
-  - Body Text: `'Switzer', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`
-  - Monospace: `'JetBrains Mono', SFMono-Regular, Consolas, monospace`
+## 2. Color Palette & Design Tokens
 
-## 3. Copy & Prose Rules (§08 The Voice)
+### 2.1 Backgrounds & Environments
+- **Primary Dark Graphite (Brand Canvas):** `#181818` (Preferred dark environment for the primary NAVO identity).
+- **Product Page Canvas:** `#0A1117` (Deep technical navy/slate for SaaS app surfaces, cards, and tables).
+- **Deep Black:** `#000000` (Pure contrast base).
+- **Warm Dark:** `#201F1C` (Soft dark background alternative).
+- **Light Canvas:** `#FCFCFC` / `#FFFFFF` (Clean light mode canvas).
 
-- **Spaced Em-Dash Rule:** The spaced em-dash (` — `) is **banned from prose** as an AI-writing tell. Use colons, semicolons, commas, or periods instead. (Allowed only in titles/labels like `"TrackingMCP — Dashboard"`).
-- **Zero-Emoji UI Rule (Strict Brand Standard):** Gratuitous, arbitrary, or colorful emoji icons (`✍️`, `👁️`, `🎯`, `🕒`, `📚`, `🔍`, `🖼️`, `⚡`, `🏠`, `📦`, `📊`, `⚙️`, `🛡️`, `🚪`, etc.) are **strictly prohibited** in tab labels, buttons, navigation bars, headers, and UI controls. No unauthorized emojis anywhere in Navo UI. Interface elements must be clean, typography-led (Switzer, Ranade, JetBrains Mono) or accompanied strictly by brand SVG line icons (stroke width 1.8–2.0px).
-- **Dual-Staging & Repository Topography:**
-  - **Umbrella Portal (`navo24.com`):** Repo `Navo24S/navo24-web` (Astro v5, TailwindCSS v4). Staging for Stefan's isolated branch is on `https://stefan.staging.navo24.com/` (`navo24-web-stefan.pages.dev`).
-  - **Product Web App (`trackingmcp.com`):** Repo `Navo24S/trackingmcp` (React SPA, Vite, Supabase). Staging is on `https://tracking.staging.navo24.com/` (`navo24-tracking-web-staging.pages.dev`).
-- **Endorsement Rule (§06):** Legal footers and product endorsements must use `© 2026 [Product] · a Navo24 product` in lowercase JetBrains Mono (10–11px, `ink-500`).
-- **Team Names:** Robert's title is Full-Stack Developer (first name "Роберт" only, do NOT add "Vance" surname). Callum Vance is Tech Lead.
+### 2.2 The Target Rings & Ecosystem Products
+Built with strict concentric color hierarchy:
+1. **Outer Ring / Base:** `#113EC9` (Deep Royal Blue)
+2. **Ring 2 / TrackingMCP:** `#1F4FE6` (Electric Cobalt Blue — Visibility, movement, real-time tracking)
+3. **Ring 3 / Rates / Demurrage:** `#E2231A` (Vivid Red — Market rates, alerts, cost thresholds)
+4. **Ring 4 / LoadingMCP:** `#FF8135` / `#FF7A1F` (Signal Orange — Execution, operational movement)
+5. **Inner Center:** White (`#FFFFFF`) on dark backgrounds, Black (`#000000`) on light backgrounds.
 
-## 4. Brand Vector Assets
+### 2.3 Product Specific Accent Colors
+- **TrackingMCP:** Electric Blue (`#1F4FE6` / `#113EC9`)
+- **SchedulesMCP:** Ocean Teal (`#77E6FF` / `#31D8FE` / `#12C2C2`)
+- **LoadingMCP:** Signal Orange (`#FF8135` / `#FF7A1F`)
+- **FreightRatesMCP:** Vivid Purple (`#A055FF`) & Rate Red (`#E2231A`)
+- **AirCargoMCP:** Sky Cyan (`#31D8FE`)
 
-- **White Wordmark:** `https://navo24.com/brand/navo-wordmark-white.svg`
-- **Dark Wordmark:** `https://navo24.com/brand/navo-wordmark.svg`
-- **Identity Mark:** `https://navo24.com/brand/navo-mark.svg`
+### 2.4 Accent & Communications Colors
+- **Citron / Electric Lime:** `#CEF868` / `#B5ED30` (High energy external communications, badges, key callouts).
+- **Yellow Gold:** `#FFCF01` (Metrics, star ratings, warm badges).
+- **Hyper Pink / Magenta:** `#FA61AA` / `#FE8FC9` (Internal communications, highlights).
 
-## 5. Email Template & CTA Layout Rules
+### 2.5 Strict Accessibility & Text Contrast Rules
+- **Color text:** Recommended ONLY on solid Black, Dark Graphite (`#181818`), or Pure White backgrounds.
+- **Colored background surfaces:** On bright colored cards/pills (e.g. `#CEF868`, `#FFCF01`, `#FF8135`), **ONLY 100% Black text (`#000000`)** is permitted. Never use white text on yellow, lime, or orange.
+- **Never use light gray shadows** on white backgrounds.
 
-- **CTA Button Layout (Avoid Edge-to-Edge Banner Overflow):**
-  - Never put `background-color` on a `width: 100%` wrapper `<td>` around a CTA button link. That stretches the button background edge-to-edge across the card padding.
-  - Wrap the CTA button in `<table align="center">` and place `background-color: #1f4fe6`, `display: inline-block`, `padding: 14px 28px`, `border-radius: 6px`, and `box-sizing: border-box; max-width: 100%;` directly on the `<a>` element.
-- **Vertical Step Lists:**
-  - On step-by-step onboarding boxes ("Step 1 → Step 2"), stack steps vertically (one under the other) with individual step badges (`Step 1`, `Step 2`) and vertical connectors (e.g. `border-left: 2px dashed #12c2c2`). Avoid crowding steps into horizontal single-line badges.
-- **Header Badging:**
-  - Header right corner should feature a clean `navo24.com` badge in JetBrains Mono (`11px`, `color: #12c2c2`, `background-color: rgba(18, 194, 194, 0.12)`).
-- **Secondary Contact Line Positioning:**
-  - Secondary contact options (e.g. `sales@navo24.com` / demo requests) should be placed as a clean plain text sentence with an underlined mailto link directly above the sign-off (`Best regards, / The Navo24 Team`), rather than a secondary button.
+---
 
-## 6. Slide Decks & Presentation Artifacts
+## 3. Typography Hierarchy
 
-- **Theme & Both Themes Rule (§03):** Support both Dark (`#0A0E16` canvas, `#121826` paper, `#1A2234` cards) and Light (`#FCFCFB` canvas, `#FFFFFF` paper, `#F8FAFC` cards) via a Theme Toggle button in the header (`☀️ Light` / `🌙 Dark`) with state saved in `localStorage`.
-- **Typography:** Ranade for display slide titles (`h1`, `h2`), Switzer for body/cards, JetBrains Mono for eyebrows/badges/SLA tags. Include Fontshare URLs in `<link>` tags.
-- **Header Bar:** Navo white wordmark SVG, product badge (`navo24.com` or project badge), slide counter (`1 / N`), Theme Toggle button, and keyboard controls (`← / →`).
-- **Mobile Responsiveness:**
-  - On screens `<= 768px`, collapse 2-column/4-column card grids to 1 column (`1fr`).
-  - Do NOT lock viewport height (`height: 100vh; overflow: hidden`) on mobile — allow smooth scrolling.
-  - Implement mobile touch swipe support (`touchstart` / `touchend`).
-  - Provide a sticky bottom mobile control bar (`← Назад | Слайд N из 8 | Вперед →`).
-- **Modal Window UX Rule:** ALL modal windows in Navo apps and dashboards MUST support closing via Escape key (`e.key === 'Escape'` keydown listener) and backdrop click.
-- **Interactive Slide Decks:** Support keyboard controls (`← / →`, `Space`, `Home`, `End`), touch swipe (`touchstart` / `touchend`), progress bar indicator, slide counter (`Slide X of N`), and both Light/Dark modes with `localStorage` persistence.
-- **Deployments:** Package with static `index.html` + `vercel.json` (`cleanUrls: true`) for 1-click Vercel deployment using `VERCEL_TOKEN=vcp_2QMSKEwYW3Dg4vdKOTB8q7IRCr2uCEFWeXgVMDAr18jPnuhEKf0KYAYO vercel <dir> --prod --yes --scope navo5`.
+### 3.1 Typefaces
+- **Primary Display / Headlines:** **Ranade** (Light 300, Medium 500, Bold 700). Geometric, directional, architectural.
+- **Interface & Body:** **Switzer** (Regular 400, Medium 500, Semibold 600). Clean neo-grotesque sans-serif with high legibility.
+- **Code, Data & Badges:** **JetBrains Mono** (400, 500, 700). Monospaced for ports, container numbers, logs, SLAs.
 
-## 7. AI-Augmented Developer KPI & Velocity Benchmarking
+### 3.2 Font CDN Links
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=ranade@200,300,500,700&f[]=switzer@200,300,400,500,600,700&display=swap" rel="stylesheet">
+```
 
-- **Name Conventions:** Robert is "Роберт" (Full-Stack Developer), NOT "Роберт Vance".
-- **Baseline Observation Phase (Month 1):**
-  - Do NOT set arbitrary hardcoded SLA numbers (e.g. "48 hours Cycle Time") without project-specific baseline data.
-  - Phase 1 focuses on 0 Prod Regressions (Sev-1) + 100% AI Review & Test pass, while logging real velocity with Claude Code on Dev-servers.
-  - Log AI tool usage via GitHub PR templates (`[x] Claude Code Assisted`) and CI/CD time-to-dev-server metrics to set accurate company SLAs on Month 2.
+### 3.3 Sizing Scale
+- **Primary Heading (H1):** `44pt` (`~56px`), line-height `1.15`, letter-spacing `-0.03em`.
+- **Secondary Heading (H2):** `33pt` (`~42px`), line-height `1.2`, letter-spacing `-0.02em`.
+- **Tertiary Heading (H3):** `22pt` (`~28px`), line-height `1.3`.
+- **Large Body / Subhead:** `18pt` (`~24px`), line-height `1.5`.
+- **Standard Body:** `14pt - 16pt` (`~18px - 20px`), line-height `1.6`.
+- **Badges / Eyebrows / Captions:** `11pt - 12pt` (`~14px`), uppercase, JetBrains Mono, letter-spacing `0.12em`.
 
-## 8. Multilingual, Navigation & Account Standards (9 Languages)
+---
 
-- **URL Structure & Hierarchy:**
-  - Root `navo24.com/` is default English.
-  - Multilingual localized versions use clean prefix paths: `navo24.com/es`, `navo24.com/de`, `navo24.com/fr`, `navo24.com/it`, `navo24.com/uk`, `navo24.com/ru`, `navo24.com/zh`, `navo24.com/ar`.
-- **Dynamic Localization & i18n Rules:**
-  - Never leave hardcoded English strings in shared marketing components (`MarketingNav`, `HomePage`, `MarketingFooter`). All rendered copy must call `t(...)` from `useTranslation()` linked to `src/locales/{lang}.json`.
-  - Route wrapper (`LanguageRouteWrapper` at `/:lang/*`) must automatically synchronize `i18n.changeLanguage(lang)` and set `document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr')`.
-- **Language Switcher & Flags:**
-  - 9 standard languages: English, Español, Deutsch, Français, Italiano, Українська, Русский, 中文, العربية.
-  - **Russian (`ru`) Flag Directive:** Strictly use the White-Blue-White flag (⬜🟦⬜ / SVG with three equal horizontal stripes: White, `#0083D6` Blue, White).
-  - **Arabic (`ar`):** Must toggle document direction to RTL (`document.documentElement.setAttribute('dir', 'rtl')`).
-- **Header Auth State & User Menu:**
-  - Unauthenticated: Display ONLY the primary "Start free" button (do NOT add a separate "Sign in" button — "Start free" serves as the single action point).
-  - Authenticated: Display ONLY the user avatar button (`UserAccountMenu`) styled in brand Cobalt blue (`color: var(--signal)` / `#1F4FE6`, `background: rgba(31, 79, 230, 0.12)`, `border: 1px solid rgba(31, 79, 230, 0.32)`) with hover/click dropdown popover. Do NOT show an extra blue "Dashboard →" button in the header navbar or mobile drawer (the avatar dropdown already provides direct access to all workspace destinations). The dropdown menu contains:
-    - User email and role tag (*SUPERADMIN / MEMBER*).
-    - Workspace Home (`/home`), Shipments Board (`/dashboard`), Analytics (`/analytics`), Settings (`/settings`).
-    - Superadmin only: Blog Publisher (`/home/blog`), Superuser Panel (`/admin`).
-    - Sign out action.
-- **Routing & User Navigation Preservation:**
-  - Never automatically redirect logged-in users away from the public marketing homepage (`/`) into `/home` or `/dashboard`. A user (logged-in or guest) must always land on the exact URL they requested. Logged-in users access the workspace via the user account dropdown.
-- **Static Hosting & Client Sub-Routes (Cloudflare Pages):**
-  - Cloudflare Pages serves physical assets before `_redirects`. Every localized prefix route (`/es`, `/de`, `/fr`, `/it`, `/uk`, `/ru`, `/zh`, `/ar`) AND client-side application sub-routes (e.g. `/home/blog`, `/blog-editor`, `/sales/accounts`, `/sales/people`) MUST have static HTML shells pre-emitted at build time for both `dist/<route>.html` AND `dist/<route>/index.html` (via `prerender.mjs`) to avoid CDN 404 fallbacks on direct page hits and page refreshes.
-- **Editorial & Rich-Text Editor State Management (`contentEditable`):**
-  - Superadmin RTF studio with Brand Book fonts (Ranade, Switzer, JetBrains Mono), 11-step self-audit metrics (99% originality, <15% AI score), and live corner-drag image resizing handles.
-  - **React contentEditable Rule:** NEVER bind `dangerouslySetInnerHTML` directly onto a `contentEditable` element on every controlled re-render. Doing so collides with React's DOM reconciler during typing, causing `TypeError: Cannot read properties of null (reading 'innerHTML')`. Instead, synchronize initial/tab-switch HTML via `ref.current.innerHTML` in `useEffect`, and read `e.currentTarget.innerHTML` in `onInput` without letting React manage child nodes.
-  - **Asynchronous Auth & Ref Mounting Rule:** When the editor wraps around an asynchronous auth check (`if (checking) return <Spinner />`), `useEffect` hooks for syncing `post.contentHtml` into `contentRef.current.innerHTML` and attaching image click/resize listeners MUST include `checking` in their dependency array (`[checking, activeTab, post.id, post.contentHtml]`), otherwise effects run during the early return when `contentRef.current` is `null` and fail to bind once auth resolves.
-  - **Direct In-Canvas Image Drag Resizing:** Images inside the editor must be directly resizable via an absolute transform overlay on the clicked `<img>` with 4 corner drag handles (`nw`, `ne`, `se`, `sw`) and a floating action pill (`Left`, `Center`, `Right`, `100%`, presets, `Delete`). Never put separate image control boxes outside the editor canvas.
-  - **Articles Catalog & Search:** Provide an "All Articles" management tab placed at the end of the editor tab hierarchy (`Content Editor` [default] → `Live Brand Preview` → `SEO & AI Quality` → `Version History` → `All Articles`) with instant live search across titles, slugs, categories, tags, and authors, segmented status filters (`All`, `Published`, `Draft`, `Scheduled`), category filtering, and 1-click `Edit` / `Preview` / `Delete` actions.
-- **Deployment Pipeline Target & Repository Topography:**
-  - **Product App (TrackingMCP):** `Navo24S/trackingmcp` (React SPA, Vite, Bun). Staging deliverables must be committed and pushed to `dev` branch to trigger `.github/workflows/deploy-web-staging.yml` deploying to Cloudflare Pages (`https://tracking.staging.navo24.com/`). Avoid temporary Vercel deploys for main product features.
-  - **Umbrella Portal (navo24.com):** `Navo24S/navo24-web` (Astro v5.18.2, TailwindCSS v4). Features automatic brand and schema audits. When carrier or connector counts drift, run `bun run sync:stats` before `bun run build` to synchronize `stats.json` across comparative markdown tables.
-    - General Staging: Deployed to `https://navo24-web-staging.pages.dev/` via `.github/workflows/deploy-staging.yml` on push to `dev` or `main`.
-    - Stefan Personal Staging (`stefan` branch): Push to branch `stefan` triggers `.github/workflows/deploy-stefan.yml`, deploying to Cloudflare Pages project `navo24-web-stefan` (`https://navo24-web-stefan.pages.dev/` / custom domain `https://stefan.staging.navo24.com/`).
-    - Cloudflare DNS & SSL Provisioning: Custom subdomains require a CNAME in Cloudflare DNS pointing to the respective `<project-name>.pages.dev` with `Proxied: true`. Deep 3rd-level subdomains (`*.staging.navo24.com`) trigger automated Edge TLS certificate issuance by Cloudflare, during which HTTP 301 is active while HTTPS may return TLS alert 552 for 5-15 minutes before the edge cert becomes active.
+## 4. Logo Usage & Geometry
+- **Primary Logo:** Combines the `navo` lowercase wordmark with the multi-color concentric target replacing the `o`.
+- **Clear Space:** Minimum clear space around the logo equals the inner diameter of the target ring.
+- **Minimum Digital Size:** `70px` width.
+- **Dark Backgrounds:** White wordmark + multi-color target (preferred environment: `#181818` / `#0A1117`).
+- **Light Backgrounds:** Black wordmark + multi-color target.
+- **Positioning:** Placed preferentially in the top-left corner or centered in hero layouts.
 
-## 9. Mobile Responsiveness & Viewport Overflow Rules
+---
 
-- **Navbar Header Isolation (< 760px):**
-  - Keep the mobile navbar header ultra-clean: **Logo + Language Switcher + Theme Toggle + Hamburger**.
-  - Long CTA buttons (*«Start free»* / *«Comenzar gratis»* / *«Sign in»*) must be hidden from the top bar on mobile (`.marketing-nav-cta { display: none !important; }`) and placed prominently full-width inside the hamburger drawer to prevent top bar overflow.
-- **Ambient Glow & Pseudo-elements:**
-  - Absolute ambient glow pseudo-elements (e.g. `.cp-hero::before`) must use `width: min(1320px, 100vw)` and the parent section MUST have `overflow: hidden; position: relative;` to prevent off-canvas horizontal scrolling.
-- **Grid Auto-fit Clamping:**
-  - Do not use fixed pixel minimums like `minmax(300px, 1fr)` on mobile grids with container padding, as 320px–360px phones will overflow. Use `minmax(min(260px, 100%), 1fr)` and explicit single-column collapse (`grid-template-columns: 1fr !important`).
-- **Global Viewport Safeguard:**
-  - `html, body { overflow-x: hidden; max-width: 100vw; }` to guarantee zero horizontal drag.
+## 5. UI Elements, Shapes & Radii
+- **Signature Corner Radius:**
+  - **Large Containers, Modals & Slide Cards:** `35px` (`border-radius: 35px` / `rounded-[35px]`).
+  - **Standard Cards:** `16px - 20px`.
+  - **Buttons & Pills:** `8px - 12px` (or full pill `9999px` for chips).
+- **Geometric Elements:** Clean rounded polygons, stars, text underline wings.
+- **Modal Windows:** Must support closing via `Escape` key (`e.key === 'Escape'`).
 
-## 10. Social Media & Marketing Visuals (LinkedIn & X)
+---
 
-- **Canvas & Resolution Standards:**
-  - LinkedIn Standard: `1200 x 675` (16:9 landscape) rendered with `device_scale_factor: 2` (produces `2400 x 1350` ultra-crisp Retina PNG).
-  - Square / Carousel: `1200 x 1200` (1:1).
-- **Background & Atmospheric Lighting:**
-  - Deep Obsidian / Navy ground (`#060911` or `#070C18`).
-  - Subtle radial glow pseudo-elements: Cobalt (`rgba(31, 79, 230, 0.22)`, blur `60px`) at top-right, Turquoise (`rgba(18, 194, 194, 0.14)`, blur `70px`) at bottom-left.
-  - Ambient grid overlay: `40px 40px` with `rgba(255, 255, 255, 0.03)` masked radially.
-- **Typography & Headline Composition:**
-  - Eyebrows & Meta: JetBrains Mono (`11-12px`, uppercase, tracking `+0.14em`, color `#4A86FF` or `#12C2C2`).
-  - Core Statement: Ranade Light 300 (`36-42px`, line-height `1.18`, tracking `-0.03em`), bolding key phrase in white/cobalt gradient (`#FFFFFF` to `#90B2FF`) and brand terms in turquoise (`#12C2C2`).
-  - Subtitle: Switzer Regular 400 (`15-17px`, line-height `1.5`, color `#8E9BAE`).
-  - Punchline Pill: JetBrains Mono badge (`#E2ECFF`, border `1px solid rgba(74, 134, 255, 0.35)`, background `rgba(31, 79, 230, 0.12)`).
-- **Interactive Architectural & Execution Mockup Cards:**
-  - Glassmorphic card styling: `background: rgba(14, 20, 36, 0.85)`, `border: 1px solid rgba(255, 255, 255, 0.10)`, `backdrop-filter: blur(16px)`, `border-radius: 14px`.
-  - Top border gradient accent: `linear-gradient(90deg, transparent, #4A86FF, #12C2C2, transparent)`.
-  - Real Domain Elements: Verified container ID (e.g. `MSCU9284102`), UN/LOCODE port route (`Rotterdam NLRTM ➔ Singapore SGSIN`), 3-tier status rows:
-    - *Signal:* Problem / trigger in Amber (`#E8A33D`).
-    - *Resolution:* Autonomous action in Cobalt (`#1F4FE6` / `#4A86FF`).
-    - *Impact:* Preserved SLA / $0 demurrage in Turquoise (`#12C2C2`).
-    - *Terminal Log:* Real DCSA API call (`POST /v1/containers/... [200 OK]`).
-- **Rendering Workflow (Playwright):**
-  - Render HTML template to PNG via headless Chromium using Playwright: launch with `--no-sandbox`, viewport `1200x675`, `device_scale_factor: 2`, wait 2000ms for Fontshare fonts (`Ranade`, `Switzer`) to hydrate before `page.screenshot()`.
+## 6. Slide Decks & Interactive Presentations
+- **Top Header Bar Rule:** In the presentation top navigation header, show ONLY the clean target logo mark (32px-36px). **NEVER write words, titles, or product names next to it in the header** (e.g. no "navo rates" text).
+- **Inner Slides Logo Placement:** On all slides EXCEPT the title cover slide (slides 2 through N), place the official product logo (white version of `navo <Product>MCP` with target 'o') in the top-right of the slide content area. In light mode, wrap in a dark graphite pill (`#0E1626`) for contrast.
+- **Title Cover Slide:** Render the title slide cleanly as an intact visual, maintaining the search input bar, route selectors, and action CTA.
+- **Dark Graphite Canvas:** Presentations strictly use Dark Graphite (`#181818`) or Product Slate (`#0A1117`) backgrounds.
+- **Corner Radii:** Strictly apply signature `35px` border radius (`border-radius: 35px`) to presentation cards and container placeholders.
+- **Interactive Controls:**
+  - Keyboard: `ArrowLeft`, `ArrowRight`, `Space`, `PageUp`, `PageDown`, `Home`, `End`.
+  - Mobile touch swipe support (`touchstart` / `touchend` with >50px delta).
+  - Top animated progress bar (`linear-gradient` matching product accent).
+  - Slide counter formatted with leading zero (`01 / 10`).
+  - Dark/Light theme toggle with `localStorage` persistence.
 
-## 11. NavoLogix & Product Landing Pages Architecture
+---
 
-- **Header & Title Hierarchy:**
-  - **H1:** Clean, prominent product title (e.g. `<h1>NavoLogix</h1>` or `<h1>Navo<span class="text-signal">Logix</span></h1>`) in Ranade (Light 300 / Bold 700).
-  - **H2:** Punchy value proposition / subtitle immediately below H1 (e.g. `<h2>The End of <strong class="text-signal">15-Tab Logistics.</strong></h2>`).
-  - **Eyebrow Pill:** Monospace badge (`JetBrains Mono`, uppercase) with pulsating Turquoise status dot (`#12C2C2`).
-- **High-Contrast Callout Banners (Deep Navy Surfaces):**
-  - For full-width callout / manifesto banners using `#0C2A5E` Navy background, explicitly declare `!text-white` (`#FFFFFF`) on headings, `!text-turquoise` (`#12C2C2`) on emphasis spans, and `!text-slate-200` (`#E2ECF8`) on paragraph text to guarantee brand visual fidelity against any CSS inheritance overrides.
-- **Comparison Matrix Standard:**
-  - 3-column table: `Feature` (25%, bold Ink) | `Traditional Tools` (37.5%, Muted) | `[Product]` (37.5%, highlighted with `bg-signal/5` and bold Signal text).
-- **Interactive Modals & Private Beta Flows:**
-  - Modal dialogues MUST support backdrop blur (`rgba(11, 12, 14, 0.75)`), closing via `Escape` key (`e.key === 'Escape'`), and clicking outside the card.
-- **Deployment Topography:**
-  - Umbrella Portal integration: Add `src/pages/[product].astro` in `Navo24S/navo24-web` (branch `stefan` auto-deploys to `https://navo24-web-stefan.pages.dev/[product]/` and `https://stefan.staging.navo24.com/[product]/`).
-  - Standalone Package: Deliver in a standalone directory with `index.html` and `vercel.json` (`cleanUrls: true`).
+## 7. Vercel & Production Deployments
+- **Project Structure:** Standalone directory with `index.html`, `assets/`, and `vercel.json`:
+  ```json
+  {
+    "version": 2,
+    "cleanUrls": true,
+    "routes": [{ "src": "/(.*)", "dest": "/index.html" }]
+  }
+  ```
+- **Deployment Command:** `vercel <dir> --prod --yes --scope navo5`
+- **CLI Authentication:** Omit `--token` flag unless explicitly provided; use the active local CLI session (`navo5` team scope).
 
+---
 
-
+## 8. Print, Exhibition & Conference Stand Specifications
+- Detailed EPS print specifications, header validation, CairoSVG generation script, and conference pitch formulas are documented in `references/print-and-exhibition-specs.md`.
 

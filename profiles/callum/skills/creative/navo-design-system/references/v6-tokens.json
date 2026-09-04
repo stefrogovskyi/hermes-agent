@@ -1,0 +1,45 @@
+{
+  "name": "Navo24 Design Tokens",
+  "version": "6.0.0",
+  "canvases": {
+    "darkGraphite": "#181818",
+    "productCanvas": "#0A1117",
+    "absoluteBlack": "#000000",
+    "warmDark": "#201F1C",
+    "lightCanvas": "#FCFCFC",
+    "white": "#FFFFFF"
+  },
+  "targetRings": {
+    "ring1": "#113EC9",
+    "ring2": "#1F4FE6",
+    "ring3": "#E2231A",
+    "ring4": "#FF8135",
+    "center": "#FFFFFF"
+  },
+  "products": {
+    "tracking": "#1F4FE6",
+    "schedules": "#77E6FF",
+    "loading": "#FF8135",
+    "freightRates": {
+      "purple": "#A055FF",
+      "red": "#E2231A"
+    },
+    "airCargo": "#31D8FE"
+  },
+  "accents": {
+    "limeCitron": "#CEF868",
+    "goldYellow": "#FFCF01",
+    "hyperPink": "#FA61AA"
+  },
+  "typography": {
+    "display": "Ranade",
+    "interface": "Switzer",
+    "mono": "JetBrains Mono"
+  },
+  "radii": {
+    "presentationCard": "35px",
+    "standardCard": "20px",
+    "button": "10px",
+    "chip": "9999px"
+  }
+}

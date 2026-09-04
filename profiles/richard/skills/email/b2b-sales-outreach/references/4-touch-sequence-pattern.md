@@ -130,3 +130,107 @@ Whenever a new client email arrives, present Stefan with:
 - **Restricted Sender Unblock**: If Microsoft Defender blocks outbound email (`550 5.1.8 Access denied, bad outbound sender AS(42004)`), unblock the account at:
   `https://security.microsoft.com/restrictedentities`
 - **Backfilling Past Emails**: To pull past sent outreach messages into `sales@navo24.com` after unblocking, resend or forward from `rich@navo24.com`'s Exchange `Sent Items` folder via Graph API.
+
+---
+
+## 6. SeaRates Re-engagement 4-Touch Sequence (Day 0, 4, 9, 16 Pattern)
+
+Standard sequence template used for re-engaging past SeaRates customers and historical inbound requests across Navo24 account executives (Elena, Nikita, etc.).
+
+### Cadence & Rules
+- **Pacing**: 100–150 new Touch 1 sends per day, Monday–Friday only.
+- **Follow-ups**: Executed strictly on weekdays (Touch 2 on Day 4, Touch 3 on Day 9, Touch 4 on Day 16).
+- **Conditionality**: Steps 2–4 trigger ONLY if recipient has neither replied nor bounced.
+- **Inbound & Bounce Automation**: Background poller via MS Graph API (`users/{manager_email}/mailFolders/inbox/messages`) triages incoming emails every 3–5 min. On reply: marks sheet `Replied / Warm`, halts sequence, and alerts manager in Telegram. On delivery failure: marks sheet `Bounced`.
+
+### Email Templates
+
+#### Touch 1 (Day 0)
+- **Subject**: `quick question, {company}` (Fallback if company missing: `quick question, {first_name}`)
+- **Body**:
+```text
+Hi {first_name},
+
+Elena here from Navo24 — I've recently joined the team.
+
+You may know us as the team behind SeaRates, where we built the tracking technology.
+
+You previously worked with us, so I wanted to reconnect and see what you're using today.
+
+Since then, the SeaRates team has expanded Navo24 beyond tracking — we now cover container tracking, air cargo tracking, sailing schedules, container load planning, and ocean freight rates.
+
+Did you end up solving these needs another way, or are you still dealing with some of them manually?
+
+Would you be open to a quick 15-minute chat next week?
+```
+
+#### Touch 2 (Day 4)
+- **Subject**: `what changed`
+- **Body**:
+```text
+Hi {first_name},
+
+Following up because the team behind SeaRates tracking has built quite a bit since we last worked together.
+
+Navo24 now covers:
+
+— TrackingMCP — container tracking
+— AirCargoMCP — air waybill tracking
+— SchedulesMCP — sailing schedules & reliability
+— LoadingMCP — container load planning
+— FreightRatesMCP — ocean spot rates
+
+So we're no longer just the tracking technology you may remember from SeaRates — we've expanded into several parts of the freight workflow.
+
+I'd be happy to show you what's changed and figure out which part, if any, is relevant to your team now.
+
+Would 15 minutes next week make sense?
+```
+
+#### Touch 3 (Day 9)
+- **Subject**: `worth a quick look?`
+- **Body**:
+```text
+Hi {first_name},
+
+Since you already worked with the SeaRates team, rather than sending you a generic product demo, I'd rather look at what you're actually using today.
+
+We can take 15 minutes and see whether anything we've built at Navo24 could help — whether that's tracking, air cargo, schedules, load planning, or freight rates.
+
+If there's a specific use case you're dealing with, we can also test it directly.
+
+Worth a quick call?
+```
+
+#### Touch 4 (Day 16)
+- **Subject**: `closing the loop`
+- **Body**:
+```text
+Hi {first_name},
+
+I'll assume this isn't a priority right now and stop here.
+
+If something changes, just reply to this thread.
+
+The SeaRates team is still here, but we've built Navo24 into much more than tracking — from shipment visibility and schedules to load planning and ocean freight rates.
+
+If you'd like to see what's changed since you last worked with us, I'm happy to walk you through it in 15 minutes.
+
+The free key stays open either way: five containers, no card, no expiry.
+```
+
+### Account Executive Signature Standard
+```html
+<div style="margin-top: 24px; font-family: Tahoma, Arial, sans-serif; font-size: 13px; color: #334155; line-height: 1.4; text-align: left;">
+  <b>{Manager Name}</b><br>
+  <b>Account Executive</b><br>
+  <div style="margin: 8px 0 10px 0;">
+    <img src="https://bit.ly/4hLg86T" alt="navo" style="height: 35px; width: auto; display: block;" border="0">
+  </div>
+  API-MCP for Logistics & Trade<br>
+  {Manager Phone}<br>
+  <a href="mailto:{Manager Email}" style="color: #2563eb; text-decoration: underline;">{Manager Email}</a><br>
+  30 St Mary Axe, London, EC3A 8BF<br>
+  <a href="https://www.navo24.com" style="color: #2563eb; text-decoration: underline;">www.navo24.com</a>
+</div>
+```
