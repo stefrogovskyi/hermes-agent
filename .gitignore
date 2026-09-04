@@ -36,3 +36,8 @@ memory_v2/*.log
 *.secret
 *.token
 *.json.old
+
+# Large backups
+*.tar.gz
+backups/*.tar.gz
+*.zip
