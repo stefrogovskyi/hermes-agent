@@ -770,14 +770,14 @@
     "created_by": "agent",
     "last_patched_at": "2026-08-28T05:32:33.545210+00:00",
     "last_reused_patch_generation": 1,
-    "last_used_at": "2026-09-03T06:00:21.687893+00:00",
-    "last_viewed_at": "2026-09-03T06:00:21.684838+00:00",
+    "last_used_at": "2026-09-04T09:30:19.839924+00:00",
+    "last_viewed_at": "2026-09-04T09:30:19.836943+00:00",
     "patch_count": 1,
     "patch_generation": 1,
     "pinned": false,
     "state": "active",
-    "use_count": 13,
-    "view_count": 13
+    "use_count": 14,
+    "view_count": 14
   },
   "notion": {
     "archived_at": null,
