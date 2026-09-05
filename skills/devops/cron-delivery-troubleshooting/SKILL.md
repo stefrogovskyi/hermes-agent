@@ -93,8 +93,8 @@ When the true cause turns out different/bigger than an earlier explanation you g
   3. Jobs explicitly pinned to a specific engine (e.g. Archie blogwriting on `claude-sonnet-5`) must have their `model_snapshot` pinned to that same engine.
 
 ### 4. Spurious Burst Deliveries via `catch_up_occurrences`
-- **Root Cause:** When heavy file system or git operations occur (e.g. `git-filter-repo`, large branch resets, time drift), Hermes schedulers across profiles may perceive the timestamps as a reboot/lag.
-- Hermes creates a temporary file `catch_up_occurrences` in `/opt/hermes/cron/` and profile cron directories, causing a rapid-fire "burst" execution of all jobs at once.
+- **Root Cause:** When heavy file system, git operations (e.g. `git-filter-repo`, history rewrites), or time drifts occur, Hermes schedulers across profiles may perceive the timestamps as a reboot or missed interval lag.
+- Hermes creates temporary `catch_up_occurrences` files in `/opt/hermes/cron/` and profile cron directories, causing a rapid-fire "burst" execution of all jobs at once.
 - **Prevention & Fix:**
   1. In all `jobs.json` definitions, explicitly declare `"catch_up": false` for recurring jobs unless historical replay is strictly intended.
   2. If burst triggers occur, immediately purge all `catch_up_occurrences` files:
@@ -102,5 +102,37 @@ When the true cause turns out different/bigger than an earlier explanation you g
      find /opt/hermes -name "catch_up_occurrences" -delete
      ```
   3. Ensure jobs have `"catch_up": false` written across all cluster profiles.
+
+### 5. Git Sanitization, Secret Leaks & Safe Remote Updates
+- When scrubbing sensitive files or large assets across Git history using `git-filter-repo` (e.g. after GitHub Secret Scanning flags leaked API keys):
+  1. Always create a safety bundle first: `git bundle create /tmp/pre_filter.bundle --all`.
+  2. Prepare targeted path list (`--paths-from-file /tmp/paths.txt`) to strip credentials, `.env`, tokens, and heavy binary backups (`*.tar.gz`).
+  3. Execute `git-filter-repo --invert-paths --paths-from-file ... --force` (using the virtualenv binary if not in global PATH).
+  4. Remember `git-filter-repo` unsets remotes for safety: re-add origin (`git remote add origin <URL>`) and reset tracking branch (`git branch --set-upstream-to=origin/master master`).
+  5. Force-push rewritten clean history: `git push origin master --force`.
+  6. **Prevent Spurious Catch-up Storms:** History rewrites alter commit hashes and file timestamps, triggering schedulers into replaying missed intervals. Immediately purge `catch_up_occurrences` files and verify `"catch_up": false` on all jobs.
+
+### 6. Desktop PC Silent Background Tasks (Zero Windows Popups)
+- **Problem:** Running scheduled background scripts on a user's active Windows desktop (e.g. MS To-Do sync, local file dumpers) via PowerShell or cmd.exe spawns black console windows that steal focus or blink on screen.
+- **Solution & Workflow:**
+  1. Wrap script executions in a VBScript with `WindowStyle = 0`:
+     ```vbscript
+     Set WshShell = CreateObject("WScript.Shell")
+     WshShell.Run "powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File ""C:\Path\To\script.ps1""", 0, False
+     ```
+  2. In Windows Task Scheduler, register tasks as hidden and point the action to `wscript.exe "C:\Path\To\run_silent.vbs"`.
+  3. When triggering from Linux over SSH/Tailscale, call `wscript.exe` rather than direct `powershell.exe` to guarantee zero UI interruption.
+  4. **UTF-8 BOM Trap over SSH:** When PowerShell writes JSON using `Set-Content -Encoding UTF8`, it prepends a UTF-8 BOM (`\ufeff`). When python reads it over SSH (`cat` / `type`), `json.loads` crashes with `Unexpected UTF-8 BOM (decode using utf-8-sig)`. Always strip BOM (`if s.startswith('\ufeff'): s = s[1:]`) or decode with `utf-8-sig`.
+
+### 7. Proactive Model Discovery & Health Audit Radar
+- Do not restrict fallback model health checks to static arrays.
+- Actively scan discovery endpoints across all configured cluster keys:
+  - Google Gemini API (`generativelanguage.googleapis.com/v1beta/models`)
+  - NVIDIA NIM (`integrate.api.nvidia.com/v1/models`)
+  - Nous Research Portal (`inference-api.nousresearch.com/v1/models`)
+  - OpenRouter Free Catalog (`openrouter.ai/api/v1/models`)
+  - Gonka24 API (`api.gonka24.com/v1/models`)
+- Dynamically ping newly detected models with a lightweight probe. Automatically integrate successful `HTTP 200` responders into the active fallback chain and surface them in the morning audit report.
+
 
 

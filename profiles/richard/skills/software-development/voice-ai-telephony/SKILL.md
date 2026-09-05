@@ -110,6 +110,28 @@ Initiate outbound calls with TwiML pointing to the WebSocket stream:
 </Response>
 ```
 
+### 6.1. Dynamic Inbound Webhook Endpoint & Zero-Touch Twilio API Binding
+To handle inbound calls seamlessly through tunneling (e.g. Cloudflare Quick Tunnels):
+1. **Dynamic TwiML Route:** Implement an HTTP POST/GET endpoint (e.g., `/incoming-call`) in FastAPI that inspects the request `Host` header to dynamically construct the WebSocket URL:
+   ```python
+   @app.api_route("/incoming-call", methods=["GET", "POST"])
+   async def incoming_call(request: Request):
+       host = request.headers.get("host")
+       return Response(
+           content=f'<?xml version="1.0" encoding="UTF-8"?><Response><Connect><Stream url="wss://{host}/media-stream" /></Connect></Response>',
+           media_type="application/xml"
+       )
+   ```
+2. **Automated Twilio Binding via REST API:** Avoid manual console edits by configuring the incoming phone number SID directly via the Twilio Python SDK:
+   ```python
+   from twilio.rest import Client
+   client = Client(account_sid, auth_token)
+   client.incoming_phone_numbers(phone_number_sid).update(
+       voice_url=f"https://{tunnel_domain}/incoming-call",
+       voice_method="POST"
+   )
+   ```
+
 ### 7. Inbound Call Forwarding Architecture (SIM-to-Twilio Bridge)
 When the sales team operates a physical SIM card or mobile handset (e.g. UK mobile `+44 7...`) where WhatsApp, SMS, or mobile service must remain active on the device, but AI needs to answer all inbound voice calls:
 1. **Low-Cost Virtual Twilio Number**: Purchase a low-cost virtual number in Twilio (e.g. US Local for ~$1.15/mo with zero regulatory bundle overhead, or UK Local).

@@ -98,8 +98,10 @@ To achieve continuous background synchronization without user friction:
    $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -Hidden -Priority 7
    Register-ScheduledTask -TaskName "HermesTodoDumper" -Action $action -Trigger $trigger -Settings $settings -Force
    ```
-3. **Linux Cron Poller (`every 30m`)**:
-   Pulls `C:\Users\Stefan\AppData\Local\hermes\todo_live.json` via Tailscale SCP to `/opt/hermes/state/ms_todo_live_snapshot.json` so the orchestrator retains an up-to-date snapshot 24/7 even when the desktop goes offline.
+3. **Linux Cron Poller (`pull_todo_from_pc.py` every 30m)**:
+   Pulls `C:\Users\Stefan\AppData\Local\hermes\todo_live.json` via Tailscale SSH (`Stefan@100.79.157.46`) directly into `/opt/hermes/state/ms_todo_live_snapshot.json` so the orchestrator retains an up-to-date snapshot 24/7 even when the desktop goes offline.
+   - **UTF-8 BOM Stripping**: PowerShell `Set-Content -Encoding UTF8` emits a UTF-8 BOM (`\ufeff`), which crashes Python `json.loads` (`Unexpected UTF-8 BOM`). Always strip `\ufeff` before parsing or use `encoding='utf-8-sig'`.
+   - **Zero User Disruption Requirement**: Always run dumps on the Windows host completely hidden via `wscript.exe` running a `.vbs` wrapper (`WindowStyle = 0`). Black terminal windows / popup consoles must NEVER appear to the user.
 
 ### Method C: Operations Reference (Graph API REST)
 

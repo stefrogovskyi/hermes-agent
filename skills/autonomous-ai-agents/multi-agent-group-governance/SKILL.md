@@ -51,3 +51,11 @@ An agent responds to **ANY group participant** (not just admins) ONLY under 3 co
 - **`compression.threshold: 0.20`:** Auto-compresses context at 20% capacity (~20k-40k tokens) down to 10% to guarantee 1-3s response latency.
 - **Telegram Flood Control Cooldown:** Gateway daemons under `systemd` queue inbound messages during temporary Telegram API flood control limits (e.g. 68s cooldown) without dropping them.
 - **Timezone Standard:** All scheduled crons and time reports MUST follow Ukrainian time (`Europe/Kiev` / UTC+3).
+
+### 6. Authorized User-Session Scanning (Telethon Userbot Extraction)
+- **Use Case:** When an agent needs to scan closed Telegram groups/channels or perform audits on behalf of an authorized user (e.g. scanning Navo group history, client feedback mining, audit of customer replies).
+- **Session Binding:** Uses the persistent authorized Telethon session at `/opt/hermes/stefan_userbot.session` (authenticated under `@stefrogovskiy`, ID `330656040`). See `references/telethon_userbot_group_extraction.md` for extraction recipes and group ID mappings.
+- **Safety Directives:**
+  - Read-only historical extraction via `client.iter_messages()`. Never post or mutate group state under the user's account without explicit instruction.
+  - Rate limiting & timeouts: Avoid unbounded `get_dialogs()` scans across thousands of channels. Filter by explicit group ID (e.g., Navo: `-1004451177709`, Navo Tech geeks: `-1004328290471`) or cap dialog queries with `limit=100`.
+

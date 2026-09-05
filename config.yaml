@@ -1,33 +1,167 @@
-_config_version: 33
+model:
+  default: google/gemini-3.8-flash
+  max_retries: 2
+  provider: google
+  providers:
+    gonka24:
+      api_key_env: GONKA24_API_KEY
+      base_url: https://api.gonka24.com/v1
+      models:
+        - minimax-m2.7
+        - kimi-k2.6
+    huggingface:
+      api_key_env: HF_TOKEN
+      base_url: https://router.huggingface.co/v1
+      models:
+        - deepseek-ai/DeepSeek-R1
+        - deepseek-ai/DeepSeek-V3
+        - meta-llama/Llama-3.3-70B-Instruct
+        - Qwen/Qwen2.5-72B-Instruct
+        - Qwen/Qwen2.5-Coder-32B-Instruct
+        - meta-llama/Llama-3.1-8B-Instruct
+  request_timeout_seconds: 30
+  retry_delay_seconds: 1
+providers:
+  gonka24:
+    request_timeout_seconds: 25
+  google:
+    request_timeout_seconds: 30
+  nous:
+    request_timeout_seconds: 30
+  nvidia:
+    request_timeout_seconds: 20
+  openai:
+    request_timeout_seconds: 30
+  openrouter:
+    request_timeout_seconds: 25
+fallback_providers:
+  - model: gpt-4o
+    provider: openai
+  - model: deepseek/deepseek-chat
+    provider: openrouter
+  - model: deepseek-ai/DeepSeek-R1
+    provider: huggingface
+  - model: deepseek-ai/DeepSeek-V3
+    provider: huggingface
+  - model: google/gemini-3.6-flash
+    provider: google
+  - model: nousresearch/hermes-3-llama-3.1-405b
+    provider: openrouter
+  - model: meta-llama/Llama-3.3-70B-Instruct
+    provider: huggingface
+  - model: google/gemini-2.5-pro
+    provider: google
+  - model: meta-llama/llama-3.3-70b-instruct
+    provider: openrouter
+  - model: nousresearch/hermes-3-llama-3.1-70b
+    provider: openrouter
+  - model: Qwen/Qwen2.5-72B-Instruct
+    provider: huggingface
+  - model: qwen/qwen-2.5-72b-instruct
+    provider: openrouter
+  - model: Qwen/Qwen2.5-Coder-32B-Instruct
+    provider: huggingface
+  - model: mistralai/mistral-small-24b-instruct-2501
+    provider: openrouter
+  - model: minimax-m2.7
+    provider: gonka24
+  - model: kimi-k2.6
+    provider: gonka24
+  - model: gpt-4o-mini
+    provider: openai
+  - model: stepfun/step-3.7-flash:free
+    provider: nous
+  - model: upstage/solar-pro4:free
+    provider: nous
+  - model: tencent/hy3:free
+    provider: nous
+  - model: meituan/longcat-2.0:free
+    provider: nous
+  - model: poolside/laguna-s-2.1:free
+    provider: nous
+  - model: poolside/laguna-xs-2.1:free
+    provider: nous
+  - model: nvidia/nemotron-3-super-120b-a12b:free
+    provider: openrouter
+  - model: google/gemma-4-31b-it:free
+    provider: openrouter
+  - model: google/gemma-4-26b-a4b-it:free
+    provider: openrouter
+  - model: minimax/minimax-m3:free
+    provider: openrouter
+  - model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
+    provider: openrouter
+  - model: mistralai/mistral-nemo
+    provider: openrouter
+  - model: meta-llama/Llama-3.1-8B-Instruct
+    provider: huggingface
+  - model: google/gemini-2.5-flash
+    provider: google
+  - model: claude-haiku-4-5
+    provider: anthropic
+  - model: claude-sonnet-4-5
+    provider: anthropic
+  - model: claude-opus-4-5
+    provider: anthropic
+  - model: inclusionai/ling-3.0-flash-fin:free
+    provider: openrouter
+  - model: dots-studio/dots-3-note-preview:free
+    provider: openrouter
+  - model: liquid/lfm-2.5-2.6b:free
+    provider: openrouter
+  - model: cohere/north-mini-code:free
+    provider: openrouter
+  - model: z-ai/glm-5.2:free
+    provider: openrouter
+  - model: nvidia/nemotron-3-ultra-550b-a55b:free
+    provider: openrouter
+  - model: minimax/minimax-m2.7:free
+    provider: openrouter
+  - model: openrouter/free
+    provider: openrouter
+web:
+  backend: nous
+  search_backend: ddgs
 browser:
-  cdp_url: http://127.0.0.1:9223
   engine: chrome
+  cdp_url: http://127.0.0.1:9223
+compression:
+  enabled: true
+  threshold: 0.2
+  target_ratio: 0.1
+display:
+  busy_input_mode: steer
+  streaming: true
+  interim_assistant_messages: true
+  streaming_throttle_ms: 1000
+  tool_progress: all
+telegram:
+  require_mention: true
+  stream_update_interval_ms: 2500
 command_allowlist:
-  - access to Hermes secrets (Windows path)
   - script execution via -e/-c flag
-  - stop/restart system service
-  - recursive delete
   - delete in root path
-  - overwrite system config
-  - PowerShell destructive delete (Remove-Item)
   - force kill processes (Stop-Process -Force)
-  - execute_code
+  - copy/move file into system config path
+  - stop/restart system service
+  - force kill processes (taskkill /F)
+  - access to Hermes secrets (Windows path)
+  - PowerShell destructive delete (Remove-Item)
+  - recursive delete
   - script execution via heredoc
   - pipe remote content to shell
   - in-place edit of Hermes config/env
-  - copy/move file into system config path
-  - PowerShell encoded command execution
   - git force push (rewrites remote history)
-compression:
+  - overwrite system config
+  - PowerShell encoded command execution
+  - execute_code
+streaming:
   enabled: true
-  target_ratio: 0.1
-  threshold: 0.2
-display:
-  busy_input_mode: steer
-  interim_assistant_messages: true
-  streaming: true
-  streaming_throttle_ms: 1000
-  tool_progress: all
+onboarding:
+  seen:
+    busy_input_prompt: true
+    openclaw_residue_cleanup: true
+_config_version: 33
 fallback:
   - gemini-3.8-flash
   - model: gpt-4o
@@ -114,119 +248,7 @@ fallback:
     provider: openrouter
   - model: openrouter/free
     provider: openrouter
-fallback_providers:
-  - model: gpt-4o
-    provider: openai
-  - model: deepseek/deepseek-chat
-    provider: openrouter
-  - model: deepseek-ai/DeepSeek-R1
-    provider: huggingface
-  - model: deepseek-ai/DeepSeek-V3
-    provider: huggingface
-  - model: google/gemini-3.6-flash
-    provider: google
-  - model: nousresearch/hermes-3-llama-3.1-405b
-    provider: openrouter
-  - model: meta-llama/Llama-3.3-70B-Instruct
-    provider: huggingface
-  - model: google/gemini-2.5-pro
-    provider: google
-  - model: meta-llama/llama-3.3-70b-instruct
-    provider: openrouter
-  - model: nousresearch/hermes-3-llama-3.1-70b
-    provider: openrouter
-  - model: Qwen/Qwen2.5-72B-Instruct
-    provider: huggingface
-  - model: qwen/qwen-2.5-72b-instruct
-    provider: openrouter
-  - model: Qwen/Qwen2.5-Coder-32B-Instruct
-    provider: huggingface
-  - model: mistralai/mistral-small-24b-instruct-2501
-    provider: openrouter
-  - model: minimax-m2.7
-    provider: gonka24
-  - model: kimi-k2.6
-    provider: gonka24
-  - model: gpt-4o-mini
-    provider: openai
-  - model: stepfun/step-3.7-flash:free
-    provider: nous
-  - model: upstage/solar-pro4:free
-    provider: nous
-  - model: tencent/hy3:free
-    provider: nous
-  - model: meituan/longcat-2.0:free
-    provider: nous
-  - model: poolside/laguna-s-2.1:free
-    provider: nous
-  - model: poolside/laguna-xs-2.1:free
-    provider: nous
-  - model: nvidia/nemotron-3-super-120b-a12b:free
-    provider: openrouter
-  - model: google/gemma-4-31b-it:free
-    provider: openrouter
-  - model: google/gemma-4-26b-a4b-it:free
-    provider: openrouter
-  - model: minimax/minimax-m3:free
-    provider: openrouter
-  - model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
-    provider: openrouter
-  - model: mistralai/mistral-nemo
-    provider: openrouter
-  - model: meta-llama/Llama-3.1-8B-Instruct
-    provider: huggingface
-  - model: google/gemini-2.5-flash
-    provider: google
-  - model: claude-haiku-4-5
-    provider: anthropic
-  - model: claude-sonnet-4-5
-    provider: anthropic
-  - model: claude-opus-4-5
-    provider: anthropic
-  - model: inclusionai/ling-3.0-flash-fin:free
-    provider: openrouter
-  - model: dots-studio/dots-3-note-preview:free
-    provider: openrouter
-  - model: liquid/lfm-2.5-2.6b:free
-    provider: openrouter
-  - model: cohere/north-mini-code:free
-    provider: openrouter
-  - model: z-ai/glm-5.2:free
-    provider: openrouter
-  - model: nvidia/nemotron-3-ultra-550b-a55b:free
-    provider: openrouter
-  - model: minimax/minimax-m2.7:free
-    provider: openrouter
-  - model: openrouter/free
-    provider: openrouter
 group_sessions_per_user: true
-model:
-  default: google/gemini-3.8-flash
-  max_retries: 2
-  provider: google
-  providers:
-    gonka24:
-      api_key_env: GONKA24_API_KEY
-      base_url: https://api.gonka24.com/v1
-      models:
-        - minimax-m2.7
-        - kimi-k2.6
-    huggingface:
-      api_key_env: HF_TOKEN
-      base_url: https://router.huggingface.co/v1
-      models:
-        - deepseek-ai/DeepSeek-R1
-        - deepseek-ai/DeepSeek-V3
-        - meta-llama/Llama-3.3-70B-Instruct
-        - Qwen/Qwen2.5-72B-Instruct
-        - Qwen/Qwen2.5-Coder-32B-Instruct
-        - meta-llama/Llama-3.1-8B-Instruct
-  request_timeout_seconds: 30
-  retry_delay_seconds: 1
-onboarding:
-  seen:
-    busy_input_prompt: true
-    openclaw_residue_cleanup: true
 platforms:
   telegram:
     aliases:
@@ -249,25 +271,42 @@ platforms:
       - 593209837
     enabled: true
     group_response_mode: mention
-providers:
-  gonka24:
-    request_timeout_seconds: 25
-  google:
-    request_timeout_seconds: 30
-  nous:
-    request_timeout_seconds: 30
-  nvidia:
-    request_timeout_seconds: 20
-  openai:
-    request_timeout_seconds: 30
-  openrouter:
-    request_timeout_seconds: 25
 request_timeout_seconds: 15
-streaming:
-  enabled: true
-telegram:
-  require_mention: true
-  stream_update_interval_ms: 2500
-web:
-  backend: nous
-  search_backend: ddgs
+
+# ── Security ──────────────────────────────────────────────────────────
+# Secret redaction is ON by default — strings that look like API keys,
+# tokens, and passwords are masked in tool output, logs, and chat
+# responses before the model or user ever sees them. Set redact_secrets
+# to false to disable (e.g. when developing the redactor itself).
+# tirith pre-exec scanning is enabled by default when the tirith binary
+# is available. Configure via security.tirith_* keys or env vars
+# (TIRITH_ENABLED, TIRITH_BIN, TIRITH_TIMEOUT, TIRITH_FAIL_OPEN).
+#
+# security:
+#   redact_secrets: true
+#   tirith_enabled: true
+#   tirith_path: "tirith"
+#   tirith_timeout: 5
+#   tirith_fail_open: true
+
+# ── Fallback Model ────────────────────────────────────────────────────
+# Automatic provider failover when primary is unavailable.
+# Uncomment and configure to enable. Triggers on rate limits (429),
+# overload (529), service errors (503), or connection failures.
+#
+# Supported providers:
+#   openrouter   (OPENROUTER_API_KEY)  — routes to any model
+#   openai-codex (OAuth — hermes auth) — OpenAI Codex
+#   nous         (OAuth — hermes auth) — Nous Portal
+#   zai          (ZAI_API_KEY)         — Z.AI / GLM
+#   kimi-coding  (KIMI_API_KEY)        — Kimi / Moonshot
+#   kimi-coding-cn (KIMI_CN_API_KEY)   — Kimi / Moonshot (China)
+#   minimax      (MINIMAX_API_KEY)     — MiniMax
+#   minimax-cn   (MINIMAX_CN_API_KEY)  — MiniMax (China)
+#   bedrock      (AWS IAM / boto3)     — AWS Bedrock (Converse API)
+#
+# For custom OpenAI-compatible endpoints, add base_url and key_env.
+#
+# fallback_model:
+#   provider: openrouter
+#   model: anthropic/claude-sonnet-4

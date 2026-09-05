@@ -15,7 +15,7 @@ os.makedirs("/opt/hermes/logs", exist_ok=True)
 def log(msg):
     ts = time.strftime("%Y-%m-%d %H:%M:%S")
     line = f"[{ts}] {msg}"
-    print(line)
+    print(line, flush=True)
     with open(LOG_FILE, "a", encoding="utf-8") as f:
         f.write(line + "\n")
 
@@ -36,15 +36,30 @@ def check_and_update():
         local_rev = subprocess.run(["git", "-C", APP_DIR, "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
         remote_rev = subprocess.run(["git", "-C", APP_DIR, "rev-parse", "@{u}"], capture_output=True, text=True).stdout.strip()
 
-        if local_rev == remote_rev:
+        # Check currently built commit
+        built_commit = ""
+        build_info_path = os.path.join(APP_DIR, "dist", "build-info.json")
+        if os.path.exists(build_info_path):
+            try:
+                with open(build_info_path, "r", encoding="utf-8") as f:
+                    built_commit = json.load(f).get("commit", "").strip()
+            except Exception:
+                pass
+
+        if local_rev == remote_rev and built_commit == local_rev:
             log(f"OpenClaw 2.0 is up to date (Commit: {local_rev[:8]}). No rebuild needed.")
             return
 
-        log(f"New update found! Local: {local_rev[:8]} -> Remote: {remote_rev[:8]}. Pulling...")
-        res_pull = subprocess.run(["git", "-C", APP_DIR, "pull", "--ff-only"], capture_output=True, text=True, timeout=60)
-        if res_pull.returncode != 0:
-            log(f"Git pull failed: {res_pull.stderr.strip()}")
-            return
+        if local_rev != remote_rev:
+            log(f"New update found! Local: {local_rev[:8]} -> Remote: {remote_rev[:8]}. Pulling...")
+            res_pull = subprocess.run(["git", "-C", APP_DIR, "pull", "--ff-only"], capture_output=True, text=True, timeout=60)
+            if res_pull.returncode != 0:
+                log(f"Git pull failed: {res_pull.stderr.strip()}")
+                return
+            target_rev = remote_rev
+        else:
+            log(f"Rebuild required for HEAD {local_rev[:8]} (currently built commit: {built_commit[:8] if built_commit else none}).")
+            target_rev = local_rev
 
         log("Installing dependencies (pnpm install)...")
         res_install = subprocess.run(["pnpm", "--dir", APP_DIR, "install"], capture_output=True, text=True, timeout=180)
@@ -66,7 +81,7 @@ def check_and_update():
         log("Restarting openclaw.service...")
         res_restart = subprocess.run(["systemctl", "restart", SERVICE_NAME], capture_output=True, text=True, timeout=30)
         if res_restart.returncode == 0:
-            log(f"✅ OpenClaw 2.0 successfully updated and restarted to commit {remote_rev[:8]}!")
+            log(f"✅ OpenClaw 2.0 successfully updated and restarted to commit {target_rev[:8]}!")
         else:
             log(f"Service restart failed: {res_restart.stderr.strip()}")
 
