@@ -3,7 +3,7 @@
     {
       "id": "ae18ce4d8dbc",
       "name": "Richard memory self-inventory",
-      "prompt": "You are the memory steward for Richard Marlowe, Navo's AI sales agent. His live working memory is at:\nC:\\Users\\Stefan\\My Drive\\Equity\\My Biz\\Partner companies\\Navo\\6. Departments\\Richard Marlowe\\Richard Hermes\\memory.md\n\nSteps:\n1. Read memory.md (read_file).\n2. Also read soul.md and Agents.md from the same folder if you need product/competitive context to judge what is still accurate.\n3. Prune memory.md: KEEP only high-signal, currently-relevant facts — active/growing client relationships, competitive intel that has changed, product facts Richard cites daily, recurring gotchas, and the pruning rules themselves. DROP stale one-off items, outdated rates/numbers, facts that will never recur, and verbose duplicates.\n4. Goal: keep the file light (target under ~150 lines) while preserving everything Richard needs to sell well tomorrow. Forgetting dead facts is GOOD.\n5. Rewrite memory.md with write_file (full replacement), preserving its header comment block and the \"Pruning rules\" section.\n6. Output a short report: lines kept, lines dropped, and any fact you were unsure whether to keep. Be decisive.",
+      "prompt": "You are the memory steward for Richard Marlowe, Navo's AI sales agent. His live working memory is at:\nC:\\Users\\Stefan\\My Drive\\Equity\\My Biz\\Partner companies\\Navo\\6. Departments\\Richard Marlowe\\Richard Hermes\\memory.md\n\nSteps:\n1. Read memory.md (read_file).\n2. Also read soul.md and Agents.md from the same folder if you need product/competitive context to judge what is still accurate.\n3. Prune memory.md: KEEP only high-signal, currently-relevant facts \u2014 active/growing client relationships, competitive intel that has changed, product facts Richard cites daily, recurring gotchas, and the pruning rules themselves. DROP stale one-off items, outdated rates/numbers, facts that will never recur, and verbose duplicates.\n4. Goal: keep the file light (target under ~150 lines) while preserving everything Richard needs to sell well tomorrow. Forgetting dead facts is GOOD.\n5. Rewrite memory.md with write_file (full replacement), preserving its header comment block and the \"Pruning rules\" section.\n6. Output a short report: lines kept, lines dropped, and any fact you were unsure whether to keep. Be decisive.",
       "skills": [],
       "skill": null,
       "model": "gemini-3.8-flash",
@@ -38,12 +38,13 @@
       "origin": null,
       "enabled_toolsets": null,
       "workdir": null,
-      "fire_claim": null
+      "fire_claim": null,
+      "catch_up": false
     },
     {
       "id": "ba53668b7e6c",
       "name": "Richard Group Hourly Sweep",
-      "prompt": "Ты — Richard Marlowe (Navo24), AI Senior Sales Manager. Запуск раз в час как фоновый sweep групп Telegram.\n\nШаг 1. Собери НОВЫЕ сообщения из всех чатов, куда добавлен бот (diff-only, не повторяй прочитанное):\n```\ncd \"C:/Users/Stefan/My Drive/Equity/My Biz/My companies/Enlight Group/Stefan Rogovskyi/Hermes Stevenson/groups\"\npython \"richard_group_sweep.py\" fetch\n```\n(python = venv: C:/Users/Stefan/AppData/Local/hermes/hermes-agent/venv/Scripts/python.exe)\nРезультат — JSON {\"max_id\": N, \"messages\": [...]}. Если messages пуст — заверши молча (ничего не пиши Стефану).\n\nШаг 2. Для каждого нового сообщения реши (как Richard, по своему system_prompt/role):\n- если тебя упомянули (@richnavobot / @richard) ИЛИ сообщение on-domain (логистика, фрахт, navo, трекинг, ставки, груз, контейнер, морской, букинг, freight, shipping, tracking, rate, shipment, port, customs, charter, TrackingMCP, SchedulesMCP, LoadingMCP, FreightRatesMCP) и твой совет реально полезен → ОТВЕТИ в тот же чат от своего имени:\n  python richard_group_sweep.py send --chat <chat_id> --text \"<твой ответ голосом Richard>\"\n- если это цена вне прайса / крупный контракт / любая финансовая просьба → НЕ отвечай в чат, отправь digest Стефану:\n  python richard_group_sweep.py digest --text \"⚠️ Эскалация из группы <title>: <суть>\"\n- иначе → МОЛЧИ (не отвечай, не эскалируй).\n\nRichard отвечает ВСЕМ участникам (фильтра \"только админ\" нет). Тон — concise_bullets, как в agent.config.json. Никогда не выдумывай ставки/ETA/статусы груза — \"нет данных\" как есть.\n\nШаг 3. Зафиксируй прочтение (обязательно, иначе повторим те же сообщения в следующий час):\n```\npython richard_group_sweep.py commit --max-id <N из fetch>\n```\n\nШаг 4. Если были реальные действия (ответы/эскалации) — кратко доложи Стефану в этом же сообщении что сделал. Если только молчал — ничего не отправляй (тишина).\n\nВАЖНО: это НЕ realtime-режим. Ты читаешь накопленное за час раз в час. Не дублируй ответы.",
+      "prompt": "\u0422\u044b \u2014 Richard Marlowe (Navo24), AI Senior Sales Manager. \u0417\u0430\u043f\u0443\u0441\u043a \u0440\u0430\u0437 \u0432 \u0447\u0430\u0441 \u043a\u0430\u043a \u0444\u043e\u043d\u043e\u0432\u044b\u0439 sweep \u0433\u0440\u0443\u043f\u043f Telegram.\n\n\u0428\u0430\u0433 1. \u0421\u043e\u0431\u0435\u0440\u0438 \u041d\u041e\u0412\u042b\u0415 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f \u0438\u0437 \u0432\u0441\u0435\u0445 \u0447\u0430\u0442\u043e\u0432, \u043a\u0443\u0434\u0430 \u0434\u043e\u0431\u0430\u0432\u043b\u0435\u043d \u0431\u043e\u0442 (diff-only, \u043d\u0435 \u043f\u043e\u0432\u0442\u043e\u0440\u044f\u0439 \u043f\u0440\u043e\u0447\u0438\u0442\u0430\u043d\u043d\u043e\u0435):\n```\ncd \"C:/Users/Stefan/My Drive/Equity/My Biz/My companies/Enlight Group/Stefan Rogovskyi/Hermes Stevenson/groups\"\npython \"richard_group_sweep.py\" fetch\n```\n(python = venv: C:/Users/Stefan/AppData/Local/hermes/hermes-agent/venv/Scripts/python.exe)\n\u0420\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442 \u2014 JSON {\"max_id\": N, \"messages\": [...]}. \u0415\u0441\u043b\u0438 messages \u043f\u0443\u0441\u0442 \u2014 \u0437\u0430\u0432\u0435\u0440\u0448\u0438 \u043c\u043e\u043b\u0447\u0430 (\u043d\u0438\u0447\u0435\u0433\u043e \u043d\u0435 \u043f\u0438\u0448\u0438 \u0421\u0442\u0435\u0444\u0430\u043d\u0443).\n\n\u0428\u0430\u0433 2. \u0414\u043b\u044f \u043a\u0430\u0436\u0434\u043e\u0433\u043e \u043d\u043e\u0432\u043e\u0433\u043e \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f \u0440\u0435\u0448\u0438 (\u043a\u0430\u043a Richard, \u043f\u043e \u0441\u0432\u043e\u0435\u043c\u0443 system_prompt/role):\n- \u0435\u0441\u043b\u0438 \u0442\u0435\u0431\u044f \u0443\u043f\u043e\u043c\u044f\u043d\u0443\u043b\u0438 (@richnavobot / @richard) \u0418\u041b\u0418 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435 on-domain (\u043b\u043e\u0433\u0438\u0441\u0442\u0438\u043a\u0430, \u0444\u0440\u0430\u0445\u0442, navo, \u0442\u0440\u0435\u043a\u0438\u043d\u0433, \u0441\u0442\u0430\u0432\u043a\u0438, \u0433\u0440\u0443\u0437, \u043a\u043e\u043d\u0442\u0435\u0439\u043d\u0435\u0440, \u043c\u043e\u0440\u0441\u043a\u043e\u0439, \u0431\u0443\u043a\u0438\u043d\u0433, freight, shipping, tracking, rate, shipment, port, customs, charter, TrackingMCP, SchedulesMCP, LoadingMCP, FreightRatesMCP) \u0438 \u0442\u0432\u043e\u0439 \u0441\u043e\u0432\u0435\u0442 \u0440\u0435\u0430\u043b\u044c\u043d\u043e \u043f\u043e\u043b\u0435\u0437\u0435\u043d \u2192 \u041e\u0422\u0412\u0415\u0422\u0418 \u0432 \u0442\u043e\u0442 \u0436\u0435 \u0447\u0430\u0442 \u043e\u0442 \u0441\u0432\u043e\u0435\u0433\u043e \u0438\u043c\u0435\u043d\u0438:\n  python richard_group_sweep.py send --chat <chat_id> --text \"<\u0442\u0432\u043e\u0439 \u043e\u0442\u0432\u0435\u0442 \u0433\u043e\u043b\u043e\u0441\u043e\u043c Richard>\"\n- \u0435\u0441\u043b\u0438 \u044d\u0442\u043e \u0446\u0435\u043d\u0430 \u0432\u043d\u0435 \u043f\u0440\u0430\u0439\u0441\u0430 / \u043a\u0440\u0443\u043f\u043d\u044b\u0439 \u043a\u043e\u043d\u0442\u0440\u0430\u043a\u0442 / \u043b\u044e\u0431\u0430\u044f \u0444\u0438\u043d\u0430\u043d\u0441\u043e\u0432\u0430\u044f \u043f\u0440\u043e\u0441\u044c\u0431\u0430 \u2192 \u041d\u0415 \u043e\u0442\u0432\u0435\u0447\u0430\u0439 \u0432 \u0447\u0430\u0442, \u043e\u0442\u043f\u0440\u0430\u0432\u044c digest \u0421\u0442\u0435\u0444\u0430\u043d\u0443:\n  python richard_group_sweep.py digest --text \"\u26a0\ufe0f \u042d\u0441\u043a\u0430\u043b\u0430\u0446\u0438\u044f \u0438\u0437 \u0433\u0440\u0443\u043f\u043f\u044b <title>: <\u0441\u0443\u0442\u044c>\"\n- \u0438\u043d\u0430\u0447\u0435 \u2192 \u041c\u041e\u041b\u0427\u0418 (\u043d\u0435 \u043e\u0442\u0432\u0435\u0447\u0430\u0439, \u043d\u0435 \u044d\u0441\u043a\u0430\u043b\u0438\u0440\u0443\u0439).\n\nRichard \u043e\u0442\u0432\u0435\u0447\u0430\u0435\u0442 \u0412\u0421\u0415\u041c \u0443\u0447\u0430\u0441\u0442\u043d\u0438\u043a\u0430\u043c (\u0444\u0438\u043b\u044c\u0442\u0440\u0430 \"\u0442\u043e\u043b\u044c\u043a\u043e \u0430\u0434\u043c\u0438\u043d\" \u043d\u0435\u0442). \u0422\u043e\u043d \u2014 concise_bullets, \u043a\u0430\u043a \u0432 agent.config.json. \u041d\u0438\u043a\u043e\u0433\u0434\u0430 \u043d\u0435 \u0432\u044b\u0434\u0443\u043c\u044b\u0432\u0430\u0439 \u0441\u0442\u0430\u0432\u043a\u0438/ETA/\u0441\u0442\u0430\u0442\u0443\u0441\u044b \u0433\u0440\u0443\u0437\u0430 \u2014 \"\u043d\u0435\u0442 \u0434\u0430\u043d\u043d\u044b\u0445\" \u043a\u0430\u043a \u0435\u0441\u0442\u044c.\n\n\u0428\u0430\u0433 3. \u0417\u0430\u0444\u0438\u043a\u0441\u0438\u0440\u0443\u0439 \u043f\u0440\u043e\u0447\u0442\u0435\u043d\u0438\u0435 (\u043e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u043e, \u0438\u043d\u0430\u0447\u0435 \u043f\u043e\u0432\u0442\u043e\u0440\u0438\u043c \u0442\u0435 \u0436\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f \u0432 \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u0439 \u0447\u0430\u0441):\n```\npython richard_group_sweep.py commit --max-id <N \u0438\u0437 fetch>\n```\n\n\u0428\u0430\u0433 4. \u0415\u0441\u043b\u0438 \u0431\u044b\u043b\u0438 \u0440\u0435\u0430\u043b\u044c\u043d\u044b\u0435 \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044f (\u043e\u0442\u0432\u0435\u0442\u044b/\u044d\u0441\u043a\u0430\u043b\u0430\u0446\u0438\u0438) \u2014 \u043a\u0440\u0430\u0442\u043a\u043e \u0434\u043e\u043b\u043e\u0436\u0438 \u0421\u0442\u0435\u0444\u0430\u043d\u0443 \u0432 \u044d\u0442\u043e\u043c \u0436\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0438 \u0447\u0442\u043e \u0441\u0434\u0435\u043b\u0430\u043b. \u0415\u0441\u043b\u0438 \u0442\u043e\u043b\u044c\u043a\u043e \u043c\u043e\u043b\u0447\u0430\u043b \u2014 \u043d\u0438\u0447\u0435\u0433\u043e \u043d\u0435 \u043e\u0442\u043f\u0440\u0430\u0432\u043b\u044f\u0439 (\u0442\u0438\u0448\u0438\u043d\u0430).\n\n\u0412\u0410\u0416\u041d\u041e: \u044d\u0442\u043e \u041d\u0415 realtime-\u0440\u0435\u0436\u0438\u043c. \u0422\u044b \u0447\u0438\u0442\u0430\u0435\u0448\u044c \u043d\u0430\u043a\u043e\u043f\u043b\u0435\u043d\u043d\u043e\u0435 \u0437\u0430 \u0447\u0430\u0441 \u0440\u0430\u0437 \u0432 \u0447\u0430\u0441. \u041d\u0435 \u0434\u0443\u0431\u043b\u0438\u0440\u0443\u0439 \u043e\u0442\u0432\u0435\u0442\u044b.",
       "skills": [],
       "skill": null,
       "model": "gemini-3.8-flash",
@@ -87,7 +88,8 @@
         "file"
       ],
       "workdir": null,
-      "fire_claim": null
+      "fire_claim": null,
+      "catch_up": false
     },
     {
       "id": "06617fcc7903",
@@ -111,15 +113,15 @@
       "schedule_display": "0 4 * * *",
       "repeat": {
         "times": null,
-        "completed": 40
+        "completed": 42
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-24T09:32:33.630454+03:00",
-      "next_run_at": "2026-09-04T04:00:00+00:00",
-      "last_run_at": "2026-09-03T04:00:24.758384+00:00",
+      "next_run_at": "2026-09-06T04:00:00+00:00",
+      "last_run_at": "2026-09-05T04:00:34.485955+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -133,7 +135,8 @@
       },
       "enabled_toolsets": null,
       "workdir": null,
-      "fire_claim": null
+      "fire_claim": null,
+      "catch_up": false
     },
     {
       "id": "adebce1b861c",
@@ -157,15 +160,15 @@
       "schedule_display": "0 4 * * *",
       "repeat": {
         "times": null,
-        "completed": 41
+        "completed": 43
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-25T02:44:50.786339+03:00",
-      "next_run_at": "2026-09-04T04:00:00+00:00",
-      "last_run_at": "2026-09-03T04:00:24.767173+00:00",
+      "next_run_at": "2026-09-06T04:00:00+00:00",
+      "last_run_at": "2026-09-05T04:00:34.493097+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -179,7 +182,8 @@
       },
       "enabled_toolsets": null,
       "workdir": null,
-      "fire_claim": null
+      "fire_claim": null,
+      "catch_up": false
     },
     {
       "id": "64949a3bab7d",
@@ -203,15 +207,15 @@
       "schedule_display": "every 30m",
       "repeat": {
         "times": null,
-        "completed": 1628
+        "completed": 1671
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T12:10:31.215147+03:00",
-      "next_run_at": "2026-09-03T06:00:48.728641+00:00",
-      "last_run_at": "2026-09-03T05:30:48.728641+00:00",
+      "next_run_at": "2026-09-05T07:42:42.246305+00:00",
+      "last_run_at": "2026-09-05T07:12:42.246305+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -225,7 +229,8 @@
       },
       "enabled_toolsets": null,
       "workdir": null,
-      "fire_claim": null
+      "fire_claim": null,
+      "catch_up": false
     },
     {
       "id": "5131c5900c82",
@@ -249,15 +254,15 @@
       "schedule_display": "every 5m",
       "repeat": {
         "times": null,
-        "completed": 8395
+        "completed": 8615
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-26T14:00:47.463720+03:00",
-      "next_run_at": "2026-09-03T05:52:35.569852+00:00",
-      "last_run_at": "2026-09-03T05:47:35.569852+00:00",
+      "next_run_at": "2026-09-05T07:29:42.444519+00:00",
+      "last_run_at": "2026-09-05T07:24:42.444519+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -271,12 +276,13 @@
       },
       "enabled_toolsets": null,
       "workdir": null,
-      "fire_claim": null
+      "fire_claim": null,
+      "catch_up": false
     },
     {
       "id": "e82853e5ab8e",
       "name": "Silpo weekly order",
-      "prompt": "Еженедельный заказ продуктов в Silpo.ua для Стефана. Отвечай по-русски.\n\nШАГ 0 — прочитай файл предпочтений: C:/Users/Stefan/AppData/Local/hermes/scripts/silpo_prefs.md — там актуальные требования, список проверенных товаров и техническая процедура. Следуй ему строго.\n\nКратко: собрать корзину еды на неделю в silpo.ua через Chrome Стефана (CDP 127.0.0.1:9223, залогиненный профиль). Требования: сумма >1700 грн; кулинария со скидкой >20%; БЕЗ рыбы; обязательно молоко, яйца, сыр, глазированные сырочки (+балык); Піца Франческо — 2 шт; слот доставки — на завтра.\n\nТехника: browser.cdp_url должен быть http://127.0.0.1:9223 и engine=chrome (проверь `hermes config get browser.cdp_url`, при необходимости `hermes config set`). Если порт 9223 не слушается — НЕ убивай Chrome, напиши Стефану, что нужно запустить Chrome с --remote-debugging-port=9223. Кнопки «Додати у кошик» в лентах глючат — добавляй товары JS-кликом через browser_console (найти article с названием товара, кликнуть кнопку aria-label «Додати у кошик»; количество — кнопкой «Збільшити»).\n\nЖЁСТКОЕ ПРАВИЛО: корзину собрать, слот на завтра выбрать, но финальное оформление/оплату НЕ подтверждать. В финальном ответе — состав корзины, сумма, и вопрос Стефану, подтверждает ли он заказ.\n\nПри любом блокере (Cloudflare, разлогин, нет CDP) — не молчать, сразу сообщить в ответе, что именно нужно от Стефана (например, пройти капчу или залогиниться).",
+      "prompt": "\u0415\u0436\u0435\u043d\u0435\u0434\u0435\u043b\u044c\u043d\u044b\u0439 \u0437\u0430\u043a\u0430\u0437 \u043f\u0440\u043e\u0434\u0443\u043a\u0442\u043e\u0432 \u0432 Silpo.ua \u0434\u043b\u044f \u0421\u0442\u0435\u0444\u0430\u043d\u0430. \u041e\u0442\u0432\u0435\u0447\u0430\u0439 \u043f\u043e-\u0440\u0443\u0441\u0441\u043a\u0438.\n\n\u0428\u0410\u0413 0 \u2014 \u043f\u0440\u043e\u0447\u0438\u0442\u0430\u0439 \u0444\u0430\u0439\u043b \u043f\u0440\u0435\u0434\u043f\u043e\u0447\u0442\u0435\u043d\u0438\u0439: C:/Users/Stefan/AppData/Local/hermes/scripts/silpo_prefs.md \u2014 \u0442\u0430\u043c \u0430\u043a\u0442\u0443\u0430\u043b\u044c\u043d\u044b\u0435 \u0442\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f, \u0441\u043f\u0438\u0441\u043e\u043a \u043f\u0440\u043e\u0432\u0435\u0440\u0435\u043d\u043d\u044b\u0445 \u0442\u043e\u0432\u0430\u0440\u043e\u0432 \u0438 \u0442\u0435\u0445\u043d\u0438\u0447\u0435\u0441\u043a\u0430\u044f \u043f\u0440\u043e\u0446\u0435\u0434\u0443\u0440\u0430. \u0421\u043b\u0435\u0434\u0443\u0439 \u0435\u043c\u0443 \u0441\u0442\u0440\u043e\u0433\u043e.\n\n\u041a\u0440\u0430\u0442\u043a\u043e: \u0441\u043e\u0431\u0440\u0430\u0442\u044c \u043a\u043e\u0440\u0437\u0438\u043d\u0443 \u0435\u0434\u044b \u043d\u0430 \u043d\u0435\u0434\u0435\u043b\u044e \u0432 silpo.ua \u0447\u0435\u0440\u0435\u0437 Chrome \u0421\u0442\u0435\u0444\u0430\u043d\u0430 (CDP 127.0.0.1:9223, \u0437\u0430\u043b\u043e\u0433\u0438\u043d\u0435\u043d\u043d\u044b\u0439 \u043f\u0440\u043e\u0444\u0438\u043b\u044c). \u0422\u0440\u0435\u0431\u043e\u0432\u0430\u043d\u0438\u044f: \u0441\u0443\u043c\u043c\u0430 >1700 \u0433\u0440\u043d; \u043a\u0443\u043b\u0438\u043d\u0430\u0440\u0438\u044f \u0441\u043e \u0441\u043a\u0438\u0434\u043a\u043e\u0439 >20%; \u0411\u0415\u0417 \u0440\u044b\u0431\u044b; \u043e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u043e \u043c\u043e\u043b\u043e\u043a\u043e, \u044f\u0439\u0446\u0430, \u0441\u044b\u0440, \u0433\u043b\u0430\u0437\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0435 \u0441\u044b\u0440\u043e\u0447\u043a\u0438 (+\u0431\u0430\u043b\u044b\u043a); \u041f\u0456\u0446\u0430 \u0424\u0440\u0430\u043d\u0447\u0435\u0441\u043a\u043e \u2014 2 \u0448\u0442; \u0441\u043b\u043e\u0442 \u0434\u043e\u0441\u0442\u0430\u0432\u043a\u0438 \u2014 \u043d\u0430 \u0437\u0430\u0432\u0442\u0440\u0430.\n\n\u0422\u0435\u0445\u043d\u0438\u043a\u0430: browser.cdp_url \u0434\u043e\u043b\u0436\u0435\u043d \u0431\u044b\u0442\u044c http://127.0.0.1:9223 \u0438 engine=chrome (\u043f\u0440\u043e\u0432\u0435\u0440\u044c `hermes config get browser.cdp_url`, \u043f\u0440\u0438 \u043d\u0435\u043e\u0431\u0445\u043e\u0434\u0438\u043c\u043e\u0441\u0442\u0438 `hermes config set`). \u0415\u0441\u043b\u0438 \u043f\u043e\u0440\u0442 9223 \u043d\u0435 \u0441\u043b\u0443\u0448\u0430\u0435\u0442\u0441\u044f \u2014 \u041d\u0415 \u0443\u0431\u0438\u0432\u0430\u0439 Chrome, \u043d\u0430\u043f\u0438\u0448\u0438 \u0421\u0442\u0435\u0444\u0430\u043d\u0443, \u0447\u0442\u043e \u043d\u0443\u0436\u043d\u043e \u0437\u0430\u043f\u0443\u0441\u0442\u0438\u0442\u044c Chrome \u0441 --remote-debugging-port=9223. \u041a\u043d\u043e\u043f\u043a\u0438 \u00ab\u0414\u043e\u0434\u0430\u0442\u0438 \u0443 \u043a\u043e\u0448\u0438\u043a\u00bb \u0432 \u043b\u0435\u043d\u0442\u0430\u0445 \u0433\u043b\u044e\u0447\u0430\u0442 \u2014 \u0434\u043e\u0431\u0430\u0432\u043b\u044f\u0439 \u0442\u043e\u0432\u0430\u0440\u044b JS-\u043a\u043b\u0438\u043a\u043e\u043c \u0447\u0435\u0440\u0435\u0437 browser_console (\u043d\u0430\u0439\u0442\u0438 article \u0441 \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435\u043c \u0442\u043e\u0432\u0430\u0440\u0430, \u043a\u043b\u0438\u043a\u043d\u0443\u0442\u044c \u043a\u043d\u043e\u043f\u043a\u0443 aria-label \u00ab\u0414\u043e\u0434\u0430\u0442\u0438 \u0443 \u043a\u043e\u0448\u0438\u043a\u00bb; \u043a\u043e\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u043e \u2014 \u043a\u043d\u043e\u043f\u043a\u043e\u0439 \u00ab\u0417\u0431\u0456\u043b\u044c\u0448\u0438\u0442\u0438\u00bb).\n\n\u0416\u0401\u0421\u0422\u041a\u041e\u0415 \u041f\u0420\u0410\u0412\u0418\u041b\u041e: \u043a\u043e\u0440\u0437\u0438\u043d\u0443 \u0441\u043e\u0431\u0440\u0430\u0442\u044c, \u0441\u043b\u043e\u0442 \u043d\u0430 \u0437\u0430\u0432\u0442\u0440\u0430 \u0432\u044b\u0431\u0440\u0430\u0442\u044c, \u043d\u043e \u0444\u0438\u043d\u0430\u043b\u044c\u043d\u043e\u0435 \u043e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u0435/\u043e\u043f\u043b\u0430\u0442\u0443 \u041d\u0415 \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0430\u0442\u044c. \u0412 \u0444\u0438\u043d\u0430\u043b\u044c\u043d\u043e\u043c \u043e\u0442\u0432\u0435\u0442\u0435 \u2014 \u0441\u043e\u0441\u0442\u0430\u0432 \u043a\u043e\u0440\u0437\u0438\u043d\u044b, \u0441\u0443\u043c\u043c\u0430, \u0438 \u0432\u043e\u043f\u0440\u043e\u0441 \u0421\u0442\u0435\u0444\u0430\u043d\u0443, \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0430\u0435\u0442 \u043b\u0438 \u043e\u043d \u0437\u0430\u043a\u0430\u0437.\n\n\u041f\u0440\u0438 \u043b\u044e\u0431\u043e\u043c \u0431\u043b\u043e\u043a\u0435\u0440\u0435 (Cloudflare, \u0440\u0430\u0437\u043b\u043e\u0433\u0438\u043d, \u043d\u0435\u0442 CDP) \u2014 \u043d\u0435 \u043c\u043e\u043b\u0447\u0430\u0442\u044c, \u0441\u0440\u0430\u0437\u0443 \u0441\u043e\u043e\u0431\u0449\u0438\u0442\u044c \u0432 \u043e\u0442\u0432\u0435\u0442\u0435, \u0447\u0442\u043e \u0438\u043c\u0435\u043d\u043d\u043e \u043d\u0443\u0436\u043d\u043e \u043e\u0442 \u0421\u0442\u0435\u0444\u0430\u043d\u0430 (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440, \u043f\u0440\u043e\u0439\u0442\u0438 \u043a\u0430\u043f\u0447\u0443 \u0438\u043b\u0438 \u0437\u0430\u043b\u043e\u0433\u0438\u043d\u0438\u0442\u044c\u0441\u044f).",
       "skills": [],
       "skill": null,
       "model": "gemini-3.8-flash",
@@ -322,12 +328,13 @@
         "browser"
       ],
       "workdir": null,
-      "fire_claim": null
+      "fire_claim": null,
+      "catch_up": false
     },
     {
       "id": "70082a72b5e8",
       "name": "Pinecone memory sync daily",
-      "prompt": "Run the Pinecone vector-memory sync for Hermes long-term memory. Execute:\n`cd \"C:/Users/Stefan/AppData/Local/hermes/memory_v2\" && \"C:/Users/Stefan/AppData/Local/hermes/hermes-agent/venv/Scripts/python.exe\" pinecone_sync.py`\nThe script reads PINECONE_API_KEY and OPENROUTER_API_KEY from C:/Users/Stefan/AppData/Local/hermes/.env automatically. It creates/updates the 'hermes-memory' index (dim 1536) with embeddings via OpenRouter free tier, chunks all cases/ + principles/ .md files, and upserts them. If Pinecone or OpenRouter key is missing it silently skips (file-based recall.py still works). Report only if it errors or upserts 0 chunks. This keeps semantic search indexed as new cases are added. Do NOT edit any case files — sync only.",
+      "prompt": "Run the Pinecone vector-memory sync for Hermes long-term memory. Execute:\n`cd \"C:/Users/Stefan/AppData/Local/hermes/memory_v2\" && \"C:/Users/Stefan/AppData/Local/hermes/hermes-agent/venv/Scripts/python.exe\" pinecone_sync.py`\nThe script reads PINECONE_API_KEY and OPENROUTER_API_KEY from C:/Users/Stefan/AppData/Local/hermes/.env automatically. It creates/updates the 'hermes-memory' index (dim 1536) with embeddings via OpenRouter free tier, chunks all cases/ + principles/ .md files, and upserts them. If Pinecone or OpenRouter key is missing it silently skips (file-based recall.py still works). Report only if it errors or upserts 0 chunks. This keeps semantic search indexed as new cases are added. Do NOT edit any case files \u2014 sync only.",
       "skills": [
         "memory-recall"
       ],
@@ -348,15 +355,15 @@
       "schedule_display": "0 3 * * *",
       "repeat": {
         "times": null,
-        "completed": 37
+        "completed": 39
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-28T08:57:56.515725+03:00",
-      "next_run_at": "2026-09-04T03:00:00+00:00",
-      "last_run_at": "2026-09-03T03:01:22.268288+00:00",
+      "next_run_at": "2026-09-06T03:00:00+00:00",
+      "last_run_at": "2026-09-05T03:01:41.200542+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -370,12 +377,13 @@
       },
       "enabled_toolsets": null,
       "workdir": null,
-      "fire_claim": null
+      "fire_claim": null,
+      "catch_up": false
     },
     {
       "id": "5622fe92371d",
       "name": "Daily memory harvest",
-      "prompt": "Harvest today's session into Hermes long-term memory (memory_v2). Steps:\n1. Extract the session transcript text for the last 24h (from state.db or gateway logs under C:/Users/Stefan/AppData/Local/hermes/).\n2. Run: `cd \"C:/Users/Stefan/AppData/Local/hermes/memory_v2\" && \"C:/Users/Stefan/AppData/Local/hermes/hermes-agent/venv/Scripts/python.exe\" memory_harvest.py <session_text_file>`\n3. For each candidate the script outputs:\n   - If INSTRUCTION / durable rule from Stefan → write or append to memory_v2/principles/ OR memory_v2/domains/life_domains.md (categorize by domain tag the script suggests, but verify the category makes sense — agent_club is for bots only, memory_systems for architecture, personal for general conduct).\n   - If SUCCESS / METHOD → create a case file in memory_v2/cases/ with symlink/cross-ref to relevant domain.\n   - Update memory_v2/index.md with new entries.\n4. Do NOT overwrite existing case files blindly — append new sections.\n5. After writing, run `pinecone_sync.py` to re-index (already has its own 03:00 cron; this is a backup).\nReport only if errors or 0 candidates found. Silence if nothing useful.\nIMPORTANT: if you detect a prior session crash (state.db write error, truncated turn) — note it in a case under memory_systems and continue the interrupted task, do not wait for Stefan to ask.",
+      "prompt": "Harvest today's session into Hermes long-term memory (memory_v2). Steps:\n1. Extract the session transcript text for the last 24h (from state.db or gateway logs under C:/Users/Stefan/AppData/Local/hermes/).\n2. Run: `cd \"C:/Users/Stefan/AppData/Local/hermes/memory_v2\" && \"C:/Users/Stefan/AppData/Local/hermes/hermes-agent/venv/Scripts/python.exe\" memory_harvest.py <session_text_file>`\n3. For each candidate the script outputs:\n   - If INSTRUCTION / durable rule from Stefan \u2192 write or append to memory_v2/principles/ OR memory_v2/domains/life_domains.md (categorize by domain tag the script suggests, but verify the category makes sense \u2014 agent_club is for bots only, memory_systems for architecture, personal for general conduct).\n   - If SUCCESS / METHOD \u2192 create a case file in memory_v2/cases/ with symlink/cross-ref to relevant domain.\n   - Update memory_v2/index.md with new entries.\n4. Do NOT overwrite existing case files blindly \u2014 append new sections.\n5. After writing, run `pinecone_sync.py` to re-index (already has its own 03:00 cron; this is a backup).\nReport only if errors or 0 candidates found. Silence if nothing useful.\nIMPORTANT: if you detect a prior session crash (state.db write error, truncated turn) \u2014 note it in a case under memory_systems and continue the interrupted task, do not wait for Stefan to ask.",
       "skills": [
         "memory-recall"
       ],
@@ -396,15 +404,15 @@
       "schedule_display": "0 2 * * *",
       "repeat": {
         "times": null,
-        "completed": 37
+        "completed": 39
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-28T09:17:54.493677+03:00",
-      "next_run_at": "2026-09-04T02:00:00+00:00",
-      "last_run_at": "2026-09-03T02:03:58.680746+00:00",
+      "next_run_at": "2026-09-06T02:00:00+00:00",
+      "last_run_at": "2026-09-05T02:04:54.546183+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -418,7 +426,8 @@
       },
       "enabled_toolsets": null,
       "workdir": null,
-      "fire_claim": null
+      "fire_claim": null,
+      "catch_up": false
     },
     {
       "id": "3e476da6d524",
@@ -442,15 +451,15 @@
       "schedule_display": "0 4 * * *",
       "repeat": {
         "times": null,
-        "completed": 37
+        "completed": 39
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-30T20:46:48.439443+03:00",
-      "next_run_at": "2026-09-04T04:00:00+00:00",
-      "last_run_at": "2026-09-03T04:00:36.822764+00:00",
+      "next_run_at": "2026-09-06T04:00:00+00:00",
+      "last_run_at": "2026-09-05T04:00:51.803838+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -464,7 +473,8 @@
       },
       "enabled_toolsets": null,
       "workdir": null,
-      "fire_claim": null
+      "fire_claim": null,
+      "catch_up": false
     },
     {
       "id": "daf4d500bbbf",
@@ -510,7 +520,8 @@
       },
       "enabled_toolsets": null,
       "workdir": null,
-      "fire_claim": null
+      "fire_claim": null,
+      "catch_up": false
     },
     {
       "id": "84745a9d1d44",
@@ -534,15 +545,15 @@
       "schedule_display": "0 1 * * *",
       "repeat": {
         "times": null,
-        "completed": 31
+        "completed": 33
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-08-03T23:48:24.008367+03:00",
-      "next_run_at": "2026-09-04T01:00:00+00:00",
-      "last_run_at": "2026-09-03T01:00:23.789838+00:00",
+      "next_run_at": "2026-09-06T01:00:00+00:00",
+      "last_run_at": "2026-09-05T01:00:33.896991+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -556,12 +567,13 @@
       },
       "enabled_toolsets": null,
       "workdir": null,
-      "fire_claim": null
+      "fire_claim": null,
+      "catch_up": false
     },
     {
       "id": "7470b62acaab",
       "name": "Career Scanner Daily (09:00 MSK)",
-      "prompt": "Ежедневная сводка вакансий для Стефана (COO Navo, профиль: linkedin.com/in/stefrogovskiy). Отвечай по-русски.\n\nСкрипт-преран уже собрал ТРИ блока данных из официальных API (Greenhouse/Ashby/Workday/SmartRecruiters/Comeet/WP-REST/Oracle HCM/DOU RSS):\n1) EXECUTIVE CAREERS POLLER — C-Level/VP/Head of/Director в Big Tech, AI и FreightTech (Anthropic, OpenAI, SpaceX, Flexport, project44, FourKites, Maersk, Manhattan Associates, WiseTech, Windward, Descartes).\n2) IT UKRAINE — BizDev/PM/Product/Delivery senior+ уровня ($5000+) в EPAM, GlobalLogic, SoftServe, Luxoft, DataArt, Ciklum, Wix, Genesis, SKELAR, Grammarly/Superhuman, GitLab.\n3) DP World (Oracle HCM).\n\nЖЕЛЕЗНЫЕ ПРАВИЛА:\n- Используй ТОЛЬКО вакансии из вывода скрипта. ЗАПРЕЩЕНО выдумывать вакансии, компании, ссылки или менять URL хоть на символ. Каждый URL копируй байт-в-байт.\n- ЗАПРЕЩЕНЫ выдуманные метрики («99% Match»), несуществующие функции («авто-подача»).\n- Если в блоке новых вакансий нет — так и пиши одной строкой, не раздувай.\n- Если источник упал (⚠️ в выводе скрипта) — честно перечисли в конце.\n\nФОРМАТ сводки (Telegram Markdown):\n- Заголовок с датой.\n- Секция «🎯 Executive (Big Tech / AI / FreightTech)»: новые вакансии из блока 1 + DP World. Для каждой: компания, роль, локация, ссылка. Отметь топ-3 наиболее близких к профилю COO/логистика/AI — кратко почему (1 строка, на основе названия роли).\n- Секция «💻 IT Ukraine (BizDev/PM/Product, senior+)»: новые вакансии из блока 2. Компания, роль, локация, ссылка.\n- Краткий итог: сколько всего новых/открытых.\nСводку доставь одним сообщением.",
+      "prompt": "\u0415\u0436\u0435\u0434\u043d\u0435\u0432\u043d\u0430\u044f \u0441\u0432\u043e\u0434\u043a\u0430 \u0432\u0430\u043a\u0430\u043d\u0441\u0438\u0439 \u0434\u043b\u044f \u0421\u0442\u0435\u0444\u0430\u043d\u0430 (COO Navo, \u043f\u0440\u043e\u0444\u0438\u043b\u044c: linkedin.com/in/stefrogovskiy). \u041e\u0442\u0432\u0435\u0447\u0430\u0439 \u043f\u043e-\u0440\u0443\u0441\u0441\u043a\u0438.\n\n\u0421\u043a\u0440\u0438\u043f\u0442-\u043f\u0440\u0435\u0440\u0430\u043d \u0443\u0436\u0435 \u0441\u043e\u0431\u0440\u0430\u043b \u0422\u0420\u0418 \u0431\u043b\u043e\u043a\u0430 \u0434\u0430\u043d\u043d\u044b\u0445 \u0438\u0437 \u043e\u0444\u0438\u0446\u0438\u0430\u043b\u044c\u043d\u044b\u0445 API (Greenhouse/Ashby/Workday/SmartRecruiters/Comeet/WP-REST/Oracle HCM/DOU RSS):\n1) EXECUTIVE CAREERS POLLER \u2014 C-Level/VP/Head of/Director \u0432 Big Tech, AI \u0438 FreightTech (Anthropic, OpenAI, SpaceX, Flexport, project44, FourKites, Maersk, Manhattan Associates, WiseTech, Windward, Descartes).\n2) IT UKRAINE \u2014 BizDev/PM/Product/Delivery senior+ \u0443\u0440\u043e\u0432\u043d\u044f ($5000+) \u0432 EPAM, GlobalLogic, SoftServe, Luxoft, DataArt, Ciklum, Wix, Genesis, SKELAR, Grammarly/Superhuman, GitLab.\n3) DP World (Oracle HCM).\n\n\u0416\u0415\u041b\u0415\u0417\u041d\u042b\u0415 \u041f\u0420\u0410\u0412\u0418\u041b\u0410:\n- \u0418\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u0439 \u0422\u041e\u041b\u042c\u041a\u041e \u0432\u0430\u043a\u0430\u043d\u0441\u0438\u0438 \u0438\u0437 \u0432\u044b\u0432\u043e\u0434\u0430 \u0441\u043a\u0440\u0438\u043f\u0442\u0430. \u0417\u0410\u041f\u0420\u0415\u0429\u0415\u041d\u041e \u0432\u044b\u0434\u0443\u043c\u044b\u0432\u0430\u0442\u044c \u0432\u0430\u043a\u0430\u043d\u0441\u0438\u0438, \u043a\u043e\u043c\u043f\u0430\u043d\u0438\u0438, \u0441\u0441\u044b\u043b\u043a\u0438 \u0438\u043b\u0438 \u043c\u0435\u043d\u044f\u0442\u044c URL \u0445\u043e\u0442\u044c \u043d\u0430 \u0441\u0438\u043c\u0432\u043e\u043b. \u041a\u0430\u0436\u0434\u044b\u0439 URL \u043a\u043e\u043f\u0438\u0440\u0443\u0439 \u0431\u0430\u0439\u0442-\u0432-\u0431\u0430\u0439\u0442.\n- \u0417\u0410\u041f\u0420\u0415\u0429\u0415\u041d\u042b \u0432\u044b\u0434\u0443\u043c\u0430\u043d\u043d\u044b\u0435 \u043c\u0435\u0442\u0440\u0438\u043a\u0438 (\u00ab99% Match\u00bb), \u043d\u0435\u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u0435 \u0444\u0443\u043d\u043a\u0446\u0438\u0438 (\u00ab\u0430\u0432\u0442\u043e-\u043f\u043e\u0434\u0430\u0447\u0430\u00bb).\n- \u0415\u0441\u043b\u0438 \u0432 \u0431\u043b\u043e\u043a\u0435 \u043d\u043e\u0432\u044b\u0445 \u0432\u0430\u043a\u0430\u043d\u0441\u0438\u0439 \u043d\u0435\u0442 \u2014 \u0442\u0430\u043a \u0438 \u043f\u0438\u0448\u0438 \u043e\u0434\u043d\u043e\u0439 \u0441\u0442\u0440\u043e\u043a\u043e\u0439, \u043d\u0435 \u0440\u0430\u0437\u0434\u0443\u0432\u0430\u0439.\n- \u0415\u0441\u043b\u0438 \u0438\u0441\u0442\u043e\u0447\u043d\u0438\u043a \u0443\u043f\u0430\u043b (\u26a0\ufe0f \u0432 \u0432\u044b\u0432\u043e\u0434\u0435 \u0441\u043a\u0440\u0438\u043f\u0442\u0430) \u2014 \u0447\u0435\u0441\u0442\u043d\u043e \u043f\u0435\u0440\u0435\u0447\u0438\u0441\u043b\u0438 \u0432 \u043a\u043e\u043d\u0446\u0435.\n\n\u0424\u041e\u0420\u041c\u0410\u0422 \u0441\u0432\u043e\u0434\u043a\u0438 (Telegram Markdown):\n- \u0417\u0430\u0433\u043e\u043b\u043e\u0432\u043e\u043a \u0441 \u0434\u0430\u0442\u043e\u0439.\n- \u0421\u0435\u043a\u0446\u0438\u044f \u00ab\ud83c\udfaf Executive (Big Tech / AI / FreightTech)\u00bb: \u043d\u043e\u0432\u044b\u0435 \u0432\u0430\u043a\u0430\u043d\u0441\u0438\u0438 \u0438\u0437 \u0431\u043b\u043e\u043a\u0430 1 + DP World. \u0414\u043b\u044f \u043a\u0430\u0436\u0434\u043e\u0439: \u043a\u043e\u043c\u043f\u0430\u043d\u0438\u044f, \u0440\u043e\u043b\u044c, \u043b\u043e\u043a\u0430\u0446\u0438\u044f, \u0441\u0441\u044b\u043b\u043a\u0430. \u041e\u0442\u043c\u0435\u0442\u044c \u0442\u043e\u043f-3 \u043d\u0430\u0438\u0431\u043e\u043b\u0435\u0435 \u0431\u043b\u0438\u0437\u043a\u0438\u0445 \u043a \u043f\u0440\u043e\u0444\u0438\u043b\u044e COO/\u043b\u043e\u0433\u0438\u0441\u0442\u0438\u043a\u0430/AI \u2014 \u043a\u0440\u0430\u0442\u043a\u043e \u043f\u043e\u0447\u0435\u043c\u0443 (1 \u0441\u0442\u0440\u043e\u043a\u0430, \u043d\u0430 \u043e\u0441\u043d\u043e\u0432\u0435 \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u044f \u0440\u043e\u043b\u0438).\n- \u0421\u0435\u043a\u0446\u0438\u044f \u00ab\ud83d\udcbb IT Ukraine (BizDev/PM/Product, senior+)\u00bb: \u043d\u043e\u0432\u044b\u0435 \u0432\u0430\u043a\u0430\u043d\u0441\u0438\u0438 \u0438\u0437 \u0431\u043b\u043e\u043a\u0430 2. \u041a\u043e\u043c\u043f\u0430\u043d\u0438\u044f, \u0440\u043e\u043b\u044c, \u043b\u043e\u043a\u0430\u0446\u0438\u044f, \u0441\u0441\u044b\u043b\u043a\u0430.\n- \u041a\u0440\u0430\u0442\u043a\u0438\u0439 \u0438\u0442\u043e\u0433: \u0441\u043a\u043e\u043b\u044c\u043a\u043e \u0432\u0441\u0435\u0433\u043e \u043d\u043e\u0432\u044b\u0445/\u043e\u0442\u043a\u0440\u044b\u0442\u044b\u0445.\n\u0421\u0432\u043e\u0434\u043a\u0443 \u0434\u043e\u0441\u0442\u0430\u0432\u044c \u043e\u0434\u043d\u0438\u043c \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435\u043c.",
       "skills": [],
       "skill": null,
       "model": "google/gemini-3.8-flash",
@@ -580,15 +592,15 @@
       "schedule_display": "0 6 * * *",
       "repeat": {
         "times": null,
-        "completed": 28
+        "completed": 30
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-08-05T16:41:59.885403+03:00",
-      "next_run_at": "2026-09-03T06:00:00+00:00",
-      "last_run_at": "2026-09-02T06:02:27.058287+00:00",
+      "next_run_at": "2026-09-06T06:00:00+00:00",
+      "last_run_at": "2026-09-05T06:02:22.069308+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -602,12 +614,13 @@
       },
       "enabled_toolsets": null,
       "workdir": null,
-      "fire_claim": null
+      "fire_claim": null,
+      "catch_up": false
     },
     {
       "id": "067240302d25",
       "name": "Weekly Hermes Ecosystem Architecture Audit (Sunday 07:00)",
-      "prompt": "Продиагностируй сейчас всю архитектуру Гермес-стека в экосистеме Стефана: на серварике Servarica (stefan1) и на компьютерах в сети Tailscale.\nПроверь всё: правила, кроны, файлы, память, души (souls/personas) и конфиги на предмет конфликтов, 409 ошибок, уязвимостей и рассинхрона.\nПроверь токеновую изоляцию (чтобы под-боты не использовали токен Hermes 8682188433 и не имперсонировали Стефана), статус systemd сервисов, здоровье memory_v2 и отсутствие замусоривания путей.\nПосле завершения выдай подробный отчет с находками и рекомендациями по улучшению и оптимизации. Помни: ты — Гермес Стивенсон, Главный Оркестратор.",
+      "prompt": "\u041f\u0440\u043e\u0434\u0438\u0430\u0433\u043d\u043e\u0441\u0442\u0438\u0440\u0443\u0439 \u0441\u0435\u0439\u0447\u0430\u0441 \u0432\u0441\u044e \u0430\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u0443 \u0413\u0435\u0440\u043c\u0435\u0441-\u0441\u0442\u0435\u043a\u0430 \u0432 \u044d\u043a\u043e\u0441\u0438\u0441\u0442\u0435\u043c\u0435 \u0421\u0442\u0435\u0444\u0430\u043d\u0430: \u043d\u0430 \u0441\u0435\u0440\u0432\u0430\u0440\u0438\u043a\u0435 Servarica (stefan1) \u0438 \u043d\u0430 \u043a\u043e\u043c\u043f\u044c\u044e\u0442\u0435\u0440\u0430\u0445 \u0432 \u0441\u0435\u0442\u0438 Tailscale.\n\u041f\u0440\u043e\u0432\u0435\u0440\u044c \u0432\u0441\u0451: \u043f\u0440\u0430\u0432\u0438\u043b\u0430, \u043a\u0440\u043e\u043d\u044b, \u0444\u0430\u0439\u043b\u044b, \u043f\u0430\u043c\u044f\u0442\u044c, \u0434\u0443\u0448\u0438 (souls/personas) \u0438 \u043a\u043e\u043d\u0444\u0438\u0433\u0438 \u043d\u0430 \u043f\u0440\u0435\u0434\u043c\u0435\u0442 \u043a\u043e\u043d\u0444\u043b\u0438\u043a\u0442\u043e\u0432, 409 \u043e\u0448\u0438\u0431\u043e\u043a, \u0443\u044f\u0437\u0432\u0438\u043c\u043e\u0441\u0442\u0435\u0439 \u0438 \u0440\u0430\u0441\u0441\u0438\u043d\u0445\u0440\u043e\u043d\u0430.\n\u041f\u0440\u043e\u0432\u0435\u0440\u044c \u0442\u043e\u043a\u0435\u043d\u043e\u0432\u0443\u044e \u0438\u0437\u043e\u043b\u044f\u0446\u0438\u044e (\u0447\u0442\u043e\u0431\u044b \u043f\u043e\u0434-\u0431\u043e\u0442\u044b \u043d\u0435 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043b\u0438 \u0442\u043e\u043a\u0435\u043d Hermes 8682188433 \u0438 \u043d\u0435 \u0438\u043c\u043f\u0435\u0440\u0441\u043e\u043d\u0438\u0440\u043e\u0432\u0430\u043b\u0438 \u0421\u0442\u0435\u0444\u0430\u043d\u0430), \u0441\u0442\u0430\u0442\u0443\u0441 systemd \u0441\u0435\u0440\u0432\u0438\u0441\u043e\u0432, \u0437\u0434\u043e\u0440\u043e\u0432\u044c\u0435 memory_v2 \u0438 \u043e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0438\u0435 \u0437\u0430\u043c\u0443\u0441\u043e\u0440\u0438\u0432\u0430\u043d\u0438\u044f \u043f\u0443\u0442\u0435\u0439.\n\u041f\u043e\u0441\u043b\u0435 \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043d\u0438\u044f \u0432\u044b\u0434\u0430\u0439 \u043f\u043e\u0434\u0440\u043e\u0431\u043d\u044b\u0439 \u043e\u0442\u0447\u0435\u0442 \u0441 \u043d\u0430\u0445\u043e\u0434\u043a\u0430\u043c\u0438 \u0438 \u0440\u0435\u043a\u043e\u043c\u0435\u043d\u0434\u0430\u0446\u0438\u044f\u043c\u0438 \u043f\u043e \u0443\u043b\u0443\u0447\u0448\u0435\u043d\u0438\u044e \u0438 \u043e\u043f\u0442\u0438\u043c\u0438\u0437\u0430\u0446\u0438\u0438. \u041f\u043e\u043c\u043d\u0438: \u0442\u044b \u2014 \u0413\u0435\u0440\u043c\u0435\u0441 \u0421\u0442\u0438\u0432\u0435\u043d\u0441\u043e\u043d, \u0413\u043b\u0430\u0432\u043d\u044b\u0439 \u041e\u0440\u043a\u0435\u0441\u0442\u0440\u0430\u0442\u043e\u0440.",
       "skills": [],
       "skill": null,
       "model": "google/gemini-3.8-flash",
@@ -642,12 +655,13 @@
       "origin": null,
       "enabled_toolsets": null,
       "workdir": null,
-      "fire_claim": null
+      "fire_claim": null,
+      "catch_up": false
     },
     {
       "id": "66619135fb8e",
       "name": "Odessa Session Watchdog",
-      "prompt": "Watchdog Telethon-сессии stefan_userbot (odessa-safe-router): проверка авторизации, авто-бэкап, восстановление из бэкапа, алерт при ревоке.",
+      "prompt": "Watchdog Telethon-\u0441\u0435\u0441\u0441\u0438\u0438 stefan_userbot (odessa-safe-router): \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u0430\u0432\u0442\u043e\u0440\u0438\u0437\u0430\u0446\u0438\u0438, \u0430\u0432\u0442\u043e-\u0431\u044d\u043a\u0430\u043f, \u0432\u043e\u0441\u0441\u0442\u0430\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435 \u0438\u0437 \u0431\u044d\u043a\u0430\u043f\u0430, \u0430\u043b\u0435\u0440\u0442 \u043f\u0440\u0438 \u0440\u0435\u0432\u043e\u043a\u0435.",
       "skills": [],
       "skill": null,
       "model": null,
@@ -669,15 +683,15 @@
       "schedule_display": "0 */6 * * *",
       "repeat": {
         "times": null,
-        "completed": 69
+        "completed": 74
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-08-16T14:58:17.997958+00:00",
-      "next_run_at": "2026-09-03T06:00:00+00:00",
-      "last_run_at": "2026-09-03T00:00:23.722712+00:00",
+      "next_run_at": "2026-09-05T12:00:00+00:00",
+      "last_run_at": "2026-09-05T06:00:36.945474+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -691,11 +705,12 @@
       },
       "enabled_toolsets": null,
       "workdir": null,
-      "fire_claim": null
+      "fire_claim": null,
+      "catch_up": false
     },
     {
       "id": "0302075fc0ce",
-      "name": "Git Workspace Auto-Sync Daily (03:00 Киев / 00:00 UTC)",
+      "name": "Git Workspace Auto-Sync Daily (03:00 \u041a\u0438\u0435\u0432 / 00:00 UTC)",
       "prompt": "",
       "skills": [],
       "skill": null,
@@ -718,15 +733,15 @@
       "schedule_display": "0 0 * * *",
       "repeat": {
         "times": null,
-        "completed": 17
+        "completed": 19
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-08-18T07:21:14.466229+00:00",
-      "next_run_at": "2026-09-04T00:00:00+00:00",
-      "last_run_at": "2026-09-03T00:00:24.917419+00:00",
+      "next_run_at": "2026-09-06T00:00:00+00:00",
+      "last_run_at": "2026-09-05T00:00:33.646095+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -740,7 +755,8 @@
       },
       "enabled_toolsets": null,
       "workdir": null,
-      "fire_claim": null
+      "fire_claim": null,
+      "catch_up": false
     },
     {
       "id": "626544789cdf",
@@ -767,15 +783,15 @@
       "schedule_display": "0 20 * * *",
       "repeat": {
         "times": null,
-        "completed": 6
+        "completed": 8
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-08-28T05:51:43.245778+00:00",
-      "next_run_at": "2026-09-03T20:00:00+00:00",
-      "last_run_at": "2026-09-02T20:00:47.998821+00:00",
+      "next_run_at": "2026-09-05T20:00:00+00:00",
+      "last_run_at": "2026-09-04T20:00:52.265240+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -789,7 +805,8 @@
       },
       "enabled_toolsets": null,
       "workdir": null,
-      "fire_claim": null
+      "fire_claim": null,
+      "catch_up": false
     },
     {
       "id": "655a38c17ec8",
@@ -806,10 +823,11 @@
       "enabled": true,
       "repeat": "forever",
       "created_at": "2026-08-28T17:30:00.000000+00:00",
-      "next_run_at": "2026-09-04T00:00:00+00:00",
+      "next_run_at": "2026-09-06T00:00:00+00:00",
       "schedule_display": "0 0 * * *",
       "model_snapshot": "google/gemini-3.8-flash",
-      "provider_snapshot": "gemini"
+      "provider_snapshot": "gemini",
+      "catch_up": false
     },
     {
       "id": "08f6e5c6d5cf",
@@ -836,15 +854,15 @@
       "schedule_display": "every 360m",
       "repeat": {
         "times": null,
-        "completed": 19
+        "completed": 23
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-08-29T09:10:44.151325+00:00",
-      "next_run_at": "2026-09-03T09:13:26.204296+00:00",
-      "last_run_at": "2026-09-03T03:13:26.204296+00:00",
+      "next_run_at": "2026-09-05T09:31:36.017218+00:00",
+      "last_run_at": "2026-09-05T03:31:36.017218+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -858,12 +876,13 @@
       },
       "enabled_toolsets": null,
       "workdir": null,
-      "fire_claim": null
+      "fire_claim": null,
+      "catch_up": false
     },
     {
       "id": "853cf3c5ef02",
       "name": "Daily Ecosystem Registry Sync & Evening Report (22:00 Kiev)",
-      "prompt": "Запусти скрипт синхронизации реестра кронов и скиллов в Google Таблицу:\npython3 /opt/hermes/scripts/sync_ecosystem_sheet_registry.py\n\nПосле успешного выполнения пришли Стефану короткий, структурированный вечерний отчет на русском языке (22:00 Киев):\n1. Статус актуализации Google Таблицы реестра (https://docs.google.com/spreadsheets/d/1WjOtga9-heqcd2gKdAkCdUZ-Ocg75EDCaSKgAZsP0ew/edit).\n2. Общее количество активных кронов и скиллов по всем 9 агентам кластера.\n3. Были ли за сегодня добавлены новые или изменены существующие скиллы/кроны.\n4. Готовность экосистемы.\n\nФормат: лаконичный, аккуратный список с эмодзи.",
+      "prompt": "\u0417\u0430\u043f\u0443\u0441\u0442\u0438 \u0441\u043a\u0440\u0438\u043f\u0442 \u0441\u0438\u043d\u0445\u0440\u043e\u043d\u0438\u0437\u0430\u0446\u0438\u0438 \u0440\u0435\u0435\u0441\u0442\u0440\u0430 \u043a\u0440\u043e\u043d\u043e\u0432 \u0438 \u0441\u043a\u0438\u043b\u043b\u043e\u0432 \u0432 Google \u0422\u0430\u0431\u043b\u0438\u0446\u0443:\npython3 /opt/hermes/scripts/sync_ecosystem_sheet_registry.py\n\n\u041f\u043e\u0441\u043b\u0435 \u0443\u0441\u043f\u0435\u0448\u043d\u043e\u0433\u043e \u0432\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u0438\u044f \u043f\u0440\u0438\u0448\u043b\u0438 \u0421\u0442\u0435\u0444\u0430\u043d\u0443 \u043a\u043e\u0440\u043e\u0442\u043a\u0438\u0439, \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0439 \u0432\u0435\u0447\u0435\u0440\u043d\u0438\u0439 \u043e\u0442\u0447\u0435\u0442 \u043d\u0430 \u0440\u0443\u0441\u0441\u043a\u043e\u043c \u044f\u0437\u044b\u043a\u0435 (22:00 \u041a\u0438\u0435\u0432):\n1. \u0421\u0442\u0430\u0442\u0443\u0441 \u0430\u043a\u0442\u0443\u0430\u043b\u0438\u0437\u0430\u0446\u0438\u0438 Google \u0422\u0430\u0431\u043b\u0438\u0446\u044b \u0440\u0435\u0435\u0441\u0442\u0440\u0430 (https://docs.google.com/spreadsheets/d/1WjOtga9-heqcd2gKdAkCdUZ-Ocg75EDCaSKgAZsP0ew/edit).\n2. \u041e\u0431\u0449\u0435\u0435 \u043a\u043e\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u043e \u0430\u043a\u0442\u0438\u0432\u043d\u044b\u0445 \u043a\u0440\u043e\u043d\u043e\u0432 \u0438 \u0441\u043a\u0438\u043b\u043b\u043e\u0432 \u043f\u043e \u0432\u0441\u0435\u043c 9 \u0430\u0433\u0435\u043d\u0442\u0430\u043c \u043a\u043b\u0430\u0441\u0442\u0435\u0440\u0430.\n3. \u0411\u044b\u043b\u0438 \u043b\u0438 \u0437\u0430 \u0441\u0435\u0433\u043e\u0434\u043d\u044f \u0434\u043e\u0431\u0430\u0432\u043b\u0435\u043d\u044b \u043d\u043e\u0432\u044b\u0435 \u0438\u043b\u0438 \u0438\u0437\u043c\u0435\u043d\u0435\u043d\u044b \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u0435 \u0441\u043a\u0438\u043b\u043b\u044b/\u043a\u0440\u043e\u043d\u044b.\n4. \u0413\u043e\u0442\u043e\u0432\u043d\u043e\u0441\u0442\u044c \u044d\u043a\u043e\u0441\u0438\u0441\u0442\u0435\u043c\u044b.\n\n\u0424\u043e\u0440\u043c\u0430\u0442: \u043b\u0430\u043a\u043e\u043d\u0438\u0447\u043d\u044b\u0439, \u0430\u043a\u043a\u0443\u0440\u0430\u0442\u043d\u044b\u0439 \u0441\u043f\u0438\u0441\u043e\u043a \u0441 \u044d\u043c\u043e\u0434\u0437\u0438.",
       "skills": [],
       "skill": null,
       "model": null,
@@ -885,15 +904,15 @@
       "schedule_display": "0 19 * * *",
       "repeat": {
         "times": null,
-        "completed": 6
+        "completed": 8
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-08-29T09:11:46.816641+00:00",
-      "next_run_at": "2026-09-03T19:00:00+00:00",
-      "last_run_at": "2026-09-02T19:03:27.622339+00:00",
+      "next_run_at": "2026-09-05T19:00:00+00:00",
+      "last_run_at": "2026-09-04T19:00:58.175857+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -907,12 +926,13 @@
       },
       "enabled_toolsets": null,
       "workdir": null,
-      "fire_claim": null
+      "fire_claim": null,
+      "catch_up": false
     },
     {
       "id": "9d5228d9e04f",
-      "name": "MS To-Do Live Snapshot Poller",
-      "prompt": "Синхронизируй слепок задач Microsoft To-Do с десктопа Stefan (100.79.157.46) в локальный кэш /opt/hermes/state/ms_todo_live_snapshot.json. Если десктоп онлайн — обнови слепок, если оффлайн — сохрани текущий. Без отправки сообщений в чат.",
+      "name": "MS To-Do Live Snapshot Poller (100% Silent PC Sync)",
+      "prompt": "\u0421\u0438\u043d\u0445\u0440\u043e\u043d\u0438\u0437\u0438\u0440\u0443\u0439 \u0441\u043b\u0435\u043f\u043e\u043a \u0437\u0430\u0434\u0430\u0447 Microsoft To-Do \u0441 \u0434\u0435\u0441\u043a\u0442\u043e\u043f\u0430 Stefan (100.79.157.46) \u0432 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u0439 \u043a\u044d\u0448 /opt/hermes/state/ms_todo_live_snapshot.json. \u0415\u0441\u043b\u0438 \u0434\u0435\u0441\u043a\u0442\u043e\u043f \u043e\u043d\u043b\u0430\u0439\u043d \u2014 \u043e\u0431\u043d\u043e\u0432\u0438 \u0441\u043b\u0435\u043f\u043e\u043a, \u0435\u0441\u043b\u0438 \u043e\u0444\u0444\u043b\u0430\u0439\u043d \u2014 \u0441\u043e\u0445\u0440\u0430\u043d\u0438 \u0442\u0435\u043a\u0443\u0449\u0438\u0439. \u0411\u0435\u0437 \u043e\u0442\u043f\u0440\u0430\u0432\u043a\u0438 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0439 \u0432 \u0447\u0430\u0442.",
       "skills": [],
       "skill": null,
       "model": null,
@@ -920,8 +940,8 @@
       "provider_snapshot": "gemini",
       "model_snapshot": "google/gemini-3.8-flash",
       "base_url": null,
-      "script": null,
-      "no_agent": false,
+      "script": "pull_todo_from_pc.py",
+      "no_agent": true,
       "monitor_script": null,
       "monitor_url": null,
       "monitor_state": null,
@@ -959,12 +979,13 @@
         "file"
       ],
       "workdir": null,
-      "fire_claim": null
+      "fire_claim": null,
+      "catch_up": false
     },
     {
       "id": "015bd8eafeb1",
       "name": "OpenClaw 2.0 Auto-Updater & Watchdog",
-      "prompt": "Выполни тихую проверку обновлений OpenClaw 2.0: запусти /opt/hermes/scripts/openclaw_auto_updater.py. Если есть новый релиз/коммит — собери билд и перезапусти openclaw.service. Отчет только в локальный лог.",
+      "prompt": "\u0412\u044b\u043f\u043e\u043b\u043d\u0438 \u0442\u0438\u0445\u0443\u044e \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443 \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0439 OpenClaw 2.0: \u0437\u0430\u043f\u0443\u0441\u0442\u0438 /opt/hermes/scripts/openclaw_auto_updater.py. \u0415\u0441\u043b\u0438 \u0435\u0441\u0442\u044c \u043d\u043e\u0432\u044b\u0439 \u0440\u0435\u043b\u0438\u0437/\u043a\u043e\u043c\u043c\u0438\u0442 \u2014 \u0441\u043e\u0431\u0435\u0440\u0438 \u0431\u0438\u043b\u0434 \u0438 \u043f\u0435\u0440\u0435\u0437\u0430\u043f\u0443\u0441\u0442\u0438 openclaw.service. \u041e\u0442\u0447\u0435\u0442 \u0442\u043e\u043b\u044c\u043a\u043e \u0432 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u0439 \u043b\u043e\u0433.",
       "skills": [],
       "skill": null,
       "model": null,
@@ -986,15 +1007,15 @@
       "schedule_display": "every 360m",
       "repeat": {
         "times": null,
-        "completed": 4
+        "completed": 8
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-09-01T23:39:07.712030+00:00",
-      "next_run_at": "2026-09-03T06:25:01.709304+00:00",
-      "last_run_at": "2026-09-03T00:25:01.709304+00:00",
+      "next_run_at": "2026-09-05T10:15:18.986217+00:00",
+      "last_run_at": "2026-09-05T04:15:18.986217+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -1010,8 +1031,9 @@
         "terminal"
       ],
       "workdir": null,
-      "fire_claim": null
+      "fire_claim": null,
+      "catch_up": false
     }
   ],
-  "updated_at": "2026-09-03T05:47:35.570131+00:00"
+  "updated_at": "2026-09-05T07:24:42.444833+00:00"
 }
