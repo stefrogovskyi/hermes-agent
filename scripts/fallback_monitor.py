@@ -298,6 +298,8 @@ def main():
         ("google/gemini-3.8-flash", "google"),
         ("google/gemini-2.5-flash", "google"),
         ("stepfun/step-3.7-flash:free", "nous"),
+        ("inclusionai/ling-3.0-flash-sante:free", "nous"),
+        ("nvidia/nemotron-3-super-120b-a12b:free", "openrouter"),
         ("upstage/solar-pro4:free", "nous"),
         ("meituan/longcat-2.0:free", "nous"),
         ("poolside/laguna-s-2.1:free", "nous"),
