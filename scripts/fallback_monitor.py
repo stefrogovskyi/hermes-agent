@@ -289,6 +289,58 @@ def sync_to_google_sheet(timestamp_str, total_live, total_all, tier3_res, tier2_
     except Exception as e:
         return False, str(e)
 
+def discover_new_models(keys, nous_tok, existing_pool):
+    """
+    Автоматический поиск новых моделей в OpenRouter и Nous Portal.
+    Если найдена новая рабочая модель (HTTP 200), она возвращается для авто-добавления в пул.
+    """
+    new_found = []
+    
+    # 1. OpenRouter Free discovery
+    try:
+        op_key = keys.get("openrouter", "")
+        headers = {"Authorization": f"Bearer {op_key}", "Content-Type": "application/json"} if op_key else {}
+        r = requests.get("https://openrouter.ai/api/v1/models", headers=headers, timeout=12)
+        if r.status_code == 200:
+            for m in r.json().get("data", []):
+                mid = m.get("id", "")
+                pricing = m.get("pricing", {})
+                p_in = float(pricing.get("prompt", 0) or 0)
+                p_out = float(pricing.get("completion", 0) or 0)
+                if p_in == 0 and p_out == 0 and mid:
+                    if mid not in existing_pool and f"openrouter/{mid}" not in existing_pool:
+                        # Quick ping check
+                        try:
+                            p_payload = {"model": mid, "messages": [{"role": "user", "content": "ping"}], "max_tokens": 5}
+                            r_ping = requests.post("https://openrouter.ai/api/v1/chat/completions", json=p_payload, headers=headers, timeout=6)
+                            if r_ping.status_code == 200:
+                                new_found.append((mid, "openrouter", "Tier 3 (Free)"))
+                        except Exception:
+                            pass
+    except Exception:
+        pass
+
+    # 2. Nous Portal Discovery
+    try:
+        if nous_tok:
+            headers_nous = {"Authorization": f"Bearer {nous_tok}", "Content-Type": "application/json"}
+            r_n = requests.get("https://inference-api.nousresearch.com/v1/models", headers=headers_nous, timeout=12)
+            if r_n.status_code == 200:
+                for m in r_n.json().get("data", []):
+                    mid = m.get("id", "")
+                    if mid and ":free" in mid and mid not in existing_pool and f"nous/{mid}" not in existing_pool:
+                        try:
+                            p_payload = {"model": mid, "messages": [{"role": "user", "content": "ping"}], "max_tokens": 5}
+                            r_ping = requests.post("https://inference-api.nousresearch.com/v1/chat/completions", json=p_payload, headers=headers_nous, timeout=6)
+                            if r_ping.status_code == 200:
+                                new_found.append((mid, "nous", "Tier 3 (Nous Subscription)"))
+                        except Exception:
+                            pass
+    except Exception:
+        pass
+
+    return new_found
+
 def main():
     keys = load_keys()
     nous_tok = load_nous_token()
@@ -345,6 +397,11 @@ def main():
         ("openrouter/free", "openrouter")
     ]
 
+    existing_pool_set = {m[0] for m in tier3_models + tier2_models + tier1_models}
+    newly_discovered = discover_new_models(keys, nous_tok, existing_pool_set)
+    for nm, np, ntier in newly_discovered:
+        tier3_models.append((nm, np))
+
     timestamp_str = time.strftime("%Y-%m-%d %H:%M:%S")
     
     tier3_res = []
@@ -376,6 +433,10 @@ def main():
     out.append("📊 **Ночной аудит моделей, синхронизация OpenClaw 2.0 & Google Таблицы (03:00 Киев)**")
     out.append(f"🕒 *Время проверки:* `{timestamp_str}` (Киев)")
     out.append(f"🔢 *Всего в пуле:* `{total_all}` моделей | 🟢 *Доступно (LIVE):* `{total_live}`")
+    if newly_discovered:
+        out.append(f"🌟 **Автоматически найдены и добавлены новые модели ({len(newly_discovered)}):**")
+        for nm, np, ntier in newly_discovered:
+            out.append(f"  ✨ `{nm}` ({np}) ➔ {ntier}")
     if openclaw_updated:
         out.append("🐾 *OpenClaw 2.0:* ✅ Конфигурация и фолбек-цепочка автоматически обновлены под живые модели!")
     else:
