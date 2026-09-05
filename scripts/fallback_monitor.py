@@ -291,8 +291,12 @@ def sync_to_google_sheet(timestamp_str, total_live, total_all, tier3_res, tier2_
 
 def discover_new_models(keys, nous_tok, existing_pool):
     """
-    Автоматический поиск новых моделей в OpenRouter и Nous Portal.
-    Если найдена новая рабочая модель (HTTP 200), она возвращается для авто-добавления в пул.
+    Полномасштабный автоматический радар новых моделей по ВСЕМ провайдерам экосистемы:
+    1. OpenRouter (все бесплатные / :free новинки)
+    2. Nous Research Portal (все доступные по подписке :free модели)
+    3. Google Generative AI (Gemini 3.x / Flash / Pro релизы)
+    4. NVIDIA NIM (NVIDIA Nemotron / Llama / Qwen через NVIDIA API)
+    5. Gonka24 (китайские скоростные API)
     """
     new_found = []
     
@@ -309,12 +313,11 @@ def discover_new_models(keys, nous_tok, existing_pool):
                 p_out = float(pricing.get("completion", 0) or 0)
                 if p_in == 0 and p_out == 0 and mid:
                     if mid not in existing_pool and f"openrouter/{mid}" not in existing_pool:
-                        # Quick ping check
                         try:
                             p_payload = {"model": mid, "messages": [{"role": "user", "content": "ping"}], "max_tokens": 5}
                             r_ping = requests.post("https://openrouter.ai/api/v1/chat/completions", json=p_payload, headers=headers, timeout=6)
                             if r_ping.status_code == 200:
-                                new_found.append((mid, "openrouter", "Tier 3 (Free)"))
+                                new_found.append((mid, "openrouter", "Tier 3 (OpenRouter Free)"))
                         except Exception:
                             pass
     except Exception:
@@ -336,6 +339,63 @@ def discover_new_models(keys, nous_tok, existing_pool):
                                 new_found.append((mid, "nous", "Tier 3 (Nous Subscription)"))
                         except Exception:
                             pass
+    except Exception:
+        pass
+
+    # 3. Google Gemini Official Catalog Discovery
+    try:
+        g_key = keys.get("gemini", "")
+        if g_key:
+            r_g = requests.get(f"https://generativelanguage.googleapis.com/v1beta/models?key={g_key}", timeout=10)
+            if r_g.status_code == 200:
+                for gm in r_g.json().get("models", []):
+                    gname = gm.get("name", "").replace("models/", "")
+                    if "gemini" in gname and not any(x in gname for x in ["vision", "embedding", "aqa", "tts"]):
+                        full_mid = f"google/{gname}"
+                        if full_mid not in existing_pool and gname not in existing_pool:
+                            try:
+                                ping_url = f"https://generativelanguage.googleapis.com/v1beta/models/{gname}:generateContent?key={g_key}"
+                                r_gp = requests.post(ping_url, json={"contents": [{"parts": [{"text": "hi"}]}]}, timeout=6)
+                                if r_gp.status_code == 200:
+                                    tier_label = "Tier 2 (Google)" if "flash" in gname else "Tier 1 (Google Pro)"
+                                    new_found.append((full_mid, "google", tier_label))
+                            except Exception:
+                                pass
+    except Exception:
+        pass
+
+    # 4. NVIDIA NIM Catalog Discovery
+    try:
+        nv_key = keys.get("nvidia", "")
+        if nv_key:
+            r_nv = requests.get("https://integrate.api.nvidia.com/v1/models", headers={"Authorization": f"Bearer {nv_key}"}, timeout=10)
+            if r_nv.status_code == 200:
+                for nvm in r_nv.json().get("data", []):
+                    nid = nvm.get("id", "")
+                    if any(fav in nid.lower() for fav in ["nemotron", "llama-3.3", "deepseek", "qwen"]):
+                        full_nid = f"nvidia/{nid}"
+                        if full_nid not in existing_pool and nid not in existing_pool:
+                            try:
+                                p_payload = {"model": nid, "messages": [{"role": "user", "content": "ping"}], "max_tokens": 5}
+                                r_nvp = requests.post("https://integrate.api.nvidia.com/v1/chat/completions", json=p_payload, headers={"Authorization": f"Bearer {nv_key}"}, timeout=6)
+                                if r_nvp.status_code == 200:
+                                    new_found.append((full_nid, "nvidia", "Tier 2 (NVIDIA NIM)"))
+                            except Exception:
+                                pass
+    except Exception:
+        pass
+
+    # 5. Gonka24 Discovery
+    try:
+        gonka_key = keys.get("gonka24", "")
+        if gonka_key:
+            r_gk = requests.get("https://api.gonka24.com/v1/models", headers={"Authorization": f"Bearer {gonka_key}"}, timeout=10)
+            if r_gk.status_code == 200:
+                for gkm in r_gk.json().get("data", []):
+                    gid = gkm.get("id", "")
+                    full_gid = f"gonka24/{gid}"
+                    if full_gid not in existing_pool and gid not in existing_pool:
+                        new_found.append((full_gid, "gonka24", "Tier 2 (Gonka24)"))
     except Exception:
         pass
 
